@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>logFormatVersion</key>
+	<integer>10</integer>
+	<key>logs</key>
+	<dict>
+		<key>EAB27098-5E91-480A-809D-4E5EBD498F17</key>
+		<dict>
+			<key>className</key>
+			<string>IDEActivityLogSection</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>EAB27098-5E91-480A-809D-4E5EBD498F17.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>YXStitch project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>YXStitch</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Build YXStitch</string>
+			<key>timeStartedRecording</key>
+			<real>681823420.01944304</real>
+			<key>timeStoppedRecording</key>
+			<real>681823424.72460401</real>
+			<key>title</key>
+			<string>Build YXStitch</string>
+			<key>uniqueIdentifier</key>
+			<string>EAB27098-5E91-480A-809D-4E5EBD498F17</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

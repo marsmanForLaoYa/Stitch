@@ -1,0 +1,35 @@
+Target dependency graph (13 targets)
+StitchScreenShareSetupUI in YXStitch, no dependencies
+StitchScreenShare in YXStitch, no dependencies
+AFNetworking in Pods, no dependencies
+GVUserDefaults in Pods, no dependencies
+IQKeyboardManager in Pods, no dependencies
+Masonry in Pods, no dependencies
+SDWebImage in Pods, no dependencies
+SVProgressHUD in Pods, no dependencies
+Toast in Pods, no dependencies
+YYCategories in Pods, no dependencies
+YYModel in Pods, no dependencies
+Pods-YXStitch in Pods, depends on:
+AFNetworking in Pods (explicit)
+GVUserDefaults in Pods (explicit)
+IQKeyboardManager in Pods (explicit)
+Masonry in Pods (explicit)
+SDWebImage in Pods (explicit)
+SVProgressHUD in Pods (explicit)
+Toast in Pods (explicit)
+YYCategories in Pods (explicit)
+YYModel in Pods (explicit)
+YXStitch in YXStitch, depends on:
+StitchScreenShareSetupUI in YXStitch (explicit)
+StitchScreenShare in YXStitch (explicit)
+Pods-YXStitch in Pods (implicit dependency via file 'libPods-YXStitch.a' in build phase 'Link Binary')
+AFNetworking in Pods (implicit dependency via options '-lAFNetworking' in build setting 'OTHER_LDFLAGS')
+GVUserDefaults in Pods (implicit dependency via options '-lGVUserDefaults' in build setting 'OTHER_LDFLAGS')
+IQKeyboardManager in Pods (implicit dependency via options '-lIQKeyboardManager' in build setting 'OTHER_LDFLAGS')
+Masonry in Pods (implicit dependency via options '-lMasonry' in build setting 'OTHER_LDFLAGS')
+SDWebImage in Pods (implicit dependency via options '-lSDWebImage' in build setting 'OTHER_LDFLAGS')
+SVProgressHUD in Pods (implicit dependency via options '-lSVProgressHUD' in build setting 'OTHER_LDFLAGS')
+Toast in Pods (implicit dependency via options '-lToast' in build setting 'OTHER_LDFLAGS')
+YYCategories in Pods (implicit dependency via options '-lYYCategories' in build setting 'OTHER_LDFLAGS')
+YYModel in Pods (implicit dependency via options '-lYYModel' in build setting 'OTHER_LDFLAGS')

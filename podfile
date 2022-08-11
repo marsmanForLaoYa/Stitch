@@ -1,0 +1,17 @@
+ platform :ios, '9.0'
+
+target 'YXStitch' do
+  # Comment the next line if you don't want to use dynamic frameworks
+  
+  pod 'SDWebImage'
+  pod 'Masonry'
+  pod 'AFNetworking'
+  pod 'YYCategories'
+  pod 'IQKeyboardManager'
+  pod 'GVUserDefaults'
+  pod 'YYModel'
+  pod 'Toast'
+  pod 'SVProgressHUD'
+
+end
+
