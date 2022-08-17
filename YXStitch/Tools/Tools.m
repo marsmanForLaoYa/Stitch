@@ -10,6 +10,11 @@
 #import <AVFoundation/AVFoundation.h>
 #import <mach/mach.h>
 #import <sys/sysctl.h>
+#import <CoreMedia/CoreMedia.h>
+
+
+#define BEfORETIME -(600 * 60)
+
 @implementation Tools
 + (UIImageView *)getLineWithFrame:(CGRect )frame{
     UIImageView *line = [[UIImageView alloc]initWithFrame:frame];
@@ -519,6 +524,212 @@
     }
  
     return NO;
+}
+
+#pragma mark - CMSampleBufferRef转换为UIImage
+-(UIImage *)bufferToImage:(CMSampleBufferRef)buffer{
+    
+    //获取一个Core Video图像缓存对象
+    //CVImageBufferRef：Base type for all CoreVideo image buffers
+    CVImageBufferRef imgBuffer = CMSampleBufferGetImageBuffer(buffer);
+    
+    //锁定基地址
+    //参数一：CVPixelBufferRef
+    /**
+     CVPixelBufferRef：Based on the image buffer type. The pixel
+     buffer implements the memory storage for an image buffer.
+     CVPixelBufferRef是以CVImageBufferRef为基础的类型
+     */
+    //参数二：CVPixelBufferLockFlags
+    /**
+     If you are not going to modify the data while you hold the
+     lock, you should set this flag to avoid potentially
+     invalidating any existing caches of the buffer contents.
+     This flag should be passed both to the lock and unlock
+     functions.  Non-symmetrical usage of this flag will result in
+     undefined behavior.
+     如果在持有锁时不打算修改数据，则应设置此标志以避免可能使缓冲区内容的任何现有缓存失效。此标志应同时传递给锁定和解锁功能。非对称使用此标志将导致未定义的行为。
+     */
+    CVReturn result = CVPixelBufferLockBaseAddress(imgBuffer, 0);
+    NSLog(@"success or error result：%d", result);
+    
+    //获得基地址
+    void *baseAddr = CVPixelBufferGetBaseAddress(imgBuffer);
+    
+    //获得行字节数
+    size_t bytesPerRow = CVPixelBufferGetBytesPerRow(imgBuffer);
+    
+    //获得宽、高
+    size_t width = CVPixelBufferGetWidth(imgBuffer);
+    size_t height = CVPixelBufferGetHeight(imgBuffer);
+    NSLog(@"width：%zu, height：%zu", width, height);    
+    //创建RGB颜色空间
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    //创建一个图形上下文
+    CGContextRef context = CGBitmapContextCreate(baseAddr, width, height, 8, bytesPerRow, colorSpace, kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedFirst);
+    //根据上下文创建CGImage
+    CGImageRef cgImg = CGBitmapContextCreateImage(context);
+    //处理完成后，解锁（加锁、解锁要配套使用）
+    CVPixelBufferUnlockBaseAddress(imgBuffer, 0);
+    //这些资源不会自动释放，需要手动释放
+    CGContextRelease(context);
+    CGColorSpaceRelease(colorSpace);
+    
+    //创建UIImage
+    //UIImage *img = [UIImage imageWithCGImage:cgImg];
+    UIImage *img = [UIImage imageWithCGImage:cgImg scale:1.0f orientation:UIImageOrientationUp];
+    
+    //释放
+    CGImageRelease(cgImg);
+    
+    return img;
+}
+ 
+#pragma mark - CMSampleBufferRef转换为NSData
+-(NSData *)bufferToData:(CMSampleBufferRef)buffer{
+    
+    CVImageBufferRef imgBuffer = CMSampleBufferGetImageBuffer(buffer);
+    
+    CVPixelBufferLockBaseAddress(imgBuffer, 0);
+    
+    size_t bytePerRow = CVPixelBufferGetBytesPerRow(imgBuffer);
+    
+    size_t height = CVPixelBufferGetHeight(imgBuffer);
+    
+    void *baseAddr = CVPixelBufferGetBaseAddress(imgBuffer);
+    
+    NSData *data = [NSData dataWithBytes:baseAddr length:bytePerRow * height];
+    
+    CVPixelBufferUnlockBaseAddress(imgBuffer, 0);
+    
+    return data;
+    
+}
+
++(NSMutableArray*)detectionScreenShotIMG{
+    //ascenging 升序/逆序
+    PHFetchOptions* options = [[PHFetchOptions alloc]init];
+    options.sortDescriptors=@[[NSSortDescriptor sortDescriptorWithKey:@"creationDate"ascending:YES]];
+    //多媒体类型的渭词
+    NSPredicate *media = [NSPredicate predicateWithFormat:@"mediaType = %d",PHAssetMediaTypeImage];
+    //查询指定时间之内的图片
+    NSDate *date = [NSDate date];
+    NSDate *lastDate = [date initWithTimeIntervalSinceNow:BEfORETIME];
+    NSPredicate *predicateDate = [NSPredicate predicateWithFormat:@"creationDate >= %@", lastDate];
+    NSCompoundPredicate *compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:@[media, predicateDate]];
+    options.predicate= compoundPredicate;
+//    options.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat
+    PHFetchResult* result = [PHAsset fetchAssetsWithMediaType:PHAssetMediaTypeImage options:options];
+    __block NSMutableArray *dataArr = [NSMutableArray array];
+    if (result.count > 0){
+        NSLog(@"2分钟以内的图片一共%ld张",result.count);
+        for (PHAsset* asset in result) {
+            [dataArr addObject:asset];
+        }
+    }else{
+        NSLog(@"无数据");
+    }
+    return dataArr;
+}
+
+//获取image
+
++(void)getImageWithAsset:(PHAsset*)asset withBlock:(void(^)(UIImage *image))block{
+    //通过asset资源获取图片
+    PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
+    options.synchronous = true;
+    options.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
+    options.networkAccessAllowed = YES;
+   // CGSize size = CGSizeMake(200, 200);
+    //PHImageManagerMaximumSize
+//    [[PHCachingImageManager defaultManager]requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeDefault options:options resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+//        block(result);
+//    }];
+    [[PHImageManager defaultManager] requestImageDataForAsset:asset options:options resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+        UIImage *result = [UIImage imageWithData:imageData];
+        block(result);
+    }];
+}
+
+/*  遍历相簿中的全部图片
+*  @param assetCollection 相簿
+*  @param original        是否要原图
+*/
++(void)enumerateAssetsInAssetCollection:(PHAssetCollection *)assetCollection original:(BOOL)original{
+   NSLog(@"相簿名:%@", assetCollection.localizedTitle);
+   
+   PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
+   options.resizeMode = PHImageRequestOptionsResizeModeFast;
+   // 同步获得图片, 只会返回1张图片
+   options.synchronous = YES;
+   
+   // 获得某个相簿中的所有PHAsset对象
+   PHFetchResult<PHAsset *> *assets = [PHAsset fetchAssetsInAssetCollection:assetCollection options:nil];
+   for (PHAsset *asset in assets) {
+       // 是否要原图
+       CGSize size = original ? CGSizeMake(asset.pixelWidth, asset.pixelHeight) : CGSizeZero;
+       
+       // 从asset中获得图片
+       __weak typeof(self) weakSelf = self;
+       [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeDefault options:options resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+           NSLog(@"%@", result);
+       }];
+       dispatch_async(dispatch_get_main_queue(), ^{
+//           [weakSelf.showPhotoCollectionView reloadData];
+       });
+   }
+}
+
++(NSMutableArray *)search{
+    PHFetchOptions *options = [PHFetchOptions new];
+    PHFetchResult *topLevelUserCollections = [PHAssetCollection fetchTopLevelUserCollectionsWithOptions:options];
+    PHAssetCollectionSubtype subType = PHAssetCollectionSubtypeAlbumRegular;
+    PHFetchResult *smartAlbumsResult = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:subType options:options];
+    
+   __block PHAssetCollection *resultAsset = [PHAssetCollection new];
+    NSMutableArray *photoGroups = [NSMutableArray array];
+    [topLevelUserCollections enumerateObjectsUsingBlock:^(id _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj isKindOfClass:[PHAssetCollection class]]) {
+             PHAssetCollection *asset = (PHAssetCollection *)obj;
+             PHFetchResult *result = [PHAsset fetchAssetsInAssetCollection:asset options:[PHFetchOptions new]];
+             if (result.count > 0) {
+                 
+             }
+         }
+    }];
+    [smartAlbumsResult enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj isKindOfClass:[PHAssetCollection class]]) {
+            PHAssetCollection *asset = (PHAssetCollection *)obj;
+            PHFetchResult *result = [PHAsset fetchAssetsInAssetCollection:asset options:[PHFetchOptions new]];
+            //截图相册
+            if ([asset.localizedTitle isEqualToString:@"Screenshots"]){
+                resultAsset = asset;
+            }
+         }
+    }];
+    options.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:NO]];
+    //多媒体类型的渭词
+    NSPredicate *media = [NSPredicate predicateWithFormat:@"mediaType = %d",PHAssetMediaTypeImage];
+    //查询指定时间内的图片
+    NSDate *date = [NSDate date];
+    NSDate *lastDate = [date initWithTimeIntervalSinceNow:-60000];
+    NSPredicate *predicateDate = [NSPredicate predicateWithFormat:@"creationDate >= %@", lastDate];
+    //
+    NSCompoundPredicate *compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:@[media, predicateDate]];
+    //
+    options.predicate= compoundPredicate;
+    PHFetchResult *result = [PHAsset fetchAssetsInAssetCollection:resultAsset options:options];
+    __block NSMutableArray *dataArr = [NSMutableArray array];
+    if(result.count > 0 && resultAsset.assetCollectionSubtype != PHAssetCollectionSubtypeSmartAlbumVideos) {
+        
+        for (PHAsset* asset in result) {
+            [self getImageWithAsset:asset withBlock:^(UIImage *image) {
+                [dataArr addObject:image];
+            }];
+        }
+     }
+    return  dataArr;
+
 }
 
 @end

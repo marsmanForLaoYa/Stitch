@@ -8,7 +8,7 @@
 #import "SettingTableViewCell.h"
 
 @interface SettingTableViewCell ()
-@property (nonatomic, strong) UILabel *setingLabel;
+
 @end
 
 @implementation SettingTableViewCell
@@ -36,12 +36,66 @@
         make.centerY.equalTo(self);
     }];
     
-    [self addSubview:[Tools getLineWithFrame:CGRectMake(16, 39, SCREEN_WIDTH-16, 1)]];
+    [self addSubview:[Tools getLineWithFrame:CGRectMake(16, 43, SCREEN_WIDTH-16, 1)]];
 }
 
-- (void)configModel:(NSString *)str{
+- (void)configModel:(NSString *)str andTag:(NSInteger)tag andType:(NSInteger)type{
     self.accessibilityIdentifier = 
     _setingLabel.text = str;
+    self.tag = tag;
+    if (tag == 2 && type == 1){
+        UIImageView *icon = [UIImageView new];
+        if (GVUserDe.logoType == 1){
+            icon.image = IMG(@"darkIcon");
+        }else{
+            icon.image = IMG(@"lightIcon");
+        }
+        [self addSubview:icon];
+        [icon mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.width.height.equalTo(@24);
+            make.centerY.equalTo(self);
+            make.right.equalTo(self.mas_right).offset(-32);
+        }];
+    }
+    if (tag == 1 && type == 1){
+        UILabel *posizionLab = [UILabel new];
+        posizionLab.font = Font13;
+        switch (GVUserDe.waterPosition) {
+            case 1:
+                posizionLab.text = @"无";
+                break;
+            case 2:
+                posizionLab.text = @"左边";
+                break;
+            case 3:
+                posizionLab.text = @"居中";
+                break;
+            case 4:
+                posizionLab.text = @"右边";
+                break;
+            case 5:
+                posizionLab.text = @"全屏";
+                break;
+                
+            default:
+                break;
+        }
+        
+        posizionLab.textColor = HexColor(@"#999999");
+        [self addSubview:posizionLab];
+        [posizionLab mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.equalTo(self);
+            make.right.equalTo(self.mas_right).offset(-32);
+        }];
+//        switch (GVUserDe.waterPosition) {
+//            case :
+//                <#statements#>
+//                break;
+//
+//            default:
+//                break;
+//        }
+    }
 }
 
 - (void)awakeFromNib {

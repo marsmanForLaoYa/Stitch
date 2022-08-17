@@ -162,7 +162,7 @@
         for (UIButton *btn in _selectArr) {
             switch (btn.tag) {
                 case 0:
-                    [tempArr addObject: @"截长图"];
+                    [tempArr addObject: @"截长屏"];
                     break;
                 case 1:
                     [tempArr addObject: @"网页滚动截图"];

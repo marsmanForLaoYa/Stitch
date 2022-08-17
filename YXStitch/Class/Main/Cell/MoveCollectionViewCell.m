@@ -54,7 +54,7 @@
     _cellName = cellName;
     _iconIMG.image = [UIImage imageNamed:cellName];
     if ([cellName isEqualToString:@"更多功能"]){
-        nameLab.textColor = [UIColor colorWithHexString:@"#999999"];
+        nameLab.textColor =  [UIColor colorWithHexString:@"#999999"];
     }else{
         nameLab.textColor = [UIColor blackColor];
     }

@@ -10,17 +10,28 @@
 #import "MoveCollectionViewCell.h"
 #import "EnterURLViewController.h"
 #import "SettingViewController.h"
+#import <AVKit/AVKit.h>
+#import <AVFoundation/AVFoundation.h>
+#import <ReplayKit/ReplayKit.h>
+#import "ScrrenStitchHintView.h"
+#import "SaveViewController.h"
+#import "UIScrollView+LVShot.h"
+#import "WaterMarkViewController.h"
 
-@interface HomeViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,MoveCollectionViewCellDelegate>
+@interface HomeViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,MoveCollectionViewCellDelegate,ScrrenStitchHintViewDelegate>
 
 @property (nonatomic ,strong)UIView *iconView;
-@property (nonatomic ,strong) UICollectionView *MJColloctionView;
+@property (nonatomic ,strong)UICollectionView *MJColloctionView;
 @property (nonatomic ,strong)NSMutableArray *iconArr;
-//iOS9 及之后弃用以下属性
-@property (nonatomic ,strong) UIView * shotView;
-@property (nonatomic ,strong) NSIndexPath * indexPath;
-@property (nonatomic ,strong) NSIndexPath * nextIndexPath;
+@property (nonatomic ,strong)UIView * shotView;
+@property (nonatomic ,strong)NSIndexPath * indexPath;
+@property (nonatomic ,strong)NSIndexPath * nextIndexPath;
 @property (nonatomic ,weak) MoveCollectionViewCell * originalCell;
+@property (nonatomic, strong)SZImageGenerator *generator;
+@property (nonatomic ,strong)ScrrenStitchHintView *checkScreenStitchView;
+@property (nonatomic ,strong)UIView *bgView;
+@property (nonatomic ,strong)StitchResultView *resultView;
+@property (nonatomic ,strong)NSMutableArray *stitchArr;
 @end
 
 @implementation HomeViewController
@@ -29,13 +40,32 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     self.title = @"首页";
-    _iconArr = [NSMutableArray arrayWithObjects:@"截长屏",@"网页滚动截图",@"拼图",@"水印",@"设置",@"更多功能",nil];
+//    GVUserDe.waterPosition = 1;
+    if (GVUserDe.homeIconArr.count >0){
+        _iconArr = [NSMutableArray arrayWithArray:GVUserDe.homeIconArr];
+    }else{
+        _iconArr = [NSMutableArray arrayWithObjects:@"截长屏",@"网页滚动截图",@"拼图",@"水印",@"设置",@"更多功能",nil];
+    }
     [self setupViews];
     [self setupLayout];
     [self setupNavItems];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(noty:) name:@"homeChange" object:nil];
+//    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES);
+//    NSString *path = [paths objectAtIndex:0];
+//    NSLog(@"path==%@",path);
+  //  [self getByAppGroup2];
+
 }
 
+#pragma mark - NSFileManager
+- (void)getByAppGroup2{
+    //获取分组的共享目录
+    NSURL *groupURL = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:@"group.test.appgroup"];//此处id要与开发者中心创建时一致
+    NSURL *fileURL = [groupURL URLByAppendingPathComponent:@"demo.txt"];
+    //读取文件
+    NSString *str = [NSString stringWithContentsOfURL:fileURL encoding:NSUTF8StringEncoding error:nil];
+    NSLog(@"str = %@", str);
+}
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];   
@@ -44,21 +74,12 @@
 - (void)noty:(NSNotification *)noty {
     NSDictionary *dict = noty.userInfo;
     _iconArr = dict[@"iconArr"];
+    GVUserDe.homeIconArr = _iconArr;
     [_MJColloctionView reloadData];
 }
 
 #pragma mark - UI
 -(void)setupViews{
-//    _iconView = [[UIView alloc]init];
-//    _iconView.backgroundColor = HexColor(BKGrayColor);
-//    [self.view addSubview:_iconView];
-//    [_iconView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.width.left.equalTo(self.view);
-//        make.height.equalTo(@(SCREEN_HEIGHT - Nav_H));
-//        make.top.equalTo(@(Nav_H));
-//    }];
-    
-    
     UICollectionViewFlowLayout * layout = [[UICollectionViewFlowLayout alloc] init];
     CGFloat sizeWidth = (CGFloat) 168 / 375  * SCREEN_WIDTH;
     CGFloat sizeHeight = (CGFloat) 160 / 667  * SCREEN_HEIGHT;
@@ -69,10 +90,8 @@
     _MJColloctionView.delegate = self;
     _MJColloctionView.backgroundColor = HexColor(BKGrayColor);
     [self.view addSubview:_MJColloctionView];
-    
-
-    
 }
+
 -(void)setupLayout{
     
 }
@@ -96,7 +115,6 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     
     MoveCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"MoveCollectionViewCell" forIndexPath:indexPath];
-    
     cell.p_MoveCollectionViewCellDelegate = self;
     cell.cellName = [_iconArr objectAtIndex:indexPath.row];
     return cell;
@@ -108,13 +126,13 @@
     //跳转
     UIViewController *vc;
     if ([cellName isEqualToString:@"截长屏"]){
-        
+        [self screenStitch];
     }else if ([cellName isEqualToString:@"网页滚动截图"]){
         vc = [EnterURLViewController new];
     }else if ([cellName isEqualToString:@"拼图"]){
         
     }else if ([cellName isEqualToString:@"水印"]){
-        
+        vc = [WaterMarkViewController new];
     }else if ([cellName isEqualToString:@"设置"]){
         vc = [SettingViewController new];
     }else{
@@ -122,6 +140,42 @@
         vc = [HomeSettingViewController new];
     }
     [self.navigationController pushViewController:vc animated:YES];
+}
+
+-(void)screenStitch{
+    //自动识别长图
+    [SVProgressHUD showWithStatus:@"正在检测是否有连续截图..."];
+    _stitchArr = [Tools detectionScreenShotIMG];
+    //触发提示
+    MJWeakSelf
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [SVProgressHUD dismiss];
+        if (weakSelf.bgView == nil){
+            weakSelf.bgView = [Tools addBGViewWithFrame:self.view.frame];
+            [weakSelf.view addSubview:weakSelf.bgView];
+        }else{
+            weakSelf.bgView.hidden = NO;
+        }
+        if (weakSelf.checkScreenStitchView == nil){
+            weakSelf.checkScreenStitchView = [ScrrenStitchHintView new];
+            weakSelf.checkScreenStitchView.frame = CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, RYRealAdaptWidthValue(550));
+            weakSelf.checkScreenStitchView.delegate = self;
+            if (weakSelf.stitchArr.count > 1){
+                //连续截图数量大于2才能去拼接
+                [SVProgressHUD showWithStatus:@"正在拼接中..."];
+                weakSelf.checkScreenStitchView.type = 2;
+                weakSelf.checkScreenStitchView.arr = weakSelf.stitchArr;
+            }else{
+                weakSelf.checkScreenStitchView.type = 1;
+            }
+            weakSelf.checkScreenStitchView.delegate = self;
+            [weakSelf.view addSubview:weakSelf.checkScreenStitchView];
+        }
+        weakSelf.checkScreenStitchView.hidden = NO;
+        [UIView animateWithDuration:0.3 animations:^{
+            weakSelf.checkScreenStitchView.frame = CGRectMake(0, SCREEN_HEIGHT - weakSelf.checkScreenStitchView.height, SCREEN_WIDTH , weakSelf.checkScreenStitchView.height);
+        }];
+    });
 }
 
 
@@ -152,8 +206,7 @@
                 break;
         }
 
-    }else
-    {
+    }else{
         MoveCollectionViewCell* cell = (MoveCollectionViewCell*)gestureRecognizer.view;
         static CGPoint startPoint;
         if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
@@ -215,8 +268,7 @@
     }
 }
 
--(BOOL)collectionView:(UICollectionView *)collectionView canMoveItemAtIndexPath:(NSIndexPath *)indexPath
-{
+-(BOOL)collectionView:(UICollectionView *)collectionView canMoveItemAtIndexPath:(NSIndexPath *)indexPath{
     return YES;
 }
 
@@ -224,6 +276,7 @@
     id objc = [_iconArr objectAtIndex:sourceIndexPath.item];
     [_iconArr removeObject:objc];
     [_iconArr insertObject:objc atIndex:destinationIndexPath.item];
+    GVUserDe.homeIconArr = _iconArr;
 }
 
 
@@ -232,5 +285,66 @@
     //滚动截图指引
 }
 
+
+#pragma mark -- viewDelegate
+-(void)btnClickWithTag:(NSInteger)tag{
+    MJWeakSelf
+    if (tag == 4){
+        [weakSelf checkScreenStitchViewDiss];
+    }else if (tag == 5){
+        __weak typeof(self) weakSelf = self;
+        [SVProgressHUD showWithStatus:@"正在生成图片中.."];
+        [_resultView.scrollView DDGContentScrollScreenShot:^(UIImage *screenShotImage) {
+            [SVProgressHUD dismiss];
+            SaveViewController *saveVC = [SaveViewController new];
+            saveVC.screenshotIMG = screenShotImage;
+            saveVC.type = 2;
+            [weakSelf checkScreenStitchViewDiss];
+            [weakSelf.navigationController pushViewController:saveVC animated:YES];
+        }];
+       
+    }else{
+        
+    }
+    
+}
+-(void)checkScreenStitchViewDiss{
+    MJWeakSelf
+    [UIView animateWithDuration:0.3 animations:^{
+        weakSelf.checkScreenStitchView.frame = CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH , weakSelf.checkScreenStitchView.height);
+        weakSelf.bgView.hidden = YES;
+    }];
+}
+
+-(void)showResult:(SZImageGenerator *)result{
+    [SVProgressHUD dismiss];
+    if (!result) {
+        return;
+    }
+    _generator = result;
+    //点击了拼接，而且还没结束识别的时候；
+//    if (_needJumpToPreviewController) {
+//        [self startMergeImage:nil];
+//    }
+    
+    _resultView = [StitchResultView new];
+    _resultView.generator = _generator;
+    [_checkScreenStitchView addSubview:_resultView];
+    [_resultView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(@23);
+        make.width.equalTo(@(SCREEN_WIDTH  - 46));
+        make.top.equalTo(@50);
+        make.height.equalTo(@(_checkScreenStitchView.height - 128));
+    }];
+    
+}
+
+#pragma mark -- set
+-(NSMutableArray *)stitchArr{
+    if (_stitchArr == nil){
+        _stitchArr = [NSMutableArray array];
+    }
+    return _stitchArr;
+}
 
 @end

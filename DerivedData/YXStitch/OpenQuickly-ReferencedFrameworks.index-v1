@@ -6,36 +6,46 @@
 	<string>AVFoundation</string>
 	<string>CommonCrypto</string>
 	<string>ImageIO</string>
+	<string>YYKit</string>
 	<string>objc</string>
 	<string>Accelerate</string>
 	<string>CoreData</string>
 	<string>MobileCoreServices</string>
 	<string>CoreFoundation</string>
 	<string>sys</string>
-	<string>arpa</string>
+	<string>UMCommon</string>
+	<string>UMShare</string>
 	<string>CoreImage</string>
-	<string>Toast</string>
+	<string>arpa</string>
 	<string>CoreMedia</string>
 	<string>CoreServices</string>
 	<string>netinet6</string>
+	<string>StoreKit</string>
+	<string>Toast</string>
+	<string>GVUserDefaults</string>
+	<string>CoreTelephony</string>
+	<string>MessageUI</string>
+	<string>AVKit</string>
 	<string>SDWebImage</string>
 	<string>libkern</string>
 	<string>CoreText</string>
 	<string>WebKit</string>
 	<string>CoreVideo</string>
+	<string>MapKit</string>
 	<string>WatchKit</string>
 	<string>Foundation</string>
 	<string>mach</string>
 	<string>QuartzCore</string>
 	<string>Security</string>
 	<string>AppKit</string>
+	<string>Photos</string>
 	<string>os</string>
-	<string>YYCategories</string>
 	<string>netinet</string>
 	<string>ReplayKit</string>
+	<string>AssetsLibrary</string>
 	<string>SystemConfiguration</string>
 	<string>CoreGraphics</string>
-	<string>YYModel</string>
 	<string>UIKit</string>
+	<string>webp</string>
 </array>
 </plist>

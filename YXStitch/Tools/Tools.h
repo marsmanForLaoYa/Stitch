@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Photos/Photos.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -114,6 +115,7 @@ NS_ASSUME_NONNULL_BEGIN
 ///获取当前任务所占用的内存（单位：MB）
 +(double)availableMemory;
 
+
 +(UIImage *)imageFromView:(UIView *)view rect:(CGRect)rect;
 
 
@@ -127,6 +129,12 @@ NS_ASSUME_NONNULL_BEGIN
  */
  
 +(BOOL)urlValidation:(NSString *)string;
+
+///检测是否连续截图
++(NSMutableArray*)detectionScreenShotIMG;
+
+///PHAsset转换成UIImage
++(void)getImageWithAsset:(PHAsset*)asset withBlock:(void(^)(UIImage*image))block;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -6,12 +6,18 @@ target 'YXStitch' do
   pod 'SDWebImage'
   pod 'Masonry'
   pod 'AFNetworking'
-  pod 'YYCategories'
+  #pod 'YYCategories'
   pod 'IQKeyboardManager'
   pod 'GVUserDefaults'
-  pod 'YYModel'
+ # pod 'YYModel'
   pod 'Toast'
   pod 'SVProgressHUD'
-
+  pod 'YYKit'
+  #友盟分享
+  pod 'UMCommon'
+  pod 'UMDevice'
+  pod 'UMShare/Social/WeChat'
+  pod 'UMShare/Social/Sina'
+  
 end
 

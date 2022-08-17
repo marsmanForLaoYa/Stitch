@@ -22,10 +22,28 @@ PODS:
   - SDWebImage/Core (5.13.2)
   - SVProgressHUD (2.2.5)
   - Toast (4.0.0)
-  - YYCategories (1.0.4):
-    - YYCategories/no-arc (= 1.0.4)
-  - YYCategories/no-arc (1.0.4)
-  - YYModel (1.0.4)
+  - UMCommon (7.3.7):
+    - UMDevice
+  - UMDevice (2.2.1)
+  - UMShare/Core (6.10.6):
+    - UMCommon
+  - UMShare/Social/ReducedSina (6.10.6):
+    - UMCommon
+    - UMShare/Core
+  - UMShare/Social/ReducedWeChat (6.10.6):
+    - UMCommon
+    - UMShare/Core
+  - UMShare/Social/Sina (6.10.6):
+    - UMCommon
+    - UMShare/Core
+    - UMShare/Social/ReducedSina
+  - UMShare/Social/WeChat (6.10.6):
+    - UMCommon
+    - UMShare/Core
+    - UMShare/Social/ReducedWeChat
+  - YYKit (1.0.9):
+    - YYKit/no-arc (= 1.0.9)
+  - YYKit/no-arc (1.0.9)
 
 DEPENDENCIES:
   - AFNetworking
@@ -35,8 +53,11 @@ DEPENDENCIES:
   - SDWebImage
   - SVProgressHUD
   - Toast
-  - YYCategories
-  - YYModel
+  - UMCommon
+  - UMDevice
+  - UMShare/Social/Sina
+  - UMShare/Social/WeChat
+  - YYKit
 
 SPEC REPOS:
   trunk:
@@ -47,8 +68,10 @@ SPEC REPOS:
     - SDWebImage
     - SVProgressHUD
     - Toast
-    - YYCategories
-    - YYModel
+    - UMCommon
+    - UMDevice
+    - UMShare
+    - YYKit
 
 SPEC CHECKSUMS:
   AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
@@ -58,9 +81,11 @@ SPEC CHECKSUMS:
   SDWebImage: 72f86271a6f3139cc7e4a89220946489d4b9a866
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
-  YYCategories: 6bcd4314c6661a561410dce4a793379ebd306abd
-  YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
+  UMCommon: 37fe35f498e92cf57bbb06a086f02915fc35f211
+  UMDevice: 053478c4b4d7292f31f0a275c227d3c4007a5571
+  UMShare: b66d969a5cc7bd9eeffad6ad2ccd8f860d6216dd
+  YYKit: 7cda43304a8dc3696c449041e2cb3107b4e236e7
 
-PODFILE CHECKSUM: 49efabe766a8d6438e627c84a21b5102d4212fcd
+PODFILE CHECKSUM: 4e97fd973b7518b525679052471fa0921951ae97
 
 COCOAPODS: 1.11.3

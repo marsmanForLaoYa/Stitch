@@ -133,6 +133,7 @@
     SaveViewController *vc = [SaveViewController new];
     vc.screenshotIMG = image;
     vc.urlStr = _urlStr;
+    vc.type = 1;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -170,7 +171,7 @@
 #pragma mark --WKWebViewDelegate
 // 页面开始加载时调用
 - (void)webView:(WKWebView *)webView didStartProvisionalNavigation:(WKNavigation *)navigation{
-
+    [SVProgressHUD showWithStatus:@"网页加载中..."];
 }
 // 当内容开始返回时调用
 - (void)webView:(WKWebView *)webView didCommitNavigation:(WKNavigation *)navigation{
@@ -191,7 +192,7 @@
 }
 // 页面加载完成之后调用
 - (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation{
-    
+    [SVProgressHUD dismiss];
     [self immitjs];
 }
 
@@ -243,7 +244,7 @@
             if ([(NSString *)[_components objectAtIndex:2] isEqualToString:@"start"])
             {
                 ///定时器, 判断手势是否长按
-                _timer = [NSTimer scheduledTimerWithTimeInterval:0.7 target:self selector:@selector(handle) userInfo:nil repeats:NO];
+                _timer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(handle) userInfo:nil repeats:NO];
                 NSLog(@"start");
             }else if ([(NSString *)[_components objectAtIndex:2] isEqualToString:@"move"]){
                 //NSLog(@"这是在滑动");

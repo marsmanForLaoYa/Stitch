@@ -6,7 +6,7 @@
 //
 
 #import "SaveViewController.h"
-
+#import <UMShare/UMShare.h>
 @interface SaveViewController ()
 @property (nonatomic ,strong)UIView *detailView;
 @end
@@ -87,14 +87,36 @@
     saveBtn.titleLabel.font = [UIFont systemFontOfSize:18];
     saveBtn.layer.masksToBounds = YES;
     saveBtn.layer.cornerRadius = 5;
-    [saveBtn addTarget:self action:@selector(oneMore) forControlEvents:UIControlEventTouchUpInside];
+    saveBtn.tag = 1;
+    [saveBtn addTarget:self action:@selector(oneMore:) forControlEvents:UIControlEventTouchUpInside];
     [_detailView addSubview:saveBtn];
     [saveBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self.view).offset(-50);
+        if (self.type == 1){
+            make.bottom.equalTo(self.view).offset(-50);
+        }else{
+            make.bottom.equalTo(self.view).offset(-40);
+        }
+        
         make.height.equalTo(@40);
         make.left.equalTo(@58);
         make.width.equalTo(@(SCREEN_WIDTH - 58 * 2));
     }];
+    if (self.type != 1){
+        UIButton *deleteBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+        [deleteBtn setBackgroundColor:HexColor(@"#DDDDDD")];
+        [deleteBtn setTintColor:[UIColor blackColor]];
+        [deleteBtn setTitle:@"删除原图" forState:UIControlStateNormal];
+        deleteBtn.titleLabel.font = [UIFont systemFontOfSize:18];
+        deleteBtn.layer.masksToBounds = YES;
+        deleteBtn.layer.cornerRadius = 5;
+        deleteBtn.tag = 2;
+        [deleteBtn addTarget:self action:@selector(oneMore:) forControlEvents:UIControlEventTouchUpInside];
+        [_detailView addSubview:deleteBtn];
+        [deleteBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.width.height.centerX.equalTo(saveBtn);
+            make.bottom.equalTo(saveBtn.mas_top).offset(-15);
+        }];
+    }
 }
 
 -(void)setupNavItems{
@@ -106,28 +128,67 @@
 }
 
 #pragma mark -- btn触发事件
--(void)oneMore{
-    [self.navigationController popToViewController:[self.navigationController.viewControllers objectAtIndex:1] animated:YES];
+-(void)oneMore:(UIButton *)btn{
+    if (btn.tag == 1){
+        [self.navigationController popToViewController:[self.navigationController.viewControllers objectAtIndex:1] animated:YES];
+    }else{
+        //删除原图
+        
+    }
+   
 }
 
 -(void)shareClick:(UIButton *)btn{
-    switch (btn.tag) {
-        case 0:
-            //复制
-            break;
-        case 1:
-            //微信
-            break;
-        case 2:
-            //朋友圈
-            break;
-        case 3:
-            //微博
-            break;
-            
-        default:
-            break;
+    UMSocialPlatformType shareType;
+    if (btn.tag != 0){
+        switch (btn.tag) {
+            case 1:
+                //微信
+                shareType = UMSocialPlatformType_WechatSession;
+                break;
+            case 2:
+                shareType = UMSocialPlatformType_WechatTimeLine;
+                //朋友圈
+                break;
+            case 3:
+                //微博
+                shareType = UMSocialPlatformType_Sina;
+                break;
+            default:
+                shareType = UMSocialPlatformType_Predefine_Begin;
+                break;
+        }
+        [self shareImageToPlatformType:shareType];
+    }else{
+        //复制
+        UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+        pasteboard.image = _screenshotIMG;
+        [SVProgressHUD showSuccessWithStatus:@"截图已复制"];
     }
+    
+    
+}
+
+- (void)shareImageToPlatformType:(UMSocialPlatformType)platformType{
+    //创建分享消息对象
+    UMSocialMessageObject *messageObject = [UMSocialMessageObject messageObject];
+    //创建图片内容对象
+    UMShareImageObject *shareObject = [[UMShareImageObject alloc] init];
+    //如果有缩略图，则设置缩略图
+    shareObject.thumbImage = [UIImage imageNamed:@"darkIcon"];
+    [shareObject setShareImage:_screenshotIMG];
+
+    //分享消息对象设置分享内容对象
+    messageObject.shareObject = shareObject;
+   // messageObject.text = @"分享文本";
+    //调用分享接口
+    [[UMSocialManager defaultManager] shareToPlatform:platformType messageObject:messageObject currentViewController:self completion:^(id data, NSError *error) {
+        if (error) {
+            NSLog(@"************Share fail with error %@*********",error);
+        }else{
+            NSLog(@"response data is %@",data);
+        }
+    }];
 }
 
 -(void)rightBtnClick{

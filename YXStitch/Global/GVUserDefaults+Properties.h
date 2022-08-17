@@ -15,10 +15,17 @@ NS_ASSUME_NONNULL_BEGIN
 @interface GVUserDefaults (Properties)
 #pragma mark--记录全局保存信息
 @property (nonatomic ,assign)NSInteger logoType;//logo类型，1=2drakIcon，2=lightIcon
-@property (nonatomic ,assign)NSInteger waterPosition;//水印位置
+@property (nonatomic ,assign)NSInteger waterPosition;//水印位置 //1=无水印 2=左 3=居中 4=右 5=全屏
+@property (nonatomic ,assign)NSInteger deleteIMGType;//删除原图类型 1=所有图片 2=只删原图
+
 @property (nonatomic ,assign)BOOL isMember;//是否是会员
+@property (nonatomic ,assign)BOOL isSaveIMGAlbum;//是否保存到拼图相册
+@property (nonatomic ,assign)BOOL isAutoDeleteOriginIMG;//是否删除原图
+@property (nonatomic ,assign)BOOL isAutoCheckRecentlyIMG;//是否检测最新长截图
+@property (nonatomic ,assign)BOOL isAutoHiddenScrollStrip;//是否自动隐藏滚动条
 
 
+@property (nonatomic ,strong)NSMutableArray *homeIconArr;//
 
 @end
 

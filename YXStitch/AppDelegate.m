@@ -8,6 +8,8 @@
 #import "AppDelegate.h"
 #import "KSViewController.h"
 #import "HomeViewController.h"
+#import <UMShare/UMShare.h>
+#import <UMCommon/UMCommon.h>
 @interface AppDelegate ()
 
 @end
@@ -18,7 +20,26 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [self SetRootView];
     [self setKeyboardHandle];
+    [self setUM];
     return YES;
+}
+
+-(void)setUM{
+    [UMConfigure initWithAppkey:APP_KEY channel:@"App Store"];
+    //配置微信平台的Universal Links
+    //微信和QQ完整版会校验合法的universalLink，不设置会在初始化平台失败
+    [UMSocialGlobal shareInstance].universalLinkDic = @{@(UMSocialPlatformType_WechatSession):@"https://umplus-sdk-download.oss-cn-shanghai.aliyuncs.com/",
+                                                        @(UMSocialPlatformType_QQ):@"https://umplus-sdk-download.oss-cn-shanghai.aliyuncs.com/qq_conn/101830139"
+                                                        };
+    
+    /* 设置微信的appKey和appSecret */
+    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_WechatSession appKey:@"wx60d36f0847db422c" appSecret:@"5758b4e5dedabcd34d5bfe7a1a65f31d" redirectURL:nil];
+
+//    /* 设置QQ */
+//    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_QQ appKey:@"101830139"/*设置QQ平台的appID*/  appSecret:nil redirectURL:nil];
+
+    /* 设置sina */
+//    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_Sina appKey:@"3921700954"  appSecret:@"04b48b094faeb16683c32669824ebdad" redirectURL:@"https://sns.whalecloud.com/sina2/callback"];
 }
 
 #pragma mark-设置rootView
@@ -50,12 +71,29 @@
     keyboardManager.shouldShowToolbarPlaceholder = YES; // 是否显示占位文字
     
     keyboardManager.placeholderFont = [UIFont boldSystemFontOfSize:17]; // 设置占位文字的字体
-    
     keyboardManager.keyboardDistanceFromTextField = 10.0f; // 输入框距离键盘的距离
+}
+
+-(void)applicationDidBecomeActive:(UIApplication *)application{
     
+}
+-(void)applicationWillEnterForeground:(UIApplication *)application{
     
 }
 
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(nullable NSString *)sourceApplication annotation:(id)annotation
+{
+      if (self.window) {
+          if (url) {
+              NSString *fileNameStr = [url lastPathComponent];
+              NSString *Doc = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents/localFile"] stringByAppendingPathComponent:fileNameStr];
+              NSData *data = [NSData dataWithContentsOfURL:url];
+              [data writeToFile:Doc atomically:YES];
+              NSLog(@"文件已存到本地文件夹内");
+         }
+     }
+     return YES;
+ }
 
 
 

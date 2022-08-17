@@ -41,7 +41,6 @@
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _tableView.backgroundColor = HexColor(BKGrayColor);
         
-        
     }
     return _tableView;
 
@@ -53,7 +52,12 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 4;
+    if (section == 0){
+        return 4;
+    }else{
+        return 2;
+    }
+    
 }
 
 
@@ -67,12 +71,12 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SettingTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SettingTableViewCell"];
     NSInteger index = indexPath.row + indexPath.section * 4;
-    [cell configModel:_arr[index]];
+    [cell configModel:_arr[index] andTag:index andType:1];
     cell.tag = index;
     return cell;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 40;
+    return 44;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     NSInteger index = indexPath.row + indexPath.section * 4;

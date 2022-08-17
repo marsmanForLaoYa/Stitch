@@ -11,13 +11,16 @@
 #import "CheckProView.h"
 #import "BuyViewController.h"
 #import "SelectMainIconViewController.h"
-
-@interface SettingViewController ()<CheckProViewDelegate,SettingTableViewDelegate>
+#import "URLSchemesViewController.h"
+#import <MessageUI/MFMailComposeViewController.h>
+#import "WaterMarkViewController.h"
+@interface SettingViewController ()<CheckProViewDelegate,SettingTableViewDelegate,MFMailComposeViewControllerDelegate>
 @property (nonatomic ,strong)UIView *contentView;
 @property (nonatomic ,strong)SettingTableView *tabletView;
 
 @property (nonatomic ,strong)CheckProView *checkProView;
 @property (nonatomic ,strong)UIView *bgView;
+
 
 @end
 
@@ -27,6 +30,10 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     self.title = @"设置";
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     [self setupViews];
 }
 
@@ -121,9 +128,11 @@
     switch (tag) {
         case 0:
             //偏好设置
+            [self.navigationController pushViewController:[PreferenceSetViewController new] animated:YES];
             break;
         case 1:
             //水印
+            [self.navigationController pushViewController:[WaterMarkViewController new] animated:YES];
             break;
         case 2:
             //主屏幕图标
@@ -131,23 +140,99 @@
             break;
         case 3:
             //urlschemes
+            [self.navigationController pushViewController:[URLSchemesViewController new] animated:YES];
             break;
         case 4:
             //去appstore评价
             break;
         case 5:
             //分享给朋友
+            [self share];
             break;
         case 6:
             //邮箱
+            [self setEmail];
             break;
         case 7:
             //新浪微博
+            [self gotoSinaWB];
             break;
         default:
             break;
     }
     
+}
+-(void)gotoAppStore{
+    //appid
+    NSInteger apple_id = 121212;
+    NSString *str = [NSString stringWithFormat:@"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%ld",(long)apple_id];
+    if (@available(iOS 10.0, *)) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str] options:@{} completionHandler:nil];
+    }else{
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
+    }
+    
+}
+
+
+-(void)share{
+    //分享的标题
+    NSString *textToShare = @"分享给朋友";
+    //分享的图片
+    //UIImage *imageToShare = _screenshotIMG;
+    //分享的url
+    NSInteger apple_id = 121212;
+    NSString *str = [NSString stringWithFormat:@"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%ld",(long)apple_id];
+    NSURL *urlToShare = [NSURL URLWithString:str];
+    NSArray *activityItems = @[textToShare,urlToShare];
+    UIActivityViewController *activityVC = [[UIActivityViewController alloc]initWithActivityItems:activityItems applicationActivities:nil];
+    activityVC.excludedActivityTypes = @[UIActivityTypePrint, UIActivityTypeCopyToPasteboard,UIActivityTypeAssignToContact,UIActivityTypeSaveToCameraRoll];
+    [self presentViewController:activityVC animated:YES completion:nil];
+    [SVProgressHUD dismiss];
+        
+    //分享之后的回调
+    activityVC.completionWithItemsHandler = ^(UIActivityType  _Nullable activityType, BOOL completed, NSArray * _Nullable returnedItems, NSError * _Nullable activityError) {
+        if (completed) {
+           // NSLog(@"completed");
+            //分享 成功
+        } else  {
+          //  NSLog(@"cancled");
+            //分享 取消
+        }
+    };
+}
+
+
+-(void)setEmail{
+    //c方法，填写系统结构体内容，返回值为0，表示成功。
+    NSString *messageBody = @"xxxxxx";
+    NSArray *toRecipents = [NSArray arrayWithObject:@"394974296@qq.com "];
+    MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
+    mc.mailComposeDelegate = self;
+    [mc setSubject:@"我的反馈"];//邮件主题
+    [mc setMessageBody:messageBody isHTML:NO];//邮件部分内容
+    [mc setToRecipients:toRecipents];//发送地址
+    [mc.navigationBar setTintColor:[UIColor whiteColor]];
+    if (!mc) {
+        return;
+    }else{
+        [self presentViewController:mc animated:YES completion:NULL];
+    }
+
+}
+
+-(void)gotoSinaWB{
+    NSURL *url = [NSURL URLWithString:@"sinaweibo://userinfo?uid=2808126020"];
+        // 如果已经安装了这个应用,就跳转
+        if ([[UIApplication sharedApplication] canOpenURL:url]) {
+            if (@available(iOS 10.0, *)) {
+                [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
+            }else{
+                [[UIApplication sharedApplication] openURL:url];
+            }
+        }else{
+            [SVProgressHUD showInfoWithStatus:@"未安装新浪微博无法跳转"];
+        }
 }
 
 @end

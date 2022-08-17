@@ -16,8 +16,8 @@
 #import "Appconfig.h"
 #import "Color.h"
 #import "Tools.h"
-#import "YYModel.h"
-#import "YYCategories.h"
+//#import "YYModel.h"
+//#import "YYCategories.h"
 #import "IQKeyboardManager.h"
 #import "GVUserDefaults.h"
 #import "ToastShowView.h"
@@ -26,6 +26,9 @@
 #import "UIImage+Color.h"
 #import "SVProgressHUD/SVProgressHUD.h"
 #import "GVUserDefaults+Properties.h"
+#import <YYKit/YYKit.h>
+#import <YYKit/UIView+YYAdd.h>
+#import "CAGradientLayer+Gradient.h"
 
 
 #endif /* PrefixHeader_pch */

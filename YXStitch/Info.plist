@@ -2,15 +2,73 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>拼接图片需要打开相册获取图片</string>
 	<key>CFBundleIcons</key>
 	<dict>
+		<key>CFBundleAlternateIcons</key>
+		<dict>
+			<key>Icon</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>Icon-App-76x76</string>
+					<string>Icon-App-83.5x83.5</string>
+					<string>Icon-App-40x40</string>
+					<string>Icon-App-60x60</string>
+					<string>Icon-App-20x20</string>
+					<string>Icon-App-29x29</string>
+				</array>
+				<key>UIPrerenderedIcon</key>
+				<false/>
+			</dict>
+			<key>LightIcon</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>lightIcon-App-40x40</string>
+					<string>lightIcon-App-20x20</string>
+					<string>lightIcon-App-60x60</string>
+					<string>lightIcon-App-29x29</string>
+					<string>lightIcon-App-76x76</string>
+					<string>lightIcon-App-83.5x83.5</string>
+				</array>
+				<key>UIPrerenderedIcon</key>
+				<false/>
+			</dict>
+			<key>小房子</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>小房子</string>
+				</array>
+				<key>UIPrerenderedIcon</key>
+				<false/>
+			</dict>
+			<key>小猫</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>小猫</string>
+				</array>
+				<key>UIPrerenderedIcon</key>
+				<false/>
+			</dict>
+			<key>邮件信息</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>邮件信息</string>
+				</array>
+				<key>UIPrerenderedIcon</key>
+				<false/>
+			</dict>
+		</dict>
 		<key>CFBundlePrimaryIcon</key>
 		<dict>
-			<key>CFBundleIconName</key>
-			<string></string>
 			<key>CFBundleIconFiles</key>
 			<array>
-				<string></string>
+				<string>默认icon</string>
 			</array>
 			<key>UIPrerenderedIcon</key>
 			<false/>
@@ -21,11 +79,63 @@
 			<array>
 				<string></string>
 			</array>
-			<key>UINewsstandBindingType</key>
-			<string>UINewsstandBindingTypeMagazine</string>
 			<key>UINewsstandBindingEdge</key>
 			<string>UINewsstandBindingEdgeLeft</string>
+			<key>UINewsstandBindingType</key>
+			<string>UINewsstandBindingTypeMagazine</string>
 		</dict>
 	</dict>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>wechat</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>wx60d36f0847db422c</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>sina</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>wb3921700954</string>
+			</array>
+		</dict>
+	</array>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>wechat</string>
+		<string>weixin</string>
+		<string>weixinULAPI</string>
+		<string>sinaweibohd</string>
+		<string>sinaweibo</string>
+		<string>sinaweibosso</string>
+		<string>weibosdk</string>
+		<string>weibosdk2.5</string>
+	</array>
+	<key>CFBundleTypeName</key>
+	<string>com.myapp.common-data</string>
+	<key>LSItemContentTypes</key>
+	<array>
+		<string>com.microsoft.powerpoint.ppt</string>
+		<string>public.item</string>
+		<string>com.microsoft.word.doc</string>
+		<string>com.adobe.pdf</string>
+		<string>com.microsoft.excel.xls</string>
+		<string>public.image</string>
+		<string>public.content</string>
+		<string>public.composite-content</string>
+		<string>public.archive</string>
+		<string>public.audio</string>
+		<string>public.movie</string>
+		<string>public.text</string>
+		<string>public.data</string>
+	</array>
 </dict>
 </plist>
