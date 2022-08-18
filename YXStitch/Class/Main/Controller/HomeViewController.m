@@ -17,6 +17,7 @@
 #import "SaveViewController.h"
 #import "UIScrollView+LVShot.h"
 #import "WaterMarkViewController.h"
+#import "SelectPictureViewController.h"
 
 @interface HomeViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,MoveCollectionViewCellDelegate,ScrrenStitchHintViewDelegate>
 
@@ -40,7 +41,13 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     self.title = @"首页";
-//    GVUserDe.waterPosition = 1;
+    if (GVUserDe.waterPosition <= 1){
+        GVUserDe.waterPosition = 1;
+    }
+    if (GVUserDe.selectColorArr.count == 0){
+        GVUserDe.selectColorArr = [NSMutableArray arrayWithObject:@"#E35AF6"];
+    }
+    
     if (GVUserDe.homeIconArr.count >0){
         _iconArr = [NSMutableArray arrayWithArray:GVUserDe.homeIconArr];
     }else{
@@ -54,6 +61,11 @@
 //    NSString *path = [paths objectAtIndex:0];
 //    NSLog(@"path==%@",path);
   //  [self getByAppGroup2];
+    
+    //检测连续截图
+//    if (GVUserDe.isAutoCheckRecentlyIMG) {
+//        [self screenStitch];
+//    }
 
 }
 
@@ -97,10 +109,10 @@
 }
 
 -(void)setupNavItems{
-    UIButton *letfBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-    [letfBtn setBackgroundImage:[UIImage imageNamed:@"水滴"] forState:UIControlStateNormal];
-    [letfBtn addTarget:self action:@selector(letfBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithCustomView:letfBtn];
+    UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+    [leftBtn setBackgroundImage:[UIImage imageNamed:@"水滴"] forState:UIControlStateNormal];
+    [leftBtn addTarget:self action:@selector(leftBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithCustomView:leftBtn];
     self.navigationItem.leftBarButtonItem = item;
 }
         
@@ -130,7 +142,7 @@
     }else if ([cellName isEqualToString:@"网页滚动截图"]){
         vc = [EnterURLViewController new];
     }else if ([cellName isEqualToString:@"拼图"]){
-        
+        vc = [SelectPictureViewController new];
     }else if ([cellName isEqualToString:@"水印"]){
         vc = [WaterMarkViewController new];
     }else if ([cellName isEqualToString:@"设置"]){
@@ -142,41 +154,6 @@
     [self.navigationController pushViewController:vc animated:YES];
 }
 
--(void)screenStitch{
-    //自动识别长图
-    [SVProgressHUD showWithStatus:@"正在检测是否有连续截图..."];
-    _stitchArr = [Tools detectionScreenShotIMG];
-    //触发提示
-    MJWeakSelf
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [SVProgressHUD dismiss];
-        if (weakSelf.bgView == nil){
-            weakSelf.bgView = [Tools addBGViewWithFrame:self.view.frame];
-            [weakSelf.view addSubview:weakSelf.bgView];
-        }else{
-            weakSelf.bgView.hidden = NO;
-        }
-        if (weakSelf.checkScreenStitchView == nil){
-            weakSelf.checkScreenStitchView = [ScrrenStitchHintView new];
-            weakSelf.checkScreenStitchView.frame = CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, RYRealAdaptWidthValue(550));
-            weakSelf.checkScreenStitchView.delegate = self;
-            if (weakSelf.stitchArr.count > 1){
-                //连续截图数量大于2才能去拼接
-                [SVProgressHUD showWithStatus:@"正在拼接中..."];
-                weakSelf.checkScreenStitchView.type = 2;
-                weakSelf.checkScreenStitchView.arr = weakSelf.stitchArr;
-            }else{
-                weakSelf.checkScreenStitchView.type = 1;
-            }
-            weakSelf.checkScreenStitchView.delegate = self;
-            [weakSelf.view addSubview:weakSelf.checkScreenStitchView];
-        }
-        weakSelf.checkScreenStitchView.hidden = NO;
-        [UIView animateWithDuration:0.3 animations:^{
-            weakSelf.checkScreenStitchView.frame = CGRectMake(0, SCREEN_HEIGHT - weakSelf.checkScreenStitchView.height, SCREEN_WIDTH , weakSelf.checkScreenStitchView.height);
-        }];
-    });
-}
 
 
 -(void)GesturePressDelegate:(UIGestureRecognizer *)gestureRecognizer
@@ -279,9 +256,46 @@
     GVUserDe.homeIconArr = _iconArr;
 }
 
+#pragma mark --长图识别
+-(void)screenStitch{
+    //自动识别长图
+    [SVProgressHUD showWithStatus:@"正在检测是否有连续截图..."];
+    _stitchArr = [Tools detectionScreenShotIMG];
+    //触发提示
+    MJWeakSelf
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [SVProgressHUD dismiss];
+        if (weakSelf.bgView == nil){
+            weakSelf.bgView = [Tools addBGViewWithFrame:self.view.frame];
+            [weakSelf.view addSubview:weakSelf.bgView];
+        }else{
+            weakSelf.bgView.hidden = NO;
+        }
+        if (weakSelf.checkScreenStitchView == nil){
+            weakSelf.checkScreenStitchView = [ScrrenStitchHintView new];
+            weakSelf.checkScreenStitchView.frame = CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, RYRealAdaptWidthValue(550));
+            weakSelf.checkScreenStitchView.delegate = self;
+            if (weakSelf.stitchArr.count > 1){
+                //连续截图数量大于2才能去拼接
+                [SVProgressHUD showWithStatus:@"正在拼接中..."];
+                weakSelf.checkScreenStitchView.type = 2;
+                weakSelf.checkScreenStitchView.arr = weakSelf.stitchArr;
+            }else{
+                weakSelf.checkScreenStitchView.type = 1;
+            }
+            weakSelf.checkScreenStitchView.delegate = self;
+            [weakSelf.view addSubview:weakSelf.checkScreenStitchView];
+        }
+        weakSelf.checkScreenStitchView.hidden = NO;
+        [UIView animateWithDuration:0.3 animations:^{
+            weakSelf.checkScreenStitchView.frame = CGRectMake(0, SCREEN_HEIGHT - weakSelf.checkScreenStitchView.height, SCREEN_WIDTH , weakSelf.checkScreenStitchView.height);
+        }];
+    });
+}
+
 
 #pragma mark -- btn触发事件
--(void)letfBtnClick:(UIButton *)btn{
+-(void)leftBtnClick:(UIButton *)btn{
     //滚动截图指引
 }
 

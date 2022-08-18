@@ -29,6 +29,6 @@
 #import <YYKit/YYKit.h>
 #import <YYKit/UIView+YYAdd.h>
 #import "CAGradientLayer+Gradient.h"
-
+#import "HXPhotoPicker.h"
 
 #endif /* PrefixHeader_pch */

@@ -15,8 +15,12 @@ PODS:
   - AFNetworking/UIKit (4.0.1):
     - AFNetworking/NSURLSession
   - GVUserDefaults (1.0.2)
+  - HXPhotoPicker (3.3.1):
+    - HXPhotoPicker/Default (= 3.3.1)
+  - HXPhotoPicker/Default (3.3.1)
   - IQKeyboardManager (6.5.10)
   - Masonry (1.1.0)
+  - RGBColorSlider (0.1.2)
   - SDWebImage (5.13.2):
     - SDWebImage/Core (= 5.13.2)
   - SDWebImage/Core (5.13.2)
@@ -48,8 +52,10 @@ PODS:
 DEPENDENCIES:
   - AFNetworking
   - GVUserDefaults
+  - HXPhotoPicker (~> 3.3.1)
   - IQKeyboardManager
   - Masonry
+  - RGBColorSlider
   - SDWebImage
   - SVProgressHUD
   - Toast
@@ -63,8 +69,10 @@ SPEC REPOS:
   trunk:
     - AFNetworking
     - GVUserDefaults
+    - HXPhotoPicker
     - IQKeyboardManager
     - Masonry
+    - RGBColorSlider
     - SDWebImage
     - SVProgressHUD
     - Toast
@@ -76,8 +84,10 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
   GVUserDefaults: 52d48cf8ba578b40a1a76312b196dfc9134ba36a
+  HXPhotoPicker: f1274d0c931ad8564e0f23f33fe8b6110b639bd7
   IQKeyboardManager: 45a1fa55c1a5b02c61ac0fd7fd5b62bb4ad20d97
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
+  RGBColorSlider: 425099dc03ea753cd8b84977047fe1db01537616
   SDWebImage: 72f86271a6f3139cc7e4a89220946489d4b9a866
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
@@ -86,6 +96,6 @@ SPEC CHECKSUMS:
   UMShare: b66d969a5cc7bd9eeffad6ad2ccd8f860d6216dd
   YYKit: 7cda43304a8dc3696c449041e2cb3107b4e236e7
 
-PODFILE CHECKSUM: 4e97fd973b7518b525679052471fa0921951ae97
+PODFILE CHECKSUM: 4cd38c8d67a57ff19041ef780078a0bcb96c40ea
 
 COCOAPODS: 1.11.3

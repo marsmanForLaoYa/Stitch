@@ -13,6 +13,9 @@ target 'YXStitch' do
   pod 'Toast'
   pod 'SVProgressHUD'
   pod 'YYKit'
+  pod 'RGBColorSlider'
+  pod 'HXPhotoPicker', '~> 3.3.1'
+  
   #友盟分享
   pod 'UMCommon'
   pod 'UMDevice'

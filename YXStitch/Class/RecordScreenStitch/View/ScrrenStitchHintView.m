@@ -109,10 +109,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
  
     _bottomView = [UIView new];
     _bottomView.backgroundColor = HexColor(@"#EEEEEE");
-    if (_type == 1) {
-        //无长图禁止交互
-        _bottomView.userInteractionEnabled = NO;
-    }
+    
     [self addSubview:_bottomView];
     [_bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.left.bottom.equalTo(self);
@@ -168,7 +165,11 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
         make.height.equalTo(@30);
         make.right.equalTo(_bottomView.mas_right).offset(-15);
     }];
-    
+    if (_type == 1) {
+        //无长图禁止交互
+        _bottomView.userInteractionEnabled = NO;
+        exportBtn.userInteractionEnabled = NO;
+    }
 }
 
 -(void)cancelClick{

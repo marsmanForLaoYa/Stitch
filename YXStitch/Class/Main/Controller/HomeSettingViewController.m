@@ -184,6 +184,7 @@
         NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
         [dict setValue:tempArr forKey:@"iconArr"];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"homeChange" object:nil userInfo:dict];
+        [self.navigationController popViewControllerAnimated:YES];
     }else{
         [SVProgressHUD showInfoWithStatus:@"请至少选择一个功能保存！"];
     }

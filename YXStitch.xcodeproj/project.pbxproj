@@ -109,12 +109,18 @@
 		FB687F0628A0EA1C002D557B /* Tools.m in Sources */ = {isa = PBXBuildFile; fileRef = FB687F0528A0EA1C002D557B /* Tools.m */; };
 		FB687F0928A0ECCC002D557B /* ToastShowView.m in Sources */ = {isa = PBXBuildFile; fileRef = FB687F0828A0ECCC002D557B /* ToastShowView.m */; };
 		FB687F0D28A0FF83002D557B /* AppGroupData.m in Sources */ = {isa = PBXBuildFile; fileRef = FB687F0C28A0FF83002D557B /* AppGroupData.m */; };
+		FB7574A828AE18890034D95B /* SelectPictureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB7574A728AE18890034D95B /* SelectPictureViewController.m */; };
 		FB7E659228A49BE00079C9F3 /* URLSchemesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB7E659128A49BE00079C9F3 /* URLSchemesViewController.m */; };
 		FB7E659528A49E6F0079C9F3 /* UrlSchemeTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = FB7E659428A49E6F0079C9F3 /* UrlSchemeTableView.m */; };
 		FB7E659828A4A5680079C9F3 /* PrefenceSetTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = FB7E659728A4A5680079C9F3 /* PrefenceSetTableView.m */; };
 		FB7E659B28A4A6110079C9F3 /* PrefenceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FB7E659A28A4A6110079C9F3 /* PrefenceTableViewCell.m */; };
 		FB8B4E4328AB8BFF00313ECD /* UIScrollView+LVShot.m in Sources */ = {isa = PBXBuildFile; fileRef = FB8B4E4128AB8BFC00313ECD /* UIScrollView+LVShot.m */; };
+		FBA1862528ACFBF50001DF8C /* FullWaterMarkTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FBA1862428ACFBF50001DF8C /* FullWaterMarkTableViewCell.m */; };
+		FBA1862928ACFC740001DF8C /* FullWaterMarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = FBA1862828ACFC740001DF8C /* FullWaterMarkView.m */; };
 		FBB863D028A4DB6600F73A80 /* UnlockFuncView.m in Sources */ = {isa = PBXBuildFile; fileRef = FBB863CF28A4DB6600F73A80 /* UnlockFuncView.m */; };
+		FBF59EF528AC796100D9C6CF /* WaterTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = FBF59EF428AC796100D9C6CF /* WaterTitleView.m */; };
+		FBF59EF828AC8B5400D9C6CF /* WaterColorSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = FBF59EF728AC8B5400D9C6CF /* WaterColorSelectView.m */; };
+		FBF59EFB28AC98BF00D9C6CF /* ColorPlateView.m in Sources */ = {isa = PBXBuildFile; fileRef = FBF59EFA28AC98BF00D9C6CF /* ColorPlateView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -315,6 +321,8 @@
 		FB687F0828A0ECCC002D557B /* ToastShowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ToastShowView.m; sourceTree = "<group>"; };
 		FB687F0B28A0FF83002D557B /* AppGroupData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppGroupData.h; sourceTree = "<group>"; };
 		FB687F0C28A0FF83002D557B /* AppGroupData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppGroupData.m; sourceTree = "<group>"; };
+		FB7574A628AE18890034D95B /* SelectPictureViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SelectPictureViewController.h; sourceTree = "<group>"; };
+		FB7574A728AE18890034D95B /* SelectPictureViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SelectPictureViewController.m; sourceTree = "<group>"; };
 		FB7E659028A49BE00079C9F3 /* URLSchemesViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = URLSchemesViewController.h; sourceTree = "<group>"; };
 		FB7E659128A49BE00079C9F3 /* URLSchemesViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = URLSchemesViewController.m; sourceTree = "<group>"; };
 		FB7E659328A49E6F0079C9F3 /* UrlSchemeTableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UrlSchemeTableView.h; sourceTree = "<group>"; };
@@ -325,8 +333,18 @@
 		FB7E659A28A4A6110079C9F3 /* PrefenceTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PrefenceTableViewCell.m; sourceTree = "<group>"; };
 		FB8B4E4128AB8BFC00313ECD /* UIScrollView+LVShot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+LVShot.m"; sourceTree = "<group>"; };
 		FB8B4E4228AB8BFF00313ECD /* UIScrollView+LVShot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+LVShot.h"; sourceTree = "<group>"; };
+		FBA1862328ACFBF50001DF8C /* FullWaterMarkTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FullWaterMarkTableViewCell.h; sourceTree = "<group>"; };
+		FBA1862428ACFBF50001DF8C /* FullWaterMarkTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FullWaterMarkTableViewCell.m; sourceTree = "<group>"; };
+		FBA1862728ACFC740001DF8C /* FullWaterMarkView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FullWaterMarkView.h; sourceTree = "<group>"; };
+		FBA1862828ACFC740001DF8C /* FullWaterMarkView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FullWaterMarkView.m; sourceTree = "<group>"; };
 		FBB863CE28A4DB6600F73A80 /* UnlockFuncView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UnlockFuncView.h; sourceTree = "<group>"; };
 		FBB863CF28A4DB6600F73A80 /* UnlockFuncView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UnlockFuncView.m; sourceTree = "<group>"; };
+		FBF59EF328AC796100D9C6CF /* WaterTitleView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WaterTitleView.h; sourceTree = "<group>"; };
+		FBF59EF428AC796100D9C6CF /* WaterTitleView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WaterTitleView.m; sourceTree = "<group>"; };
+		FBF59EF628AC8B5400D9C6CF /* WaterColorSelectView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WaterColorSelectView.h; sourceTree = "<group>"; };
+		FBF59EF728AC8B5400D9C6CF /* WaterColorSelectView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WaterColorSelectView.m; sourceTree = "<group>"; };
+		FBF59EF928AC98BF00D9C6CF /* ColorPlateView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ColorPlateView.h; sourceTree = "<group>"; };
+		FBF59EFA28AC98BF00D9C6CF /* ColorPlateView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ColorPlateView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -654,6 +672,12 @@
 			children = (
 				FB63FC1228AB9CC600F62085 /* WaterMarkToolBarView.h */,
 				FB63FC1328AB9CC600F62085 /* WaterMarkToolBarView.m */,
+				FBF59EF328AC796100D9C6CF /* WaterTitleView.h */,
+				FBF59EF428AC796100D9C6CF /* WaterTitleView.m */,
+				FBF59EF628AC8B5400D9C6CF /* WaterColorSelectView.h */,
+				FBF59EF728AC8B5400D9C6CF /* WaterColorSelectView.m */,
+				FBA1862728ACFC740001DF8C /* FullWaterMarkView.h */,
+				FBA1862828ACFC740001DF8C /* FullWaterMarkView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -776,6 +800,8 @@
 				FB2E282E28AA1A13006BDAB0 /* SZAgorithm */,
 				FB687F0B28A0FF83002D557B /* AppGroupData.h */,
 				FB687F0C28A0FF83002D557B /* AppGroupData.m */,
+				FBF59EF928AC98BF00D9C6CF /* ColorPlateView.h */,
+				FBF59EFA28AC98BF00D9C6CF /* ColorPlateView.m */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -821,6 +847,8 @@
 		FB687EF228A0DEE2002D557B /* CommonStitch */ = {
 			isa = PBXGroup;
 			children = (
+				FB7574A628AE18890034D95B /* SelectPictureViewController.h */,
+				FB7574A728AE18890034D95B /* SelectPictureViewController.m */,
 			);
 			path = CommonStitch;
 			sourceTree = "<group>";
@@ -828,6 +856,7 @@
 		FB687EF328A0DEEB002D557B /* WaterMark */ = {
 			isa = PBXGroup;
 			children = (
+				FBA1862628ACFBF80001DF8C /* Cell */,
 				FB63FC1528AB9CD300F62085 /* View */,
 				FB63FC0F28AB9B8900F62085 /* WaterMarkViewController.h */,
 				FB63FC1028AB9B8900F62085 /* WaterMarkViewController.m */,
@@ -852,6 +881,16 @@
 				FB2D5A1528A23B6B006085BC /* View */,
 			);
 			path = WebviewStitch;
+			sourceTree = "<group>";
+		};
+		FBA1862628ACFBF80001DF8C /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				FBA1862328ACFBF50001DF8C /* FullWaterMarkTableViewCell.h */,
+				FBA1862428ACFBF50001DF8C /* FullWaterMarkTableViewCell.m */,
+			);
+			name = Cell;
+			path = "New Group";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1058,6 +1097,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FBF59EF828AC8B5400D9C6CF /* WaterColorSelectView.m in Sources */,
 				FB2E283928AA1A13006BDAB0 /* SZImageGenerator.m in Sources */,
 				FB3EFE8C28A3CB07006C3889 /* GVUserDefaults+Properties.m in Sources */,
 				FB2E283728AA1A13006BDAB0 /* SZImageMergeInfo.m in Sources */,
@@ -1071,7 +1111,9 @@
 				FB2E285B28AA1A21006BDAB0 /* ZWMGuideView.m in Sources */,
 				FB2E287428AA1B62006BDAB0 /* SZScrollView.m in Sources */,
 				FB2E285C28AA1A21006BDAB0 /* AdaptationTool.m in Sources */,
+				FBA1862928ACFC740001DF8C /* FullWaterMarkView.m in Sources */,
 				FB7E659228A49BE00079C9F3 /* URLSchemesViewController.m in Sources */,
+				FBA1862528ACFBF50001DF8C /* FullWaterMarkTableViewCell.m in Sources */,
 				FB2D5A1828A23D51006085BC /* UrlInvalidHintView.m in Sources */,
 				FB3EFE4128A3A241006C3889 /* PriceView.m in Sources */,
 				FB2E287228AA1B62006BDAB0 /* SZImageTableViewCell.m in Sources */,
@@ -1087,6 +1129,7 @@
 				FB2E283A28AA1A13006BDAB0 /* SZImageFinger.m in Sources */,
 				FB4E535F28A34C4B0072E1AD /* PreferenceSetViewController.m in Sources */,
 				FB687F0628A0EA1C002D557B /* Tools.m in Sources */,
+				FBF59EF528AC796100D9C6CF /* WaterTitleView.m in Sources */,
 				FB687F0928A0ECCC002D557B /* ToastShowView.m in Sources */,
 				FB687EF928A0E23F002D557B /* HomeViewController.m in Sources */,
 				FB2E285728AA1A21006BDAB0 /* UIImage+Category.m in Sources */,
@@ -1098,6 +1141,7 @@
 				FB3EFE3B28A387EA006C3889 /* CheckProView.m in Sources */,
 				FBB863D028A4DB6600F73A80 /* UnlockFuncView.m in Sources */,
 				FB2E285A28AA1A21006BDAB0 /* UIImage+Stiching.m in Sources */,
+				FB7574A828AE18890034D95B /* SelectPictureViewController.m in Sources */,
 				FB3EFE4A28A3B828006C3889 /* SelectMainIconViewController.m in Sources */,
 				FB687EFF28A0E9F1002D557B /* KSViewController.m in Sources */,
 				FB7E659B28A4A6110079C9F3 /* PrefenceTableViewCell.m in Sources */,
@@ -1115,6 +1159,7 @@
 				FB8B4E4328AB8BFF00313ECD /* UIScrollView+LVShot.m in Sources */,
 				FB2D5A1E28A25D63006085BC /* SaveViewController.m in Sources */,
 				FB3EFE3E28A39485006C3889 /* BuyViewController.m in Sources */,
+				FBF59EFB28AC98BF00D9C6CF /* ColorPlateView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
