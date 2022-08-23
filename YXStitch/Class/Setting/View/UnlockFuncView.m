@@ -41,7 +41,7 @@
     [self addSubview:bkIMG];
     [bkIMG mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.centerY.equalTo(self);
-        make.height.equalTo(@((CGFloat)222 / 667 * SCREEN_HEIGHT));
+        make.height.equalTo(@((CGFloat)202 / 667 * SCREEN_HEIGHT));
         make.width.equalTo(@((CGFloat)258 / 375 * SCREEN_WIDTH));
     }];;
     

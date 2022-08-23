@@ -44,14 +44,22 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
     //
     MJWeakSelf
     UIButton *cancelBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-    [cancelBtn setBackgroundImage:IMG(@"取消") forState:UIControlStateNormal];
     [cancelBtn addTarget:self action:@selector(cancelClick) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:cancelBtn];
     [cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.height.equalTo(@15);
+        make.width.height.equalTo(@40);
         make.top.equalTo(@20);
         make.left.equalTo(@15);
     }];
+    
+    UIImageView *cancelIMG = [UIImageView new];
+    cancelIMG.image = IMG(@"取消");
+    [cancelBtn addSubview:cancelIMG];
+    [cancelIMG mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.height.equalTo(@15);
+        make.centerX.top.equalTo(cancelBtn);
+    }];
+    
     if (_type == 1){
         UIImageView *icon = [UIImageView new];
         icon.image = [UIImage imageNamed:@"无长图提示"];
@@ -113,7 +121,11 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
     [self addSubview:_bottomView];
     [_bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.left.bottom.equalTo(self);
-        make.height.equalTo(@48);
+        if ([Tools isIPhoneNotchScreen]) {
+            make.height.equalTo(@60);
+        }else{
+            make.height.equalTo(@48);
+        }  
     }];
     
     NSArray *textArr = @[@"裁切",@"拼接",@"字幕"];

@@ -13,7 +13,7 @@
 #import <CoreMedia/CoreMedia.h>
 
 
-#define BEfORETIME -(600 * 60)
+#define BEfORETIME -(2 * 60)
 
 @implementation Tools
 + (UIImageView *)getLineWithFrame:(CGRect )frame{
@@ -730,6 +730,22 @@
      }
     return  dataArr;
 
+}
+
++(void)setNaviBarBKColorWith:(UINavigationController *)navi andBKColor:(UIColor *)BKColor andFontColor:(UIColor *)fontClor{
+    if (@available(iOS 15.0, *)) {
+        NSMutableDictionary *textAttribute = [NSMutableDictionary dictionary];
+        textAttribute[NSForegroundColorAttributeName] = fontClor;
+        textAttribute[NSFontAttributeName] = Font18;
+        UINavigationBar *navigationBar = navi.navigationBar;
+        UINavigationBarAppearance *app = [UINavigationBarAppearance new];
+        [app configureWithOpaqueBackground];
+        [app setTitleTextAttributes:textAttribute];
+        [app setBackgroundColor:BKColor];
+        [app setShadowColor:[UIColor clearColor]];
+        navigationBar.scrollEdgeAppearance = app;
+        navigationBar.standardAppearance = app;
+    }
 }
 
 @end

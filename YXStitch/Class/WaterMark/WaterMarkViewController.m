@@ -14,8 +14,9 @@
 @interface WaterMarkViewController ()<UnlockFuncViewDelegate,CheckProViewDelegate,WaterMarkToolBarViewDelegate>
 @property (nonatomic ,strong)WaterMarkToolBarView *toolView;
 @property (nonatomic ,strong)UnlockFuncView *funcView;
-@property (nonatomic ,strong)CheckProView *checkProView;
 @property (nonatomic ,strong)UIView *bgView;
+@property (nonatomic ,strong)CheckProView *checkProView;
+
 @property (nonatomic ,strong)UIImageView *BKIMG;
 @property (nonatomic ,strong)UILabel *waterLab;
 
@@ -36,6 +37,14 @@
     UIColor *color = [UIColor whiteColor];
     NSDictionary *dict = [NSDictionary dictionaryWithObject:color forKey:NSForegroundColorAttributeName];
     self.navigationController.navigationBar.titleTextAttributes = dict;
+    self.navigationController.navigationBar.barTintColor = [UIColor blackColor];
+//    if (@available(iOS 13.0, *)) {
+//        UINavigationBarAppearance* appear = [UINavigationBarAppearance new];
+//        appear.backgroundColor = [UIColor redColor];
+//        id proxy = [UINavigationBar appearance];
+//        [proxy setStandardAppearance: appear];
+//        [proxy setScrollEdgeAppearance: appear];
+//    }
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -44,6 +53,7 @@
     UIColor *color = [UIColor blackColor];
     NSDictionary *dict = [NSDictionary dictionaryWithObject:color forKey:NSForegroundColorAttributeName];
     self.navigationController.navigationBar.titleTextAttributes = dict;
+    self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
 }
 -(void)setupViews{
     MJWeakSelf
@@ -81,11 +91,12 @@
     UIBarButtonItem *saveItem = [[UIBarButtonItem alloc]initWithCustomView:saveBtn];
     self.navigationItem.rightBarButtonItem = saveItem;
     
+    
     UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeSystem];
     leftBtn.tag = 1;
-   // [leftBtn setBackgroundImage:IMG(@"白色返回") forState:UIControlStateNormal];
+//    [leftBtn setBackgroundImage:IMG(@"whiteback") forState:UIControlStateNormal];
     leftBtn.titleLabel.font = Font18;
-    [leftBtn setTitle:@"<" forState:UIControlStateNormal];
+    [leftBtn setTitle:@"返回" forState:UIControlStateNormal];
     [leftBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [leftBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithCustomView:leftBtn];
@@ -191,6 +202,7 @@
     if (tag == 1){
         [UIView animateWithDuration:0.3 animations:^{
             weakSelf.checkProView.frame = CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH , weakSelf.checkProView.height);
+        } completion:^(BOOL finished) {
             weakSelf.bgView.hidden = YES;
         }];
     }else{

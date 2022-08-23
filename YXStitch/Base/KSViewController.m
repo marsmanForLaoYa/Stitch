@@ -31,18 +31,30 @@
 }
 
 //设置导航栏主题
-- (void)setupNavigationBar
-{
-    UINavigationBar *appearance = [UINavigationBar appearance];
-    [appearance setBarTintColor:UIColor.whiteColor]; //统一设置导航栏颜色，如果单个界面需要设置，可以在viewWillAppear里面设置，在viewWillDisappear设置回统一格式。
-//    [appearance setBarTintColor:[UIColor colorWithHexString:@"#2ED1A1" ]];
-
+- (void)setupNavigationBar{
     //导航栏title格式
     NSMutableDictionary *textAttribute = [NSMutableDictionary dictionary];
 //    textAttribute[NSForegroundColorAttributeName] = [UIColor whiteColor];
     textAttribute[NSForegroundColorAttributeName] = [UIColor blackColor];
     textAttribute[NSFontAttributeName] = Font18;
-    [appearance setTitleTextAttributes:textAttribute];
+    
+    UINavigationBar *navigationBar = self.navigationController.navigationBar;
+    if (@available(iOS 15.0, *)) {
+        UINavigationBarAppearance *app = [UINavigationBarAppearance new];
+        [app configureWithOpaqueBackground];
+        [app setTitleTextAttributes:textAttribute];
+        [app setBackgroundColor:[UIColor whiteColor]];
+        [app setShadowColor:[UIColor clearColor]];
+        navigationBar.scrollEdgeAppearance = app;
+        navigationBar.standardAppearance = app;
+    }else{
+        //统一设置导航栏颜色，如果单个界面需要设置，可以在viewWillAppear里面设置，在viewWillDisappear设置回统一格式。
+    //    [appearance setBarTintColor:[UIColor whiteColor]];
+        UINavigationBar *appearance = [UINavigationBar appearance];
+        [appearance setBarTintColor:UIColor.whiteColor];
+        [appearance setTitleTextAttributes:textAttribute];
+    }
+    
 }
 
 - (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated
@@ -75,9 +87,10 @@
 
 
 //手势代理
-- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
-{
-    return self.childViewControllers.count > 1;
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer{
+//    return self.childViewControllers.count > 1;
+    //全局禁止左滑后退
+    return NO;
 }
 
 

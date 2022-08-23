@@ -17,6 +17,8 @@
 		FB086F7228A662F60062EBA5 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB086F7128A662F60062EBA5 /* CoreData.framework */; };
 		FB086F7428A662FF0062EBA5 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB086F7328A662FF0062EBA5 /* CoreMedia.framework */; };
 		FB086F7628A663090062EBA5 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB086F7528A663090062EBA5 /* SystemConfiguration.framework */; };
+		FB2BBD1428AF688A001DDFAE /* CaptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB2BBD1328AF688A001DDFAE /* CaptionViewController.m */; };
+		FB2BBD1828AF8D21001DDFAE /* CaptionBottomView.m in Sources */ = {isa = PBXBuildFile; fileRef = FB2BBD1728AF8D21001DDFAE /* CaptionBottomView.m */; };
 		FB2D5A0728A1EE2A006085BC /* HomeSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB2D5A0628A1EE2A006085BC /* HomeSettingViewController.m */; };
 		FB2D5A0A28A1F4AF006085BC /* BaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB2D5A0928A1F4AF006085BC /* BaseViewController.m */; };
 		FB2D5A0D28A1F59C006085BC /* UIImage+Color.m in Sources */ = {isa = PBXBuildFile; fileRef = FB2D5A0C28A1F59C006085BC /* UIImage+Color.m */; };
@@ -167,6 +169,10 @@
 		FB086F7128A662F60062EBA5 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		FB086F7328A662FF0062EBA5 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		FB086F7528A663090062EBA5 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		FB2BBD1228AF688A001DDFAE /* CaptionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CaptionViewController.h; sourceTree = "<group>"; };
+		FB2BBD1328AF688A001DDFAE /* CaptionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CaptionViewController.m; sourceTree = "<group>"; };
+		FB2BBD1628AF8D21001DDFAE /* CaptionBottomView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CaptionBottomView.h; sourceTree = "<group>"; };
+		FB2BBD1728AF8D21001DDFAE /* CaptionBottomView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CaptionBottomView.m; sourceTree = "<group>"; };
 		FB2D5A0528A1EE2A006085BC /* HomeSettingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HomeSettingViewController.h; sourceTree = "<group>"; };
 		FB2D5A0628A1EE2A006085BC /* HomeSettingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HomeSettingViewController.m; sourceTree = "<group>"; };
 		FB2D5A0828A1F4AF006085BC /* BaseViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseViewController.h; sourceTree = "<group>"; };
@@ -392,6 +398,25 @@
 				B8C87E9AD95B7468BA24009E /* Pods-YXStitch.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		FB2BBD1128AF6861001DDFAE /* Caption */ = {
+			isa = PBXGroup;
+			children = (
+				FB2BBD1528AF85DA001DDFAE /* View */,
+				FB2BBD1228AF688A001DDFAE /* CaptionViewController.h */,
+				FB2BBD1328AF688A001DDFAE /* CaptionViewController.m */,
+			);
+			path = Caption;
+			sourceTree = "<group>";
+		};
+		FB2BBD1528AF85DA001DDFAE /* View */ = {
+			isa = PBXGroup;
+			children = (
+				FB2BBD1628AF8D21001DDFAE /* CaptionBottomView.h */,
+				FB2BBD1728AF8D21001DDFAE /* CaptionBottomView.m */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		FB2D5A0E28A20DCD006085BC /* Cell */ = {
@@ -770,6 +795,7 @@
 		FB687EEB28A0DEA1002D557B /* Class */ = {
 			isa = PBXGroup;
 			children = (
+				FB2BBD1128AF6861001DDFAE /* Caption */,
 				FB687EF428A0DEF6002D557B /* Setting */,
 				FB687EF528A0DEFA002D557B /* WebviewStitch */,
 				FB687EF328A0DEEB002D557B /* WaterMark */,
@@ -1151,6 +1177,7 @@
 				FB3EFE3828A356BB006C3889 /* SettingTableView.m in Sources */,
 				FB5D46A628AA3FEE0015E2A5 /* StitchResultView.m in Sources */,
 				FB687EFE28A0E9F1002D557B /* BaseView.m in Sources */,
+				FB2BBD1828AF8D21001DDFAE /* CaptionBottomView.m in Sources */,
 				FB2D5A1428A234C2006085BC /* EnterURLViewController.m in Sources */,
 				FB2D5A1128A20DE4006085BC /* MoveCollectionViewCell.m in Sources */,
 				FB4E536228A34D230072E1AD /* SettingViewController.m in Sources */,
@@ -1160,6 +1187,7 @@
 				FB2D5A1E28A25D63006085BC /* SaveViewController.m in Sources */,
 				FB3EFE3E28A39485006C3889 /* BuyViewController.m in Sources */,
 				FBF59EFB28AC98BF00D9C6CF /* ColorPlateView.m in Sources */,
+				FB2BBD1428AF688A001DDFAE /* CaptionViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -14,6 +14,7 @@
 
 @interface WaterColorSelectView ()
 @property (nonatomic, strong)UIButton *selectBtn;
+
 @end
 
 @implementation WaterColorSelectView

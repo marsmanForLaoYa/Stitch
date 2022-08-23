@@ -52,7 +52,7 @@
         make.height.equalTo(@200);
     }];
 }
-
+ 
 -(void)addBtn{
     NSArray *arr = @[@"取消",@"保存 "];
     for (NSInteger i = 0 ; i < arr.count; i ++) {
@@ -60,6 +60,7 @@
         btn.tag = i;
         [btn setTitle:arr[i] forState:UIControlStateNormal];
         [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        btn.titleLabel.font = Font18;
         [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:btn];
         [btn mas_makeConstraints:^(MASConstraintMaker *make) {

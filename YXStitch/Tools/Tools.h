@@ -13,13 +13,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface Tools : NSObject
 
-//画一个线条
+///画一条分割线
 +(UIImageView *)getLineWithFrame:(CGRect )frame;
 
-//正则判断手机号
+///正则判断手机号
 +(BOOL)isValidateMobile:(NSString *)mobile;
 
-//
+///添加背景view
 +(UIView *)addBGViewWithFrame:(CGRect )frame;
 
 +(int)pleaseInsertStarTime:(NSString *)starTime andInsertEndTime:(NSString *)endTime;
@@ -116,6 +116,7 @@ NS_ASSUME_NONNULL_BEGIN
 +(double)availableMemory;
 
 
+///UIView 转换成uiimage
 +(UIImage *)imageFromView:(UIView *)view rect:(CGRect)rect;
 
 
@@ -128,6 +129,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  @return 返回值类型为BOOL
  */
  
+///正则判断邮箱是否有效
 +(BOOL)urlValidation:(NSString *)string;
 
 ///检测是否连续截图
@@ -135,6 +137,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 ///PHAsset转换成UIImage
 +(void)getImageWithAsset:(PHAsset*)asset withBlock:(void(^)(UIImage*image))block;
+/// iOS15重置navigationbar 颜色和字体
++(void)setNaviBarBKColorWith:(UINavigationController *)navi andBKColor:(UIColor *)BKColor andFontColor:(UIColor *)fontClor;
 @end
 
 NS_ASSUME_NONNULL_END

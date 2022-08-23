@@ -326,6 +326,7 @@
     MJWeakSelf
     [UIView animateWithDuration:0.3 animations:^{
         weakSelf.checkScreenStitchView.frame = CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH , weakSelf.checkScreenStitchView.height);
+    } completion:^(BOOL finished) {
         weakSelf.bgView.hidden = YES;
     }];
 }
