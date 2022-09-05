@@ -30,5 +30,9 @@
 #import <YYKit/UIView+YYAdd.h>
 #import "CAGradientLayer+Gradient.h"
 #import "HXPhotoPicker.h"
+#import "UIScrollView+UITouch.h"
+#import "UIScrollView+LVShot.h"
+#import "SDCycleScrollView.h"
+#import "TYSnapshotScroll.h"
 
 #endif /* PrefixHeader_pch */

@@ -49,7 +49,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
     [cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.height.equalTo(@40);
         make.top.equalTo(@20);
-        make.left.equalTo(@15);
+        make.left.equalTo(@5);
     }];
     
     UIImageView *cancelIMG = [UIImageView new];
@@ -193,13 +193,14 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
 }
 
 -(void)functionClick:(UIButton *)btn{
-    if (btn.tag == 0) {
-        //长屏
-    }else if (btn.tag == 1){
-        //拼接
-    }else{
-        //字幕
-    }
+    [self.delegate btnClickWithTag:btn.tag];
+//    if (btn.tag == 0) {
+//        //长屏
+//    }else if (btn.tag == 1){
+//        //拼接
+//    }else{
+//        //字幕
+//    }
 }
 
 -(void)setupLayout{

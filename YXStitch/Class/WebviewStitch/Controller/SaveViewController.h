@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic ,strong)UIImage *screenshotIMG;
 @property (nonatomic ,strong)NSString *urlStr;
 @property (nonatomic ,assign)NSInteger type;//1=网页截图保存 2=拼图保存
+@property (nonatomic ,assign)BOOL isVer;//是竖拼还是横拼
 @end
 
 NS_ASSUME_NONNULL_END

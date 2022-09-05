@@ -15,9 +15,11 @@
 #import <ReplayKit/ReplayKit.h>
 #import "ScrrenStitchHintView.h"
 #import "SaveViewController.h"
-#import "UIScrollView+LVShot.h"
+#import "GuiderVisitorView.h"
+
 #import "WaterMarkViewController.h"
 #import "SelectPictureViewController.h"
+#import "CaptionViewController.h"
 
 @interface HomeViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,MoveCollectionViewCellDelegate,ScrrenStitchHintViewDelegate>
 
@@ -32,7 +34,10 @@
 @property (nonatomic ,strong)ScrrenStitchHintView *checkScreenStitchView;
 @property (nonatomic ,strong)UIView *bgView;
 @property (nonatomic ,strong)StitchResultView *resultView;
+@property (nonatomic ,strong)GuiderVisitorView *guiderView;
+
 @property (nonatomic ,strong)NSMutableArray *stitchArr;
+
 @end
 
 @implementation HomeViewController
@@ -57,16 +62,22 @@
     [self setupLayout];
     [self setupNavItems];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(noty:) name:@"homeChange" object:nil];
+//    [self.view bringSubviewToFront:_imageView];
 //    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES);
 //    NSString *path = [paths objectAtIndex:0];
 //    NSLog(@"path==%@",path);
   //  [self getByAppGroup2];
-    
     //检测连续截图
 //    if (GVUserDe.isAutoCheckRecentlyIMG) {
 //        [self screenStitch];
 //    }
 
+    
+}
+
+- (void)sliderValueChanged:(UISlider *)slider{
+    // Slider当前位置的值
+    NSLog(@"%f", slider.value);
 }
 
 #pragma mark - NSFileManager
@@ -297,6 +308,31 @@
 #pragma mark -- btn触发事件
 -(void)leftBtnClick:(UIButton *)btn{
     //滚动截图指引
+    MJWeakSelf
+    if (_bgView == nil){
+        _bgView = [Tools addBGViewWithFrame:self.view.frame];
+        [self.view addSubview:_bgView];
+    }else{
+        _bgView.hidden = NO;
+    }
+    if (_guiderView == nil){
+        _guiderView = [GuiderVisitorView new];
+        _guiderView.frame = CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, RYRealAdaptWidthValue(565));
+       
+        [self.view addSubview:_guiderView];
+    }
+    
+    _guiderView.btnClick = ^{
+        [UIView animateWithDuration:0.3 animations:^{
+            weakSelf.guiderView.frame = CGRectMake(0, SCREEN_HEIGHT + 100, SCREEN_WIDTH , weakSelf.guiderView.height);
+        } completion:^(BOOL finished) {
+            weakSelf.bgView.hidden = YES;
+            weakSelf.guiderView.pageC.currentPage = 0;
+        }];
+    };
+    [UIView animateWithDuration:0.3 animations:^{
+        weakSelf.guiderView.frame = CGRectMake(0, SCREEN_HEIGHT - weakSelf.guiderView.height, SCREEN_WIDTH , weakSelf.guiderView.height);
+    }];
 }
 
 
@@ -306,7 +342,7 @@
     if (tag == 4){
         [weakSelf checkScreenStitchViewDiss];
     }else if (tag == 5){
-        __weak typeof(self) weakSelf = self;
+        //导出
         [SVProgressHUD showWithStatus:@"正在生成图片中.."];
         [_resultView.scrollView DDGContentScrollScreenShot:^(UIImage *screenShotImage) {
             [SVProgressHUD dismiss];
@@ -317,7 +353,26 @@
             [weakSelf.navigationController pushViewController:saveVC animated:YES];
         }];
        
-    }else{
+    }else {
+        //字幕//拼接//裁切
+        CaptionViewController *vc = [CaptionViewController new];  
+        __block NSMutableArray *tmpArr = [NSMutableArray array];
+        for (PHAsset *asset in _stitchArr) {
+            [Tools getImageWithAsset:asset withBlock:^(UIImage * _Nonnull image) {
+                [tmpArr addObject:image];
+            }];
+        }
+        vc.dataArr = tmpArr;
+        if (tag == 1){
+            vc.type = 2;
+        }else if (tag == 2){
+            vc.type = 1;
+        }else{
+            vc.type = 3;
+        }
+        
+        [weakSelf checkScreenStitchViewDiss];
+        [self.navigationController pushViewController:vc animated:YES];
         
     }
     

@@ -16,13 +16,13 @@ static const CGFloat kPhotoViewMargin = 12.0;
 @property (weak, nonatomic) HXPhotoView *photoView;
 @property (strong, nonatomic) UIScrollView *scrollView;
 @property (nonatomic ,strong)HXPhotoBottomView *bottomView;
-
 @property (assign, nonatomic) BOOL needDeleteItem;
 @property (assign, nonatomic) BOOL showHud;
 @property (nonatomic, strong)NSTimer *reTimer;
 @property (nonatomic ,assign)BOOL isOpenAlbum;
 @property (nonatomic ,assign)NSInteger showBottomViewStatus;
 @property (nonatomic ,strong)UIButton *clearBtn;
+@property (nonatomic ,assign)NSInteger selectInex;
 
 @end
 
@@ -56,7 +56,7 @@ static const CGFloat kPhotoViewMargin = 12.0;
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    _reTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(timerMethod) userInfo:nil repeats:YES];
+    _reTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timerMethod) userInfo:nil repeats:YES];
     [self changeStatus];
 }
 -(void)viewDidDisappear:(BOOL)animated{
@@ -73,7 +73,7 @@ static const CGFloat kPhotoViewMargin = 12.0;
 #pragma mark 定时器检测图片选择器状态
 -(void)timerMethod{
     if (_isOpenAlbum){
-        if (self.manager.selectedCount == 0 ){
+        if (self.manager.selectedCount == 0){
             _showBottomViewStatus = 0;
             if (_showBottomViewStatus == 0){
                 _clearBtn.hidden = YES;
@@ -177,7 +177,7 @@ static const CGFloat kPhotoViewMargin = 12.0;
             
         };
         _manager.configuration.previewBottomView = ^(HXPhotoPreviewBottomView *bottomView) {
-            
+            //[bottomView removeFromSuperview];
         };
 
     }
@@ -265,6 +265,7 @@ static const CGFloat kPhotoViewMargin = 12.0;
                 [_clearBtn removeFromSuperview];
                 _clearBtn = nil;
                 CaptionViewController *vc = [CaptionViewController new];
+                vc.type = 1;
                 __block NSMutableArray *arr = [NSMutableArray array];
                 for (HXPhotoModel *photoModel in [self.manager selectedArray]) {
                     [Tools getImageWithAsset:photoModel.asset withBlock:^(UIImage * _Nonnull image) {
@@ -358,6 +359,7 @@ static const CGFloat kPhotoViewMargin = 12.0;
     self.view.backgroundColor = [UIColor whiteColor];
     _isOpenAlbum = NO;
     _showBottomViewStatus = 0;
+    _selectInex = 0;
     self.title  = @"拼图";
 #ifdef __IPHONE_13_0
     if (@available(iOS 13.0, *)) {

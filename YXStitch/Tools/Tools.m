@@ -13,7 +13,7 @@
 #import <CoreMedia/CoreMedia.h>
 
 
-#define BEfORETIME -(2 * 60)
+#define BEfORETIME -(100 * 60)
 
 @implementation Tools
 + (UIImageView *)getLineWithFrame:(CGRect )frame{

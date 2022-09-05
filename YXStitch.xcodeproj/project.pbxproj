@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		88A9881C3EEEB1AA517CAE1C /* libPods-YXStitch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1A9AF54F55FC18D9EDC22C /* libPods-YXStitch.a */; };
+		FB00324928B8AB910028BC61 /* MyCustomSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = FB00324828B8AB910028BC61 /* MyCustomSlider.m */; };
 		FB086F6628A662CB0062EBA5 /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB687EC828A0DE65002D557B /* ReplayKit.framework */; };
 		FB086F6828A662D30062EBA5 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB086F6728A662D30062EBA5 /* AudioToolbox.framework */; };
 		FB086F6A28A662D70062EBA5 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB086F6928A662D70062EBA5 /* AVKit.framework */; };
@@ -17,6 +18,7 @@
 		FB086F7228A662F60062EBA5 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB086F7128A662F60062EBA5 /* CoreData.framework */; };
 		FB086F7428A662FF0062EBA5 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB086F7328A662FF0062EBA5 /* CoreMedia.framework */; };
 		FB086F7628A663090062EBA5 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB086F7528A663090062EBA5 /* SystemConfiguration.framework */; };
+		FB0D9E2828B4D1420057DC37 /* UIScrollView+UITouch.m in Sources */ = {isa = PBXBuildFile; fileRef = FB0D9E2728B4D1420057DC37 /* UIScrollView+UITouch.m */; };
 		FB2BBD1428AF688A001DDFAE /* CaptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB2BBD1328AF688A001DDFAE /* CaptionViewController.m */; };
 		FB2BBD1828AF8D21001DDFAE /* CaptionBottomView.m in Sources */ = {isa = PBXBuildFile; fileRef = FB2BBD1728AF8D21001DDFAE /* CaptionBottomView.m */; };
 		FB2D5A0728A1EE2A006085BC /* HomeSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB2D5A0628A1EE2A006085BC /* HomeSettingViewController.m */; };
@@ -111,6 +113,7 @@
 		FB687F0628A0EA1C002D557B /* Tools.m in Sources */ = {isa = PBXBuildFile; fileRef = FB687F0528A0EA1C002D557B /* Tools.m */; };
 		FB687F0928A0ECCC002D557B /* ToastShowView.m in Sources */ = {isa = PBXBuildFile; fileRef = FB687F0828A0ECCC002D557B /* ToastShowView.m */; };
 		FB687F0D28A0FF83002D557B /* AppGroupData.m in Sources */ = {isa = PBXBuildFile; fileRef = FB687F0C28A0FF83002D557B /* AppGroupData.m */; };
+		FB6FC66E28B60CB500BE4AA1 /* StichingImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = FB6FC66D28B60CB500BE4AA1 /* StichingImageView.m */; };
 		FB7574A828AE18890034D95B /* SelectPictureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB7574A728AE18890034D95B /* SelectPictureViewController.m */; };
 		FB7E659228A49BE00079C9F3 /* URLSchemesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB7E659128A49BE00079C9F3 /* URLSchemesViewController.m */; };
 		FB7E659528A49E6F0079C9F3 /* UrlSchemeTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = FB7E659428A49E6F0079C9F3 /* UrlSchemeTableView.m */; };
@@ -120,6 +123,9 @@
 		FBA1862528ACFBF50001DF8C /* FullWaterMarkTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FBA1862428ACFBF50001DF8C /* FullWaterMarkTableViewCell.m */; };
 		FBA1862928ACFC740001DF8C /* FullWaterMarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = FBA1862828ACFC740001DF8C /* FullWaterMarkView.m */; };
 		FBB863D028A4DB6600F73A80 /* UnlockFuncView.m in Sources */ = {isa = PBXBuildFile; fileRef = FBB863CF28A4DB6600F73A80 /* UnlockFuncView.m */; };
+		FBE5467928C0BCC300B40FD8 /* GuiderVisitorView.m in Sources */ = {isa = PBXBuildFile; fileRef = FBE5467828C0BCC300B40FD8 /* GuiderVisitorView.m */; };
+		FBECFBD528BA0D30006FCF74 /* StitchingButton.m in Sources */ = {isa = PBXBuildFile; fileRef = FBECFBD428BA0D30006FCF74 /* StitchingButton.m */; };
+		FBF12BEE28BC4EDE008F10EA /* IMGFuctionView.m in Sources */ = {isa = PBXBuildFile; fileRef = FBF12BED28BC4EDE008F10EA /* IMGFuctionView.m */; };
 		FBF59EF528AC796100D9C6CF /* WaterTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = FBF59EF428AC796100D9C6CF /* WaterTitleView.m */; };
 		FBF59EF828AC8B5400D9C6CF /* WaterColorSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = FBF59EF728AC8B5400D9C6CF /* WaterColorSelectView.m */; };
 		FBF59EFB28AC98BF00D9C6CF /* ColorPlateView.m in Sources */ = {isa = PBXBuildFile; fileRef = FBF59EFA28AC98BF00D9C6CF /* ColorPlateView.m */; };
@@ -161,6 +167,8 @@
 		113BB414313D98CCCD8D49AD /* Pods-YXStitch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YXStitch.debug.xcconfig"; path = "Target Support Files/Pods-YXStitch/Pods-YXStitch.debug.xcconfig"; sourceTree = "<group>"; };
 		3F1A9AF54F55FC18D9EDC22C /* libPods-YXStitch.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YXStitch.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B8C87E9AD95B7468BA24009E /* Pods-YXStitch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YXStitch.release.xcconfig"; path = "Target Support Files/Pods-YXStitch/Pods-YXStitch.release.xcconfig"; sourceTree = "<group>"; };
+		FB00324728B8AB880028BC61 /* MyCustomSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyCustomSlider.h; sourceTree = "<group>"; };
+		FB00324828B8AB910028BC61 /* MyCustomSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyCustomSlider.m; sourceTree = "<group>"; };
 		FB086F6728A662D30062EBA5 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		FB086F6928A662D70062EBA5 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
 		FB086F6B28A662E20062EBA5 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
@@ -169,6 +177,8 @@
 		FB086F7128A662F60062EBA5 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		FB086F7328A662FF0062EBA5 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		FB086F7528A663090062EBA5 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		FB0D9E2628B4D1420057DC37 /* UIScrollView+UITouch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+UITouch.h"; sourceTree = "<group>"; };
+		FB0D9E2728B4D1420057DC37 /* UIScrollView+UITouch.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+UITouch.m"; sourceTree = "<group>"; };
 		FB2BBD1228AF688A001DDFAE /* CaptionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CaptionViewController.h; sourceTree = "<group>"; };
 		FB2BBD1328AF688A001DDFAE /* CaptionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CaptionViewController.m; sourceTree = "<group>"; };
 		FB2BBD1628AF8D21001DDFAE /* CaptionBottomView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CaptionBottomView.h; sourceTree = "<group>"; };
@@ -327,6 +337,8 @@
 		FB687F0828A0ECCC002D557B /* ToastShowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ToastShowView.m; sourceTree = "<group>"; };
 		FB687F0B28A0FF83002D557B /* AppGroupData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppGroupData.h; sourceTree = "<group>"; };
 		FB687F0C28A0FF83002D557B /* AppGroupData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppGroupData.m; sourceTree = "<group>"; };
+		FB6FC66C28B60CB500BE4AA1 /* StichingImageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StichingImageView.h; sourceTree = "<group>"; };
+		FB6FC66D28B60CB500BE4AA1 /* StichingImageView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StichingImageView.m; sourceTree = "<group>"; };
 		FB7574A628AE18890034D95B /* SelectPictureViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SelectPictureViewController.h; sourceTree = "<group>"; };
 		FB7574A728AE18890034D95B /* SelectPictureViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SelectPictureViewController.m; sourceTree = "<group>"; };
 		FB7E659028A49BE00079C9F3 /* URLSchemesViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = URLSchemesViewController.h; sourceTree = "<group>"; };
@@ -345,6 +357,12 @@
 		FBA1862828ACFC740001DF8C /* FullWaterMarkView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FullWaterMarkView.m; sourceTree = "<group>"; };
 		FBB863CE28A4DB6600F73A80 /* UnlockFuncView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UnlockFuncView.h; sourceTree = "<group>"; };
 		FBB863CF28A4DB6600F73A80 /* UnlockFuncView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UnlockFuncView.m; sourceTree = "<group>"; };
+		FBE5467728C0BCC300B40FD8 /* GuiderVisitorView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GuiderVisitorView.h; sourceTree = "<group>"; };
+		FBE5467828C0BCC300B40FD8 /* GuiderVisitorView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GuiderVisitorView.m; sourceTree = "<group>"; };
+		FBECFBD328BA0D30006FCF74 /* StitchingButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StitchingButton.h; sourceTree = "<group>"; };
+		FBECFBD428BA0D30006FCF74 /* StitchingButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StitchingButton.m; sourceTree = "<group>"; };
+		FBF12BEC28BC4EDE008F10EA /* IMGFuctionView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IMGFuctionView.h; sourceTree = "<group>"; };
+		FBF12BED28BC4EDE008F10EA /* IMGFuctionView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IMGFuctionView.m; sourceTree = "<group>"; };
 		FBF59EF328AC796100D9C6CF /* WaterTitleView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WaterTitleView.h; sourceTree = "<group>"; };
 		FBF59EF428AC796100D9C6CF /* WaterTitleView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WaterTitleView.m; sourceTree = "<group>"; };
 		FBF59EF628AC8B5400D9C6CF /* WaterColorSelectView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WaterColorSelectView.h; sourceTree = "<group>"; };
@@ -413,8 +431,16 @@
 		FB2BBD1528AF85DA001DDFAE /* View */ = {
 			isa = PBXGroup;
 			children = (
+				FB00324728B8AB880028BC61 /* MyCustomSlider.h */,
+				FB00324828B8AB910028BC61 /* MyCustomSlider.m */,
 				FB2BBD1628AF8D21001DDFAE /* CaptionBottomView.h */,
 				FB2BBD1728AF8D21001DDFAE /* CaptionBottomView.m */,
+				FB6FC66C28B60CB500BE4AA1 /* StichingImageView.h */,
+				FB6FC66D28B60CB500BE4AA1 /* StichingImageView.m */,
+				FBECFBD328BA0D30006FCF74 /* StitchingButton.h */,
+				FBECFBD428BA0D30006FCF74 /* StitchingButton.m */,
+				FBF12BEC28BC4EDE008F10EA /* IMGFuctionView.h */,
+				FBF12BED28BC4EDE008F10EA /* IMGFuctionView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -628,6 +654,8 @@
 				FB2D5A2228A26564006085BC /* UIView+LVShot.m */,
 				FB8B4E4228AB8BFF00313ECD /* UIScrollView+LVShot.h */,
 				FB8B4E4128AB8BFC00313ECD /* UIScrollView+LVShot.m */,
+				FB0D9E2628B4D1420057DC37 /* UIScrollView+UITouch.h */,
+				FB0D9E2728B4D1420057DC37 /* UIScrollView+UITouch.m */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -820,6 +848,7 @@
 		FB687EED28A0DEAB002D557B /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				FBE5467628C0B96600B40FD8 /* GuideView */,
 				FB2E286328AA1B62006BDAB0 /* Preview */,
 				FB2E285F28AA1A34006BDAB0 /* MergeResult */,
 				FB2E283B28AA1A21006BDAB0 /* Util */,
@@ -917,6 +946,15 @@
 			);
 			name = Cell;
 			path = "New Group";
+			sourceTree = "<group>";
+		};
+		FBE5467628C0B96600B40FD8 /* GuideView */ = {
+			isa = PBXGroup;
+			children = (
+				FBE5467728C0BCC300B40FD8 /* GuiderVisitorView.h */,
+				FBE5467828C0BCC300B40FD8 /* GuiderVisitorView.m */,
+			);
+			path = GuideView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1138,8 +1176,11 @@
 				FB2E287428AA1B62006BDAB0 /* SZScrollView.m in Sources */,
 				FB2E285C28AA1A21006BDAB0 /* AdaptationTool.m in Sources */,
 				FBA1862928ACFC740001DF8C /* FullWaterMarkView.m in Sources */,
+				FBF12BEE28BC4EDE008F10EA /* IMGFuctionView.m in Sources */,
 				FB7E659228A49BE00079C9F3 /* URLSchemesViewController.m in Sources */,
 				FBA1862528ACFBF50001DF8C /* FullWaterMarkTableViewCell.m in Sources */,
+				FB0D9E2828B4D1420057DC37 /* UIScrollView+UITouch.m in Sources */,
+				FBECFBD528BA0D30006FCF74 /* StitchingButton.m in Sources */,
 				FB2D5A1828A23D51006085BC /* UrlInvalidHintView.m in Sources */,
 				FB3EFE4128A3A241006C3889 /* PriceView.m in Sources */,
 				FB2E287228AA1B62006BDAB0 /* SZImageTableViewCell.m in Sources */,
@@ -1168,6 +1209,7 @@
 				FBB863D028A4DB6600F73A80 /* UnlockFuncView.m in Sources */,
 				FB2E285A28AA1A21006BDAB0 /* UIImage+Stiching.m in Sources */,
 				FB7574A828AE18890034D95B /* SelectPictureViewController.m in Sources */,
+				FBE5467928C0BCC300B40FD8 /* GuiderVisitorView.m in Sources */,
 				FB3EFE4A28A3B828006C3889 /* SelectMainIconViewController.m in Sources */,
 				FB687EFF28A0E9F1002D557B /* KSViewController.m in Sources */,
 				FB7E659B28A4A6110079C9F3 /* PrefenceTableViewCell.m in Sources */,
@@ -1177,6 +1219,7 @@
 				FB3EFE3828A356BB006C3889 /* SettingTableView.m in Sources */,
 				FB5D46A628AA3FEE0015E2A5 /* StitchResultView.m in Sources */,
 				FB687EFE28A0E9F1002D557B /* BaseView.m in Sources */,
+				FB6FC66E28B60CB500BE4AA1 /* StichingImageView.m in Sources */,
 				FB2BBD1828AF8D21001DDFAE /* CaptionBottomView.m in Sources */,
 				FB2D5A1428A234C2006085BC /* EnterURLViewController.m in Sources */,
 				FB2D5A1128A20DE4006085BC /* MoveCollectionViewCell.m in Sources */,
@@ -1188,6 +1231,7 @@
 				FB3EFE3E28A39485006C3889 /* BuyViewController.m in Sources */,
 				FBF59EFB28AC98BF00D9C6CF /* ColorPlateView.m in Sources */,
 				FB2BBD1428AF688A001DDFAE /* CaptionViewController.m in Sources */,
+				FB00324928B8AB910028BC61 /* MyCustomSlider.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

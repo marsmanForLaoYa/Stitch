@@ -24,6 +24,7 @@
 	<string>AppKit</string>
 	<string>AFNetworking</string>
 	<string>CoreImage</string>
+	<string>TYSnapshotAuxiliary</string>
 	<string>CoreFoundation</string>
 	<string>UMCommon</string>
 	<string>Cocoa</string>

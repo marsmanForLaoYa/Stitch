@@ -21,11 +21,14 @@ PODS:
   - IQKeyboardManager (6.5.10)
   - Masonry (1.1.0)
   - RGBColorSlider (0.1.2)
+  - SDCycleScrollView (1.82):
+    - SDWebImage (>= 5.0.0)
   - SDWebImage (5.13.2):
     - SDWebImage/Core (= 5.13.2)
   - SDWebImage/Core (5.13.2)
   - SVProgressHUD (2.2.5)
   - Toast (4.0.0)
+  - TYSnapshotScroll (0.3.3)
   - UMCommon (7.3.7):
     - UMDevice
   - UMDevice (2.2.1)
@@ -56,9 +59,11 @@ DEPENDENCIES:
   - IQKeyboardManager
   - Masonry
   - RGBColorSlider
+  - SDCycleScrollView (>= 1.82)
   - SDWebImage
   - SVProgressHUD
   - Toast
+  - TYSnapshotScroll
   - UMCommon
   - UMDevice
   - UMShare/Social/Sina
@@ -73,9 +78,11 @@ SPEC REPOS:
     - IQKeyboardManager
     - Masonry
     - RGBColorSlider
+    - SDCycleScrollView
     - SDWebImage
     - SVProgressHUD
     - Toast
+    - TYSnapshotScroll
     - UMCommon
     - UMDevice
     - UMShare
@@ -88,14 +95,16 @@ SPEC CHECKSUMS:
   IQKeyboardManager: 45a1fa55c1a5b02c61ac0fd7fd5b62bb4ad20d97
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   RGBColorSlider: 425099dc03ea753cd8b84977047fe1db01537616
+  SDCycleScrollView: a0d74c3384caa72bdfc81470bdbc8c14b3e1fbcf
   SDWebImage: 72f86271a6f3139cc7e4a89220946489d4b9a866
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
+  TYSnapshotScroll: 0fbb89ae83610ef57961b75d3a877d75d75ef181
   UMCommon: 37fe35f498e92cf57bbb06a086f02915fc35f211
   UMDevice: 053478c4b4d7292f31f0a275c227d3c4007a5571
   UMShare: b66d969a5cc7bd9eeffad6ad2ccd8f860d6216dd
   YYKit: 7cda43304a8dc3696c449041e2cb3107b4e236e7
 
-PODFILE CHECKSUM: 4cd38c8d67a57ff19041ef780078a0bcb96c40ea
+PODFILE CHECKSUM: 87f82d1ee73744f4436c80bc3b141f4b834c5601
 
 COCOAPODS: 1.11.3
