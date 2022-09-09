@@ -61,7 +61,7 @@
 
 -(void)switchAction:(UISwitch *)sw{
     if (sw.tag == 0){
-        GVUserDe.isSaveIMGAlbum = _funcswitch.on;
+        GVUserDe.isAutoSaveIMGAlbum = _funcswitch.on;
     }else if(sw.tag == 1){
         if (_funcswitch.on){
             [self.delegate autoDeleteWith:_funcswitch.on];

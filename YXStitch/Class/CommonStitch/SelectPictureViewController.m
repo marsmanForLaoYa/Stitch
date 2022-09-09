@@ -208,7 +208,7 @@ static const CGFloat kPhotoViewMargin = 12.0;
         CGFloat btnWidth = _bottomView.width / iconArr.count;
         for (NSInteger i = 0; i < iconArr.count; i ++) {
             UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
-            btn.tag = type * 200 + i;
+            btn.tag = type * 100 + i;
             [btn addTarget:self action:@selector(imgEdit:) forControlEvents:UIControlEventTouchUpInside];
             [_bottomView addSubview:btn];
             [btn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -252,18 +252,33 @@ static const CGFloat kPhotoViewMargin = 12.0;
             //选择一图编辑
         }
     }else{
+        _isOpenAlbum = NO;
+        [_clearBtn removeFromSuperview];
+        _clearBtn = nil;
         if (btn.tag == 300){
             //多图截长屏
         }else if(btn.tag == 301){
             //多图拼接
+            CaptionViewController *vc = [CaptionViewController new];
+            vc.type = 2;
+            __block NSMutableArray *arr = [NSMutableArray array];
+            for (HXPhotoModel *photoModel in [self.manager selectedArray]) {
+                [Tools getImageWithAsset:photoModel.asset withBlock:^(UIImage * _Nonnull image) {
+                    [arr addObject:image];
+                }];
+            }
+            
+            vc.dataArr = arr;
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"dismiss" object:nil];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [weakSelf.navigationController pushViewController:vc animated:YES];
+            });
         }else if(btn.tag == 302){
             //多图布局
         }else{
             //多图字幕
             if ([self.manager selectedArray].count > 1){
-                _isOpenAlbum = NO;
-                [_clearBtn removeFromSuperview];
-                _clearBtn = nil;
+                
                 CaptionViewController *vc = [CaptionViewController new];
                 vc.type = 1;
                 __block NSMutableArray *arr = [NSMutableArray array];

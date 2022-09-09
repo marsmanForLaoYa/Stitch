@@ -640,7 +640,6 @@
     options.synchronous = true;
     options.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
     options.networkAccessAllowed = YES;
-   // CGSize size = CGSizeMake(200, 200);
     //PHImageManagerMaximumSize
 //    [[PHCachingImageManager defaultManager]requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeDefault options:options resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
 //        block(result);
@@ -746,6 +745,175 @@
         navigationBar.scrollEdgeAppearance = app;
         navigationBar.standardAppearance = app;
     }
+}
+
++(void)saveImageWithImage:(UIImage *)image albumName:(NSString *)albumName withBlock:(void(^)(NSString *identify))block{
+    // PHAsset : 一个资源，一个图片
+    // PHAssetCollection : 一个相簿 （也可以说是一个相册）
+    // PHotoLibrary 整个照片库（里面会有很多相册）
+    
+    __block NSString *assetLocalIdentifier = nil;
+    [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+        
+        // 1.保存图片到相机胶卷中
+        assetLocalIdentifier = [PHAssetChangeRequest creationRequestForAssetFromImage:image].placeholderForCreatedAsset.localIdentifier;
+        
+    } completionHandler:^(BOOL success, NSError * _Nullable error) {
+        
+        if (success == NO || error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSLog(@"保存照片失败");
+            });
+            return;
+        }
+        
+        // 2. 获得相册
+        PHAssetCollection *creatAssetCollction = [self creatPHAssetWithAlbumName:albumName];
+        if (creatAssetCollction == nil) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSLog(@"创建相册失败");
+            });
+            return;
+        }
+        
+        //创建成功，就把图片保存到相册中
+        [[PHPhotoLibrary sharedPhotoLibrary]performChanges:^{
+            
+            //添加相机胶卷中的图片到相簿中去
+            PHAsset *asset = [PHAsset fetchAssetsWithLocalIdentifiers:@[assetLocalIdentifier] options:nil].lastObject;
+            //添加图片到相册中的请求
+            PHAssetCollectionChangeRequest *request = [PHAssetCollectionChangeRequest changeRequestForAssetCollection:creatAssetCollction];
+            [request addAssets:@[asset]];
+            
+        } completionHandler:^(BOOL success, NSError * _Nullable error) {
+            if (success == NO || error) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                  NSLog(@"保存图片失败");
+                });
+            } else {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                  NSLog(@"保存图片成功");
+                    block(assetLocalIdentifier);
+                });
+            }
+        }];
+        
+    }];
+}
+
++(PHAssetCollection *)creatPHAssetWithAlbumName:(NSString *)albumName {
+    
+    //从已经存在的相簿中查找应用对应的相册
+    PHFetchResult<PHAssetCollection *> *assetCollections = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeAlbum subtype:PHAssetCollectionSubtypeAlbumRegular options:nil];
+    for (PHAssetCollection *collection in assetCollections) {
+        if ([collection.localizedTitle isEqualToString:albumName]) {
+            return collection;
+        }
+    }
+    // 没找到，就创建新的相簿
+    NSError *error;
+    __block NSString *assetCollectionLocalIdentifier = nil;
+    //这里用wait请求，保证创建成功相册后才保存进去
+    [[PHPhotoLibrary sharedPhotoLibrary]performChangesAndWait:^{
+
+        assetCollectionLocalIdentifier = [PHAssetCollectionChangeRequest creationRequestForAssetCollectionWithTitle:albumName].placeholderForCreatedAssetCollection.localIdentifier;
+        
+    } error:&error];
+    
+    if (error) return nil;
+    
+    return [PHAssetCollection fetchAssetCollectionsWithLocalIdentifiers:@[assetCollectionLocalIdentifier] options:nil].lastObject;
+}
+
++(UIImage *)removeColorWithMinHueAngle:(float)minHueAngle maxHueAngle:(float)maxHueAngle image:(UIImage *)originalImage{
+    CIImage *image = [CIImage imageWithCGImage:originalImage.CGImage];
+    CIContext *context = [CIContext contextWithOptions:nil];// kCIContextUseSoftwareRenderer : CPURender
+    /** 注意
+     *  UIImage 通过CIimage初始化，得到的并不是一个通过类似CGImage的标准UIImage
+     *  所以如果不用context进行渲染处理，是没办法正常显示的
+     */
+    CIImage *renderBgImage = [self outputImageWithOriginalCIImage:image minHueAngle:minHueAngle maxHueAngle:maxHueAngle];
+    CGImageRef renderImg = [context createCGImage:renderBgImage fromRect:image.extent];
+    UIImage *renderImage = [UIImage imageWithCGImage:renderImg];
+    return renderImage;
+}
+
+struct CubeMap {
+    int length;
+    float dimension;
+    float *data;
+};
+
++(CIImage *)outputImageWithOriginalCIImage:(CIImage *)originalImage minHueAngle:(float)minHueAngle maxHueAngle:(float)maxHueAngle{
+    
+    struct CubeMap map = createCubeMap(minHueAngle, maxHueAngle);
+    const unsigned int size = 64;
+    NSData *data = [NSData dataWithBytesNoCopy:map.data
+                                        length:map.length
+                                  freeWhenDone:YES];
+    CIFilter *colorCube = [CIFilter filterWithName:@"CIColorCube"];
+    [colorCube setValue:@(size) forKey:@"inputCubeDimension"];
+    [colorCube setValue:data forKey:@"inputCubeData"];
+    
+    [colorCube setValue:originalImage forKey:kCIInputImageKey];
+    CIImage *result = [colorCube valueForKey:kCIOutputImageKey];
+    
+    return result;
+}
+
+struct CubeMap createCubeMap(float minHueAngle, float maxHueAngle) {
+    const unsigned int size = 64;
+    struct CubeMap map;
+    map.length = size * size * size * sizeof (float) * 4;
+    map.dimension = size;
+    float *cubeData = (float *)malloc (map.length);
+    float rgb[3], hsv[3], *c = cubeData;
+    
+    for (int z = 0; z < size; z++){
+        rgb[2] = ((double)z)/(size-1); // Blue value
+        for (int y = 0; y < size; y++){
+            rgb[1] = ((double)y)/(size-1); // Green value
+            for (int x = 0; x < size; x ++){
+                rgb[0] = ((double)x)/(size-1); // Red value
+                rgbToHSV(rgb,hsv);
+                float alpha = (hsv[0] > minHueAngle && hsv[0] < maxHueAngle) ? 0.0f: 1.0f;
+                c[0] = rgb[0] * alpha;
+                c[1] = rgb[1] * alpha;
+                c[2] = rgb[2] * alpha;
+                c[3] = alpha;
+                c += 4;
+            }
+        }
+    }
+    map.data = cubeData;
+    return map;
+}
+
+void rgbToHSV(float *rgb, float *hsv) {
+    float min, max, delta;
+    float r = rgb[0], g = rgb[1], b = rgb[2];
+    float *h = hsv, *s = hsv + 1, *v = hsv + 2;
+    
+    min = fmin(fmin(r, g), b );
+    max = fmax(fmax(r, g), b );
+    *v = max;
+    delta = max - min;
+    if( max != 0 )
+        *s = delta / max;
+    else {
+        *s = 0;
+        *h = -1;
+        return;
+    }
+    if( r == max )
+        *h = ( g - b ) / delta;
+    else if( g == max )
+        *h = 2 + ( b - r ) / delta;
+    else
+        *h = 4 + ( r - g ) / delta;
+    *h *= 60;
+    if( *h < 0 )
+        *h += 360;
 }
 
 @end

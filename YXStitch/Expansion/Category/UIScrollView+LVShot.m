@@ -103,10 +103,11 @@
 
     CGPoint bakOffset = self.contentOffset;
 
-//    int page = floor(self.contentSize.height/self.bounds.size.height);
-    int page = floor(self.contentSize.width/self.bounds.size.width);
-    
+    int page = floor(self.contentSize.height/self.bounds.size.height);
+
     UIGraphicsBeginImageContextWithOptions(self.contentSize, NO, UIScreen.mainScreen.scale);
+
+
     __weak typeof(self) weakSelf = self;
 
      [self DDGContentScrollPageDrawWithIndex:0 MaxIndex:page callBack:^{
@@ -128,10 +129,8 @@
 
 -(void)DDGContentScrollPageDrawWithIndex:(int)index MaxIndex:(int)maxIndex callBack:(void(^)())callBack{
 
-//    [self setContentOffset:CGPointMake(0, index*self.frame.size.height) animated:NO];
-//    CGRect splitFrame = CGRectMake(0, index*self.frame.size.height, self.bounds.size.width, self.bounds.size.height);
-    [self setContentOffset:CGPointMake(index * self.frame.size.width, 0) animated:NO];
-    CGRect splitFrame = CGRectMake(index*self.frame.size.width, 0, self.bounds.size.width, self.bounds.size.height);
+    [self setContentOffset:CGPointMake(0, index*self.frame.size.height) animated:NO];
+    CGRect splitFrame = CGRectMake(0, index*self.frame.size.height, self.bounds.size.width, self.bounds.size.height);
 
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 

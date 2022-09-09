@@ -30,60 +30,50 @@
         make.top.equalTo(@(Nav_H));
     }];
     
-    CGFloat imageFakewidth = (CGFloat) SCREEN_WIDTH / 2;
-    CGFloat imageFakeHeight = (CGFloat)_screenshotIMG.size.height *imageFakewidth / _screenshotIMG.size.width;
-    CGFloat scrollWidth = (CGFloat)225 / 375 * SCREEN_WIDTH;
-
+    CGFloat imageFakewidth = 0.0;
+    CGFloat imageFakeHeight= 0.0;
+    CGFloat scrollWidth= 0.0;
+    CGFloat scrollHeight= 0.0;
     UIScrollView *imgScrollView = [UIScrollView new];
-    imgScrollView.contentSize = CGSizeMake(imageFakewidth, imageFakeHeight);
+    imgScrollView.showsVerticalScrollIndicator = NO;
+    imgScrollView.showsHorizontalScrollIndicator = NO;
+    if(_isVer){
+        imageFakewidth = (CGFloat) SCREEN_WIDTH / 2;
+        imageFakeHeight = (CGFloat)_screenshotIMG.size.height *imageFakewidth / _screenshotIMG.size.width;
+        scrollWidth  = (CGFloat)225 / 375 * SCREEN_WIDTH;
+        scrollHeight = (CGFloat)360 / 667 * SCREEN_HEIGHT;
+        imgScrollView.contentSize = CGSizeMake(0, imageFakeHeight);
+    }else{
+        imageFakeHeight= 300;
+        imageFakewidth= _screenshotIMG.size.width;
+        scrollHeight = 300;
+        scrollWidth = (CGFloat)(_screenshotIMG.size.width/_screenshotIMG.size.height) * 300;;
+        imgScrollView.contentSize = CGSizeMake(imageFakewidth, 0);
+    }
     [_detailView addSubview:imgScrollView];
     [imgScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(@20);
         make.centerX.equalTo(self.view);
         make.width.equalTo(@(scrollWidth));
-        make.height.equalTo(@((CGFloat)360 / 667 * SCREEN_HEIGHT));
+        make.height.equalTo(@(scrollHeight));
     }];
+    imgScrollView.center = self.view.center;
     UIImageView *storeImage = [UIImageView new];
     storeImage.image = _screenshotIMG;
     [imgScrollView addSubview:storeImage];
     [storeImage mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.top.width.equalTo(imgScrollView);
+        make.centerX.top.width.equalTo(imgScrollView);
         make.height.equalTo(@(imageFakeHeight));
-    }];
-    
-    NSArray *shareArr = @[@"复制",@"微信",@"朋友圈",@"微博"];
-    for (NSInteger i = 0; i < shareArr.count; i ++) {
-        UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
-        btn.tag = i;
-        [btn addTarget:self action:@selector(shareClick:) forControlEvents:UIControlEventTouchUpInside];
-        [_detailView addSubview:btn];
-        [btn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(@(30 + i * 90));
-            make.width.equalTo(@60);
-            make.top.equalTo(imgScrollView.mas_bottom).offset(20);
-            make.height.equalTo(@80);
-        }];
-        UIImageView *iconIMG = [UIImageView new];
-        iconIMG.image = [UIImage imageNamed:shareArr[i]];
-        [btn addSubview:iconIMG];
-        [iconIMG mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.width.height.equalTo(@44);
-            make.top.centerX.equalTo(btn);
-        }];
-        UILabel *iconText = [UILabel new];
-        iconText.text = shareArr[i];
-        iconText.textAlignment = NSTextAlignmentCenter;
-        [btn addSubview:iconText];
-        [iconText mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.centerX.width.equalTo(btn);
-            make.top.equalTo(iconIMG.mas_bottom).offset(6);
-        }];
-    }
-    
+    }]; 
     UIButton *saveBtn = [UIButton buttonWithType:UIButtonTypeSystem];
     [saveBtn setBackgroundColor:[UIColor blackColor]];
     [saveBtn setTintColor:[UIColor whiteColor]];
-    [saveBtn setTitle:@"再截图一张" forState:UIControlStateNormal];
+    if (_type == 2){
+        [saveBtn setTitle:@"再拼一张" forState:UIControlStateNormal];
+    }else{
+        [saveBtn setTitle:@"再截图一张" forState:UIControlStateNormal];
+    }
+    
     saveBtn.titleLabel.font = [UIFont systemFontOfSize:18];
     saveBtn.layer.masksToBounds = YES;
     saveBtn.layer.cornerRadius = 5;
@@ -117,6 +107,35 @@
             make.bottom.equalTo(saveBtn.mas_top).offset(-15);
         }];
     }
+    
+    NSArray *shareArr = @[@"复制",@"微信",@"朋友圈",@"微博"];
+    for (NSInteger i = 0; i < shareArr.count; i ++) {
+        UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
+        btn.tag = i;
+        [btn addTarget:self action:@selector(shareClick:) forControlEvents:UIControlEventTouchUpInside];
+        [_detailView addSubview:btn];
+        [btn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(@(30 + i * 90));
+            make.width.equalTo(@60);
+            make.bottom.equalTo(saveBtn.mas_top).offset(-65);
+            make.height.equalTo(@80);
+        }];
+        UIImageView *iconIMG = [UIImageView new];
+        iconIMG.image = [UIImage imageNamed:shareArr[i]];
+        [btn addSubview:iconIMG];
+        [iconIMG mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.width.height.equalTo(@44);
+            make.top.centerX.equalTo(btn);
+        }];
+        UILabel *iconText = [UILabel new];
+        iconText.text = shareArr[i];
+        iconText.textAlignment = NSTextAlignmentCenter;
+        [btn addSubview:iconText];
+        [iconText mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerX.width.equalTo(btn);
+            make.top.equalTo(iconIMG.mas_bottom).offset(6);
+        }];
+    }
 }
 
 -(void)setupNavItems{
@@ -129,11 +148,37 @@
 
 #pragma mark -- btn触发事件
 -(void)oneMore:(UIButton *)btn{
+    MJWeakSelf
     if (btn.tag == 1){
         [self.navigationController popToViewController:[self.navigationController.viewControllers objectAtIndex:1] animated:YES];
     }else{
-        //删除原图
-        
+        if (_identify.length > 0){
+            //删除原图
+            PHFetchResult *collectonResuts = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeAny options:[PHFetchOptions new]] ;
+            [collectonResuts enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                PHAssetCollection *assetCollection = obj;
+                if ([assetCollection.localizedTitle isEqualToString:@"最近项目"]){
+                    PHFetchResult *assetResult = [PHAsset fetchAssetsInAssetCollection:assetCollection options:[PHFetchOptions new]];
+                    [assetResult enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                        [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+                            //获取相册的最后一张照片
+                            if (idx == [assetResult count] - 1) {
+                                [PHAssetChangeRequest deleteAssets:@[obj]];
+                                weakSelf.identify = @"";
+                                [SVProgressHUD showSuccessWithStatus:@"删除成功"];
+                                NSLog(@"——删除图片成功——");
+                            }
+
+                        } completionHandler:^(BOOL success, NSError *error) {
+                            NSLog(@"删除图片Error: %@", error);
+                        }];
+                    }];
+                }
+                
+            }];
+        }else{
+            [SVProgressHUD showInfoWithStatus:@"原图已删除"];
+        }
     }
    
 }

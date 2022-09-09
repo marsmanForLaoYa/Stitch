@@ -50,7 +50,6 @@
             }else{
                 make.centerY.equalTo(self);
             }
-            
             if (i <=2){
                 if (i == 2){
                     make.centerX.equalTo(self);

@@ -71,7 +71,6 @@
 //    if (GVUserDe.isAutoCheckRecentlyIMG) {
 //        [self screenStitch];
 //    }
-
     
 }
 
@@ -348,6 +347,7 @@
             [SVProgressHUD dismiss];
             SaveViewController *saveVC = [SaveViewController new];
             saveVC.screenshotIMG = screenShotImage;
+            saveVC.isVer = YES;
             saveVC.type = 2;
             [weakSelf checkScreenStitchViewDiss];
             [weakSelf.navigationController pushViewController:saveVC animated:YES];
@@ -408,6 +408,8 @@
     }];
     
 }
+
+
 
 #pragma mark -- set
 -(NSMutableArray *)stitchArr{

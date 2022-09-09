@@ -9,6 +9,7 @@
 #import <WebKit/WebKit.h>
 #import "SaveViewController.h"
 #import "WKWebView+LVShot.h"
+#import "CaptionViewController.h"
 
 @interface WebViewController ()
 <WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler>
@@ -106,20 +107,38 @@
     [saveBtn setBackgroundImage:[UIImage imageNamed:@"网页保存"] forState:UIControlStateNormal];
     saveBtn.tag = 2;
     [saveBtn addTarget:self action:@selector(rightBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    
     UIBarButtonItem *saveItem = [[UIBarButtonItem alloc]initWithCustomView:saveBtn];
-    self.navigationItem.rightBarButtonItems = @[saveItem,cutItem];
+    
+    //空白占位item
+    UIBarButtonItem *spaceItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+    spaceItem.width = 15;
+    
+    self.navigationItem.rightBarButtonItems = @[saveItem,spaceItem,cutItem];
 }
 
 #pragma mark -- btn触发事件
 -(void)rightBtnClick:(UIButton *)btn{
     //先裁剪图片
     MJWeakSelf
+    [SVProgressHUD showWithStatus:@"生成图片中..."];
+    self.view.userInteractionEnabled = NO;
     if (btn.tag == 1){
         //裁剪
+        __block NSMutableArray *tmpArr = [NSMutableArray array];
+        [_WKwebView DDGContentScreenShot:^(UIImage *screenShotImage) {
+            [SVProgressHUD dismiss];
+            self.view.userInteractionEnabled = YES;
+            CaptionViewController *vc = [CaptionViewController new];
+            [tmpArr addObject:screenShotImage];
+            vc.dataArr = tmpArr;
+            vc.type = 2;
+            [self.navigationController pushViewController:vc animated:YES];
+        }];
     }else{
         //保存
-        [SVProgressHUD showWithStatus:@"生成截图中..."];
-        self.view.userInteractionEnabled = NO;
+        
+        
         [_WKwebView DDGContentScreenShot:^(UIImage *screenShotImage) {
             weakSelf.view.userInteractionEnabled = YES;
             [SVProgressHUD dismiss];

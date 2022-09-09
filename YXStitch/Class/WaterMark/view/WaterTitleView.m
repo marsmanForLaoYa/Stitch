@@ -86,6 +86,7 @@
             [SVProgressHUD showInfoWithStatus:@"水印文字不能为空"];
         }
     }else{
+        [_titleTV resignFirstResponder];
         self.btnClick(btn.tag);
     }
     

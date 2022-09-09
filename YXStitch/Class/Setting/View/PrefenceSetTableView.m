@@ -75,7 +75,7 @@
     cell.delegate = self;
     cell.tag = indexPath.section;
     if (cell.tag == 0){
-        cell.funcswitch.on = GVUserDe.isSaveIMGAlbum;
+        cell.funcswitch.on = GVUserDe.isAutoSaveIMGAlbum;
     }else if(cell.tag == 1){
         cell.funcswitch.on = GVUserDe.isAutoDeleteOriginIMG;
     }else if(cell.tag == 2){

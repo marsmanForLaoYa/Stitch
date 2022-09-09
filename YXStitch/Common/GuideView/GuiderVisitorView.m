@@ -38,15 +38,25 @@
 }
 
 -(void)setupViews{
-    UIImageView *grayIMG = [UIImageView new];
-    grayIMG.backgroundColor = HexColor(@"#D9D9D9");
-    grayIMG.layer.cornerRadius = 3;
-    grayIMG.layer.maskedCorners = YES;
-    [self addSubview:grayIMG];
-    [grayIMG mas_makeConstraints:^(MASConstraintMaker *make) {
+    UIButton *grayBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+    [grayBtn setBackgroundColor:[UIColor clearColor]];
+    
+    [grayBtn addTarget:self action:@selector(endClick) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:grayBtn];
+    [grayBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.equalTo(@36);
+        make.height.equalTo(@25);
+        make.centerX.top.equalTo(self);
+    }];
+    
+    UIImageView *grayImg = [UIImageView new];
+    grayImg.backgroundColor = HexColor(@"#D9D9D9");
+    grayImg.layer.cornerRadius = 3;
+    grayImg.layer.maskedCorners = YES;
+    [grayBtn addSubview:grayImg];
+    [grayImg mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.left.equalTo(grayBtn);
         make.height.equalTo(@5);
-        make.centerX.equalTo(self);
         make.top.equalTo(@15);
     }];
     

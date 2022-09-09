@@ -139,6 +139,13 @@ NS_ASSUME_NONNULL_BEGIN
 +(void)getImageWithAsset:(PHAsset*)asset withBlock:(void(^)(UIImage*image))block;
 /// iOS15重置navigationbar 颜色和字体
 +(void)setNaviBarBKColorWith:(UINavigationController *)navi andBKColor:(UIColor *)BKColor andFontColor:(UIColor *)fontClor;
+
+///保存图片到指定相册
++(void)saveImageWithImage:(UIImage *)image albumName:(NSString *)albumName withBlock:(void(^)(NSString *identify))block;
+
+///抠图hsv范围颜色
++(UIImage *)removeColorWithMinHueAngle:(float)minHueAngle maxHueAngle:(float)maxHueAngle image:(UIImage *)originalImage;
+
 @end
 
 NS_ASSUME_NONNULL_END
