@@ -61,10 +61,10 @@
     [_iconIMG mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self);
         if ([cellName isEqualToString:@"截长屏"]){
-            make.width.equalTo(@44);
+            make.width.equalTo(@45);
             make.height.equalTo(@44);
         }else if ([cellName isEqualToString:@"网页滚动截图"]){
-            make.width.equalTo(@32);
+            make.width.equalTo(@31);
             make.height.equalTo(@44);
         }else if ([cellName isEqualToString:@"拼图"]){
             make.width.equalTo(@44);
@@ -73,14 +73,14 @@
             make.width.equalTo(@44);
             make.height.equalTo(@44);
         }else if ([cellName isEqualToString:@"设置"]){
-            make.height.equalTo(@38);
+            make.height.equalTo(@39);
             make.width.equalTo(@44);
         }else{
             //更多功能
             make.width.equalTo(@44);
             make.height.equalTo(@44);
         }
-        make.top.equalTo(@32);
+        make.top.equalTo(@34);
     }];
     [nameLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.equalTo(self);

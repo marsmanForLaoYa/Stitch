@@ -94,8 +94,7 @@ static const NSString *INFO_KEY = @"INFO_KEY";
                 if (i < firstLines.count - 1 && j < secondLines.count - 1 ){
                     nextFLine = firstLines[i + 1];
                     nextSLine = secondLines[j + 1];
-                }
-                
+                }  
                 //判断特征点,记录特征点的坐标起始位置
                 if ([info isX:firstValue
                           equalTo:secondValue] || (![info isX:firstValue

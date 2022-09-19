@@ -22,8 +22,8 @@
     if(!_waterTextLabel){
         _waterTextLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, SCREEN_HEIGHT * 3, 100)];
         //HexColor(GVUserDe.waterTitleColor.length >0?GVUserDe.waterTitleColor: @"ffffff")
-        _waterTextLabel.textColor = [UIColor blackColor];
-        _waterTextLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:GVUserDe.waterTitleFontSize > 10 ?GVUserDe.waterTitleFontSize : 14];
+//        _waterTextLabel.textColor = [UIColor orangeColor];
+//        _waterTextLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:GVUserDe.waterTitleFontSize > 10 ?GVUserDe.waterTitleFontSize : 14];
         _waterTextLabel.alpha = 0.5;
         _waterTextLabel.backgroundColor = [UIColor clearColor];
     }
@@ -31,9 +31,9 @@
 }
 
 -(void)configModel:(NSString *)str andSize:(NSInteger)Size andColor:(NSString *)color{
-//    _waterTextLabel.text = str;
-//    _waterTextLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:Size];
-//    _waterTextLabel.textColor = HexColor(color);
+    _waterTextLabel.text = str;
+    _waterTextLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:Size];
+    _waterTextLabel.textColor = HexColor(color);
 }
 
 @end

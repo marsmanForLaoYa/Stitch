@@ -126,15 +126,20 @@
     if (btn.tag == 1){
         //裁剪
         __block NSMutableArray *tmpArr = [NSMutableArray array];
-        [_WKwebView DDGContentScreenShot:^(UIImage *screenShotImage) {
+//        [_WKwebView DDGContentScreenShot:^(UIImage *screenShotImage) {
+//
+//        }]; 
+        [TYSnapshotScroll screenSnapshot:_WKwebView finishBlock:^(UIImage *snapshotImage) {
             [SVProgressHUD dismiss];
             self.view.userInteractionEnabled = YES;
             CaptionViewController *vc = [CaptionViewController new];
-            [tmpArr addObject:screenShotImage];
+            [tmpArr addObject:snapshotImage];
             vc.dataArr = tmpArr;
             vc.type = 2;
             [self.navigationController pushViewController:vc animated:YES];
         }];
+        
+        
     }else{
         //保存
         

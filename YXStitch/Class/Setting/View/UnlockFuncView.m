@@ -32,6 +32,9 @@
         case 2:
             imgStr = @"自定义水印设置";
             break;
+        case 3:
+            imgStr = @"不限数量";
+            break;
             
         default:
             break;
@@ -42,7 +45,7 @@
     [bkIMG mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.centerY.equalTo(self);
         make.height.equalTo(@((CGFloat)202 / 667 * SCREEN_HEIGHT));
-        make.width.equalTo(@((CGFloat)258 / 375 * SCREEN_WIDTH));
+        make.width.equalTo(@((CGFloat)278 / 375 * SCREEN_WIDTH));
     }];;
     
     UIButton *buyBtn = [UIButton buttonWithType:UIButtonTypeSystem];

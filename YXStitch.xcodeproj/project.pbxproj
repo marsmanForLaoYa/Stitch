@@ -19,6 +19,7 @@
 		FB086F7428A662FF0062EBA5 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB086F7328A662FF0062EBA5 /* CoreMedia.framework */; };
 		FB086F7628A663090062EBA5 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB086F7528A663090062EBA5 /* SystemConfiguration.framework */; };
 		FB0D9E2828B4D1420057DC37 /* UIScrollView+UITouch.m in Sources */ = {isa = PBXBuildFile; fileRef = FB0D9E2728B4D1420057DC37 /* UIScrollView+UITouch.m */; };
+		FB1B8DE728D06F5F0080AE74 /* AddWaterMark.m in Sources */ = {isa = PBXBuildFile; fileRef = FB1B8DE628D06F5F0080AE74 /* AddWaterMark.m */; };
 		FB2BBD1428AF688A001DDFAE /* CaptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB2BBD1328AF688A001DDFAE /* CaptionViewController.m */; };
 		FB2BBD1828AF8D21001DDFAE /* CaptionBottomView.m in Sources */ = {isa = PBXBuildFile; fileRef = FB2BBD1728AF8D21001DDFAE /* CaptionBottomView.m */; };
 		FB2D5A0728A1EE2A006085BC /* HomeSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB2D5A0628A1EE2A006085BC /* HomeSettingViewController.m */; };
@@ -179,6 +180,8 @@
 		FB086F7528A663090062EBA5 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		FB0D9E2628B4D1420057DC37 /* UIScrollView+UITouch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+UITouch.h"; sourceTree = "<group>"; };
 		FB0D9E2728B4D1420057DC37 /* UIScrollView+UITouch.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+UITouch.m"; sourceTree = "<group>"; };
+		FB1B8DE528D06F530080AE74 /* AddWaterMark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddWaterMark.h; sourceTree = "<group>"; };
+		FB1B8DE628D06F5F0080AE74 /* AddWaterMark.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddWaterMark.m; sourceTree = "<group>"; };
 		FB2BBD1228AF688A001DDFAE /* CaptionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CaptionViewController.h; sourceTree = "<group>"; };
 		FB2BBD1328AF688A001DDFAE /* CaptionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CaptionViewController.m; sourceTree = "<group>"; };
 		FB2BBD1628AF8D21001DDFAE /* CaptionBottomView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CaptionBottomView.h; sourceTree = "<group>"; };
@@ -490,14 +493,14 @@
 		FB2E282E28AA1A13006BDAB0 /* SZAgorithm */ = {
 			isa = PBXGroup;
 			children = (
-				FB2E282F28AA1A13006BDAB0 /* SZImageGenerator.h */,
-				FB2E283028AA1A13006BDAB0 /* SZImageMergeInfo.m */,
+				FB2E283528AA1A13006BDAB0 /* SZConstraint.h */,
 				FB2E283128AA1A13006BDAB0 /* SZConstraint.m */,
 				FB2E283228AA1A13006BDAB0 /* SZImageFinger.h */,
-				FB2E283328AA1A13006BDAB0 /* SZImageMergeInfo.h */,
-				FB2E283428AA1A13006BDAB0 /* SZImageGenerator.m */,
-				FB2E283528AA1A13006BDAB0 /* SZConstraint.h */,
 				FB2E283628AA1A13006BDAB0 /* SZImageFinger.m */,
+				FB2E283328AA1A13006BDAB0 /* SZImageMergeInfo.h */,
+				FB2E283028AA1A13006BDAB0 /* SZImageMergeInfo.m */,
+				FB2E282F28AA1A13006BDAB0 /* SZImageGenerator.h */,
+				FB2E283428AA1A13006BDAB0 /* SZImageGenerator.m */,
 			);
 			path = SZAgorithm;
 			sourceTree = "<group>";
@@ -941,6 +944,8 @@
 		FBA1862628ACFBF80001DF8C /* Cell */ = {
 			isa = PBXGroup;
 			children = (
+				FB1B8DE528D06F530080AE74 /* AddWaterMark.h */,
+				FB1B8DE628D06F5F0080AE74 /* AddWaterMark.m */,
 				FBA1862328ACFBF50001DF8C /* FullWaterMarkTableViewCell.h */,
 				FBA1862428ACFBF50001DF8C /* FullWaterMarkTableViewCell.m */,
 			);
@@ -1217,6 +1222,7 @@
 				FB2D5A2128A264C4006085BC /* WKWebView+LVShot.m in Sources */,
 				FB2D5A1B28A24743006085BC /* WebViewController.m in Sources */,
 				FB3EFE3828A356BB006C3889 /* SettingTableView.m in Sources */,
+				FB1B8DE728D06F5F0080AE74 /* AddWaterMark.m in Sources */,
 				FB5D46A628AA3FEE0015E2A5 /* StitchResultView.m in Sources */,
 				FB687EFE28A0E9F1002D557B /* BaseView.m in Sources */,
 				FB6FC66E28B60CB500BE4AA1 /* StichingImageView.m in Sources */,

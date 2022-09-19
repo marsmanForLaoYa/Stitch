@@ -21,6 +21,19 @@
     [self SetRootView];
     [self setKeyboardHandle];
     [self setUM];
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"everLaunched"]) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"everLaunched"];
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"firstLaunch"];
+        GVUserDe.isMember = NO;
+        GVUserDe.logoType = 1;
+        GVUserDe.waterPosition = 3;
+        GVUserDe.isAutoSaveIMGAlbum = NO;
+        GVUserDe.isAutoCheckRecentlyIMG = NO;
+        GVUserDe.isAutoDeleteOriginIMG = NO;
+        GVUserDe.isAutoHiddenScrollStrip = NO;
+    }else{
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"firstLaunch"];
+    }
     return YES;
 }
 

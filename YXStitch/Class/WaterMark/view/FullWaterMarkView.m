@@ -36,6 +36,7 @@
 }
 -(void)setUI{
     [self addSubview:self.tableView];
+    [self.tableView registerClass:[FullWaterMarkTableViewCell class] forCellReuseIdentifier:@"cellWaterMark"];
 }
 -(void)layoutSubviews{
     [super layoutSubviews];
@@ -45,15 +46,16 @@
 }
 #pragma mark ==========tableView代理方法==========
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    static NSString *CellIdentifier = @"cellWaterMark";
-    FullWaterMarkTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[FullWaterMarkTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-    }
-    cell.waterTextLabel.text = self.dataSource[indexPath.row];
+//    static NSString *CellIdentifier = @"cellWaterMark";
+//    FullWaterMarkTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+//    if (cell == nil) {
+//        cell = [[FullWaterMarkTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+//    }
+    FullWaterMarkTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cellWaterMark"];
+   // cell.waterTextLabel.text = self.dataSource[indexPath.row];
 //    cell.waterTextLabel.textColor = HexColor(self.waterMarkTextColor);
 //    cell.waterTextLabel.font = [UIFont systemFontOfSize:self.waterMarkTextSize];
-//    [cell configModel:self.dataSource[indexPath.row] andSize:self.waterMarkTextSize andColor:self.waterMarkTextColor];
+    [cell configModel:self.dataSource[indexPath.row] andSize:self.waterMarkTextSize andColor:self.waterMarkTextColor];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }

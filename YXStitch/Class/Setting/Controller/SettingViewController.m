@@ -102,7 +102,10 @@
         _checkProView.delegate = self;
         [self.view addSubview:_checkProView];
     }
+    
+    [self.view bringSubviewToFront:_bgView];
     _checkProView.hidden = NO;
+    [self.view bringSubviewToFront:_checkProView];
     [UIView animateWithDuration:0.3 animations:^{
         weakSelf.checkProView.frame = CGRectMake(0, SCREEN_HEIGHT - weakSelf.checkProView.height, SCREEN_WIDTH , weakSelf.checkProView.height);
     }];
@@ -111,15 +114,13 @@
 #pragma mark -- viewDelegate
 -(void)cancelClickWithTag:(NSInteger)tag{
     MJWeakSelf
-    if (tag == 1){
-        [UIView animateWithDuration:0.3 animations:^{
-            weakSelf.checkProView.frame = CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH , weakSelf.checkProView.height);
-            weakSelf.bgView.hidden = YES;
-        }];
-    }else{
-        _checkProView.hidden = YES;
-        _checkProView.frame = CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, 550);
-        _bgView.hidden = YES;
+    [UIView animateWithDuration:0.3 animations:^{
+        weakSelf.checkProView.frame = CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH , weakSelf.checkProView.height);
+    } completion:^(BOOL finished) {
+        weakSelf.bgView.hidden = YES;
+        weakSelf.checkProView.hidden = YES;
+    }];
+    if (tag == 2){
         [self.navigationController pushViewController:[BuyViewController new] animated:YES];
     }
     

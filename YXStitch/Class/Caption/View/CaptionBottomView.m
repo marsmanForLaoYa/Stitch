@@ -79,7 +79,7 @@
             make.width.left.equalTo(btn);
             make.top.equalTo(icon.mas_bottom).offset(4);
         }];
-        if ((_type == 2 && i == 0) || (_type == 3 && i == 0)){
+        if ((_type == 2 && i == 0) || (_type == 3 && i == 0) || (_type == 4 && i == 0)){
             _typeLab = textLab;
         }
         if (i == 1){
@@ -179,7 +179,7 @@
                         _typeLab.text = @"竖拼";
                     }
                 }
-                if (_type == 3){
+                if (_type == 3 || _type == 4){
                     if ([_typeLab.text isEqualToString:@"擦除滚动条"]){
                         _typeLab.text = @"恢复滚动条";
                         selectIMG.image = IMG(@"恢复滚动条");

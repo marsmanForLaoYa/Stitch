@@ -33,14 +33,22 @@
     }];
     
     UIButton *cancelBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-    [cancelBtn setBackgroundImage:IMG(@"set关闭") forState:UIControlStateNormal];
+    
     cancelBtn.tag = 1;
     [cancelBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     [proIMG addSubview:cancelBtn];
     [cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.height.equalTo(@40);
+        make.top.equalTo(@5);
+        make.left.equalTo(@5);
+    }];
+    
+    UIImageView *icon = [UIImageView new];
+    icon.image = IMG(@"set关闭");
+    [cancelBtn addSubview:icon];
+    [icon mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.centerY.equalTo(cancelBtn);
         make.width.height.equalTo(@15);
-        make.top.equalTo(@20);
-        make.left.equalTo(@15);
     }];
     
     UIScrollView *scrollView = [UIScrollView new];

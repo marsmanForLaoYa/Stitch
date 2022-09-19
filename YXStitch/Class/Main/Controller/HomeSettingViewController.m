@@ -39,6 +39,7 @@
     NSMutableArray *iconArr = [NSMutableArray arrayWithObjects:@"截长屏",@"网页滚动截图",@"拼图",@"水印",@"设置",nil];
     CGFloat btnWidth = (CGFloat) 168 / 375  * SCREEN_WIDTH;
     CGFloat btnHeight = (CGFloat) 160 / 667  * SCREEN_HEIGHT;
+   // CGFloat btnHeight = (CGFloat) 160 ;
     for (NSInteger i = 0; i < iconArr.count; i ++) {
         UIButton *iconBtn = [UIButton buttonWithType:UIButtonTypeSystem];
         iconBtn.tag = i ;

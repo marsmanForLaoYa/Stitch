@@ -22,7 +22,7 @@
 @property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) NSMutableArray *editViews;
 @property (nonatomic, strong) NSMutableArray *imageViews;
-@property (nonatomic, assign) NSInteger count;
+@property (nonatomic, assign) BOOL isLoadView;
 
 @property (nonatomic, assign) BOOL scrollEnable;
 @end
@@ -34,7 +34,7 @@
     if (self) {
         self.backgroundColor = [UIColor whiteColor];
 //        _generator = generator;
-        _count = 1;
+        _isLoadView = NO;
         
     }
     return self;
@@ -60,11 +60,10 @@
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    if (_count == 1){
+    if (!_isLoadView){
         [self setupViews];
-        _count ++;
-    }
-    
+        _isLoadView = !_isLoadView;
+    }  
 }
 
 

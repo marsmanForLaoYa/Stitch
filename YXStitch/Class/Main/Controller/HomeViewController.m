@@ -68,9 +68,10 @@
 //    NSLog(@"path==%@",path);
   //  [self getByAppGroup2];
     //检测连续截图
-//    if (GVUserDe.isAutoCheckRecentlyIMG) {
-//        [self screenStitch];
-//    }
+    if (GVUserDe.isAutoCheckRecentlyIMG) {
+        [SVProgressHUD showWithStatus:@"自动检测到有连续截图"];
+        [self screenStitchWithType:1];
+    }
     
 }
 
@@ -105,6 +106,7 @@
     UICollectionViewFlowLayout * layout = [[UICollectionViewFlowLayout alloc] init];
     CGFloat sizeWidth = (CGFloat) 168 / 375  * SCREEN_WIDTH;
     CGFloat sizeHeight = (CGFloat) 160 / 667  * SCREEN_HEIGHT;
+//    CGFloat sizeHeight = 160;
     layout.itemSize = CGSizeMake(sizeWidth, sizeHeight);
     _MJColloctionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, Nav_H,SCREEN_WIDTH,SCREEN_HEIGHT - Nav_H) collectionViewLayout:layout];
     [_MJColloctionView registerClass:[MoveCollectionViewCell class] forCellWithReuseIdentifier:@"MoveCollectionViewCell"];
@@ -148,7 +150,7 @@
     //跳转
     UIViewController *vc;
     if ([cellName isEqualToString:@"截长屏"]){
-        [self screenStitch];
+        [self screenStitchWithType:2];
     }else if ([cellName isEqualToString:@"网页滚动截图"]){
         vc = [EnterURLViewController new];
     }else if ([cellName isEqualToString:@"拼图"]){
@@ -267,9 +269,12 @@
 }
 
 #pragma mark --长图识别
--(void)screenStitch{
+-(void)screenStitchWithType:(NSInteger)type{
     //自动识别长图
-    [SVProgressHUD showWithStatus:@"正在检测是否有连续截图..."];
+    if (type == 2){
+        [SVProgressHUD showWithStatus:@"正在检测是否有连续截图..."];
+    }
+    
     _stitchArr = [Tools detectionScreenShotIMG];
     //触发提示
     MJWeakSelf
@@ -406,6 +411,7 @@
         make.top.equalTo(@50);
         make.height.equalTo(@(_checkScreenStitchView.height - 128));
     }];
+    
     
 }
 

@@ -6,7 +6,7 @@
 	<integer>10</integer>
 	<key>logs</key>
 	<dict>
-		<key>02EF5394-8170-47DA-AB57-55140DB16CC6</key>
+		<key>813703CD-5D9B-45E0-A0DD-72D55E14438F</key>
 		<dict>
 			<key>className</key>
 			<string>DBGConsoleLog</string>
@@ -15,7 +15,7 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.DebugLog</string>
 			<key>fileName</key>
-			<string>02EF5394-8170-47DA-AB57-55140DB16CC6.xcactivitylog</string>
+			<string>813703CD-5D9B-45E0-A0DD-72D55E14438F.xcactivitylog</string>
 			<key>hasPrimaryLog</key>
 			<true/>
 			<key>primaryObservable</key>
@@ -32,15 +32,15 @@
 			<key>signature</key>
 			<string>Run YXStitch</string>
 			<key>timeStartedRecording</key>
-			<real>684396867.65284204</real>
+			<real>684819040.98576295</real>
 			<key>timeStoppedRecording</key>
-			<real>684405250.84368503</real>
+			<real>684819064.91272902</real>
 			<key>title</key>
 			<string>Run YXStitch</string>
 			<key>uniqueIdentifier</key>
-			<string>02EF5394-8170-47DA-AB57-55140DB16CC6</string>
+			<string>813703CD-5D9B-45E0-A0DD-72D55E14438F</string>
 		</dict>
-		<key>0C0F5133-0D20-4E5E-91F7-E0EC9927D04F</key>
+		<key>91215156-CC3B-4566-AD65-BA3279EFEEA9</key>
 		<dict>
 			<key>className</key>
 			<string>DBGConsoleLog</string>
@@ -49,7 +49,7 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.DebugLog</string>
 			<key>fileName</key>
-			<string>0C0F5133-0D20-4E5E-91F7-E0EC9927D04F.xcactivitylog</string>
+			<string>91215156-CC3B-4566-AD65-BA3279EFEEA9.xcactivitylog</string>
 			<key>hasPrimaryLog</key>
 			<true/>
 			<key>primaryObservable</key>
@@ -66,15 +66,15 @@
 			<key>signature</key>
 			<string>Run YXStitch</string>
 			<key>timeStartedRecording</key>
-			<real>684405252.223194</real>
+			<real>684819142.51163197</real>
 			<key>timeStoppedRecording</key>
-			<real>684405281.24038601</real>
+			<real>684819279.686288</real>
 			<key>title</key>
 			<string>Run YXStitch</string>
 			<key>uniqueIdentifier</key>
-			<string>0C0F5133-0D20-4E5E-91F7-E0EC9927D04F</string>
+			<string>91215156-CC3B-4566-AD65-BA3279EFEEA9</string>
 		</dict>
-		<key>1C2300BF-167E-4736-9FCD-15056AD369C0</key>
+		<key>F1622E85-197B-48A0-9033-D4E9B65EA488</key>
 		<dict>
 			<key>className</key>
 			<string>DBGConsoleLog</string>
@@ -83,7 +83,7 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.DebugLog</string>
 			<key>fileName</key>
-			<string>1C2300BF-167E-4736-9FCD-15056AD369C0.xcactivitylog</string>
+			<string>F1622E85-197B-48A0-9033-D4E9B65EA488.xcactivitylog</string>
 			<key>hasPrimaryLog</key>
 			<true/>
 			<key>primaryObservable</key>
@@ -100,387 +100,13 @@
 			<key>signature</key>
 			<string>Run YXStitch</string>
 			<key>timeStartedRecording</key>
-			<real>684406656.26994801</real>
+			<real>684819667.38182402</real>
 			<key>timeStoppedRecording</key>
-			<real>684412178.25155997</real>
+			<real>684819679.99460101</real>
 			<key>title</key>
 			<string>Run YXStitch</string>
 			<key>uniqueIdentifier</key>
-			<string>1C2300BF-167E-4736-9FCD-15056AD369C0</string>
-		</dict>
-		<key>23911418-11C0-4B76-8A36-8B7CDF49FD4B</key>
-		<dict>
-			<key>className</key>
-			<string>DBGConsoleLog</string>
-			<key>documentTypeString</key>
-			<string>com.apple.dt.IDE.DebuggerLogContentType</string>
-			<key>domainType</key>
-			<string>Xcode.IDEActivityLogDomainType.DebugLog</string>
-			<key>fileName</key>
-			<string>23911418-11C0-4B76-8A36-8B7CDF49FD4B.xcactivitylog</string>
-			<key>hasPrimaryLog</key>
-			<true/>
-			<key>primaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>S</string>
-			</dict>
-			<key>schemeIdentifier-containerName</key>
-			<string>YXStitch project</string>
-			<key>schemeIdentifier-schemeName</key>
-			<string>YXStitch</string>
-			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
-			<key>signature</key>
-			<string>Run YXStitch</string>
-			<key>timeStartedRecording</key>
-			<real>684414172.66687703</real>
-			<key>timeStoppedRecording</key>
-			<real>684414388.06271195</real>
-			<key>title</key>
-			<string>Run YXStitch</string>
-			<key>uniqueIdentifier</key>
-			<string>23911418-11C0-4B76-8A36-8B7CDF49FD4B</string>
-		</dict>
-		<key>26F5A396-7A1C-4D96-8848-1410C302B34C</key>
-		<dict>
-			<key>className</key>
-			<string>DBGConsoleLog</string>
-			<key>documentTypeString</key>
-			<string>com.apple.dt.IDE.DebuggerLogContentType</string>
-			<key>domainType</key>
-			<string>Xcode.IDEActivityLogDomainType.DebugLog</string>
-			<key>fileName</key>
-			<string>26F5A396-7A1C-4D96-8848-1410C302B34C.xcactivitylog</string>
-			<key>hasPrimaryLog</key>
-			<true/>
-			<key>primaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>S</string>
-			</dict>
-			<key>schemeIdentifier-containerName</key>
-			<string>YXStitch project</string>
-			<key>schemeIdentifier-schemeName</key>
-			<string>YXStitch</string>
-			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
-			<key>signature</key>
-			<string>Run YXStitch</string>
-			<key>timeStartedRecording</key>
-			<real>684382113.68505204</real>
-			<key>timeStoppedRecording</key>
-			<real>684385664.09248698</real>
-			<key>title</key>
-			<string>Run YXStitch</string>
-			<key>uniqueIdentifier</key>
-			<string>26F5A396-7A1C-4D96-8848-1410C302B34C</string>
-		</dict>
-		<key>8928B6B9-60F4-489C-B7A7-0A1B0C064F29</key>
-		<dict>
-			<key>className</key>
-			<string>DBGConsoleLog</string>
-			<key>documentTypeString</key>
-			<string>com.apple.dt.IDE.DebuggerLogContentType</string>
-			<key>domainType</key>
-			<string>Xcode.IDEActivityLogDomainType.DebugLog</string>
-			<key>fileName</key>
-			<string>8928B6B9-60F4-489C-B7A7-0A1B0C064F29.xcactivitylog</string>
-			<key>hasPrimaryLog</key>
-			<true/>
-			<key>primaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>S</string>
-			</dict>
-			<key>schemeIdentifier-containerName</key>
-			<string>YXStitch project</string>
-			<key>schemeIdentifier-schemeName</key>
-			<string>YXStitch</string>
-			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
-			<key>signature</key>
-			<string>Run YXStitch</string>
-			<key>timeStartedRecording</key>
-			<real>684412179.88092506</real>
-			<key>timeStoppedRecording</key>
-			<real>684414159.28381503</real>
-			<key>title</key>
-			<string>Run YXStitch</string>
-			<key>uniqueIdentifier</key>
-			<string>8928B6B9-60F4-489C-B7A7-0A1B0C064F29</string>
-		</dict>
-		<key>8D71EC77-7499-45CF-90B1-5DECA60BFA39</key>
-		<dict>
-			<key>className</key>
-			<string>DBGConsoleLog</string>
-			<key>documentTypeString</key>
-			<string>com.apple.dt.IDE.DebuggerLogContentType</string>
-			<key>domainType</key>
-			<string>Xcode.IDEActivityLogDomainType.DebugLog</string>
-			<key>fileName</key>
-			<string>8D71EC77-7499-45CF-90B1-5DECA60BFA39.xcactivitylog</string>
-			<key>hasPrimaryLog</key>
-			<true/>
-			<key>primaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>S</string>
-			</dict>
-			<key>schemeIdentifier-containerName</key>
-			<string>YXStitch project</string>
-			<key>schemeIdentifier-schemeName</key>
-			<string>YXStitch</string>
-			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
-			<key>signature</key>
-			<string>Run YXStitch</string>
-			<key>timeStartedRecording</key>
-			<real>684405827.05594301</real>
-			<key>timeStoppedRecording</key>
-			<real>684406145.15798295</real>
-			<key>title</key>
-			<string>Run YXStitch</string>
-			<key>uniqueIdentifier</key>
-			<string>8D71EC77-7499-45CF-90B1-5DECA60BFA39</string>
-		</dict>
-		<key>93C6DB17-0EC3-49E1-99B5-C65D944D9602</key>
-		<dict>
-			<key>className</key>
-			<string>DBGConsoleLog</string>
-			<key>documentTypeString</key>
-			<string>com.apple.dt.IDE.DebuggerLogContentType</string>
-			<key>domainType</key>
-			<string>Xcode.IDEActivityLogDomainType.DebugLog</string>
-			<key>fileName</key>
-			<string>93C6DB17-0EC3-49E1-99B5-C65D944D9602.xcactivitylog</string>
-			<key>hasPrimaryLog</key>
-			<true/>
-			<key>primaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>S</string>
-			</dict>
-			<key>schemeIdentifier-containerName</key>
-			<string>YXStitch project</string>
-			<key>schemeIdentifier-schemeName</key>
-			<string>YXStitch</string>
-			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
-			<key>signature</key>
-			<string>Run YXStitch</string>
-			<key>timeStartedRecording</key>
-			<real>684406146.410025</real>
-			<key>timeStoppedRecording</key>
-			<real>684406287.06808305</real>
-			<key>title</key>
-			<string>Run YXStitch</string>
-			<key>uniqueIdentifier</key>
-			<string>93C6DB17-0EC3-49E1-99B5-C65D944D9602</string>
-		</dict>
-		<key>9DBD0F62-CDA2-407E-9E19-A4B1762E5475</key>
-		<dict>
-			<key>className</key>
-			<string>DBGConsoleLog</string>
-			<key>documentTypeString</key>
-			<string>com.apple.dt.IDE.DebuggerLogContentType</string>
-			<key>domainType</key>
-			<string>Xcode.IDEActivityLogDomainType.DebugLog</string>
-			<key>fileName</key>
-			<string>9DBD0F62-CDA2-407E-9E19-A4B1762E5475.xcactivitylog</string>
-			<key>hasPrimaryLog</key>
-			<true/>
-			<key>primaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>S</string>
-			</dict>
-			<key>schemeIdentifier-containerName</key>
-			<string>YXStitch project</string>
-			<key>schemeIdentifier-schemeName</key>
-			<string>YXStitch</string>
-			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
-			<key>signature</key>
-			<string>Run YXStitch</string>
-			<key>timeStartedRecording</key>
-			<real>684405817.04941797</real>
-			<key>timeStoppedRecording</key>
-			<real>684405826.27579999</real>
-			<key>title</key>
-			<string>Run YXStitch</string>
-			<key>uniqueIdentifier</key>
-			<string>9DBD0F62-CDA2-407E-9E19-A4B1762E5475</string>
-		</dict>
-		<key>BF47C52F-E018-4C84-98B2-9518F5235978</key>
-		<dict>
-			<key>className</key>
-			<string>DBGConsoleLog</string>
-			<key>documentTypeString</key>
-			<string>com.apple.dt.IDE.DebuggerLogContentType</string>
-			<key>domainType</key>
-			<string>Xcode.IDEActivityLogDomainType.DebugLog</string>
-			<key>fileName</key>
-			<string>BF47C52F-E018-4C84-98B2-9518F5235978.xcactivitylog</string>
-			<key>hasPrimaryLog</key>
-			<true/>
-			<key>primaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>S</string>
-			</dict>
-			<key>schemeIdentifier-containerName</key>
-			<string>YXStitch project</string>
-			<key>schemeIdentifier-schemeName</key>
-			<string>YXStitch</string>
-			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
-			<key>signature</key>
-			<string>Run YXStitch</string>
-			<key>timeStartedRecording</key>
-			<real>684385779.17718196</real>
-			<key>timeStoppedRecording</key>
-			<real>684389490.57409298</real>
-			<key>title</key>
-			<string>Run YXStitch</string>
-			<key>uniqueIdentifier</key>
-			<string>BF47C52F-E018-4C84-98B2-9518F5235978</string>
-		</dict>
-		<key>C803D253-31C0-4299-B0BE-FF9911446CEA</key>
-		<dict>
-			<key>className</key>
-			<string>DBGConsoleLog</string>
-			<key>documentTypeString</key>
-			<string>com.apple.dt.IDE.DebuggerLogContentType</string>
-			<key>domainType</key>
-			<string>Xcode.IDEActivityLogDomainType.DebugLog</string>
-			<key>fileName</key>
-			<string>C803D253-31C0-4299-B0BE-FF9911446CEA.xcactivitylog</string>
-			<key>hasPrimaryLog</key>
-			<true/>
-			<key>primaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>S</string>
-			</dict>
-			<key>schemeIdentifier-containerName</key>
-			<string>YXStitch project</string>
-			<key>schemeIdentifier-schemeName</key>
-			<string>YXStitch</string>
-			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
-			<key>signature</key>
-			<string>Run YXStitch</string>
-			<key>timeStartedRecording</key>
-			<real>684405282.26946497</real>
-			<key>timeStoppedRecording</key>
-			<real>684405348.485834</real>
-			<key>title</key>
-			<string>Run YXStitch</string>
-			<key>uniqueIdentifier</key>
-			<string>C803D253-31C0-4299-B0BE-FF9911446CEA</string>
-		</dict>
-		<key>F12604A4-8B57-4C6D-AE0B-617BAD640D2B</key>
-		<dict>
-			<key>className</key>
-			<string>DBGConsoleLog</string>
-			<key>documentTypeString</key>
-			<string>com.apple.dt.IDE.DebuggerLogContentType</string>
-			<key>domainType</key>
-			<string>Xcode.IDEActivityLogDomainType.DebugLog</string>
-			<key>fileName</key>
-			<string>F12604A4-8B57-4C6D-AE0B-617BAD640D2B.xcactivitylog</string>
-			<key>hasPrimaryLog</key>
-			<true/>
-			<key>primaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>S</string>
-			</dict>
-			<key>schemeIdentifier-containerName</key>
-			<string>YXStitch project</string>
-			<key>schemeIdentifier-schemeName</key>
-			<string>YXStitch</string>
-			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
-			<key>signature</key>
-			<string>Run YXStitch</string>
-			<key>timeStartedRecording</key>
-			<real>684406288.39264297</real>
-			<key>timeStoppedRecording</key>
-			<real>684406644.58378196</real>
-			<key>title</key>
-			<string>Run YXStitch</string>
-			<key>uniqueIdentifier</key>
-			<string>F12604A4-8B57-4C6D-AE0B-617BAD640D2B</string>
-		</dict>
-		<key>FB925A07-BE6C-483F-9001-FBEF9AFFDDB9</key>
-		<dict>
-			<key>className</key>
-			<string>DBGConsoleLog</string>
-			<key>documentTypeString</key>
-			<string>com.apple.dt.IDE.DebuggerLogContentType</string>
-			<key>domainType</key>
-			<string>Xcode.IDEActivityLogDomainType.DebugLog</string>
-			<key>fileName</key>
-			<string>FB925A07-BE6C-483F-9001-FBEF9AFFDDB9.xcactivitylog</string>
-			<key>hasPrimaryLog</key>
-			<true/>
-			<key>primaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>S</string>
-			</dict>
-			<key>schemeIdentifier-containerName</key>
-			<string>YXStitch project</string>
-			<key>schemeIdentifier-schemeName</key>
-			<string>YXStitch</string>
-			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
-			<key>signature</key>
-			<string>Run YXStitch</string>
-			<key>timeStartedRecording</key>
-			<real>684405528.85273302</real>
-			<key>timeStoppedRecording</key>
-			<real>684405815.93718398</real>
-			<key>title</key>
-			<string>Run YXStitch</string>
-			<key>uniqueIdentifier</key>
-			<string>FB925A07-BE6C-483F-9001-FBEF9AFFDDB9</string>
-		</dict>
-		<key>FBBF5770-79A7-4467-A96E-BC351BC7ECB5</key>
-		<dict>
-			<key>className</key>
-			<string>DBGConsoleLog</string>
-			<key>documentTypeString</key>
-			<string>com.apple.dt.IDE.DebuggerLogContentType</string>
-			<key>domainType</key>
-			<string>Xcode.IDEActivityLogDomainType.DebugLog</string>
-			<key>fileName</key>
-			<string>FBBF5770-79A7-4467-A96E-BC351BC7ECB5.xcactivitylog</string>
-			<key>hasPrimaryLog</key>
-			<true/>
-			<key>primaryObservable</key>
-			<dict>
-				<key>highLevelStatus</key>
-				<string>S</string>
-			</dict>
-			<key>schemeIdentifier-containerName</key>
-			<string>YXStitch project</string>
-			<key>schemeIdentifier-schemeName</key>
-			<string>YXStitch</string>
-			<key>schemeIdentifier-sharedScheme</key>
-			<integer>1</integer>
-			<key>signature</key>
-			<string>Run YXStitch</string>
-			<key>timeStartedRecording</key>
-			<real>684405349.64300001</real>
-			<key>timeStoppedRecording</key>
-			<real>684405527.45453894</real>
-			<key>title</key>
-			<string>Run YXStitch</string>
-			<key>uniqueIdentifier</key>
-			<string>FBBF5770-79A7-4467-A96E-BC351BC7ECB5</string>
+			<string>F1622E85-197B-48A0-9033-D4E9B65EA488</string>
 		</dict>
 	</dict>
 </dict>

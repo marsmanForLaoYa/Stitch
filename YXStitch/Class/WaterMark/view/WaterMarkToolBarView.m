@@ -150,52 +150,57 @@
 
 -(void)iconBtnClick:(UIButton *)btn{
     MJWeakSelf
-    if (btn.tag != _selectIndex) {
-        UIImageView *findIMG = (UIImageView *)[self viewWithTag:_selectIndex * 100];
-        UIImageView *selectIMG = (UIImageView *)[self viewWithTag:btn.tag * 100];
-        switch (_selectIndex) {
-            case 1:
-                findIMG.image = [UIImage imageNamed:@"选中无水印"];
-                break;
-            case 2:
-                findIMG.image = [UIImage imageNamed:@"未选中水印左"];
-                break;
-            case 3:
-                findIMG.image = [UIImage imageNamed:@"未选中水印居中"];
-                break;
-            case 4:
-                findIMG.image = [UIImage imageNamed:@"未选中水印右"];
-                break;
-            case 5:
-                findIMG.image = [UIImage imageNamed:@"未选中水印全屏"];
-                break;
-            default:
-                break;
-        }
-        switch (btn.tag) {
-            case 1:
-                selectIMG.image = [UIImage imageNamed:@"选中无水印"];
-                break;
-            case 2:
-                selectIMG.image = [UIImage imageNamed:@"选中水印左"];
-                break;
-            case 3:
-                selectIMG.image = [UIImage imageNamed:@"选中水印居中"];
-                break;
-            case 4:
-                selectIMG.image = [UIImage imageNamed:@"选中水印右"];
-                break;
-            case 5:
-                selectIMG.image = [UIImage imageNamed:@"选中水印全屏"];
-                break;
-            default:
-                break;
-        }
-        //保存位置  
-        _selectIndex = btn.tag;
-        GVUserDe.waterPosition = btn.tag;
+    if (btn.tag == 1){
         self.btnClick(btn.tag);
+    }else{
+        if (btn.tag != _selectIndex) {
+            UIImageView *findIMG = (UIImageView *)[self viewWithTag:_selectIndex * 100];
+            UIImageView *selectIMG = (UIImageView *)[self viewWithTag:btn.tag * 100];
+            switch (_selectIndex) {
+                case 1:
+                    findIMG.image = [UIImage imageNamed:@"选中无水印"];
+                    break;
+                case 2:
+                    findIMG.image = [UIImage imageNamed:@"未选中水印左"];
+                    break;
+                case 3:
+                    findIMG.image = [UIImage imageNamed:@"未选中水印居中"];
+                    break;
+                case 4:
+                    findIMG.image = [UIImage imageNamed:@"未选中水印右"];
+                    break;
+                case 5:
+                    findIMG.image = [UIImage imageNamed:@"未选中水印全屏"];
+                    break;
+                default:
+                    break;
+            }
+            switch (btn.tag) {
+                case 1:
+                    selectIMG.image = [UIImage imageNamed:@"选中无水印"];
+                    break;
+                case 2:
+                    selectIMG.image = [UIImage imageNamed:@"选中水印左"];
+                    break;
+                case 3:
+                    selectIMG.image = [UIImage imageNamed:@"选中水印居中"];
+                    break;
+                case 4:
+                    selectIMG.image = [UIImage imageNamed:@"选中水印右"];
+                    break;
+                case 5:
+                    selectIMG.image = [UIImage imageNamed:@"选中水印全屏"];
+                    break;
+                default:
+                    break;
+            }
+            //保存位置
+            _selectIndex = btn.tag;
+            GVUserDe.waterPosition = btn.tag;
+            self.btnClick(btn.tag);
+        }
     }
+    
     
     if (btn.tag != 1){
         if (_colorSelectView == nil){

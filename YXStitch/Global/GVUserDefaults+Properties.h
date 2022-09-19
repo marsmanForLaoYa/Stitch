@@ -20,6 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic ,assign)NSInteger waterTitleFontSize;//水印文字大小
 @property (nonatomic ,strong)NSString *waterTitleColor;//水印文字颜色
 
+
 @property (nonatomic ,assign)NSInteger deleteIMGType;//删除原图类型 1=所有图片 2=只删原图
 
 @property (nonatomic ,assign)BOOL isMember;//是否是会员

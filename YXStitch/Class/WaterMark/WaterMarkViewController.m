@@ -58,6 +58,7 @@
     //如果没有则显示默认图片
     _BKIMG = [UIImageView new];
     _BKIMG.image = IMG(@"水印默认图片");
+    _BKIMG.layer.masksToBounds = YES;
     if (_waterIMG){
         
     }else{
@@ -139,6 +140,19 @@
                     make.right.equalTo(_BKIMG.mas_right).offset(-8);
                 }
             }];
+        }else{
+            //判断是否是会员
+            if (GVUserDe.isMember){
+                
+            }else{
+                _funcView = [UnlockFuncView new];
+                _funcView.delegate = self;
+                _funcView.type = 2;
+                [self.view addSubview:_funcView];
+                [_funcView mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.edges.equalTo(self.view);
+                }];
+            }
         }
     }
    

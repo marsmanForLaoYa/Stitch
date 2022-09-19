@@ -27,8 +27,7 @@
     if (self) {
         self.backgroundColor = [UIColor whiteColor];
         [self setupViews];
-        [self setupLayout];
-        
+        [self setupLayout];    
     }
     return self;
 }
