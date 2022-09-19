@@ -40,6 +40,40 @@
 			<key>uniqueIdentifier</key>
 			<string>BB55C046-65DD-433B-87EF-8271FA231CD7</string>
 		</dict>
+		<key>C250A3D6-5184-4DA2-8FAA-A2EB7436A969</key>
+		<dict>
+			<key>className</key>
+			<string>IDEActivityLogSection</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>C250A3D6-5184-4DA2-8FAA-A2EB7436A969.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>W</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>YXStitch project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>YXStitch</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Build YXStitch</string>
+			<key>timeStartedRecording</key>
+			<real>685242696.42233503</real>
+			<key>timeStoppedRecording</key>
+			<real>685242704.28993404</real>
+			<key>title</key>
+			<string>Build YXStitch</string>
+			<key>uniqueIdentifier</key>
+			<string>C250A3D6-5184-4DA2-8FAA-A2EB7436A969</string>
+		</dict>
 	</dict>
 </dict>
 </plist>
