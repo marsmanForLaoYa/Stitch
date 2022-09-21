@@ -35,14 +35,20 @@
 -(void)setupViews{
     MJWeakSelf
     UIButton *cancelBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-    [cancelBtn setBackgroundImage:IMG(@"取消") forState:UIControlStateNormal];
     cancelBtn.tag = 1;
     [cancelBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:cancelBtn];
     [cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.height.equalTo(@15);
-        make.top.equalTo(@20);
-        make.left.equalTo(@15);
+        make.width.height.equalTo(@40);
+        make.left.top.equalTo(self);
+    }];
+    
+    UIImageView *canIcon = [UIImageView new];
+    canIcon.image = IMG(@"取消");
+    [cancelBtn addSubview:canIcon];
+    [canIcon mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.centerY.equalTo(cancelBtn);
+        make.width.height.equalTo(@14);
     }];
     
     _colorView = [UIView new];

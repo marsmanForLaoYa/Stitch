@@ -12,7 +12,7 @@
 
 
 #define MIN_HEIGHT 50
-#define EDITOR_BAR_HEIGHT 0
+#define EDITOR_BAR_HEIGHT 2
 
 @interface StitchResultView ()
 

@@ -120,6 +120,8 @@
 		FB7E659528A49E6F0079C9F3 /* UrlSchemeTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = FB7E659428A49E6F0079C9F3 /* UrlSchemeTableView.m */; };
 		FB7E659828A4A5680079C9F3 /* PrefenceSetTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = FB7E659728A4A5680079C9F3 /* PrefenceSetTableView.m */; };
 		FB7E659B28A4A6110079C9F3 /* PrefenceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FB7E659A28A4A6110079C9F3 /* PrefenceTableViewCell.m */; };
+		FB86DC2B28D96C5300EE8E4D /* UIImage+LF_Format.m in Sources */ = {isa = PBXBuildFile; fileRef = FB86DC2A28D96C5300EE8E4D /* UIImage+LF_Format.m */; };
+		FB86DC2E28D9A80700EE8E4D /* ImageEditBottomView.m in Sources */ = {isa = PBXBuildFile; fileRef = FB86DC2D28D9A80700EE8E4D /* ImageEditBottomView.m */; };
 		FB8B4E4328AB8BFF00313ECD /* UIScrollView+LVShot.m in Sources */ = {isa = PBXBuildFile; fileRef = FB8B4E4128AB8BFC00313ECD /* UIScrollView+LVShot.m */; };
 		FBA1862528ACFBF50001DF8C /* FullWaterMarkTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FBA1862428ACFBF50001DF8C /* FullWaterMarkTableViewCell.m */; };
 		FBA1862928ACFC740001DF8C /* FullWaterMarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = FBA1862828ACFC740001DF8C /* FullWaterMarkView.m */; };
@@ -352,6 +354,10 @@
 		FB7E659728A4A5680079C9F3 /* PrefenceSetTableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PrefenceSetTableView.m; sourceTree = "<group>"; };
 		FB7E659928A4A6110079C9F3 /* PrefenceTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefenceTableViewCell.h; sourceTree = "<group>"; };
 		FB7E659A28A4A6110079C9F3 /* PrefenceTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PrefenceTableViewCell.m; sourceTree = "<group>"; };
+		FB86DC2928D96C4B00EE8E4D /* UIImage+LF_Format.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+LF_Format.h"; sourceTree = "<group>"; };
+		FB86DC2A28D96C5300EE8E4D /* UIImage+LF_Format.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+LF_Format.m"; sourceTree = "<group>"; };
+		FB86DC2C28D9A80700EE8E4D /* ImageEditBottomView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageEditBottomView.h; sourceTree = "<group>"; };
+		FB86DC2D28D9A80700EE8E4D /* ImageEditBottomView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImageEditBottomView.m; sourceTree = "<group>"; };
 		FB8B4E4128AB8BFC00313ECD /* UIScrollView+LVShot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+LVShot.m"; sourceTree = "<group>"; };
 		FB8B4E4228AB8BFF00313ECD /* UIScrollView+LVShot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+LVShot.h"; sourceTree = "<group>"; };
 		FBA1862328ACFBF50001DF8C /* FullWaterMarkTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FullWaterMarkTableViewCell.h; sourceTree = "<group>"; };
@@ -444,6 +450,8 @@
 				FBECFBD428BA0D30006FCF74 /* StitchingButton.m */,
 				FBF12BEC28BC4EDE008F10EA /* IMGFuctionView.h */,
 				FBF12BED28BC4EDE008F10EA /* IMGFuctionView.m */,
+				FB86DC2C28D9A80700EE8E4D /* ImageEditBottomView.h */,
+				FB86DC2D28D9A80700EE8E4D /* ImageEditBottomView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -659,6 +667,8 @@
 				FB8B4E4128AB8BFC00313ECD /* UIScrollView+LVShot.m */,
 				FB0D9E2628B4D1420057DC37 /* UIScrollView+UITouch.h */,
 				FB0D9E2728B4D1420057DC37 /* UIScrollView+UITouch.m */,
+				FB86DC2928D96C4B00EE8E4D /* UIImage+LF_Format.h */,
+				FB86DC2A28D96C5300EE8E4D /* UIImage+LF_Format.m */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -1188,6 +1198,7 @@
 				FBECFBD528BA0D30006FCF74 /* StitchingButton.m in Sources */,
 				FB2D5A1828A23D51006085BC /* UrlInvalidHintView.m in Sources */,
 				FB3EFE4128A3A241006C3889 /* PriceView.m in Sources */,
+				FB86DC2B28D96C5300EE8E4D /* UIImage+LF_Format.m in Sources */,
 				FB2E287228AA1B62006BDAB0 /* SZImageTableViewCell.m in Sources */,
 				FB7E659828A4A5680079C9F3 /* PrefenceSetTableView.m in Sources */,
 				FB2E285528AA1A21006BDAB0 /* SZpurchasingManager.m in Sources */,
@@ -1203,6 +1214,7 @@
 				FB687F0628A0EA1C002D557B /* Tools.m in Sources */,
 				FBF59EF528AC796100D9C6CF /* WaterTitleView.m in Sources */,
 				FB687F0928A0ECCC002D557B /* ToastShowView.m in Sources */,
+				FB86DC2E28D9A80700EE8E4D /* ImageEditBottomView.m in Sources */,
 				FB687EF928A0E23F002D557B /* HomeViewController.m in Sources */,
 				FB2E285728AA1A21006BDAB0 /* UIImage+Category.m in Sources */,
 				FB2E287128AA1B62006BDAB0 /* SZImagePreVewController.m in Sources */,

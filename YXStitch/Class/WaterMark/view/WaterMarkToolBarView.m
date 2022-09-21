@@ -131,6 +131,7 @@
     MJWeakSelf
     if (!_titleView){
         _titleView = [WaterTitleView new];
+        _titleView.type = 1;
         _titleView.btnClick = ^(NSInteger tag) {
             weakSelf.titleView.hidden = YES;
             if (tag == 1){

@@ -19,7 +19,8 @@
 
 - (instancetype)init {
     if (self = [super init]) {
-        self.backgroundColor = GLOABLE_COLOR;
+        //self.backgroundColor = GLOABLE_COLOR;
+        self.backgroundColor = [UIColor orangeColor];
         [self configViews];
     }
     return self;

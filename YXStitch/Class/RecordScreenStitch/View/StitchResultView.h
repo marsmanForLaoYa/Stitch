@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong)  SZScrollView    *scrollView;
 @property (nonatomic,copy)  dispatch_block_t completion;
 @property (nonatomic, strong)SZImageGenerator *generator;
+@property (nonatomic,strong)NSMutableArray *dataImageViews;
+
 //- (id)initWithFrame:(CGRect)frame andGenerator :(SZImageGenerator *)generator;
 
 - (instancetype)initWithImage:(UIImage *)image;

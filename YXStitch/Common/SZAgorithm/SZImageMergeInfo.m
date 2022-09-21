@@ -108,7 +108,6 @@ static const NSString *INFO_KEY = @"INFO_KEY";
                             length = value;
                             x = i;
                             y = j;
-//                            NSLog(@"x===%@,y===%@",@(x),@(y));
                         }
                     }else {
                         matrix[i % 2][j] = 0;

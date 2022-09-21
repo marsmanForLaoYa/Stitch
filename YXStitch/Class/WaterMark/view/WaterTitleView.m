@@ -17,11 +17,15 @@
     if (self) {
         self.backgroundColor = [UIColor blackColor];
         self.alpha = 0.9;
-        [self setupViews];
-        [self setupLayout];
+        
         
     }
     return self;
+}
+
+-(void)layoutSubviews{
+    [self setupViews];
+    [self setupLayout];
 }
 
 - (void)setupViews{
@@ -83,7 +87,12 @@
             [_titleTV resignFirstResponder];
             self.btnClick(btn.tag);
         }else{
-            [SVProgressHUD showInfoWithStatus:@"水印文字不能为空"];
+            if (_type == 1){
+                [SVProgressHUD showInfoWithStatus:@"水印文字不能为空"];
+            }else{
+                [SVProgressHUD showInfoWithStatus:@"文字不能为空"];
+            }
+            
         }
     }else{
         [_titleTV resignFirstResponder];

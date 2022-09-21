@@ -13,6 +13,7 @@
 	<string>StoreKit</string>
 	<string>AssetsLibrary</string>
 	<string>CoreServices</string>
+	<string>GLKit</string>
 	<string>mach</string>
 	<string>AVFoundation</string>
 	<string>YYKit</string>
@@ -29,6 +30,8 @@
 	<string>UMCommon</string>
 	<string>Cocoa</string>
 	<string>PhotosUI</string>
+	<string>Metal</string>
+	<string>MetalKit</string>
 	<string>netinet</string>
 	<string>CoreData</string>
 	<string>Accelerate</string>

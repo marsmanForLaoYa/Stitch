@@ -18,6 +18,10 @@
 #import "SZImageGenerator.h"
 #import <Photos/Photos.h>
 #import "StitchResultView.h"
+#import "ImageEditBottomView.h"
+#import "WaterColorSelectView.h"
+#import "ColorPlateView.h"
+#import "WaterTitleView.h"
 
 #define MaxSCale 2.5  //最大缩放比例
 #define MinScale 0.5  //最小缩放比例
@@ -26,7 +30,7 @@
 #define HorViewHeight 300
 
 
-@interface CaptionViewController ()<UnlockFuncViewDelegate,CheckProViewDelegate,UIGestureRecognizerDelegate,HXCustomNavigationControllerDelegate,HXPhotoViewDelegate,HXPhotoViewDelegate,UIScrollViewDelegate>
+@interface CaptionViewController ()<UnlockFuncViewDelegate,CheckProViewDelegate,UIGestureRecognizerDelegate,HXCustomNavigationControllerDelegate,HXPhotoViewDelegate,HXPhotoViewDelegate,UIScrollViewDelegate,WaterColorSelectViewDelegate>
 @property (weak, nonatomic) HXPhotoView *photoView;
 @property (strong, nonatomic)HXPhotoManager *manager;
 @property (nonatomic ,strong)UnlockFuncView *funcView;
@@ -34,6 +38,12 @@
 @property (nonatomic ,strong)StitchingButton *selectIMG;
 @property (nonatomic ,strong)CaptionBottomView *bottomView;
 @property (nonatomic ,strong)IMGFuctionView *imgFunctionView;
+@property (nonatomic ,strong)ImageEditBottomView *imgEditBottomView;
+@property (nonatomic ,strong)WaterColorSelectView *colorSelectView;
+@property (nonatomic ,strong)ColorPlateView *colorPlateView;
+@property (nonatomic ,strong)WaterTitleView *titleView;
+
+
 @property (nonatomic ,strong)UIView *contentView;
 @property (nonatomic ,strong)UISlider *topSlider;
 @property (nonatomic ,strong)UISlider *bottomSlider;
@@ -49,6 +59,7 @@
 @property (nonatomic ,strong)NSMutableArray *originRightArr;
 @property (nonatomic ,strong)NSMutableArray *imageViews;
 @property (nonatomic ,strong)NSMutableArray *cutArr;
+@property (nonatomic ,strong)NSMutableArray *editLabArr;
 @property (nonatomic ,assign)CGPoint moveP;
 @property (nonatomic ,assign)CGFloat offsetY;
 
@@ -69,7 +80,7 @@
 @property (nonatomic ,assign)NSInteger posizition;
 @property (nonatomic ,assign)NSInteger imgSelectIndex;
 @property (nonatomic ,assign)NSInteger moveIndex;
-@property (nonatomic ,assign)NSInteger imgTurnCount;
+@property (nonatomic ,assign)NSInteger editType;//编辑类型
 
 @property (nonatomic ,strong)UIPanGestureRecognizer *panRecognizer;
 @property (nonatomic ,strong)UIPinchGestureRecognizer *pinchRecognizer;
@@ -77,6 +88,7 @@
 @property (nonatomic, strong)SZImageGenerator *generator;
 @property (nonatomic, strong)dispatch_queue_t queue;
 @property (nonatomic, strong)StitchResultView *resultView;
+
 
 @end
 
@@ -103,17 +115,16 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
     _isTurn = NO;
     _imgSelectIndex = MAXFLOAT;
     _isStartCut = NO;
-    _imgTurnCount = 4;
     [self setupViews];
     [self setupNavItems];
     [self addBottomView];
     
-//    _pinchRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinch:)];
-//    [_contentView addGestureRecognizer:_pinchRecognizer];
-//    _panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(selectonPanGesture:)];
-//    _panRecognizer.delegate = self;
-//    _panRecognizer.maximumNumberOfTouches = 1;
-//    [_contentView addGestureRecognizer:_panRecognizer];
+    _pinchRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinch:)];
+    [_contentView addGestureRecognizer:_pinchRecognizer];
+    _panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(selectonPanGesture:)];
+    _panRecognizer.delegate = self;
+    _panRecognizer.maximumNumberOfTouches = 1;
+    [_contentView addGestureRecognizer:_panRecognizer];
 
 }
 -(void)viewWillAppear:(BOOL)animated{
@@ -242,7 +253,6 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
         [_imageViews addObject:imageView];
         
     }
-//    NSLog(@"_contentScrollView.height==%lf",_contentScrollView.height);
     _contentScrollView.contentSize = CGSizeMake(contentWidth,SCREEN_HEIGHT - 80 - Nav_H);
 }
 
@@ -585,6 +595,12 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
 #pragma mark -- 处理拖动手势
 - (void)selectonPanGesture:(UIPanGestureRecognizer *)gesture {
     if (!_isCut){
+        if (gesture.state == UIGestureRecognizerStateBegan){
+            _contentScrollView.userInteractionEnabled = NO;
+        }
+        if (gesture.state == UIGestureRecognizerStateEnded){
+            _contentScrollView.userInteractionEnabled = YES;
+        }
         CGPoint translatedPoint = [gesture translationInView:self.view];
         CGPoint newCenter = CGPointMake(gesture.view.center.x+ translatedPoint.x, gesture.view.center.y + translatedPoint.y);
         gesture.view.center = newCenter;
@@ -1214,12 +1230,10 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
             [_originTopArr addObject:[NSNumber numberWithFloat:0]];
             [_originBottomArr addObject:[NSNumber numberWithFloat:firstImageView.height]];
             [_imageViews addObject:firstImageView];
-    //        if (_moveIndex == 1){
-    //            //如果是从第一张开始切割
-    //            firstImageView.imgView.top = 200;
-    //            NSLog(@"top==%lf",_cutBtn.top);
-    //            firstImageView.height = _cutBtn.top;
-    //        }
+            if (_moveIndex == 1){
+                //如果是从第一张开始切割
+                firstImageView.height = _cutBtn.top;
+            }
             for (NSInteger i = 1; i < topArr.count; i ++) {
                 UIImage *icon = topArr[i];
                 CGFloat imgHeight = (CGFloat)(icon.size.height/icon.size.width) * VerViewWidth;
@@ -1232,9 +1246,10 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                 [_contentScrollView addSubview:imageView];
                 if (i == index){
                     imageView.height = _cutBtn.top -  firstImageView.bottom;
-    //                imageView.imgView.top = - (_cutBtn.top -  firstImageView.bottom);
+                    //imageView.imgView.top = - (_cutBtn.top -  firstImageView.bottom);
                 }
                 firstImageView = imageView;
+             //   NSLog(@"firstbottom==%lf",firstImageView.bottom);
                 [_originTopArr addObject:[NSNumber numberWithFloat:firstImageView.top]];
                 [_imageViews addObject:imageView];
                 [_originBottomArr addObject:[NSNumber numberWithFloat:contentHeight]];
@@ -1243,7 +1258,6 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
             for (NSInteger i = 0; i < bottomArr.count; i ++) {
                 UIImage *icon = bottomArr[i];
                 CGFloat imgHeight = (CGFloat)(icon.size.height/icon.size.width) * VerViewWidth;
-                
                 StitchingButton *imageView = [[StitchingButton alloc]initWithFrame:CGRectMake(0,i==0?_cutBtn.top: firstImageView.bottom, VerViewWidth, imgHeight)];
                 imageView.image = icon;
                 imageView.centerX = firstImageView.centerX;
@@ -1252,9 +1266,14 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                 contentHeight += imgHeight;
                 [_contentScrollView addSubview:imageView];
                 if (i == 0){
-                    CGFloat tmpT = _cutBtn.bottom - firstImageView.bottom;
-                    imageView.height = imgHeight - (firstImageView.bottom - _cutBtn.bottom);
-                    imageView.imgView.top = tmpT;
+                    NSLog(@"bottom==%lf",_cutBtn.bottom);
+                    NSLog(@"top==%lf",firstImageView.bottom);
+                    imageView.imgView.top = - (_cutBtn.bottom - firstImageView.bottom);
+                    imageView.height = imageView.bottom - _cutBtn.bottom;
+                    //CGFloat tmpT = _cutBtn.bottom - firstImageView.bottom;
+//                    imageView.height = imgHeight - (firstImageView.bottom - _cutBtn.bottom);
+//                    imageView.height = imageView.bottom - _cutBtn.top;
+//                    imageView.imgView.top = -(_cutBtn.bottom - imageView.top);
                 }
                 firstImageView = imageView;
                 [_originTopArr addObject:[NSNumber numberWithFloat:firstImageView.top]];
@@ -1358,6 +1377,12 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                 }else{
                     if (tmpF >= imageView.imgView.height){
                         imageView.bottom = _cutBtn.top;
+                        StitchingButton *lastStichimageView = imageView;
+                        for (NSInteger i = _moveIndex - 2; i >= 0; i --) {
+                            StitchingButton *changeImageView = self.imageViews[i];
+                            changeImageView.bottom = imageView.top;
+                            lastStichimageView = changeImageView;
+                        }
                         return;
                     }else{
                         imageView.height = tmpF;
@@ -1757,17 +1782,35 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
         [self.view.viewController presentViewController:nav animated:YES completion:nil];
     }else if (tag == 4){
         //删除图片
-        if (_imgSelectIndex < _imageViews.count){
-            [imgView removeFromSuperview];
+        if (_imgSelectIndex <= _imageViews.count){
+//            NSLog(@"index==%ld",_imgSelectIndex);
+            StitchingButton *lastImg = _imageViews[_imgSelectIndex - 1];
             [_imageViews removeObjectAtIndex:_imgSelectIndex];
-            [_dataArr removeObjectAtIndex:_imgSelectIndex];
-            [_contentScrollView removeAllSubviews];
-            if (_isVerticalCut == YES){
-                [self addVerticalContentView];
-            }else{
-                [self addHorizontalContentView];
+//            _contentScrollView.contentSize = CGSizeMake(_contentScrollView.size.width, _contentScrollView.size.height - imgView.height);
+            [imgView removeFromSuperview];
+//            _contentScrollView.scrollEnabled = YES;  
+            for (NSInteger i = _imgSelectIndex; i < _imageViews.count; i ++) {
+                StitchingButton *imageView = _imageViews[i];
+                imageView.tag = (i + 1) * 100;
+                if (_isVerticalCut){
+                    //底部跟随
+                    imageView.top = lastImg.bottom;
+                }else{
+                    //右边跟随
+                    imageView.left = lastImg.right;
+                }
+                lastImg = imageView;
             }
             
+            self.title = [NSString stringWithFormat:@"%ld张图片",_imageViews.count];
+//            [_dataArr removeObjectAtIndex:_imgSelectIndex];
+//            [_contentScrollView removeAllSubviews];
+            [_cutArr removeAllObjects];
+//            if (_isVerticalCut == YES){
+//                [self addVerticalContentView];
+//            }else{
+//                [self addHorizontalContentView];
+//            }
             _funcView.hidden = YES;
         }
         
@@ -1783,7 +1826,6 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
         }else{
             [self addHorizontalCutView];
         }
-        
         _imgFunctionView.hidden = YES;
         _bottomView.hidden = NO;
         
@@ -1871,6 +1913,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
     
 }
 -(void)bottomBtnClick:(NSInteger )tag{
+    MJWeakSelf
     _guideIMG.hidden = YES;
     if (tag == 1){
         if (_type == 2){
@@ -2009,22 +2052,154 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                     }];
                     
                 }else{
-                    //长截切割
+                    _cutBtn.hidden = YES;
                 }
             
             }else{
-                _cutBtn.hidden = YES;
+                //长截切割   
             }
             _isSlicing = !_isSlicing;
             
         }else{
+            //编辑
             _isCut = NO;
+            if (_imgEditBottomView == nil){
+                _imgEditBottomView = [ImageEditBottomView new];
+                [self.view addSubview:_imgEditBottomView];
+                [_imgEditBottomView mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.width.left.bottom.equalTo(self.view);
+                    make.height.equalTo(@100);
+                }];
+
+            }
+            _bottomView.hidden = YES;
+            _imgEditBottomView.hidden = NO;
+            _imgEditBottomView.btnClick = ^(NSInteger tag) {
+                [weakSelf imgEditViewBtnClickWithTag:tag];
+            };
         }
     }
     
 }
 
 
+-(void)imgEditViewBtnClickWithTag:(NSInteger )tag{
+    MJWeakSelf
+    _editType = tag;
+    _colorSelectView.hidden = YES;
+    if (tag == 0){
+        //取消
+        _imgEditBottomView.hidden = YES;
+        _bottomView.hidden = NO;
+    }else if (tag == 1 || tag == 4){
+        //空心填充 //箭头
+        [self addColoeSelectedView];
+    }else if(tag == 2){
+        //实心填充
+    }else if(tag == 3){
+        //马赛克
+    }else if(tag == 5){
+        //画笔
+    }else if(tag == 6){
+        //文本
+        if (!_titleView){
+            _titleView = [WaterTitleView new];
+            _titleView.type = 2;
+            [_titleView.titleTV becomeFirstResponder];
+            _titleView.btnClick = ^(NSInteger tag) {
+                weakSelf.titleView.hidden = YES;
+                if (tag == 1){
+                    [weakSelf addEditLabWithStr:weakSelf.titleView.titleTV.text];
+                    [weakSelf addColoeSelectedView];
+                }
+            };
+            [self.view.window addSubview:_titleView];
+            [_titleView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.edges.equalTo(self.view);
+            }];
+        }else{
+            _titleView.hidden = NO;
+        }
+    }else if(tag == 100){
+        //撤销
+    }else if(tag == 200){
+        //删除
+    }else{
+        
+    }
+}
+
+-(void)addColoeSelectedView{
+    MJWeakSelf
+    if (_colorSelectView == nil){
+        _colorSelectView = [WaterColorSelectView new];
+        _colorSelectView.delegate = self;
+        _colorSelectView.moreColorClick = ^{
+            [weakSelf addColorPlateView];
+        };
+        [self.view addSubview:_colorSelectView];
+        [_colorSelectView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.width.left.equalTo(self.view);
+            make.bottom.equalTo(_imgEditBottomView.mas_top).offset(20);
+            make.height.equalTo(@120);
+        }];
+    }else{
+        _colorSelectView.hidden = NO;
+    }
+}
+
+-(void)addEditLabWithStr:(NSString *)str{
+    
+}
+
+-(void)addColorPlateView{
+    MJWeakSelf
+    _colorPlateView = [[ColorPlateView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, RYRealAdaptWidthValue(575))];
+    [self.view addSubview:_colorPlateView];
+    _colorPlateView.btnClick = ^(NSInteger tag) {
+        if (tag == 2) {
+            NSMutableArray *tmpArr = [NSMutableArray arrayWithArray:GVUserDe.selectColorArr];
+            if (tmpArr.count >= 6) {
+                [tmpArr removeFirstObject];
+            }
+            [tmpArr addObject:weakSelf.colorPlateView.colorLab.text];
+            GVUserDe.selectColorArr = tmpArr;
+        }
+        [UIView animateWithDuration:0.3 animations:^{
+            weakSelf.colorPlateView.frame = CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH , weakSelf.colorPlateView.height);
+        } completion:^(BOOL finished) {
+            [weakSelf.colorPlateView removeFromSuperview];
+        }];
+        
+    };
+    [self.view bringSubviewToFront:_colorPlateView];
+    [UIView animateWithDuration:0.3 animations:^{
+        weakSelf.colorPlateView.frame = CGRectMake(0, SCREEN_HEIGHT - weakSelf.colorPlateView.height, SCREEN_WIDTH , weakSelf.colorPlateView.height);
+    }];
+}
+
+
+#pragma mark -- colorSelectViewDelegate
+- (void)changeWaterFontSize:(NSInteger)size{
+    //改变大小
+    if (_editType == 1){
+        //修改边框
+    }else if (_editType == 4){
+        //修改箭头
+    }else if (_editType == 6){
+        //修改文本
+    }
+}
+- (void)changeWaterFontColor:(NSString *)color{
+    //改变颜色
+    if (_editType == 1){
+        //修改边框
+    }else if (_editType == 4){
+        //修改箭头
+    }else if (_editType == 6){
+        //修改文本
+    }
+}
 
 #pragma mark -photoViewDelegate
 
@@ -2068,5 +2243,15 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
         }];
     }
 }
+
+#pragma mark
+-(NSMutableArray *)editLabArr{
+    if (_editLabArr == nil){
+        _editLabArr = [NSMutableArray array];
+    }
+    return _editLabArr;
+}
+
+
 
 @end

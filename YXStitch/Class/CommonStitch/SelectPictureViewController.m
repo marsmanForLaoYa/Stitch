@@ -321,12 +321,12 @@ static const CGFloat kPhotoViewMargin = 12.0;
         _clearBtn = nil;
         if (!GVUserDe.isMember && self.manager.selectedCount > 9){
             //非会员弹出提示
-            weakSelf.funcView = [UnlockFuncView new];
-            weakSelf.funcView.delegate = weakSelf;
-            weakSelf.funcView.type = 3;
-            [weakSelf.view.window addSubview:weakSelf.funcView];
-            [weakSelf.funcView mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.edges.equalTo(weakSelf.view);
+            _funcView = [UnlockFuncView new];
+            _funcView.delegate = weakSelf;
+            _funcView.type = 3;
+            [self.view.window addSubview:_funcView];
+            [_funcView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.edges.equalTo(self.view);
             }];
         }else{
             if (btn.tag == 300){
@@ -342,8 +342,6 @@ static const CGFloat kPhotoViewMargin = 12.0;
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     [weakSelf.navigationController pushViewController:vc animated:YES];
                 });
-                
-
             }else if(btn.tag == 301){
                 //多图拼接
                 CaptionViewController *vc = [CaptionViewController new];
@@ -390,8 +388,6 @@ static const CGFloat kPhotoViewMargin = 12.0;
         
     }
 }
-    
-
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
     [picker dismissViewControllerAnimated:YES completion:nil];
