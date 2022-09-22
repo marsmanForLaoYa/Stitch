@@ -79,7 +79,7 @@
     MJWeakSelf
     if (tag == 1){
         [UIView animateWithDuration:0.3 animations:^{
-            weakSelf.checkProView.frame = CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH , weakSelf.checkProView.height);
+            weakSelf.checkProView.frame = CGRectMake(0, SCREEN_HEIGHT+ 100, SCREEN_WIDTH , weakSelf.checkProView.height);
             weakSelf.bgView.hidden = YES;
         }];
     }else{

@@ -14,7 +14,7 @@
 
 @interface WaterColorSelectView ()
 @property (nonatomic, strong)UIButton *selectBtn;
-
+@property (nonatomic ,assign)BOOL isLoad;
 @end
 
 @implementation WaterColorSelectView
@@ -25,9 +25,17 @@
         self.backgroundColor = HexColor(@"#1A1A1A");
         self.userInteractionEnabled = YES;
         _colorArray = [NSMutableArray arrayWithObjects:@"#FFFFFF",@"#000000", @"#EF5B3D",@"#F98945",@"#F7DB78",@"#5EE16F",@"#51A0FD",nil];
-        [self setupViews];
+        _isLoad = NO;
     }
     return self;
+}
+
+-(void)layoutSubviews{
+    if (!_isLoad){
+        [self setupViews];
+        _isLoad = !_isLoad;
+    }
+    
 }
 
 - (void)setupViews{
@@ -76,12 +84,25 @@
         make.width.equalTo(@(RYRealAdaptWidthValue(264)));
         make.centerX.equalTo(self);
         make.height.equalTo(@30);
-    }];  
+    }];
+    if (_type == 2){
+        for (NSInteger i = 0;  i < 8; i ++) {
+            UIButton *fillBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+            [fillBtn setBackgroundImage:IMG(@"lightIcon") forState:UIControlStateNormal];
+            fillBtn.tag = (i + 1) * 100;
+            fillBtn.frame = CGRectMake(16 + i * (CUB_WIDTH + 16), 60 , CUB_WIDTH, CUB_WIDTH);
+            fillBtn.layer.cornerRadius = CUB_WIDTH / 2;
+            fillBtn.layer.masksToBounds = YES;
+            [fillBtn addTarget:self action:@selector(fillBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+            [self addSubview:fillBtn];
+        }
+    }
+    
     for (NSInteger i = 0; i < _colorArray.count; i++) {
         UIButton *colorBtn = [UIButton buttonWithType:UIButtonTypeSystem];
         colorBtn.tag = i;
         colorBtn.backgroundColor = HexColor(self.colorArray[i]);
-        colorBtn.frame = CGRectMake(16 + i * (CUB_WIDTH + 16), 60, CUB_WIDTH, CUB_WIDTH);
+        colorBtn.frame = CGRectMake(16 + i * (CUB_WIDTH + 16), _type==1?60:110 , CUB_WIDTH, CUB_WIDTH);
         colorBtn.layer.cornerRadius = CUB_WIDTH / 2;
         colorBtn.layer.masksToBounds = YES;
         
@@ -106,8 +127,13 @@
     [self addSubview:moreBtn];
     [moreBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.height.equalTo(@CUB_WIDTH);
-        make.top.equalTo(@60);
-        make.right.equalTo(self.mas_right).offset(-16);
+        if (_type == 1){
+            make.top.equalTo(@60);
+        }else{
+            make.top.equalTo(@110);
+        }
+        //make.right.equalTo(self.mas_right).offset(-16);
+        make.left.equalTo(@(16 + 7 * (CUB_WIDTH + 16)));
     }];
     
     
@@ -136,6 +162,10 @@
 
 -(void)more{
     self.moreColorClick();
+}
+
+-(void)fillBtnClick:(UIButton *)btn{
+    
 }
 
 #pragma mark - Getters

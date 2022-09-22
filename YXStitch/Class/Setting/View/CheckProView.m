@@ -28,27 +28,28 @@
     proIMG.userInteractionEnabled = YES;
     [self addSubview:proIMG];
     [proIMG mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.width.equalTo(self);
+        make.width.equalTo(self);
         make.height.equalTo(@160);
+        make.top.equalTo(@-8);
     }];
     
     UIButton *cancelBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-    
     cancelBtn.tag = 1;
     [cancelBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     [proIMG addSubview:cancelBtn];
     [cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.height.equalTo(@40);
         make.top.equalTo(@5);
-        make.left.equalTo(@5);
+        make.left.equalTo(@0);
     }];
     
     UIImageView *icon = [UIImageView new];
     icon.image = IMG(@"set关闭");
     [cancelBtn addSubview:icon];
     [icon mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.centerY.equalTo(cancelBtn);
         make.width.height.equalTo(@15);
+        make.left.equalTo(@4);
+        make.top.equalTo(@2);
     }];
     
     UIScrollView *scrollView = [UIScrollView new];

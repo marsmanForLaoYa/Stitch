@@ -35,6 +35,9 @@
         case 3:
             imgStr = @"不限数量";
             break;
+        case 4:
+            imgStr = @"带壳截图";
+            break;
             
         default:
             break;
@@ -44,8 +47,8 @@
     [self addSubview:bkIMG];
     [bkIMG mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.centerY.equalTo(self);
-        make.height.equalTo(@((CGFloat)202 / 667 * SCREEN_HEIGHT));
-        make.width.equalTo(@((CGFloat)278 / 375 * SCREEN_WIDTH));
+        make.height.equalTo(@222);
+        make.width.equalTo(@260);
     }];;
     
     UIButton *buyBtn = [UIButton buttonWithType:UIButtonTypeSystem];

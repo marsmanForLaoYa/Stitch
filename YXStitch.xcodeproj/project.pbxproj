@@ -121,8 +121,11 @@
 		FB7E659828A4A5680079C9F3 /* PrefenceSetTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = FB7E659728A4A5680079C9F3 /* PrefenceSetTableView.m */; };
 		FB7E659B28A4A6110079C9F3 /* PrefenceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FB7E659A28A4A6110079C9F3 /* PrefenceTableViewCell.m */; };
 		FB86DC2B28D96C5300EE8E4D /* UIImage+LF_Format.m in Sources */ = {isa = PBXBuildFile; fileRef = FB86DC2A28D96C5300EE8E4D /* UIImage+LF_Format.m */; };
-		FB86DC2E28D9A80700EE8E4D /* ImageEditBottomView.m in Sources */ = {isa = PBXBuildFile; fileRef = FB86DC2D28D9A80700EE8E4D /* ImageEditBottomView.m */; };
+		FB86DC2E28D9A80700EE8E4D /* ImageEditMarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = FB86DC2D28D9A80700EE8E4D /* ImageEditMarkView.m */; };
 		FB8B4E4328AB8BFF00313ECD /* UIScrollView+LVShot.m in Sources */ = {isa = PBXBuildFile; fileRef = FB8B4E4128AB8BFC00313ECD /* UIScrollView+LVShot.m */; };
+		FBA068F728DAA61500AAB7E6 /* ImageEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FBA068F628DAA61500AAB7E6 /* ImageEditViewController.m */; };
+		FBA068FA28DAAA2D00AAB7E6 /* ImageEditBottomView.m in Sources */ = {isa = PBXBuildFile; fileRef = FBA068F928DAAA2D00AAB7E6 /* ImageEditBottomView.m */; };
+		FBA068FE28DABEC500AAB7E6 /* PaintPath.m in Sources */ = {isa = PBXBuildFile; fileRef = FBA068FD28DABEC500AAB7E6 /* PaintPath.m */; };
 		FBA1862528ACFBF50001DF8C /* FullWaterMarkTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FBA1862428ACFBF50001DF8C /* FullWaterMarkTableViewCell.m */; };
 		FBA1862928ACFC740001DF8C /* FullWaterMarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = FBA1862828ACFC740001DF8C /* FullWaterMarkView.m */; };
 		FBB863D028A4DB6600F73A80 /* UnlockFuncView.m in Sources */ = {isa = PBXBuildFile; fileRef = FBB863CF28A4DB6600F73A80 /* UnlockFuncView.m */; };
@@ -356,10 +359,16 @@
 		FB7E659A28A4A6110079C9F3 /* PrefenceTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PrefenceTableViewCell.m; sourceTree = "<group>"; };
 		FB86DC2928D96C4B00EE8E4D /* UIImage+LF_Format.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+LF_Format.h"; sourceTree = "<group>"; };
 		FB86DC2A28D96C5300EE8E4D /* UIImage+LF_Format.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+LF_Format.m"; sourceTree = "<group>"; };
-		FB86DC2C28D9A80700EE8E4D /* ImageEditBottomView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageEditBottomView.h; sourceTree = "<group>"; };
-		FB86DC2D28D9A80700EE8E4D /* ImageEditBottomView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImageEditBottomView.m; sourceTree = "<group>"; };
+		FB86DC2C28D9A80700EE8E4D /* ImageEditMarkView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageEditMarkView.h; sourceTree = "<group>"; };
+		FB86DC2D28D9A80700EE8E4D /* ImageEditMarkView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ImageEditMarkView.m; path = "../New Group1/ImageEditMarkView.m"; sourceTree = "<group>"; };
 		FB8B4E4128AB8BFC00313ECD /* UIScrollView+LVShot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+LVShot.m"; sourceTree = "<group>"; };
 		FB8B4E4228AB8BFF00313ECD /* UIScrollView+LVShot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+LVShot.h"; sourceTree = "<group>"; };
+		FBA068F528DAA61500AAB7E6 /* ImageEditViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageEditViewController.h; sourceTree = "<group>"; };
+		FBA068F628DAA61500AAB7E6 /* ImageEditViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImageEditViewController.m; sourceTree = "<group>"; };
+		FBA068F828DAAA2D00AAB7E6 /* ImageEditBottomView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageEditBottomView.h; sourceTree = "<group>"; };
+		FBA068F928DAAA2D00AAB7E6 /* ImageEditBottomView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImageEditBottomView.m; sourceTree = "<group>"; };
+		FBA068FC28DABEC500AAB7E6 /* PaintPath.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PaintPath.h; sourceTree = "<group>"; };
+		FBA068FD28DABEC500AAB7E6 /* PaintPath.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PaintPath.m; sourceTree = "<group>"; };
 		FBA1862328ACFBF50001DF8C /* FullWaterMarkTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FullWaterMarkTableViewCell.h; sourceTree = "<group>"; };
 		FBA1862428ACFBF50001DF8C /* FullWaterMarkTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FullWaterMarkTableViewCell.m; sourceTree = "<group>"; };
 		FBA1862728ACFC740001DF8C /* FullWaterMarkView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FullWaterMarkView.h; sourceTree = "<group>"; };
@@ -450,8 +459,6 @@
 				FBECFBD428BA0D30006FCF74 /* StitchingButton.m */,
 				FBF12BEC28BC4EDE008F10EA /* IMGFuctionView.h */,
 				FBF12BED28BC4EDE008F10EA /* IMGFuctionView.m */,
-				FB86DC2C28D9A80700EE8E4D /* ImageEditBottomView.h */,
-				FB86DC2D28D9A80700EE8E4D /* ImageEditBottomView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -836,6 +843,7 @@
 		FB687EEB28A0DEA1002D557B /* Class */ = {
 			isa = PBXGroup;
 			children = (
+				FBA068F228DAA5D800AAB7E6 /* ImageEdit */,
 				FB2BBD1128AF6861001DDFAE /* Caption */,
 				FB687EF428A0DEF6002D557B /* Setting */,
 				FB687EF528A0DEFA002D557B /* WebviewStitch */,
@@ -949,6 +957,46 @@
 				FB2D5A1528A23B6B006085BC /* View */,
 			);
 			path = WebviewStitch;
+			sourceTree = "<group>";
+		};
+		FBA068F228DAA5D800AAB7E6 /* ImageEdit */ = {
+			isa = PBXGroup;
+			children = (
+				FBA068FB28DABEA500AAB7E6 /* Model */,
+				FBA068F428DAA5F400AAB7E6 /* View */,
+				FBA068F328DAA5DE00AAB7E6 /* Controller */,
+			);
+			path = ImageEdit;
+			sourceTree = "<group>";
+		};
+		FBA068F328DAA5DE00AAB7E6 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				FBA068F528DAA61500AAB7E6 /* ImageEditViewController.h */,
+				FBA068F628DAA61500AAB7E6 /* ImageEditViewController.m */,
+			);
+			name = Controller;
+			path = "../New Group1/Controller";
+			sourceTree = "<group>";
+		};
+		FBA068F428DAA5F400AAB7E6 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				FB86DC2C28D9A80700EE8E4D /* ImageEditMarkView.h */,
+				FB86DC2D28D9A80700EE8E4D /* ImageEditMarkView.m */,
+				FBA068F828DAAA2D00AAB7E6 /* ImageEditBottomView.h */,
+				FBA068F928DAAA2D00AAB7E6 /* ImageEditBottomView.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		FBA068FB28DABEA500AAB7E6 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				FBA068FC28DABEC500AAB7E6 /* PaintPath.h */,
+				FBA068FD28DABEC500AAB7E6 /* PaintPath.m */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		FBA1862628ACFBF80001DF8C /* Cell */ = {
@@ -1195,12 +1243,14 @@
 				FB7E659228A49BE00079C9F3 /* URLSchemesViewController.m in Sources */,
 				FBA1862528ACFBF50001DF8C /* FullWaterMarkTableViewCell.m in Sources */,
 				FB0D9E2828B4D1420057DC37 /* UIScrollView+UITouch.m in Sources */,
+				FBA068FE28DABEC500AAB7E6 /* PaintPath.m in Sources */,
 				FBECFBD528BA0D30006FCF74 /* StitchingButton.m in Sources */,
 				FB2D5A1828A23D51006085BC /* UrlInvalidHintView.m in Sources */,
 				FB3EFE4128A3A241006C3889 /* PriceView.m in Sources */,
 				FB86DC2B28D96C5300EE8E4D /* UIImage+LF_Format.m in Sources */,
 				FB2E287228AA1B62006BDAB0 /* SZImageTableViewCell.m in Sources */,
 				FB7E659828A4A5680079C9F3 /* PrefenceSetTableView.m in Sources */,
+				FBA068F728DAA61500AAB7E6 /* ImageEditViewController.m in Sources */,
 				FB2E285528AA1A21006BDAB0 /* SZpurchasingManager.m in Sources */,
 				FB687EAB28A0DE2E002D557B /* AppDelegate.m in Sources */,
 				FB7E659528A49E6F0079C9F3 /* UrlSchemeTableView.m in Sources */,
@@ -1214,12 +1264,13 @@
 				FB687F0628A0EA1C002D557B /* Tools.m in Sources */,
 				FBF59EF528AC796100D9C6CF /* WaterTitleView.m in Sources */,
 				FB687F0928A0ECCC002D557B /* ToastShowView.m in Sources */,
-				FB86DC2E28D9A80700EE8E4D /* ImageEditBottomView.m in Sources */,
+				FB86DC2E28D9A80700EE8E4D /* ImageEditMarkView.m in Sources */,
 				FB687EF928A0E23F002D557B /* HomeViewController.m in Sources */,
 				FB2E285728AA1A21006BDAB0 /* UIImage+Category.m in Sources */,
 				FB2E287128AA1B62006BDAB0 /* SZImagePreVewController.m in Sources */,
 				FB2E285628AA1A21006BDAB0 /* CAGradientLayer+Gradient.m in Sources */,
 				FB2E285928AA1A21006BDAB0 /* UIImage+Logo.m in Sources */,
+				FBA068FA28DAAA2D00AAB7E6 /* ImageEditBottomView.m in Sources */,
 				FB2E286F28AA1B62006BDAB0 /* SZEditorView.m in Sources */,
 				FB63FC1428AB9CC600F62085 /* WaterMarkToolBarView.m in Sources */,
 				FB3EFE3B28A387EA006C3889 /* CheckProView.m in Sources */,

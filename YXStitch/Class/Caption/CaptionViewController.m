@@ -18,10 +18,7 @@
 #import "SZImageGenerator.h"
 #import <Photos/Photos.h>
 #import "StitchResultView.h"
-#import "ImageEditBottomView.h"
-#import "WaterColorSelectView.h"
-#import "ColorPlateView.h"
-#import "WaterTitleView.h"
+#import "ImageEditViewController.h"
 
 #define MaxSCale 2.5  //最大缩放比例
 #define MinScale 0.5  //最小缩放比例
@@ -30,7 +27,7 @@
 #define HorViewHeight 300
 
 
-@interface CaptionViewController ()<UnlockFuncViewDelegate,CheckProViewDelegate,UIGestureRecognizerDelegate,HXCustomNavigationControllerDelegate,HXPhotoViewDelegate,HXPhotoViewDelegate,UIScrollViewDelegate,WaterColorSelectViewDelegate>
+@interface CaptionViewController ()<UnlockFuncViewDelegate,CheckProViewDelegate,UIGestureRecognizerDelegate,HXCustomNavigationControllerDelegate,HXPhotoViewDelegate,HXPhotoViewDelegate,UIScrollViewDelegate>
 @property (weak, nonatomic) HXPhotoView *photoView;
 @property (strong, nonatomic)HXPhotoManager *manager;
 @property (nonatomic ,strong)UnlockFuncView *funcView;
@@ -38,10 +35,6 @@
 @property (nonatomic ,strong)StitchingButton *selectIMG;
 @property (nonatomic ,strong)CaptionBottomView *bottomView;
 @property (nonatomic ,strong)IMGFuctionView *imgFunctionView;
-@property (nonatomic ,strong)ImageEditBottomView *imgEditBottomView;
-@property (nonatomic ,strong)WaterColorSelectView *colorSelectView;
-@property (nonatomic ,strong)ColorPlateView *colorPlateView;
-@property (nonatomic ,strong)WaterTitleView *titleView;
 
 
 @property (nonatomic ,strong)UIView *contentView;
@@ -80,7 +73,7 @@
 @property (nonatomic ,assign)NSInteger posizition;
 @property (nonatomic ,assign)NSInteger imgSelectIndex;
 @property (nonatomic ,assign)NSInteger moveIndex;
-@property (nonatomic ,assign)NSInteger editType;//编辑类型
+
 
 @property (nonatomic ,strong)UIPanGestureRecognizer *panRecognizer;
 @property (nonatomic ,strong)UIPinchGestureRecognizer *pinchRecognizer;
@@ -1266,8 +1259,6 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                 contentHeight += imgHeight;
                 [_contentScrollView addSubview:imageView];
                 if (i == 0){
-                    NSLog(@"bottom==%lf",_cutBtn.bottom);
-                    NSLog(@"top==%lf",firstImageView.bottom);
                     imageView.imgView.top = - (_cutBtn.bottom - firstImageView.bottom);
                     imageView.height = imageView.bottom - _cutBtn.bottom;
                     //CGFloat tmpT = _cutBtn.bottom - firstImageView.bottom;
@@ -1292,6 +1283,12 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
             [_originRightArr addObject:[NSNumber numberWithFloat:0]];
             [_contentScrollView addSubview:firstImageView];
             [_imageViews addObject:firstImageView];
+            
+            if (_moveIndex == 1){
+                //如果是从第一张开始切割
+                firstImageView.width = _cutBtn.right;
+            }
+            
             for (NSInteger i = 1; i < topArr.count; i ++) {
                 UIImage *icon = topArr[i];
                 CGFloat imgWidth = (CGFloat)(icon.size.width/icon.size.height) * HorViewHeight;
@@ -1316,10 +1313,12 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                 [imageView addTarget:self action:@selector(imgBtnClick:) forControlEvents:UIControlEventTouchUpInside];
                 imageView.tag = (i+1) * 100;
                 contentWidth += imgWidth;
-                firstImageView = imageView;
+               
                 if (i == 0){
-                    imageView.width = firstImageView.right - _cutBtn.right ;
+                    imageView.width = imageView.right - _cutBtn.right ;
+                    imageView.imgView.left = -(_cutBtn.right - firstImageView.right);
                 }
+                firstImageView = imageView;
                 [_contentScrollView addSubview:imageView];
                 [_originRightArr addObject:[NSNumber numberWithFloat:firstImageView.right]];
                 [_imageViews addObject:imageView];
@@ -1674,7 +1673,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
     MJWeakSelf
     if (tag == 1){
         [UIView animateWithDuration:0.3 animations:^{
-            weakSelf.checkProView.frame = CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH , weakSelf.checkProView.height);
+            weakSelf.checkProView.frame = CGRectMake(0, SCREEN_HEIGHT + 100, SCREEN_WIDTH , weakSelf.checkProView.height);
             weakSelf.bgView.hidden = YES;
         }];
     }else{
@@ -2063,143 +2062,30 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
         }else{
             //编辑
             _isCut = NO;
-            if (_imgEditBottomView == nil){
-                _imgEditBottomView = [ImageEditBottomView new];
-                [self.view addSubview:_imgEditBottomView];
-                [_imgEditBottomView mas_makeConstraints:^(MASConstraintMaker *make) {
-                    make.width.left.bottom.equalTo(self.view);
-                    make.height.equalTo(@100);
-                }];
-
+            __block ImageEditViewController *vc = [ImageEditViewController new];
+            vc.isVer = _isVerticalCut;
+            vc.type = _type;
+            vc.titleStr = self.title;
+            UIView *view;
+            if (_type == 4){
+                view = _resultView.scrollView;
+            }else{
+                view = _contentScrollView;
             }
-            _bottomView.hidden = YES;
-            _imgEditBottomView.hidden = NO;
-            _imgEditBottomView.btnClick = ^(NSInteger tag) {
-                [weakSelf imgEditViewBtnClickWithTag:tag];
-            };
-        }
-    }
-    
-}
-
-
--(void)imgEditViewBtnClickWithTag:(NSInteger )tag{
-    MJWeakSelf
-    _editType = tag;
-    _colorSelectView.hidden = YES;
-    if (tag == 0){
-        //取消
-        _imgEditBottomView.hidden = YES;
-        _bottomView.hidden = NO;
-    }else if (tag == 1 || tag == 4){
-        //空心填充 //箭头
-        [self addColoeSelectedView];
-    }else if(tag == 2){
-        //实心填充
-    }else if(tag == 3){
-        //马赛克
-    }else if(tag == 5){
-        //画笔
-    }else if(tag == 6){
-        //文本
-        if (!_titleView){
-            _titleView = [WaterTitleView new];
-            _titleView.type = 2;
-            [_titleView.titleTV becomeFirstResponder];
-            _titleView.btnClick = ^(NSInteger tag) {
-                weakSelf.titleView.hidden = YES;
-                if (tag == 1){
-                    [weakSelf addEditLabWithStr:weakSelf.titleView.titleTV.text];
-                    [weakSelf addColoeSelectedView];
-                }
-            };
-            [self.view.window addSubview:_titleView];
-            [_titleView mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.edges.equalTo(self.view);
+            [TYSnapshotScroll screenSnapshot:view finishBlock:^(UIImage *snapshotImage) {
+                vc.screenshotIMG = snapshotImage;
+                [weakSelf.navigationController pushViewController:vc
+                                                     animated:YES];
             }];
-        }else{
-            _titleView.hidden = NO;
+            
+           
         }
-    }else if(tag == 100){
-        //撤销
-    }else if(tag == 200){
-        //删除
-    }else{
-        
     }
-}
-
--(void)addColoeSelectedView{
-    MJWeakSelf
-    if (_colorSelectView == nil){
-        _colorSelectView = [WaterColorSelectView new];
-        _colorSelectView.delegate = self;
-        _colorSelectView.moreColorClick = ^{
-            [weakSelf addColorPlateView];
-        };
-        [self.view addSubview:_colorSelectView];
-        [_colorSelectView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.width.left.equalTo(self.view);
-            make.bottom.equalTo(_imgEditBottomView.mas_top).offset(20);
-            make.height.equalTo(@120);
-        }];
-    }else{
-        _colorSelectView.hidden = NO;
-    }
-}
-
--(void)addEditLabWithStr:(NSString *)str{
     
 }
 
--(void)addColorPlateView{
-    MJWeakSelf
-    _colorPlateView = [[ColorPlateView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, RYRealAdaptWidthValue(575))];
-    [self.view addSubview:_colorPlateView];
-    _colorPlateView.btnClick = ^(NSInteger tag) {
-        if (tag == 2) {
-            NSMutableArray *tmpArr = [NSMutableArray arrayWithArray:GVUserDe.selectColorArr];
-            if (tmpArr.count >= 6) {
-                [tmpArr removeFirstObject];
-            }
-            [tmpArr addObject:weakSelf.colorPlateView.colorLab.text];
-            GVUserDe.selectColorArr = tmpArr;
-        }
-        [UIView animateWithDuration:0.3 animations:^{
-            weakSelf.colorPlateView.frame = CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH , weakSelf.colorPlateView.height);
-        } completion:^(BOOL finished) {
-            [weakSelf.colorPlateView removeFromSuperview];
-        }];
-        
-    };
-    [self.view bringSubviewToFront:_colorPlateView];
-    [UIView animateWithDuration:0.3 animations:^{
-        weakSelf.colorPlateView.frame = CGRectMake(0, SCREEN_HEIGHT - weakSelf.colorPlateView.height, SCREEN_WIDTH , weakSelf.colorPlateView.height);
-    }];
-}
 
 
-#pragma mark -- colorSelectViewDelegate
-- (void)changeWaterFontSize:(NSInteger)size{
-    //改变大小
-    if (_editType == 1){
-        //修改边框
-    }else if (_editType == 4){
-        //修改箭头
-    }else if (_editType == 6){
-        //修改文本
-    }
-}
-- (void)changeWaterFontColor:(NSString *)color{
-    //改变颜色
-    if (_editType == 1){
-        //修改边框
-    }else if (_editType == 4){
-        //修改箭头
-    }else if (_editType == 6){
-        //修改文本
-    }
-}
 
 #pragma mark -photoViewDelegate
 

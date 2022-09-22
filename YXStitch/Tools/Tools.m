@@ -399,7 +399,6 @@
     CGRect myImageRect = rect;
     CGImageRef imageRef = image.CGImage;
     CGImageRef subImageRef = CGImageCreateWithImageInRect(imageRef,myImageRect );
-    
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextDrawImage(context, myImageRect, subImageRef);
     UIImage* smallImage = [UIImage imageWithCGImage:subImageRef];

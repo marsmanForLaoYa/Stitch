@@ -186,7 +186,7 @@ static const CGFloat kPhotoViewMargin = 12.0;
     MJWeakSelf
     if (tag == 1){
         [UIView animateWithDuration:0.3 animations:^{
-            weakSelf.checkProView.frame = CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH , weakSelf.checkProView.height);
+            weakSelf.checkProView.frame = CGRectMake(0, SCREEN_HEIGHT + 100, SCREEN_WIDTH , weakSelf.checkProView.height);
             weakSelf.bgView.hidden = YES;
         }];
     }else{
@@ -194,10 +194,9 @@ static const CGFloat kPhotoViewMargin = 12.0;
             weakSelf.checkProView.frame = CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, 550);
         } completion:^(BOOL finished) {
             weakSelf.bgView.hidden = YES;
-            weakSelf.checkProView.hidden = YES;
+            [weakSelf.checkProView removeFromSuperview];
         }];
         [_funcView removeFromSuperview];
-        [_checkProView removeFromSuperview];
         [[NSNotificationCenter defaultCenter]postNotificationName:@"dismiss" object:nil];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [weakSelf.navigationController pushViewController:[BuyViewController new] animated:YES];
