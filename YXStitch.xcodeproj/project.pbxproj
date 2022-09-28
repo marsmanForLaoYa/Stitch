@@ -92,6 +92,7 @@
 		FB3EFE8C28A3CB07006C3889 /* GVUserDefaults+Properties.m in Sources */ = {isa = PBXBuildFile; fileRef = FB3EFE8A28A3CB07006C3889 /* GVUserDefaults+Properties.m */; };
 		FB4E535F28A34C4B0072E1AD /* PreferenceSetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB4E535E28A34C4B0072E1AD /* PreferenceSetViewController.m */; };
 		FB4E536228A34D230072E1AD /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB4E536128A34D230072E1AD /* SettingViewController.m */; };
+		FB58D81328E14D5000EC831D /* CustomScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = FB58D81128E14D4400EC831D /* CustomScrollView.m */; };
 		FB5D46A628AA3FEE0015E2A5 /* StitchResultView.m in Sources */ = {isa = PBXBuildFile; fileRef = FB5D46A528AA3FEE0015E2A5 /* StitchResultView.m */; };
 		FB63FC1128AB9B8900F62085 /* WaterMarkViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB63FC1028AB9B8900F62085 /* WaterMarkViewController.m */; };
 		FB63FC1428AB9CC600F62085 /* WaterMarkToolBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = FB63FC1328AB9CC600F62085 /* WaterMarkToolBarView.m */; };
@@ -123,12 +124,19 @@
 		FB86DC2B28D96C5300EE8E4D /* UIImage+LF_Format.m in Sources */ = {isa = PBXBuildFile; fileRef = FB86DC2A28D96C5300EE8E4D /* UIImage+LF_Format.m */; };
 		FB86DC2E28D9A80700EE8E4D /* ImageEditMarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = FB86DC2D28D9A80700EE8E4D /* ImageEditMarkView.m */; };
 		FB8B4E4328AB8BFF00313ECD /* UIScrollView+LVShot.m in Sources */ = {isa = PBXBuildFile; fileRef = FB8B4E4128AB8BFC00313ECD /* UIScrollView+LVShot.m */; };
+		FB8BAEA028E2F78900A9978A /* ImageShellSettingView.m in Sources */ = {isa = PBXBuildFile; fileRef = FB8BAE9F28E2F78900A9978A /* ImageShellSettingView.m */; };
+		FB9B943428DC455C009D55FB /* UIBezierPath+GetAllPoints.m in Sources */ = {isa = PBXBuildFile; fileRef = FB9B943228DC4556009D55FB /* UIBezierPath+GetAllPoints.m */; };
 		FBA068F728DAA61500AAB7E6 /* ImageEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FBA068F628DAA61500AAB7E6 /* ImageEditViewController.m */; };
 		FBA068FA28DAAA2D00AAB7E6 /* ImageEditBottomView.m in Sources */ = {isa = PBXBuildFile; fileRef = FBA068F928DAAA2D00AAB7E6 /* ImageEditBottomView.m */; };
 		FBA068FE28DABEC500AAB7E6 /* PaintPath.m in Sources */ = {isa = PBXBuildFile; fileRef = FBA068FD28DABEC500AAB7E6 /* PaintPath.m */; };
 		FBA1862528ACFBF50001DF8C /* FullWaterMarkTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FBA1862428ACFBF50001DF8C /* FullWaterMarkTableViewCell.m */; };
 		FBA1862928ACFC740001DF8C /* FullWaterMarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = FBA1862828ACFC740001DF8C /* FullWaterMarkView.m */; };
 		FBB863D028A4DB6600F73A80 /* UnlockFuncView.m in Sources */ = {isa = PBXBuildFile; fileRef = FBB863CF28A4DB6600F73A80 /* UnlockFuncView.m */; };
+		FBD32A9328DD8C9D000A548F /* MosaicStyleSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = FBD32A9228DD8C9D000A548F /* MosaicStyleSelectView.m */; };
+		FBD32A9628DDC2D2000A548F /* UIBezierPath+Arrow.m in Sources */ = {isa = PBXBuildFile; fileRef = FBD32A9428DDC2BB000A548F /* UIBezierPath+Arrow.m */; };
+		FBD32A9928DDC303000A548F /* NSString+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = FBD32A9728DDC2F5000A548F /* NSString+Extension.m */; };
+		FBDA328E28E28E92003B7FA6 /* ImageBorderSettingView.m in Sources */ = {isa = PBXBuildFile; fileRef = FBDA328D28E28E92003B7FA6 /* ImageBorderSettingView.m */; };
+		FBDA329128E29A60003B7FA6 /* UIView+directionBorder.m in Sources */ = {isa = PBXBuildFile; fileRef = FBDA329028E29A60003B7FA6 /* UIView+directionBorder.m */; };
 		FBE5467928C0BCC300B40FD8 /* GuiderVisitorView.m in Sources */ = {isa = PBXBuildFile; fileRef = FBE5467828C0BCC300B40FD8 /* GuiderVisitorView.m */; };
 		FBECFBD528BA0D30006FCF74 /* StitchingButton.m in Sources */ = {isa = PBXBuildFile; fileRef = FBECFBD428BA0D30006FCF74 /* StitchingButton.m */; };
 		FBF12BEE28BC4EDE008F10EA /* IMGFuctionView.m in Sources */ = {isa = PBXBuildFile; fileRef = FBF12BED28BC4EDE008F10EA /* IMGFuctionView.m */; };
@@ -300,6 +308,8 @@
 		FB4E535E28A34C4B0072E1AD /* PreferenceSetViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PreferenceSetViewController.m; sourceTree = "<group>"; };
 		FB4E536028A34D230072E1AD /* SettingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SettingViewController.h; sourceTree = "<group>"; };
 		FB4E536128A34D230072E1AD /* SettingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SettingViewController.m; sourceTree = "<group>"; };
+		FB58D81128E14D4400EC831D /* CustomScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomScrollView.m; sourceTree = "<group>"; };
+		FB58D81228E14D5000EC831D /* CustomScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomScrollView.h; sourceTree = "<group>"; };
 		FB5D46A428AA3FEE0015E2A5 /* StitchResultView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StitchResultView.h; sourceTree = "<group>"; };
 		FB5D46A528AA3FEE0015E2A5 /* StitchResultView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StitchResultView.m; sourceTree = "<group>"; };
 		FB63FC0F28AB9B8900F62085 /* WaterMarkViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WaterMarkViewController.h; sourceTree = "<group>"; };
@@ -363,6 +373,10 @@
 		FB86DC2D28D9A80700EE8E4D /* ImageEditMarkView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ImageEditMarkView.m; path = "../New Group1/ImageEditMarkView.m"; sourceTree = "<group>"; };
 		FB8B4E4128AB8BFC00313ECD /* UIScrollView+LVShot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+LVShot.m"; sourceTree = "<group>"; };
 		FB8B4E4228AB8BFF00313ECD /* UIScrollView+LVShot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+LVShot.h"; sourceTree = "<group>"; };
+		FB8BAE9E28E2F78900A9978A /* ImageShellSettingView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageShellSettingView.h; sourceTree = "<group>"; };
+		FB8BAE9F28E2F78900A9978A /* ImageShellSettingView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImageShellSettingView.m; sourceTree = "<group>"; };
+		FB9B943228DC4556009D55FB /* UIBezierPath+GetAllPoints.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBezierPath+GetAllPoints.m"; sourceTree = "<group>"; };
+		FB9B943328DC455C009D55FB /* UIBezierPath+GetAllPoints.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBezierPath+GetAllPoints.h"; sourceTree = "<group>"; };
 		FBA068F528DAA61500AAB7E6 /* ImageEditViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageEditViewController.h; sourceTree = "<group>"; };
 		FBA068F628DAA61500AAB7E6 /* ImageEditViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImageEditViewController.m; sourceTree = "<group>"; };
 		FBA068F828DAAA2D00AAB7E6 /* ImageEditBottomView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageEditBottomView.h; sourceTree = "<group>"; };
@@ -375,6 +389,16 @@
 		FBA1862828ACFC740001DF8C /* FullWaterMarkView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FullWaterMarkView.m; sourceTree = "<group>"; };
 		FBB863CE28A4DB6600F73A80 /* UnlockFuncView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UnlockFuncView.h; sourceTree = "<group>"; };
 		FBB863CF28A4DB6600F73A80 /* UnlockFuncView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UnlockFuncView.m; sourceTree = "<group>"; };
+		FBD32A9128DD8C9D000A548F /* MosaicStyleSelectView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MosaicStyleSelectView.h; sourceTree = "<group>"; };
+		FBD32A9228DD8C9D000A548F /* MosaicStyleSelectView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MosaicStyleSelectView.m; sourceTree = "<group>"; };
+		FBD32A9428DDC2BB000A548F /* UIBezierPath+Arrow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBezierPath+Arrow.m"; sourceTree = "<group>"; };
+		FBD32A9528DDC2D2000A548F /* UIBezierPath+Arrow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBezierPath+Arrow.h"; sourceTree = "<group>"; };
+		FBD32A9728DDC2F5000A548F /* NSString+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Extension.m"; sourceTree = "<group>"; };
+		FBD32A9828DDC303000A548F /* NSString+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Extension.h"; sourceTree = "<group>"; };
+		FBDA328C28E28E92003B7FA6 /* ImageBorderSettingView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageBorderSettingView.h; sourceTree = "<group>"; };
+		FBDA328D28E28E92003B7FA6 /* ImageBorderSettingView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImageBorderSettingView.m; sourceTree = "<group>"; };
+		FBDA328F28E29A60003B7FA6 /* UIView+directionBorder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+directionBorder.h"; sourceTree = "<group>"; };
+		FBDA329028E29A60003B7FA6 /* UIView+directionBorder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+directionBorder.m"; sourceTree = "<group>"; };
 		FBE5467728C0BCC300B40FD8 /* GuiderVisitorView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GuiderVisitorView.h; sourceTree = "<group>"; };
 		FBE5467828C0BCC300B40FD8 /* GuiderVisitorView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GuiderVisitorView.m; sourceTree = "<group>"; };
 		FBECFBD328BA0D30006FCF74 /* StitchingButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StitchingButton.h; sourceTree = "<group>"; };
@@ -676,6 +700,10 @@
 				FB0D9E2728B4D1420057DC37 /* UIScrollView+UITouch.m */,
 				FB86DC2928D96C4B00EE8E4D /* UIImage+LF_Format.h */,
 				FB86DC2A28D96C5300EE8E4D /* UIImage+LF_Format.m */,
+				FBD32A9828DDC303000A548F /* NSString+Extension.h */,
+				FBD32A9728DDC2F5000A548F /* NSString+Extension.m */,
+				FBDA328F28E29A60003B7FA6 /* UIView+directionBorder.h */,
+				FBDA329028E29A60003B7FA6 /* UIView+directionBorder.m */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -878,6 +906,8 @@
 				FB687F0C28A0FF83002D557B /* AppGroupData.m */,
 				FBF59EF928AC98BF00D9C6CF /* ColorPlateView.h */,
 				FBF59EFA28AC98BF00D9C6CF /* ColorPlateView.m */,
+				FB58D81228E14D5000EC831D /* CustomScrollView.h */,
+				FB58D81128E14D4400EC831D /* CustomScrollView.m */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -986,6 +1016,12 @@
 				FB86DC2D28D9A80700EE8E4D /* ImageEditMarkView.m */,
 				FBA068F828DAAA2D00AAB7E6 /* ImageEditBottomView.h */,
 				FBA068F928DAAA2D00AAB7E6 /* ImageEditBottomView.m */,
+				FBD32A9128DD8C9D000A548F /* MosaicStyleSelectView.h */,
+				FBD32A9228DD8C9D000A548F /* MosaicStyleSelectView.m */,
+				FBDA328C28E28E92003B7FA6 /* ImageBorderSettingView.h */,
+				FBDA328D28E28E92003B7FA6 /* ImageBorderSettingView.m */,
+				FB8BAE9E28E2F78900A9978A /* ImageShellSettingView.h */,
+				FB8BAE9F28E2F78900A9978A /* ImageShellSettingView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -995,6 +1031,10 @@
 			children = (
 				FBA068FC28DABEC500AAB7E6 /* PaintPath.h */,
 				FBA068FD28DABEC500AAB7E6 /* PaintPath.m */,
+				FB9B943328DC455C009D55FB /* UIBezierPath+GetAllPoints.h */,
+				FB9B943228DC4556009D55FB /* UIBezierPath+GetAllPoints.m */,
+				FBD32A9528DDC2D2000A548F /* UIBezierPath+Arrow.h */,
+				FBD32A9428DDC2BB000A548F /* UIBezierPath+Arrow.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1234,6 +1274,7 @@
 				FB2E283828AA1A13006BDAB0 /* SZConstraint.m in Sources */,
 				FB3EFE4728A3A423006C3889 /* BuyDetailView.m in Sources */,
 				FB2E287328AA1B62006BDAB0 /* SZStichingImageView.m in Sources */,
+				FBDA329128E29A60003B7FA6 /* UIView+directionBorder.m in Sources */,
 				FB63FC1128AB9B8900F62085 /* WaterMarkViewController.m in Sources */,
 				FB2E285B28AA1A21006BDAB0 /* ZWMGuideView.m in Sources */,
 				FB2E287428AA1B62006BDAB0 /* SZScrollView.m in Sources */,
@@ -1250,12 +1291,16 @@
 				FB86DC2B28D96C5300EE8E4D /* UIImage+LF_Format.m in Sources */,
 				FB2E287228AA1B62006BDAB0 /* SZImageTableViewCell.m in Sources */,
 				FB7E659828A4A5680079C9F3 /* PrefenceSetTableView.m in Sources */,
+				FBD32A9328DD8C9D000A548F /* MosaicStyleSelectView.m in Sources */,
 				FBA068F728DAA61500AAB7E6 /* ImageEditViewController.m in Sources */,
 				FB2E285528AA1A21006BDAB0 /* SZpurchasingManager.m in Sources */,
+				FB8BAEA028E2F78900A9978A /* ImageShellSettingView.m in Sources */,
 				FB687EAB28A0DE2E002D557B /* AppDelegate.m in Sources */,
+				FB9B943428DC455C009D55FB /* UIBezierPath+GetAllPoints.m in Sources */,
 				FB7E659528A49E6F0079C9F3 /* UrlSchemeTableView.m in Sources */,
 				FB3EFE3528A3561E006C3889 /* SettingTableViewCell.m in Sources */,
 				FB687EBC28A0DE30002D557B /* main.m in Sources */,
+				FBD32A9928DDC303000A548F /* NSString+Extension.m in Sources */,
 				FB2E286228AA1A34006BDAB0 /* SZMergeResult.m in Sources */,
 				FB2E282D28A9E504006BDAB0 /* ScrrenStitchHintView.m in Sources */,
 				FB2E285828AA1A21006BDAB0 /* UINavigationController+Category.m in Sources */,
@@ -1285,12 +1330,15 @@
 				FB2D5A2128A264C4006085BC /* WKWebView+LVShot.m in Sources */,
 				FB2D5A1B28A24743006085BC /* WebViewController.m in Sources */,
 				FB3EFE3828A356BB006C3889 /* SettingTableView.m in Sources */,
+				FB58D81328E14D5000EC831D /* CustomScrollView.m in Sources */,
 				FB1B8DE728D06F5F0080AE74 /* AddWaterMark.m in Sources */,
 				FB5D46A628AA3FEE0015E2A5 /* StitchResultView.m in Sources */,
+				FBD32A9628DDC2D2000A548F /* UIBezierPath+Arrow.m in Sources */,
 				FB687EFE28A0E9F1002D557B /* BaseView.m in Sources */,
 				FB6FC66E28B60CB500BE4AA1 /* StichingImageView.m in Sources */,
 				FB2BBD1828AF8D21001DDFAE /* CaptionBottomView.m in Sources */,
 				FB2D5A1428A234C2006085BC /* EnterURLViewController.m in Sources */,
+				FBDA328E28E28E92003B7FA6 /* ImageBorderSettingView.m in Sources */,
 				FB2D5A1128A20DE4006085BC /* MoveCollectionViewCell.m in Sources */,
 				FB4E536228A34D230072E1AD /* SettingViewController.m in Sources */,
 				FB2D5A0728A1EE2A006085BC /* HomeSettingViewController.m in Sources */,

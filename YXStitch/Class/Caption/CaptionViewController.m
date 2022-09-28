@@ -114,10 +114,10 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
     
     _pinchRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinch:)];
     [_contentView addGestureRecognizer:_pinchRecognizer];
-    _panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(selectonPanGesture:)];
-    _panRecognizer.delegate = self;
-    _panRecognizer.maximumNumberOfTouches = 1;
-    [_contentView addGestureRecognizer:_panRecognizer];
+//    _panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(selectonPanGesture:)];
+//    _panRecognizer.delegate = self;
+//    _panRecognizer.maximumNumberOfTouches = 1;
+//    [_contentView addGestureRecognizer:_panRecognizer];
 
 }
 -(void)viewWillAppear:(BOOL)animated{
@@ -1621,7 +1621,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
     }
 }
 
--(void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo{
+-(void)image:(UIImage *)image didFinishSavingWithErrorf:(NSError *)error contextInfo:(void *)contextInfo{
     NSString *msg = nil;
     if (!error) {
         msg = @"下载成功，已为您保存至相册";
@@ -1970,8 +1970,9 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
         }else{
             _isCut = NO;
             if (_adjustView == nil){
+                
             }
-            _adjustView.hidden = NO;
+            _adjustView.hidden = !_adjustView.hidden;
             _cutBtn.hidden = YES;
         }
         
@@ -2066,17 +2067,19 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
             vc.isVer = _isVerticalCut;
             vc.type = _type;
             vc.titleStr = self.title;
-            UIView *view;
-            if (_type == 4){
-                view = _resultView.scrollView;
-            }else{
-                view = _contentScrollView;
-            }
-            [TYSnapshotScroll screenSnapshot:view finishBlock:^(UIImage *snapshotImage) {
-                vc.screenshotIMG = snapshotImage;
-                [weakSelf.navigationController pushViewController:vc
-                                                     animated:YES];
-            }];
+            vc.imgArr = _dataArr;
+            [self.navigationController pushViewController:vc animated:YES];
+//            UIView *view;
+//            if (_type == 4){
+//                view = _resultView.scrollView;
+//            }else{
+//                view = _contentScrollView;
+//            }
+//            [TYSnapshotScroll screenSnapshot:view finishBlock:^(UIImage *snapshotImage) {
+//                vc.screenshotIMG = snapshotImage;
+//                [weakSelf.navigationController pushViewController:vc
+//                                                     animated:YES];
+//            }];
             
            
         }

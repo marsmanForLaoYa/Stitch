@@ -118,7 +118,8 @@
         weakSelf.checkProView.frame = CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH , weakSelf.checkProView.height);
     } completion:^(BOOL finished) {
         weakSelf.bgView.hidden = YES;
-        [weakSelf.checkProView removeFromSuperview];
+       // [weakSelf.checkProView removeFromSuperview];
+        weakSelf.checkProView.hidden = YES;
     }];
     if (tag == 2){
         [self.navigationController pushViewController:[BuyViewController new] animated:YES];
@@ -147,8 +148,8 @@
             //去appstore评价
             break;
         case 5:
-            //分享给朋友
-            [self share];
+            //分享得会员
+            //[self share];
             break;
         case 6:
             //邮箱
@@ -157,6 +158,9 @@
         case 7:
             //新浪微博
             [self gotoSinaWB];
+            break;
+        case 8:
+            //
             break;
         default:
             break;

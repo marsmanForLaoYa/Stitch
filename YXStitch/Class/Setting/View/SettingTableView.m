@@ -16,7 +16,7 @@
     if (self) {
 
         self.backgroundColor = HexColor(BKGrayColor);
-        _arr = [NSMutableArray arrayWithObjects:@"偏好设置",@"水印",@"主屏幕图标",@"URL SChemes",@"去APP Store评价",@"分享给朋友",@"邮箱",@"微博",nil] ;
+        _arr = [NSMutableArray arrayWithObjects:@"偏好设置",@"水印",@"主屏幕图标",@"URL SChemes",@"去APP Store评价",@"分享得超级会员",@"",nil] ;
         [self setupViews];
         [self setupLayout];
         
@@ -48,14 +48,16 @@
 
 #pragma mark - UITableViewDataSource
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 2;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0){
         return 4;
-    }else{
+    }else if (section == 1){
         return 2;
+    }else{
+        return 1;
     }
     
 }
@@ -70,13 +72,22 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SettingTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SettingTableViewCell"];
-    NSInteger index = indexPath.row + indexPath.section * 4;
+    NSInteger index;
+    if (indexPath.section == 2){
+        index = 6;
+    }else{
+        index = indexPath.row + indexPath.section * 4;
+    }
     [cell configModel:_arr[index] andTag:index andType:1];
     cell.tag = index;
     return cell;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (indexPath.section == 2){
+        return 60;
+    }
     return 44;
+    
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     NSInteger index = indexPath.row + indexPath.section * 4;

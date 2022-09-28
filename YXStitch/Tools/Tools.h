@@ -146,6 +146,9 @@ NS_ASSUME_NONNULL_BEGIN
 ///抠图hsv范围颜色
 +(UIImage *)removeColorWithMinHueAngle:(float)minHueAngle maxHueAngle:(float)maxHueAngle image:(UIImage *)originalImage;
 
+///
++ (NSString *)getIphoneType ;
+
 @end
 
 NS_ASSUME_NONNULL_END

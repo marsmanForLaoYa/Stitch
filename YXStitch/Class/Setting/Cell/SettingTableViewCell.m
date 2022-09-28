@@ -34,68 +34,95 @@
     [_setingLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(@20);
         make.centerY.equalTo(self);
-    }];
-    
-    [self addSubview:[Tools getLineWithFrame:CGRectMake(16, 43, SCREEN_WIDTH-16, 1)]];
+    }];  
 }
 
 - (void)configModel:(NSString *)str andTag:(NSInteger)tag andType:(NSInteger)type{
-    self.accessibilityIdentifier = 
-    _setingLabel.text = str;
+   // self.accessibilityIdentifier =
     self.tag = tag;
-    if (tag == 2 && type == 1){
-        UIImageView *icon = [UIImageView new];
-        if (GVUserDe.logoType == 1){
-            icon.image = IMG(@"darkIcon");
-        }else{
-            icon.image = IMG(@"lightIcon");
+    if (tag != 6){
+        _setingLabel.text = str;
+        [self addSubview:[Tools getLineWithFrame:CGRectMake(16, 43, SCREEN_WIDTH-16, 1)]];
+        if (tag == 2 && type == 1){
+            UIImageView *icon = [UIImageView new];
+            if (GVUserDe.logoType == 1){
+                icon.image = IMG(@"darkIcon");
+            }else{
+                icon.image = IMG(@"lightIcon");
+            }
+            [self addSubview:icon];
+            [icon mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.width.height.equalTo(@24);
+                make.centerY.equalTo(self);
+                make.right.equalTo(self.mas_right).offset(-32);
+            }];
         }
+        if (tag == 1 && type == 1){
+            UILabel *posizionLab = [UILabel new];
+            posizionLab.font = Font13;
+            switch (GVUserDe.waterPosition) {
+                case 1:
+                    posizionLab.text = @"无";
+                    break;
+                case 2:
+                    posizionLab.text = @"左边";
+                    break;
+                case 3:
+                    posizionLab.text = @"居中";
+                    break;
+                case 4:
+                    posizionLab.text = @"右边";
+                    break;
+                case 5:
+                    posizionLab.text = @"全屏";
+                    break;
+                    
+                default:
+                    break;
+            }
+            
+            posizionLab.textColor = HexColor(@"#999999");
+            [self addSubview:posizionLab];
+            [posizionLab mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.centerY.equalTo(self);
+                make.right.equalTo(self.mas_right).offset(-32);
+            }];
+        }
+    }else{
+        self.accessoryType = UITableViewCellAccessoryNone;
+        UIImageView *icon = [UIImageView new];
+        icon.image = IMG(@"darkIcon");
         [self addSubview:icon];
         [icon mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.width.height.equalTo(@24);
+            make.left.equalTo(@20);
             make.centerY.equalTo(self);
-            make.right.equalTo(self.mas_right).offset(-32);
+            make.width.height.equalTo(@40);
         }];
-    }
-    if (tag == 1 && type == 1){
-        UILabel *posizionLab = [UILabel new];
-        posizionLab.font = Font13;
-        switch (GVUserDe.waterPosition) {
-            case 1:
-                posizionLab.text = @"无";
-                break;
-            case 2:
-                posizionLab.text = @"左边";
-                break;
-            case 3:
-                posizionLab.text = @"居中";
-                break;
-            case 4:
-                posizionLab.text = @"右边";
-                break;
-            case 5:
-                posizionLab.text = @"全屏";
-                break;
-                
-            default:
-                break;
-        }
         
-        posizionLab.textColor = HexColor(@"#999999");
-        [self addSubview:posizionLab];
-        [posizionLab mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.centerY.equalTo(self);
-            make.right.equalTo(self.mas_right).offset(-32);
+        UILabel *nameLab = [UILabel new];
+        nameLab.text = @"游客xxx";
+        nameLab.textColor = [UIColor blackColor];
+        nameLab.font = Font14;
+        [self addSubview:nameLab];
+        [nameLab mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(icon.mas_right).offset(11);
+            make.top.equalTo(@10);
+            make.width.equalTo(@(SCREEN_WIDTH - 100));
+            make.height.equalTo(@16);
         }];
-//        switch (GVUserDe.waterPosition) {
-//            case :
-//                <#statements#>
-//                break;
-//
-//            default:
-//                break;
-//        }
+        
+        UILabel *idLab = [UILabel new];
+        idLab.textColor = [UIColor blackColor];
+        idLab.font = Font12;
+        idLab.text = @"设备id：xxxxx";
+        [self addSubview:idLab];
+        [idLab mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.width.equalTo(nameLab);
+            make.top.equalTo(nameLab.mas_bottom).offset(8);
+        }];
+        
     }
+    
 }
 
 - (void)awakeFromNib {

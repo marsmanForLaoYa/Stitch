@@ -6,7 +6,7 @@
 	<integer>10</integer>
 	<key>logs</key>
 	<dict>
-		<key>6103B4F1-49D8-4D8A-9955-95FF403E3D92</key>
+		<key>4E57AC36-AC96-48ED-97A7-2D15BF13F32B</key>
 		<dict>
 			<key>className</key>
 			<string>IDEActivityLogSection</string>
@@ -15,7 +15,7 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
 			<key>fileName</key>
-			<string>6103B4F1-49D8-4D8A-9955-95FF403E3D92.xcactivitylog</string>
+			<string>4E57AC36-AC96-48ED-97A7-2D15BF13F32B.xcactivitylog</string>
 			<key>hasPrimaryLog</key>
 			<true/>
 			<key>primaryObservable</key>
@@ -32,13 +32,13 @@
 			<key>signature</key>
 			<string>Build YXStitch</string>
 			<key>timeStartedRecording</key>
-			<real>685450905.52196801</real>
+			<real>685966392.38761306</real>
 			<key>timeStoppedRecording</key>
-			<real>685450906.85555696</real>
+			<real>685966393.46882606</real>
 			<key>title</key>
 			<string>Build YXStitch</string>
 			<key>uniqueIdentifier</key>
-			<string>6103B4F1-49D8-4D8A-9955-95FF403E3D92</string>
+			<string>4E57AC36-AC96-48ED-97A7-2D15BF13F32B</string>
 		</dict>
 	</dict>
 </dict>

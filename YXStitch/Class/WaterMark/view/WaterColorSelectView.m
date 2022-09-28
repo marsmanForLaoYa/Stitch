@@ -24,7 +24,6 @@
     if (self) {
         self.backgroundColor = HexColor(@"#1A1A1A");
         self.userInteractionEnabled = YES;
-        _colorArray = [NSMutableArray arrayWithObjects:@"#FFFFFF",@"#000000", @"#EF5B3D",@"#F98945",@"#F7DB78",@"#5EE16F",@"#51A0FD",nil];
         _isLoad = NO;
     }
     return self;
@@ -32,6 +31,11 @@
 
 -(void)layoutSubviews{
     if (!_isLoad){
+        if (_type != 4){
+            _colorArray = [NSMutableArray arrayWithObjects:@"#FFFFFF",@"#000000", @"#EF5B3D",@"#F98945",@"#F7DB78",@"#5EE16F",@"#51A0FD",nil];
+        }else{
+            _colorArray = [NSMutableArray arrayWithObjects:@"#D2D0DE",@"#C0DCE8",@"#A0C7B2",@"#F6C9A8 ",@"#7D7D85",@"#3B5169",@"#4C6E6F",@"#C44153",@"",@"#FFFFFF",@"#000000", @"#FDECA7",@"#F3B0A0",@"#5590D2",@"#424E42",nil];
+        }
         [self setupViews];
         _isLoad = !_isLoad;
     }
@@ -61,14 +65,18 @@
     UIImage *thumbImage = IMG(@"滑动icon");
     //左右轨的图片
     _paintSlider = [UISlider new];
+    _paintSlider.userInteractionEnabled = YES;
     _paintSlider.minimumValue = 10;
     _paintSlider.maximumValue = 30;
-    _paintSlider.userInteractionEnabled = YES;
-    if (GVUserDe.waterTitleFontSize > 0){
-        _paintSlider.value = GVUserDe.waterTitleFontSize;
-    }else{
-        _paintSlider.value = 16;
+    
+    if (_type == 5){
+        if (GVUserDe.waterTitleFontSize > 0){
+            _paintSlider.value = GVUserDe.waterTitleFontSize;
+        }else{
+            _paintSlider.value = 16;
+        }
     }
+    
     // 设置颜色
     _paintSlider.maximumTrackTintColor = HexColor(@"#282B30");
     _paintSlider.minimumTrackTintColor = [UIColor whiteColor];
@@ -85,10 +93,21 @@
         make.centerX.equalTo(self);
         make.height.equalTo(@30);
     }];
-    if (_type == 2){
+    
+    if (_type == 3){
+        smallIcon.hidden = YES;
+        bigIcon.hidden = YES;
+        _paintSlider.hidden = YES;
+    }else{
+        smallIcon.hidden = NO;
+        bigIcon.hidden = NO;
+        _paintSlider.hidden = NO;
+    }
+    if (_type == 2 || _type == 3){
         for (NSInteger i = 0;  i < 8; i ++) {
             UIButton *fillBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-            [fillBtn setBackgroundImage:IMG(@"lightIcon") forState:UIControlStateNormal];
+            NSString *iconStr = [NSString stringWithFormat:@"fillIcon_0%ld",i + 1];
+            [fillBtn setBackgroundImage:IMG(iconStr) forState:UIControlStateNormal];
             fillBtn.tag = (i + 1) * 100;
             fillBtn.frame = CGRectMake(16 + i * (CUB_WIDTH + 16), 60 , CUB_WIDTH, CUB_WIDTH);
             fillBtn.layer.cornerRadius = CUB_WIDTH / 2;
@@ -97,15 +116,18 @@
             [self addSubview:fillBtn];
         }
     }
-    
+    NSInteger top;
+    if (_type == 1 || _type == 4){
+        top = 60;
+    }else{
+        top = 110;
+    }
     for (NSInteger i = 0; i < _colorArray.count; i++) {
-        UIButton *colorBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+        UIButton *colorBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         colorBtn.tag = i;
-        colorBtn.backgroundColor = HexColor(self.colorArray[i]);
-        colorBtn.frame = CGRectMake(16 + i * (CUB_WIDTH + 16), _type==1?60:110 , CUB_WIDTH, CUB_WIDTH);
+        colorBtn.frame = CGRectMake(16 + (i % 8) * (CUB_WIDTH + 16), (i / 8 * (CUB_WIDTH + 16)) + top , CUB_WIDTH, CUB_WIDTH);
         colorBtn.layer.cornerRadius = CUB_WIDTH / 2;
         colorBtn.layer.masksToBounds = YES;
-        
         if ([GVUserDe.waterTitleColor isEqualToString:_colorArray[i]] ){
             if (i == 1){
                 colorBtn.layer.borderColor = [UIColor redColor].CGColor;
@@ -116,6 +138,12 @@
             _selectBtn = colorBtn;
         }
         
+        if (i == 8){
+            [colorBtn setBackgroundColor:[UIColor clearColor]];
+            [colorBtn setImage:IMG(@"马赛克样式_02") forState:UIControlStateNormal];
+        }else{
+            colorBtn.backgroundColor = HexColor(self.colorArray[i]);
+        }
         
         [colorBtn addTarget:self action:@selector(colorSelected:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:colorBtn];
@@ -127,8 +155,10 @@
     [self addSubview:moreBtn];
     [moreBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.height.equalTo(@CUB_WIDTH);
-        if (_type == 1){
+        if (_type == 1 || _type == 5){
             make.top.equalTo(@60);
+        }else if (_type == 4){
+            make.top.equalTo(@(CUB_WIDTH + 16 + top));
         }else{
             make.top.equalTo(@110);
         }
@@ -156,6 +186,9 @@
 }
 
 -(void)sliderValueChanged:(UISlider *)slider{
+    if (slider.value == slider.maximumValue && _type == 4 ){
+        return;
+    }
     GVUserDe.waterTitleFontSize = (NSInteger)slider.value;
     [self.delegate changeWaterFontSize:GVUserDe.waterTitleFontSize];
 }
@@ -165,7 +198,7 @@
 }
 
 -(void)fillBtnClick:(UIButton *)btn{
-    
+    [self.delegate changeFillBKImageWith:btn.tag];
 }
 
 #pragma mark - Getters

@@ -120,7 +120,7 @@
         }else{
             switch (_selectIndex) {
                 case 1:
-                    beforeIMG.image = IMG(@"字幕调整选中");
+                    beforeIMG.image = IMG(@"无边框_unSelected");
                     if(_type == 1){
                         
                     }else if (_type == 2){
@@ -169,7 +169,7 @@
         switch (btn.tag) {
             case 1:
                 if (_type == 1){
-                    selectIMG.image = IMG(@"选中无水印");
+                    selectIMG.image = IMG(@"无边框_unSelected");
                 }
                 if (_type == 2){
                     selectIMG.image = IMG(@"横拼");

@@ -10,7 +10,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface PaintPath : UIBezierPath
-
+@property (nonatomic ,strong)NSArray *allPoints;//该画笔的所有路径点
 @property (nonatomic ,assign)CGRect boundRect; //该画笔形成的矩形框
 @property (nonatomic ,assign)NSInteger pathLineWidth;// 线的宽度
 @property (nonatomic ,strong)NSString *colorStr;// 线的颜色

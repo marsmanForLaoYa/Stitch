@@ -206,7 +206,7 @@
     if (btn.tag != 1){
         if (_colorSelectView == nil){
             _colorSelectView = [WaterColorSelectView new];
-            _colorSelectView.type = 1;
+            _colorSelectView.type = 5;
             _colorSelectView.delegate = self;
             _colorSelectView.moreColorClick = ^{
                 [weakSelf addColorPlateView];

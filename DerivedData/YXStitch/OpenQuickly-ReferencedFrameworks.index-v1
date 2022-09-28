@@ -28,8 +28,8 @@
 	<string>TYSnapshotAuxiliary</string>
 	<string>CoreFoundation</string>
 	<string>UMCommon</string>
-	<string>Cocoa</string>
 	<string>PhotosUI</string>
+	<string>Cocoa</string>
 	<string>Metal</string>
 	<string>MetalKit</string>
 	<string>netinet</string>

@@ -78,7 +78,7 @@
     for (NSInteger i = 0 ; i < funcArr.count ; i ++) {
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
         btn.tag = (i + 1) * 100;
-        [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
+        [btn addTarget:self action:@selector(funcClick:) forControlEvents:UIControlEventTouchUpInside];
         [btn setImage:IMG(funcArr[1-i]) forState:UIControlStateNormal];
         [contentView addSubview:btn];
         if (i == 0){
@@ -92,8 +92,11 @@
             make.right.equalTo(contentView.mas_right).offset(-(i * 55 + 28));
         }];
     }
-    
-    
+ 
+}
+
+-(void)funcClick:(UIButton *)btn{
+    self.btnClick(btn.tag);
 }
 
 -(void)btnClick:(UIButton *)btn{

@@ -12,8 +12,8 @@
                             startPoint:(CGPoint)startP{
     PaintPath * path = [[self alloc] init];
     path.lineWidth = width;
-    path.lineCapStyle = kCGLineCapRound;
-    path.lineJoinStyle = kCGLineCapRound;
+    path.lineCapStyle = kCALineCapButt;
+    path.lineJoinStyle = kCALineCapButt;
     [path moveToPoint:startP];
     return path;
 }

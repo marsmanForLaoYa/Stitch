@@ -362,8 +362,7 @@ static const CGFloat kPhotoViewMargin = 12.0;
                 //多图布局
             }else{
                 //多图字幕
-                if ([self.manager selectedArray].count > 1){
-                    
+                if ([self.manager selectedArray].count > 1){ 
                     CaptionViewController *vc = [CaptionViewController new];
                     vc.type = 1;
                     __block NSMutableArray *arr = [NSMutableArray array];
