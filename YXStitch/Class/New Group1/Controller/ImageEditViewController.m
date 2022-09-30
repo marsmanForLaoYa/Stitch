@@ -101,13 +101,13 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor blackColor];
     self.title = [NSString stringWithFormat:@"%@",_titleStr];
-    _dataArr = [NSMutableArray array];
     _isSelectPath = NO;
     _isStartPaint = NO;
-    _imageViewsArr = [NSMutableArray array];
-    _originWidthArr = [NSMutableArray array];
-    _originHeightArr = [NSMutableArray array];
-    _originzTopArr = [NSMutableArray array];
+//    _dataArr = [NSMutableArray array];
+//    _imageViewsArr = [NSMutableArray array];
+//    _originWidthArr = [NSMutableArray array];
+//    _originHeightArr = [NSMutableArray array];
+//    _originzTopArr = [NSMutableArray array];
     [self setupViews];
     [self setupNavItems];
     [self addBottomView];
@@ -192,32 +192,6 @@
         [self addHorizontalContentView];
     }
     
-    //    [_contentView mas_makeConstraints:^(MASConstraintMaker *make) {
-    //        make.centerX.equalTo(self.view);
-    //        if (_isVer){
-    //            make.top.equalTo(@(Nav_HEIGHT));
-    //        }else{
-    //            make.centerY.equalTo(self.view);
-    //        }
-    //        make.width.equalTo(@(imageFakewidth));
-    //        make.height.equalTo(@(imageFakeHeight));
-    //    }];
-    //    [_contentView addSubview:_contentScrollView];
-    //    [_contentScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
-    //        make.top.equalTo(@(Nav_H));
-    //        make.centerX.width.equalTo(_contentView);
-    //        make.height.equalTo(@(scrollHeight));
-    //    }];
-    // _contentScrollView.center = self.view.center;
-    //    _imageView = [UIImageView new];
-    //    _imageView.contentMode = UIViewContentModeScaleToFill;
-    //    _imageView.userInteractionEnabled = YES;
-    //    _imageView.image = _screenshotIMG;
-    //    [_contentView addSubview:_imageView];
-    //    [_imageView mas_makeConstraints:^(MASConstraintMaker *make) {
-    //        make.edges.equalTo(_contentView);
-    //    }];
-    
 }
 
 -(void)addVerticalContentView{
@@ -227,8 +201,6 @@
     StitchingButton *firstImageView = [[StitchingButton alloc]initWithFrame:CGRectMake(0, 0, VerViewWidth, (CGFloat)(icon.size.height/icon.size.width) * VerViewWidth)];
     firstImageView.image = icon;
     firstImageView.userInteractionEnabled = YES;
-//    firstImageView.centerX = self.view.centerX;
-    //    [firstImageView addTarget:self action:@selector(imgBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     contentHeight += firstImageView.height;
     firstImageView.tag = 100;
     [_contentScrollView addSubview:firstImageView];
@@ -1237,10 +1209,7 @@
 
 -(void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     CGPoint moveP = [self pointWithTouches:touches];
-    
-    
-    
-    
+
 //    if ((_markType == LINE || _markType == MOSAIC) && !_isSelectPath){
 //        [_path addLineToPoint:moveP];
 //        _path.boundRect = CGPathGetPathBoundingBox(_path.CGPath);
@@ -1558,32 +1527,50 @@ static inline CGPoint XBPointOnPowerCurveLine(CGPoint p0, CGPoint p1, CGPoint p2
 
 
 
-#pragma mark --set方法
+#pragma mark --lazy
 -(NSMutableArray *)layers{
-    if (_layers == nil){
-        _layers = [NSMutableArray array];
+    if (!_layers ){
+        _layers = [[NSMutableArray alloc]init];
     }
     return _layers;
 }
 -(NSMutableArray *)removedLayers{
-    if (_removedLayers == nil){
-        _removedLayers = [NSMutableArray array];
+    if (!_removedLayers ){
+        _removedLayers = [[NSMutableArray alloc]init];
     }
     return _removedLayers;
 }
 
-//-(NSMutableArray *)originWidthArr{
-//    if (_originWidthArr == nil){
-//        _originWidthArr = [NSMutableArray array];
-//    }
-//    return _originWidthArr;
-//}
-//
-//-(NSMutableArray *)originHeightArr{
-//    if (_originHeightArr == nil){
-//        _originHeightArr = [NSMutableArray array];
-//    }
-//    return _originHeightArr;
-//}
+-(NSMutableArray *)originWidthArr{
+    if (!_originWidthArr){
+        _originWidthArr = [[NSMutableArray alloc]init];
+    }
+    return _originWidthArr;
+}
+
+-(NSMutableArray *)originHeightArr{
+    if (!_originHeightArr){
+        _originHeightArr = [[NSMutableArray alloc]init];
+    }
+    return _originHeightArr;
+}
+-(NSMutableArray *)originzTopArr{
+    if (!_originzTopArr){
+        _originzTopArr = [[NSMutableArray alloc]init];
+    }
+    return _originzTopArr;
+}
+-(NSMutableArray *)imageViewsArr{
+    if (!_imageViewsArr){
+        _imageViewsArr = [[NSMutableArray alloc]init];
+    }
+    return _imageViewsArr;
+}
+-(NSMutableArray *)dataArr{
+    if (!_dataArr){
+        _dataArr = [[NSMutableArray array]init];
+    }
+    return _dataArr;
+}
 
 @end

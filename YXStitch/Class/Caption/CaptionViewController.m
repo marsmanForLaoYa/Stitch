@@ -2054,10 +2054,10 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
     }
 }
 
-#pragma mark
+#pragma mark --lazy
 -(NSMutableArray *)editLabArr{
-    if (_editLabArr == nil){
-        _editLabArr = [NSMutableArray array];
+    if (!_editLabArr){
+        _editLabArr = [[NSMutableArray alloc]init];
     }
     return _editLabArr;
 }
