@@ -134,6 +134,8 @@ GridShowImgView *lastShowImgView;
         [showImgView showBorder];
         //记录当前选中的view
         lastShowImgView = showImgView;
+        //把选中的view放在最上层
+        [self bringSubviewToFront:showImgView];
     };
     subImgView.delegate = self;
     [self addSubview:subImgView];

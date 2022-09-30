@@ -20,7 +20,7 @@ typedef void(^LayoutBottomBlock)(NSInteger index);
 
 @property (nonatomic, strong) UIButton *button;
 @property (nonatomic, strong) UILabel *titleLabel;
-- (instancetype)initWithImagName:(NSString *)imageName title:(NSString *)title;
+- (instancetype)initWithNormalImagName:(NSString *)normalImageName selectedImagName:(NSString *)selectedImagName title:(NSString *)title;
 
 @end
 
