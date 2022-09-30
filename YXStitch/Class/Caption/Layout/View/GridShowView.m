@@ -1288,10 +1288,15 @@ GridShowImgView *lastShowImgView;
 }
 
 @end
-
+//左右
 #define kCanPanViewMaxHeight 100
 #define kCanPanViewMinHeight 30
 #define kCanPanViewWidth 10
+//上下
+#define kCanPanViewMaxWidth 100
+#define kCanPanViewMinWidth 30
+#define kCanPanViewHeight 10
+#define kViewBorderWidth 3
 @interface GridShowImgView ()
 
 @property (nonatomic, strong) UIImageView *imageView;
@@ -1313,7 +1318,7 @@ GridShowImgView *lastShowImgView;
     self = [super initWithFrame:frame];
     if (self) {
         self.contentMode = UIViewContentModeScaleAspectFill;
-        self.clipsToBounds = YES;
+        self.clipsToBounds = NO;
 
         [self configViews];
     }
@@ -1383,39 +1388,37 @@ GridShowImgView *lastShowImgView;
     self.bottomPanGestureView.frame = CGRectMake(0, self.height - edge, self.width, edge);
     self.scrollView.frame = self.bounds;
     
-    CGFloat fixMarginMax = 40;
-    CGFloat marginMin = 20;
-    CGFloat leftCanPanViewHeitht = 0;
-    if(self.height > fixMarginMax * 2 + kCanPanViewMaxHeight) {
-        leftCanPanViewHeitht = kCanPanViewMaxHeight;
+    CGFloat fixMarginYMin = 10;
+    CGFloat leftCanPanViewHeight = 0;
+    CGFloat leftCanPanViewTop = 0;
+    if(self.height >= fixMarginYMin * 2 + kCanPanViewMaxHeight) {
+        leftCanPanViewHeight = kCanPanViewMaxHeight;
+        leftCanPanViewTop = (self.height - leftCanPanViewHeight) / 2;
+    }
+    else
+    {
+        leftCanPanViewTop = fixMarginYMin;
+        leftCanPanViewHeight = self.height - 2 * leftCanPanViewTop;
     }
     
+    self.leftCanPanView.frame = CGRectMake(- kCanPanViewWidth / 2 + kViewBorderWidth / 2, leftCanPanViewTop, kCanPanViewWidth, leftCanPanViewHeight);
+    self.rightCanPanView.frame = CGRectMake(self.width - kCanPanViewWidth / 2 - kViewBorderWidth / 2, leftCanPanViewTop, kCanPanViewWidth, leftCanPanViewHeight);
     
-    self.leftCanPanView.frame = CGRectMake(0, 0, edge, self.height);
-    self.rightCanPanView.frame = CGRectMake(self.width - edge, 0, edge, self.height);
-    self.topCanPanView.frame = CGRectMake(0, 0, self.width, edge);
-    self.bottomCanPanView.frame = CGRectMake(0, self.height - edge, self.width, edge);
     
-//    self.leftCanPanView.width = kCanPanViewWidth;
-//    if(self.leftCanPanView.height < kCanPanViewMaxHeight && self.leftCanPanView.height > kCanPanViewMinHeight) {
-//
-//        self.leftCanPanView.left = - kCanPanViewWidth / 2;
-//        self.leftCanPanView.height = self.height - 2 * 20;
-//        self.leftCanPanView.centerY = self.centerY;
-//    }
-//    else {
-//        if(self.leftCanPanView.height <= kCanPanViewMinHeight) {
-//            self.leftCanPanView.left = - kCanPanViewWidth / 2;
-//            self.leftCanPanView.height = kCanPanViewMinHeight;
-//            self.leftCanPanView.centerY = self.centerY;
-//        }
-//
-//        if(self.leftCanPanView.height >= kCanPanViewMaxHeight) {
-//            self.leftCanPanView.left = - kCanPanViewWidth / 2;
-//            self.leftCanPanView.height = kCanPanViewMaxHeight;
-//            self.leftCanPanView.centerY = self.centerY;
-//        }
-//    }
+    CGFloat fixMarginXMin = 10;
+    CGFloat topCanPanViewWidth = 0;
+    CGFloat topCanPanViewLeft = 0;
+    if(self.width >= fixMarginXMin * 2 + kCanPanViewMaxWidth) {
+        topCanPanViewWidth = kCanPanViewMaxWidth;
+        topCanPanViewLeft = (self.width - topCanPanViewWidth) / 2;
+    }
+    else
+    {
+        topCanPanViewLeft = fixMarginXMin;
+        topCanPanViewWidth = self.width - 2 * topCanPanViewLeft;
+    }
+    self.topCanPanView.frame = CGRectMake(topCanPanViewLeft, - kCanPanViewWidth / 2+ kViewBorderWidth / 2, topCanPanViewWidth, kCanPanViewHeight);
+    self.bottomCanPanView.frame = CGRectMake(topCanPanViewLeft, self.height - kCanPanViewWidth / 2 - kViewBorderWidth / 2, topCanPanViewWidth, kCanPanViewHeight);
 }
 
 #pragma mark - Method
@@ -1428,10 +1431,6 @@ GridShowImgView *lastShowImgView;
 
 - (void)showBorder
 {
-    self.leftCanPanView.hidden = YES;
-    self.rightCanPanView.hidden = YES;
-    self.topCanPanView.hidden = YES;
-    self.bottomCanPanView.hidden = YES;
     if(self.gridPanEdge & GridPanEdgeTop) {
         self.topCanPanView.hidden = NO;
     }
@@ -1448,7 +1447,7 @@ GridShowImgView *lastShowImgView;
         self.bottomCanPanView.hidden = NO;
     }
     self.layer.borderColor = RGB(0, 74, 274).CGColor;
-    self.layer.borderWidth = 3.0;
+    self.layer.borderWidth = kViewBorderWidth;
 }
 
 - (void)addGestureWithView:(UIView *)view action:(nullable SEL)action {
@@ -1459,6 +1458,10 @@ GridShowImgView *lastShowImgView;
 - (void)clearBorder {
     self.layer.borderColor = [UIColor clearColor].CGColor;
     self.layer.borderWidth = 0.0;
+    self.leftCanPanView.hidden = YES;
+    self.rightCanPanView.hidden = YES;
+    self.topCanPanView.hidden = YES;
+    self.bottomCanPanView.hidden = YES;
 }
 
 #pragma mark - gesture
@@ -1571,7 +1574,7 @@ GridShowImgView *lastShowImgView;
 {
     if(!_leftPanGestureView) {
         _leftPanGestureView = [[UIView alloc] init];
-        _leftPanGestureView.backgroundColor = [UIColor redColor];
+        _leftPanGestureView.backgroundColor = [UIColor clearColor];
         _leftPanGestureView.hidden = YES;
     }
     return _leftPanGestureView;
@@ -1581,7 +1584,7 @@ GridShowImgView *lastShowImgView;
 {
     if(!_rightPanGestureView) {
         _rightPanGestureView = [[UIView alloc] init];
-        _rightPanGestureView.backgroundColor = [UIColor redColor];
+        _rightPanGestureView.backgroundColor = [UIColor clearColor];
         _rightPanGestureView.hidden = YES;
     }
     return _rightPanGestureView;
@@ -1591,7 +1594,7 @@ GridShowImgView *lastShowImgView;
 {
     if(!_topPanGestureView) {
         _topPanGestureView = [[UIView alloc] init];
-        _topPanGestureView.backgroundColor = [UIColor redColor];
+        _topPanGestureView.backgroundColor = [UIColor clearColor];
         _topPanGestureView.hidden = YES;
     }
     return _topPanGestureView;
@@ -1601,7 +1604,7 @@ GridShowImgView *lastShowImgView;
 {
     if(!_bottomPanGestureView) {
         _bottomPanGestureView = [[UIView alloc] init];
-        _bottomPanGestureView.backgroundColor = [UIColor redColor];
+        _bottomPanGestureView.backgroundColor = [UIColor clearColor];
         _bottomPanGestureView.hidden = YES;
     }
     return _bottomPanGestureView;
@@ -1610,9 +1613,11 @@ GridShowImgView *lastShowImgView;
 - (UIView *)leftCanPanView
 {
     if(!_leftCanPanView) {
-        _leftCanPanView = [[UIView alloc] initWithFrame:CGRectMake(0, -kCanPanViewWidth / 2, kCanPanViewWidth, self.height)];
+        _leftCanPanView = [[UIView alloc] initWithFrame:CGRectZero];
         _leftCanPanView.backgroundColor = RGB(0, 74, 274);
         _leftCanPanView.hidden = YES;
+        _leftCanPanView.layer.masksToBounds = YES;
+        _leftCanPanView.layer.cornerRadius = kCanPanViewWidth / 2;
     }
     return _leftCanPanView;
 }
@@ -1623,6 +1628,8 @@ GridShowImgView *lastShowImgView;
         _rightCanPanView = [[UIView alloc] initWithFrame:CGRectZero];
         _rightCanPanView.backgroundColor = RGB(0, 74, 274);
         _rightCanPanView.hidden = YES;
+        _rightCanPanView.layer.masksToBounds = YES;
+        _rightCanPanView.layer.cornerRadius = kCanPanViewWidth / 2;
     }
     return _rightCanPanView;
 }
@@ -1633,6 +1640,8 @@ GridShowImgView *lastShowImgView;
         _topCanPanView = [[UIView alloc] initWithFrame:CGRectZero];
         _topCanPanView.backgroundColor = RGB(0, 74, 274);
         _topCanPanView.hidden = YES;
+        _topCanPanView.layer.masksToBounds = YES;
+        _topCanPanView.layer.cornerRadius = kCanPanViewWidth / 2;
     }
     return _topCanPanView;
 }
@@ -1643,6 +1652,8 @@ GridShowImgView *lastShowImgView;
         _bottomCanPanView = [[UIView alloc] initWithFrame:CGRectZero];
         _bottomCanPanView.backgroundColor = RGB(0, 74, 274);
         _bottomCanPanView.hidden = YES;
+        _bottomCanPanView.layer.masksToBounds = YES;
+        _bottomCanPanView.layer.cornerRadius = kCanPanViewWidth / 2;
     }
     return _bottomCanPanView;
 }
