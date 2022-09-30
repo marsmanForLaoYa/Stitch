@@ -1,0 +1,64 @@
+{
+    "count":2,
+    "types":[
+        {
+            "name":"0",
+            "image-normal":"grid_picture_2_1_normal",
+            "image-selected":"grid_picture_2_1_selected",
+            "rowsCount":2,
+            "rows": [
+                {
+                    "start":0,
+                    "columnsCount":1,
+                    "columns":[
+                        {
+                            "width":1,
+                            "height":1,
+                            "top":0,
+                            "margin":0
+                        }
+                    ]
+                },
+                {
+                    "start":0,
+                    "columnsCount":1,
+                    "columns":[
+                        {
+                            "width":1,
+                            "height":1,
+                            "top":1,
+                            "margin":0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name":"1",
+            "image-normal":"grid_picture_2_2_normal",
+            "image-selected":"grid_picture_2_2_selected",
+            "rowsCount":1,
+            "rows": [
+                {
+                    "start":0,
+                    "columnsCount":2,
+                    "columns":[
+                        {
+                            "width":1,
+                            "height":1,
+                            "top":0,
+                            "margin":0
+                        },
+                        {
+                            "width":1,
+                            "height":1,
+                            "top":0,
+                            "margin":0
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+

@@ -12,7 +12,7 @@
 #import "UnlockFuncView.h"
 #import "BuyViewController.h"
 #import "CheckProView.h"
-
+#import "PictureLayoutController.h"
 
 static const CGFloat kPhotoViewMargin = 12.0;
 @interface SelectPictureViewController ()<HXPhotoViewDelegate,UIImagePickerControllerDelegate, HXPhotoViewCellCustomProtocol,HXCustomNavigationControllerDelegate,UnlockFuncViewDelegate,CheckProViewDelegate>
@@ -360,9 +360,26 @@ static const CGFloat kPhotoViewMargin = 12.0;
                 
             }else if(btn.tag == 302){
                 //多图布局
+                PictureLayoutController *layoutVC = [[PictureLayoutController alloc] init];
+                
+                __block NSMutableArray *arr = [NSMutableArray array];
+                for (HXPhotoModel *photoModel in [self.manager selectedArray]) {
+                    [Tools getImageWithAsset:photoModel.asset withBlock:^(UIImage * _Nonnull image) {
+                        [arr addObject:image];
+                    }];
+                }
+                
+                layoutVC.pictures = arr;
+                
+                [[NSNotificationCenter defaultCenter]postNotificationName:@"dismiss" object:nil];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [weakSelf.navigationController pushViewController:layoutVC animated:YES];
+                });
+
             }else{
                 //多图字幕
-                if ([self.manager selectedArray].count > 1){ 
+                if ([self.manager selectedArray].count > 1){
+                    
                     CaptionViewController *vc = [CaptionViewController new];
                     vc.type = 1;
                     __block NSMutableArray *arr = [NSMutableArray array];
