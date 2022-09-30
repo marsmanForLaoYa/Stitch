@@ -1094,7 +1094,7 @@ GridShowImgView *lastShowImgView;
     
     CGFloat marginMax = 40;
     CGFloat marginMin = 20;
-    CGFloat leftCanPanViewHeitht = 0
+    CGFloat leftCanPanViewHeitht = 0;
     if(self.height > marginMax * 2 + kCanPanViewMaxHeight) {
         leftCanPanViewHeitht = kCanPanViewMaxHeight;
     }

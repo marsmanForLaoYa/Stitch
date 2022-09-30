@@ -204,7 +204,6 @@
 		BBB52A1728E693290027DA9C /* GridLayout_5.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = GridLayout_5.json; sourceTree = "<group>"; };
 		BBB52A1828E693290027DA9C /* GridLayout_2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = GridLayout_2.json; sourceTree = "<group>"; };
 		BBB52A1928E693290027DA9C /* GridLayout_3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = GridLayout_3.json; sourceTree = "<group>"; };
-		BBB52A1B28E693290027DA9C /* PictureLayoutController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PictureLayoutController.h; sourceTree = "<group>"; };
 		BBB52A1C28E693290027DA9C /* PictureLayoutController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PictureLayoutController.m; sourceTree = "<group>"; };
 		BBB52A1E28E693290027DA9C /* GridCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GridCell.m; sourceTree = "<group>"; };
 		BBB52A1F28E693290027DA9C /* GridSelectedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GridSelectedView.h; sourceTree = "<group>"; };
@@ -214,6 +213,7 @@
 		BBB52A2328E693290027DA9C /* GridCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GridCell.h; sourceTree = "<group>"; };
 		BBB52A2428E693290027DA9C /* GridShowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GridShowView.m; sourceTree = "<group>"; };
 		BBB52A2528E693290027DA9C /* LayoutBottomView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LayoutBottomView.m; sourceTree = "<group>"; };
+		BBB52A3328E6B5880027DA9C /* PictureLayoutController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PictureLayoutController.h; sourceTree = "<group>"; };
 		FB00324728B8AB880028BC61 /* MyCustomSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyCustomSlider.h; sourceTree = "<group>"; };
 		FB00324828B8AB910028BC61 /* MyCustomSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyCustomSlider.m; sourceTree = "<group>"; };
 		FB086F6728A662D30062EBA5 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -525,7 +525,7 @@
 		BBB52A1A28E693290027DA9C /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				BBB52A1B28E693290027DA9C /* PictureLayoutController.h */,
+				BBB52A3328E6B5880027DA9C /* PictureLayoutController.h */,
 				BBB52A1C28E693290027DA9C /* PictureLayoutController.m */,
 			);
 			path = Controller;
