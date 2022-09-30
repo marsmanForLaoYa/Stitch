@@ -148,7 +148,9 @@
                 colorBtn.layer.borderColor = [UIColor whiteColor].CGColor;
             }
             colorBtn.layer.borderWidth = 4;
-            _selectBtn = colorBtn;
+            if (_type != 6) {
+                _selectBtn = colorBtn;
+            }
         }
         
         if (i == 8){
