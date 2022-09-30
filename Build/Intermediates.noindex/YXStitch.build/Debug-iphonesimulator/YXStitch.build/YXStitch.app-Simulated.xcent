@@ -4,6 +4,10 @@
 <dict>
 	<key>application-identifier</key>
 	<string>ZDUQAVA425.CDUK.YXStitch</string>
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+		<string>applinks:umplus-sdk-download.oss-cn-shanghai.aliyuncs.com</string>
+	</array>
 	<key>com.apple.security.application-groups</key>
 	<array>
 		<string>group.yxiOSSdk.yxStitch</string>

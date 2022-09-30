@@ -1760,14 +1760,14 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
     if (tag <= 2){
         if (tag == 0){
             //旋转
-            flipImage = [self image:imgView.imgView.image rotation:UIImageOrientationDown];
+            flipImage = [Tools image:imgView.imgView.image rotation:UIImageOrientationDown];
         }else if (tag == 1){
             //水平镜像
-            flipImage = [self turnImageWith:imgView.imgView.image AndType:1];
+            flipImage = [Tools turnImageWith:imgView.imgView.image AndType:1 AndisTurn:_isTurn];
             _isTurn = !_isTurn;
         }else{
             //垂直镜像
-            flipImage = [self turnImageWith:imgView.imgView.image AndType:2];
+            flipImage = [Tools turnImageWith:imgView.imgView.image AndType:2 AndisTurn:_isTurn];
         }
         imgView.imgView.image = flipImage;
     }else if (tag == 3){
@@ -1831,86 +1831,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
     }
     
 }
-///水平翻转/垂直翻转图片
--(UIImage *)turnImageWith:(UIImage *)img AndType:(NSInteger)type{
-    CGRect rect = CGRectMake(0, 0, img.size.width, img.size.height);
-    UIGraphicsBeginImageContextWithOptions(rect.size, false, 1);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextClipToRect(context, rect);
-    if (type == 1){
-        //水平翻转
-        if (!_isTurn){
-            CGContextRotateCTM(context, (CGFloat)M_PI);
-        }else{
-            CGContextRotateCTM(context, (CGFloat)-M_PI);
-        }
-        CGContextTranslateCTM(context, -rect.size.width, -rect.size.height);
-    }
-    CGContextDrawImage(context, rect, img.CGImage);
-    //翻转图片
-    UIImage *drawImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIImage *flipImage = [UIImage imageWithCGImage:drawImage.CGImage scale:img.scale orientation:img.imageOrientation];
-    return flipImage;
 
-}
-
-//翻转图片
-- (UIImage *)image:(UIImage *)image rotation:(UIImageOrientation)orientation{
-    long double rotate = 0.0;
-    CGRect rect;
-    float translateX = 0;
-    float translateY = 0;
-    float scaleX = 1.0;
-    float scaleY = 1.0;
-    
-    switch (orientation) {
-        case UIImageOrientationLeft:
-            rotate = M_PI_2;
-            rect = CGRectMake(0, 0, image.size.height, image.size.width);
-            translateX = 0;
-            translateY = -rect.size.width;
-            scaleY = rect.size.width/rect.size.height;
-            scaleX = rect.size.height/rect.size.width;
-            break;
-        case UIImageOrientationRight:
-            rotate = 33 * M_PI_2;
-            rect = CGRectMake(0, 0, image.size.height, image.size.width);
-            translateX = -rect.size.height;
-            translateY = 0;
-            scaleY = rect.size.width/rect.size.height;
-            scaleX = rect.size.height/rect.size.width;
-            break;
-        case UIImageOrientationDown:
-            rotate = M_PI;
-            rect = CGRectMake(0, 0, image.size.width, image.size.height);
-            translateX = -rect.size.width;
-            translateY = -rect.size.height;
-            break;
-        default:
-            rotate = 0.0;
-            rect = CGRectMake(0, 0, image.size.width, image.size.height);
-            translateX = 0;
-            translateY = 0;
-            break;
-    }
-    
-    UIGraphicsBeginImageContext(rect.size);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    //做CTM变换
-    CGContextTranslateCTM(context, 0.0, rect.size.height);
-    CGContextScaleCTM(context, 1.0, -1.0);
-    CGContextRotateCTM(context, rotate);
-    CGContextTranslateCTM(context, translateX, translateY);
-    
-    CGContextScaleCTM(context, scaleX, scaleY);
-    //绘制图片
-    CGContextDrawImage(context, CGRectMake(0, 0, rect.size.width, rect.size.height), image.CGImage);
-    
-    UIImage *newPic = UIGraphicsGetImageFromCurrentImageContext();
-    
-    return newPic;
-    
-}
 -(void)bottomBtnClick:(NSInteger )tag{
     MJWeakSelf
     _guideIMG.hidden = YES;

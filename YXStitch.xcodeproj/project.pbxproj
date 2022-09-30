@@ -20,6 +20,8 @@
 		FB086F7628A663090062EBA5 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB086F7528A663090062EBA5 /* SystemConfiguration.framework */; };
 		FB0D9E2828B4D1420057DC37 /* UIScrollView+UITouch.m in Sources */ = {isa = PBXBuildFile; fileRef = FB0D9E2728B4D1420057DC37 /* UIScrollView+UITouch.m */; };
 		FB1B8DE728D06F5F0080AE74 /* AddWaterMark.m in Sources */ = {isa = PBXBuildFile; fileRef = FB1B8DE628D06F5F0080AE74 /* AddWaterMark.m */; };
+		FB26948228E57E5200565F4B /* imageShellSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = FB26948128E57E5200565F4B /* imageShellSelectView.m */; };
+		FB26948628E590BB00565F4B /* ShellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FB26948528E590BB00565F4B /* ShellTableViewCell.m */; };
 		FB2BBD1428AF688A001DDFAE /* CaptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB2BBD1328AF688A001DDFAE /* CaptionViewController.m */; };
 		FB2BBD1828AF8D21001DDFAE /* CaptionBottomView.m in Sources */ = {isa = PBXBuildFile; fileRef = FB2BBD1728AF8D21001DDFAE /* CaptionBottomView.m */; };
 		FB2D5A0728A1EE2A006085BC /* HomeSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB2D5A0628A1EE2A006085BC /* HomeSettingViewController.m */; };
@@ -195,6 +197,10 @@
 		FB0D9E2728B4D1420057DC37 /* UIScrollView+UITouch.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+UITouch.m"; sourceTree = "<group>"; };
 		FB1B8DE528D06F530080AE74 /* AddWaterMark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddWaterMark.h; sourceTree = "<group>"; };
 		FB1B8DE628D06F5F0080AE74 /* AddWaterMark.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddWaterMark.m; sourceTree = "<group>"; };
+		FB26948028E57E5200565F4B /* imageShellSelectView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = imageShellSelectView.h; sourceTree = "<group>"; };
+		FB26948128E57E5200565F4B /* imageShellSelectView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = imageShellSelectView.m; sourceTree = "<group>"; };
+		FB26948428E590BB00565F4B /* ShellTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShellTableViewCell.h; sourceTree = "<group>"; };
+		FB26948528E590BB00565F4B /* ShellTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShellTableViewCell.m; sourceTree = "<group>"; };
 		FB2BBD1228AF688A001DDFAE /* CaptionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CaptionViewController.h; sourceTree = "<group>"; };
 		FB2BBD1328AF688A001DDFAE /* CaptionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CaptionViewController.m; sourceTree = "<group>"; };
 		FB2BBD1628AF8D21001DDFAE /* CaptionBottomView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CaptionBottomView.h; sourceTree = "<group>"; };
@@ -458,6 +464,15 @@
 				B8C87E9AD95B7468BA24009E /* Pods-YXStitch.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		FB26948328E590A000565F4B /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				FB26948428E590BB00565F4B /* ShellTableViewCell.h */,
+				FB26948528E590BB00565F4B /* ShellTableViewCell.m */,
+			);
+			path = Cell;
 			sourceTree = "<group>";
 		};
 		FB2BBD1128AF6861001DDFAE /* Caption */ = {
@@ -992,6 +1007,7 @@
 		FBA068F228DAA5D800AAB7E6 /* ImageEdit */ = {
 			isa = PBXGroup;
 			children = (
+				FB26948328E590A000565F4B /* Cell */,
 				FBA068FB28DABEA500AAB7E6 /* Model */,
 				FBA068F428DAA5F400AAB7E6 /* View */,
 				FBA068F328DAA5DE00AAB7E6 /* Controller */,
@@ -1022,6 +1038,8 @@
 				FBDA328D28E28E92003B7FA6 /* ImageBorderSettingView.m */,
 				FB8BAE9E28E2F78900A9978A /* ImageShellSettingView.h */,
 				FB8BAE9F28E2F78900A9978A /* ImageShellSettingView.m */,
+				FB26948028E57E5200565F4B /* imageShellSelectView.h */,
+				FB26948128E57E5200565F4B /* imageShellSelectView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1333,6 +1351,7 @@
 				FB58D81328E14D5000EC831D /* CustomScrollView.m in Sources */,
 				FB1B8DE728D06F5F0080AE74 /* AddWaterMark.m in Sources */,
 				FB5D46A628AA3FEE0015E2A5 /* StitchResultView.m in Sources */,
+				FB26948628E590BB00565F4B /* ShellTableViewCell.m in Sources */,
 				FBD32A9628DDC2D2000A548F /* UIBezierPath+Arrow.m in Sources */,
 				FB687EFE28A0E9F1002D557B /* BaseView.m in Sources */,
 				FB6FC66E28B60CB500BE4AA1 /* StichingImageView.m in Sources */,
@@ -1349,6 +1368,7 @@
 				FBF59EFB28AC98BF00D9C6CF /* ColorPlateView.m in Sources */,
 				FB2BBD1428AF688A001DDFAE /* CaptionViewController.m in Sources */,
 				FB00324928B8AB910028BC61 /* MyCustomSlider.m in Sources */,
+				FB26948228E57E5200565F4B /* imageShellSelectView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

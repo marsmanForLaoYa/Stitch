@@ -13,9 +13,12 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor clearColor];
-        [self setupViews];
+       // [self setupViews];
     }
     return self;
+}
+-(void)layoutSubviews{
+    [self setupViews];
 }
 
 -(void)setupViews{

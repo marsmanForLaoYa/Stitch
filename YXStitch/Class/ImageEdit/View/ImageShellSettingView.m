@@ -76,7 +76,12 @@
         [btn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.width.height.equalTo(@40);
             make.left.equalTo(@(25 + i * 50));
-            make.top.equalTo(@10);
+            if([Tools isIPhoneNotchScreen]){
+                make.top.equalTo(@10);
+            }else{
+                make.centerY.equalTo(contentView);  
+            }
+            
         }];
         if (i == 0){
             _selectBtn = btn;
@@ -91,7 +96,11 @@
     [phoneTypeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.equalTo(@160);
         make.height.equalTo(@33);
-        make.top.equalTo(@15);
+        if([Tools isIPhoneNotchScreen]){
+            make.top.equalTo(@15);
+        }else{
+            make.centerY.equalTo(contentView);
+        }
         make.right.equalTo(contentView.mas_right).offset(-25);
     }];
     

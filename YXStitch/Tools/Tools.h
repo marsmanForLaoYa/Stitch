@@ -146,8 +146,14 @@ NS_ASSUME_NONNULL_BEGIN
 ///抠图hsv范围颜色
 +(UIImage *)removeColorWithMinHueAngle:(float)minHueAngle maxHueAngle:(float)maxHueAngle image:(UIImage *)originalImage;
 
-///
+///获取手机型号
 + (NSString *)getIphoneType ;
+
+///水平翻转/垂直翻转图片
++(UIImage *)turnImageWith:(UIImage *)img AndType:(NSInteger)type AndisTurn:(BOOL)isTurn;
+
+///翻转图片
++ (UIImage *)image:(UIImage *)image rotation:(UIImageOrientation)orientation;
 
 @end
 
