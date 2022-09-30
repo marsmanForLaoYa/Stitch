@@ -510,14 +510,14 @@
 		BBB52A1128E693290027DA9C /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				BBB52A1228E693290027DA9C /* GridLayout_6.json */,
-				BBB52A1328E693290027DA9C /* GridLayout_7.json */,
-				BBB52A1428E693290027DA9C /* GridLayout_4.json */,
-				BBB52A1528E693290027DA9C /* GridLayout_8.json */,
-				BBB52A1628E693290027DA9C /* GridLayout_9.json */,
-				BBB52A1728E693290027DA9C /* GridLayout_5.json */,
 				BBB52A1828E693290027DA9C /* GridLayout_2.json */,
 				BBB52A1928E693290027DA9C /* GridLayout_3.json */,
+				BBB52A1428E693290027DA9C /* GridLayout_4.json */,
+				BBB52A1728E693290027DA9C /* GridLayout_5.json */,
+				BBB52A1228E693290027DA9C /* GridLayout_6.json */,
+				BBB52A1328E693290027DA9C /* GridLayout_7.json */,
+				BBB52A1528E693290027DA9C /* GridLayout_8.json */,
+				BBB52A1628E693290027DA9C /* GridLayout_9.json */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -534,13 +534,13 @@
 		BBB52A1D28E693290027DA9C /* View */ = {
 			isa = PBXGroup;
 			children = (
+				BBB52A2328E693290027DA9C /* GridCell.h */,
 				BBB52A1E28E693290027DA9C /* GridCell.m */,
 				BBB52A1F28E693290027DA9C /* GridSelectedView.h */,
-				BBB52A2028E693290027DA9C /* GridShowView.h */,
-				BBB52A2128E693290027DA9C /* LayoutBottomView.h */,
 				BBB52A2228E693290027DA9C /* GridSelectedView.m */,
-				BBB52A2328E693290027DA9C /* GridCell.h */,
+				BBB52A2028E693290027DA9C /* GridShowView.h */,
 				BBB52A2428E693290027DA9C /* GridShowView.m */,
+				BBB52A2128E693290027DA9C /* LayoutBottomView.h */,
 				BBB52A2528E693290027DA9C /* LayoutBottomView.m */,
 			);
 			path = View;

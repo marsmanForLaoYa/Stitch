@@ -997,9 +997,17 @@ GridShowImgView *lastShowImgView;
 
 @end
 
+#define kCanPanViewMaxHeight 100
+#define kCanPanViewMinHeight 30
+#define kCanPanViewWidth 10
 @interface GridShowImgView ()
 
 @property (nonatomic, strong) UIImageView *imageView;
+
+@property (nonatomic, strong) UIView *leftCanPanView;
+@property (nonatomic, strong) UIView *topCanPanView;
+@property (nonatomic, strong) UIView *rightCanPanView;
+@property (nonatomic, strong) UIView *bottomCanPanView;
 
 @end
 @implementation GridShowImgView
@@ -1027,20 +1035,28 @@ GridShowImgView *lastShowImgView;
     
     self.scrollView.frame = self.bounds;
     [self addSubview:self.scrollView];
-    [self addSubview:self.leftPanView];
-    [self addSubview:self.topPanView];
-    [self addSubview:self.rightPanView];
-    [self addSubview:self.bottomPanView];
-    [self addGestureWithView:self.leftPanView action:@selector(leftPanView:)];
-    [self addGestureWithView:self.topPanView action:@selector(topPanView:)];
-    [self addGestureWithView:self.rightPanView action:@selector(rightPanView:)];
-    [self addGestureWithView:self.bottomPanView action:@selector(bottomPanView:)];
+    
+    [self addSubview:self.leftCanPanView];
+    [self addSubview:self.rightCanPanView];
+    [self addSubview:self.topCanPanView];
+    [self addSubview:self.bottomCanPanView];
+    
+    [self addSubview:self.leftPanGestureView];
+    [self addSubview:self.topPanGestureView];
+    [self addSubview:self.rightPanGestureView];
+    [self addSubview:self.bottomPanGestureView];
+
+    [self addGestureWithView:self.leftPanGestureView action:@selector(leftPanGestureView:)];
+    [self addGestureWithView:self.topPanGestureView action:@selector(topPanGestureView:)];
+    [self addGestureWithView:self.rightPanGestureView action:@selector(rightPanGestureView:)];
+    [self addGestureWithView:self.bottomPanGestureView action:@selector(bottomPanGestureView:)];
     
     self.imageView.frame = self.bounds;
     self.imageView.width = SCREEN_WIDTH;
     [self.scrollView addSubview:self.imageView];
 }
 
+#pragma mark - setter
 - (void)setImage:(UIImage *)image{
     _image = image;
     _imageView.image = image;
@@ -1048,32 +1064,110 @@ GridShowImgView *lastShowImgView;
 
 - (void)setGridPanEdge:(GridPanEdge)gridPanEdge
 {
-    _gridPanEdge = GridPanEdgeTop;
+    _gridPanEdge = gridPanEdge;
     if(gridPanEdge & GridPanEdgeTop) {
-        self.topPanView.hidden = NO;
+        self.topPanGestureView.hidden = NO;
     }
     
     if(gridPanEdge & GridPanEdgeLeft) {
-        self.leftPanView.hidden = NO;
+        self.leftPanGestureView.hidden = NO;
     }
     
     if(gridPanEdge & GridPanEdgeRight) {
-        self.rightPanView.hidden = NO;
+        self.rightPanGestureView.hidden = NO;
     }
     
     if(gridPanEdge & GridPanEdgeBottom) {
-        self.bottomPanView.hidden = NO;
+        self.bottomPanGestureView.hidden = NO;
     }
 }
 
 - (void)layoutSubviews
 {
     CGFloat edge = 20;
-    self.leftPanView.frame = CGRectMake(0, 0, edge, self.height);
-    self.rightPanView.frame = CGRectMake(self.width - edge, 0, edge, self.height);
-    self.topPanView.frame = CGRectMake(0, 0, self.width, edge);;
-    self.bottomPanView.frame = CGRectMake(0, self.height - edge, self.width, edge);
+    self.leftPanGestureView.frame = CGRectMake(0, 0, edge, self.height);
+    self.rightPanGestureView.frame = CGRectMake(self.width - edge, 0, edge, self.height);
+    self.topPanGestureView.frame = CGRectMake(0, 0, self.width, edge);
+    self.bottomPanGestureView.frame = CGRectMake(0, self.height - edge, self.width, edge);
     self.scrollView.frame = self.bounds;
+    
+    
+    CGFloat marginMax = 40;
+    CGFloat marginMin = 20;
+    CGFloat leftCanPanViewHeitht = 0
+    if(self.height > marginMax * 2 + kCanPanViewMaxHeight) {
+        leftCanPanViewHeitht = kCanPanViewMaxHeight;
+    }
+    
+    
+    self.leftCanPanView.frame = CGRectMake(0, 0, edge, self.height);
+    self.rightCanPanView.frame = CGRectMake(self.width - edge, 0, edge, self.height);
+    self.topCanPanView.frame = CGRectMake(0, 0, self.width, edge);
+    self.bottomCanPanView.frame = CGRectMake(0, self.height - edge, self.width, edge);
+    
+//    self.leftCanPanView.width = kCanPanViewWidth;
+//    if(self.leftCanPanView.height < kCanPanViewMaxHeight && self.leftCanPanView.height > kCanPanViewMinHeight) {
+//
+//        self.leftCanPanView.left = - kCanPanViewWidth / 2;
+//        self.leftCanPanView.height = self.height - 2 * 20;
+//        self.leftCanPanView.centerY = self.centerY;
+//    }
+//    else {
+//        if(self.leftCanPanView.height <= kCanPanViewMinHeight) {
+//            self.leftCanPanView.left = - kCanPanViewWidth / 2;
+//            self.leftCanPanView.height = kCanPanViewMinHeight;
+//            self.leftCanPanView.centerY = self.centerY;
+//        }
+//
+//        if(self.leftCanPanView.height >= kCanPanViewMaxHeight) {
+//            self.leftCanPanView.left = - kCanPanViewWidth / 2;
+//            self.leftCanPanView.height = kCanPanViewMaxHeight;
+//            self.leftCanPanView.centerY = self.centerY;
+//        }
+//    }
+}
+
+#pragma mark - Method
+- (void)initGestureView {
+    self.leftPanGestureView.hidden = YES;
+    self.rightPanGestureView.hidden = YES;
+    self.topPanGestureView.hidden = YES;
+    self.bottomPanGestureView.hidden = YES;
+}
+
+- (void)showBorder
+{
+    self.leftCanPanView.hidden = YES;
+    self.rightCanPanView.hidden = YES;
+    self.topCanPanView.hidden = YES;
+    self.bottomCanPanView.hidden = YES;
+    if(self.gridPanEdge & GridPanEdgeTop) {
+        self.topCanPanView.hidden = NO;
+    }
+    
+    if(self.gridPanEdge & GridPanEdgeLeft) {
+        self.leftCanPanView.hidden = NO;
+    }
+    
+    if(self.gridPanEdge & GridPanEdgeRight) {
+        self.rightCanPanView.hidden = NO;
+    }
+    
+    if(self.gridPanEdge & GridPanEdgeBottom) {
+        self.bottomCanPanView.hidden = NO;
+    }
+    self.layer.borderColor = RGB(0, 74, 274).CGColor;
+    self.layer.borderWidth = 3.0;
+}
+
+- (void)addGestureWithView:(UIView *)view action:(nullable SEL)action {
+    UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:action];
+    [view addGestureRecognizer:pan];
+}
+
+- (void)clearBorder {
+    self.layer.borderColor = [UIColor clearColor].CGColor;
+    self.layer.borderWidth = 0.0;
 }
 
 #pragma mark - gesture
@@ -1083,19 +1177,19 @@ GridShowImgView *lastShowImgView;
     }
 }
 
-- (void)leftPanView:(UIPanGestureRecognizer *)panGesture{
+- (void)leftPanGestureView:(UIPanGestureRecognizer *)panGesture{
     [self panAction:panGesture edge:PanViewEdgeLeft];
 }
 
-- (void)topPanView:(UIPanGestureRecognizer *)panGesture{
+- (void)topPanGestureView:(UIPanGestureRecognizer *)panGesture{
     [self panAction:panGesture edge:PanViewEdgeTop];
 }
 
-- (void)rightPanView:(UIPanGestureRecognizer *)panGesture{
+- (void)rightPanGestureView:(UIPanGestureRecognizer *)panGesture{
     [self panAction:panGesture edge:PanViewEdgeRight];
 }
 
-- (void)bottomPanView:(UIPanGestureRecognizer *)panGesture {
+- (void)bottomPanGestureView:(UIPanGestureRecognizer *)panGesture {
     [self panAction:panGesture edge:PanViewEdgeBottom];
 }
 
@@ -1161,30 +1255,6 @@ GridShowImgView *lastShowImgView;
     }
 }
 
-#pragma mark - Method
-- (void)initGestureView {
-    self.leftPanView.hidden = YES;
-    self.rightPanView.hidden = YES;
-    self.topPanView.hidden = YES;
-    self.bottomPanView.hidden = YES;
-}
-
-- (void)showBorder
-{
-    self.layer.borderColor = RGB(0, 74, 274).CGColor;
-    self.layer.borderWidth = 3.0;
-}
-
-- (void)addGestureWithView:(UIView *)view action:(nullable SEL)action {
-    UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:action];
-    [view addGestureRecognizer:pan];
-}
-
-- (void)clearBorder {
-    self.layer.borderColor = [UIColor clearColor].CGColor;
-    self.layer.borderWidth = 0.0;
-}
-
 #pragma mark - lazy
 - (UIImageView *)imageView{
     if (!_imageView) {
@@ -1206,44 +1276,84 @@ GridShowImgView *lastShowImgView;
     return _scrollView;
 }
 
-- (UIView *)leftPanView
+- (UIView *)leftPanGestureView
 {
-    if(!_leftPanView) {
-        _leftPanView = [[UIView alloc] init];
-        _leftPanView.backgroundColor = [UIColor redColor];
-        _leftPanView.hidden = YES;
+    if(!_leftPanGestureView) {
+        _leftPanGestureView = [[UIView alloc] init];
+        _leftPanGestureView.backgroundColor = [UIColor clearColor];
+        _leftPanGestureView.hidden = YES;
     }
-    return _leftPanView;
+    return _leftPanGestureView;
 }
 
-- (UIView *)rightPanView
+- (UIView *)rightPanGestureView
 {
-    if(!_rightPanView) {
-        _rightPanView = [[UIView alloc] init];
-        _rightPanView.backgroundColor = [UIColor redColor];
-        _rightPanView.hidden = YES;
+    if(!_rightPanGestureView) {
+        _rightPanGestureView = [[UIView alloc] init];
+        _rightPanGestureView.backgroundColor = [UIColor clearColor];
+        _rightPanGestureView.hidden = YES;
     }
-    return _rightPanView;
+    return _rightPanGestureView;
 }
 
-- (UIView *)topPanView
+- (UIView *)topPanGestureView
 {
-    if(!_topPanView) {
-        _topPanView = [[UIView alloc] init];
-        _topPanView.backgroundColor = [UIColor redColor];
-        _topPanView.hidden = YES;
+    if(!_topPanGestureView) {
+        _topPanGestureView = [[UIView alloc] init];
+        _topPanGestureView.backgroundColor = [UIColor clearColor];
+        _topPanGestureView.hidden = YES;
     }
-    return _topPanView;
+    return _topPanGestureView;
 }
 
-- (UIView *)bottomPanView
+- (UIView *)bottomPanGestureView
 {
-    if(!_bottomPanView) {
-        _bottomPanView = [[UIView alloc] init];
-        _bottomPanView.backgroundColor = [UIColor redColor];
-        _bottomPanView.hidden = YES;
+    if(!_bottomPanGestureView) {
+        _bottomPanGestureView = [[UIView alloc] init];
+        _bottomPanGestureView.backgroundColor = [UIColor clearColor];
+        _bottomPanGestureView.hidden = YES;
     }
-    return _bottomPanView;
+    return _bottomPanGestureView;
+}
+
+- (UIView *)leftCanPanView
+{
+    if(!_leftCanPanView) {
+        _leftCanPanView = [[UIView alloc] initWithFrame:CGRectMake(0, -kCanPanViewWidth / 2, kCanPanViewWidth, self.height)];
+        _leftCanPanView.backgroundColor = RGB(0, 74, 274);
+        _leftCanPanView.hidden = YES;
+    }
+    return _leftCanPanView;
+}
+
+- (UIView *)rightCanPanView
+{
+    if(!_rightCanPanView) {
+        _rightCanPanView = [[UIView alloc] initWithFrame:CGRectZero];
+        _rightCanPanView.backgroundColor = RGB(0, 74, 274);
+        _rightCanPanView.hidden = YES;
+    }
+    return _rightCanPanView;
+}
+
+- (UIView *)topCanPanView
+{
+    if(!_topCanPanView) {
+        _topCanPanView = [[UIView alloc] initWithFrame:CGRectZero];
+        _topCanPanView.backgroundColor = RGB(0, 74, 274);
+        _topCanPanView.hidden = YES;
+    }
+    return _topCanPanView;
+}
+
+- (UIView *)bottomCanPanView
+{
+    if(!_bottomCanPanView) {
+        _bottomCanPanView = [[UIView alloc] initWithFrame:CGRectZero];
+        _bottomCanPanView.backgroundColor = RGB(0, 74, 274);
+        _bottomCanPanView.hidden = YES;
+    }
+    return _bottomCanPanView;
 }
 
 @end
