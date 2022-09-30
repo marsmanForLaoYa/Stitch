@@ -9,12 +9,17 @@
 #import "LayoutBottomView.h"
 #import "GridSelectedView.h"
 #import "GridShowView.h"
-@interface PictureLayoutController ()
+#import "WaterColorSelectView.h"
+#import "ColorPlateView.h"
+@interface PictureLayoutController ()<WaterColorSelectViewDelegate>
 
 @property (nonatomic, strong) LayoutBottomView *bottomView;
-@property (nonatomic, strong) GridSelectedView *gridView;
+@property (nonatomic, strong) GridSelectedView *gridSelectedView;
 @property (nonatomic, strong) NSArray *grids;
 @property (nonatomic, strong) GridShowView *gridsShowView;
+
+@property (nonatomic ,strong)WaterColorSelectView *colorSelectView;
+@property (nonatomic ,strong)ColorPlateView *colorPlateView;
 
 @end
 
@@ -29,7 +34,9 @@
 //    [self drawGridsWithIndex:0];
     [self setBottomView];
     [self initlalizeGridShowView];
-    [self initlalizeGridSelectedView];
+ 
+    [self addGridSelectedView];
+    [self addColorSelectedView];
 }
 
 #pragma mark - dataSources
@@ -45,34 +52,7 @@
     
     NSDictionary *dict = self.grids[index];
     self.gridsShowView.gridsDic = dict;
-//    NSInteger rowsCount = [dict[@"rowsCount"] integerValue];
-//    NSArray *rows = dict[@"rows"];
-//
-//    for (int i = 0; i < rows.count; i++) {
-//        NSDictionary *dicRows = rows[i];
-//        CGFloat start = [dicRows[@"start"] integerValue];
-//        NSInteger columnsCount = [dicRows[@"columnsCount"] integerValue];
-//        NSArray *columns = dicRows[@"columns"];
-//        CGFloat left = start * self.bgView.width / columnsCount;
-//        for (int j = 0; j < columns.count; j++) {
-//            NSDictionary *dicColumn = columns[j];
-//            CGFloat width = [dicColumn[@"width"] floatValue];
-//            CGFloat height = [dicColumn[@"height"] floatValue];
-//            CGFloat margin = [dicColumn[@"margin"] floatValue] * self.bgView.width / columnsCount;
-//            CGFloat top = [dicColumn[@"top"] floatValue];
-//            [self creatSubviewsWithFrame:CGRectMake(left + margin, top * self.bgView.height / rowsCount, width * self.bgView.width / columnsCount, height * self.bgView.height / rowsCount)];
-//            left += width * self.bgView.width / columnsCount;
-//        }
-//    }
 }
-
-//- (void)creatSubviewsWithFrame:(CGRect)frame{
-//    UIView *subView = [[UIView alloc] initWithFrame:frame];
-//    subView.backgroundColor = [UIColor cyanColor];
-//    subView.layer.borderColor = [UIColor greenColor].CGColor;
-//    subView.layer.borderWidth = 1.0;
-//    [self.bgView addSubview:subView];
-//}
 
 - (void)setBottomView {
     
@@ -87,27 +67,126 @@
     _bottomView = bottomView;
 }
 
-- (void)initlalizeGridSelectedView
-{
-    GridSelectedView *gridView = [[GridSelectedView alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH - 20, 80)];
-    gridView.bottom = self.bottomView.top;
-    @weakify(self);
-    gridView.gridSelectedItemBlock = ^(NSInteger index) {
-        @strongify(self);
-        [self drawGridsWithIndex:index];
-    };
-    gridView.backgroundColor = RGB(25, 25, 25);
-    [self.view addSubview:gridView];
-    _gridView = gridView;
-    self.gridView.grids = self.grids;
-}
-
 - (void)initlalizeGridShowView
 {
     GridShowView *gridsShowView = [[GridShowView alloc] initWithFrame:CGRectMake(0, 100, SCREEN_WIDTH, SCREEN_WIDTH)];
+    gridsShowView.centerY = SCREEN_HEIGHT / 2;
     gridsShowView.pictures = self.pictures;
     [self.view addSubview:gridsShowView];
     _gridsShowView = gridsShowView;
+}
+
+- (void)addGridSelectedView
+{
+    GridSelectedView *gridSelectedView = [[GridSelectedView alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH - 20, 80)];
+    gridSelectedView.bottom = self.bottomView.top;
+    @weakify(self);
+    gridSelectedView.gridSelectedItemBlock = ^(NSInteger index) {
+        @strongify(self);
+        [self drawGridsWithIndex:index];
+    };
+    gridSelectedView.backgroundColor = RGB(25, 25, 25);
+    [self.view addSubview:gridSelectedView];
+    _gridSelectedView = gridSelectedView;
+    self.gridSelectedView.grids = self.grids;
+
+    //隐藏
+    [self hiddenGridSelectedView];
+}
+
+- (void)showGridSelectedView {
+    [UIView animateWithDuration:0.1 animations:^{
+
+        self.gridSelectedView.hidden = NO;
+        self.gridSelectedView.bottom = self.bottomView.top;
+
+    } completion:^(BOOL finished) {
+
+    }];
+}
+
+- (void)hiddenGridSelectedView {
+    [UIView animateWithDuration:0.1 animations:^{
+        self.gridSelectedView.bottom = self.gridSelectedView.bottom + 30;
+        
+
+    } completion:^(BOOL finished) {
+        self.gridSelectedView.hidden = YES;
+    }];
+}
+
+-(void)addColorSelectedView {
+    MJWeakSelf
+    _colorSelectView = [[WaterColorSelectView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 160)];
+    _colorSelectView.bottom = self.bottomView.top;
+    _colorSelectView.type = 6;
+    _colorSelectView.delegate = self;
+    _colorSelectView.moreColorClick = ^{
+        [weakSelf addColorPlateView];
+    };
+    [self.view addSubview:_colorSelectView];
+    
+    [self hiddenColorSelectedView];
+}
+
+- (void)showColorSelectedView {
+    [UIView animateWithDuration:0.1 animations:^{
+
+        self.colorSelectView.hidden = NO;
+        self.colorSelectView.bottom = self.bottomView.top;
+
+    } completion:^(BOOL finished) {
+
+    }];
+}
+
+- (void)hiddenColorSelectedView {
+    [UIView animateWithDuration:0.1 animations:^{
+        self.colorSelectView.bottom = self.colorSelectView.bottom + 30;
+    } completion:^(BOOL finished) {
+        self.colorSelectView.hidden = YES;
+    }];
+}
+
+#pragma mark -- colorSelectViewDelegate
+- (void)changeSliderValue:(CGFloat)value {
+
+    //vale 0-1;
+    self.gridsShowView.imagePadding = value * 20;
+
+}
+
+- (void)changeWaterFontColor:(NSString *)color{
+
+    [self.gridsShowView setShowViewBackgroundColorWithHex:color];
+}
+
+#pragma mark -- 添加颜色选择器
+-(void)addColorPlateView{
+    MJWeakSelf
+    _colorPlateView = [[ColorPlateView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, RYRealAdaptWidthValue(575))];
+    [self.view addSubview:_colorPlateView];
+    _colorPlateView.btnClick = ^(NSInteger tag) {
+        if (tag == 2) {
+            NSMutableArray *tmpArr = [NSMutableArray arrayWithArray:GVUserDe.selectColorArr];
+            if (tmpArr.count >= 6) {
+                [tmpArr removeFirstObject];
+            }
+            [tmpArr addObject:weakSelf.colorPlateView.colorLab.text];
+            GVUserDe.selectColorArr = tmpArr;
+            [weakSelf changeWaterFontColor:weakSelf.colorPlateView.colorLab.text];
+        }
+        [UIView animateWithDuration:0.3 animations:^{
+            weakSelf.colorPlateView.frame = CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH , weakSelf.colorPlateView.height);
+        } completion:^(BOOL finished) {
+            [weakSelf.colorPlateView removeFromSuperview];
+        }];
+        
+    };
+    [self.view bringSubviewToFront:_colorPlateView];
+    [UIView animateWithDuration:0.3 animations:^{
+        weakSelf.colorPlateView.frame = CGRectMake(0, SCREEN_HEIGHT - weakSelf.colorPlateView.height, SCREEN_WIDTH , weakSelf.colorPlateView.height);
+    }];
 }
 
 #pragma mark - Method
@@ -115,7 +194,17 @@
     switch (index) {
         case 0:
         {
+            if(!self.colorSelectView.hidden) {
+                [self hiddenColorSelectedView];
+            }
             
+            if(self.gridSelectedView.hidden) {
+                [self showGridSelectedView];
+            }
+            else
+            {
+                [self hiddenGridSelectedView];
+            }
         }
             break;
         case 1:
@@ -126,7 +215,17 @@
             break;
         case 2:
         {
+            if(!self.gridSelectedView.hidden) {
+                [self hiddenGridSelectedView];
+            }
             
+            if(self.colorSelectView.hidden) {
+                [self showColorSelectedView];
+            }
+            else
+            {
+                [self hiddenColorSelectedView];
+            }
             
         }
             break;

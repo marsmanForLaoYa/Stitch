@@ -31,7 +31,7 @@
 
 -(void)layoutSubviews{
     if (!_isLoad){
-        if (_type == 4 || _type == 5){    
+        if (_type == 4 || _type == 5 || _type == 6){
             _colorArray = [NSMutableArray arrayWithObjects:@"#D2D0DE",@"#C0DCE8",@"#A0C7B2",@"#F6C9A8 ",@"#7D7D85",@"#3B5169",@"#4C6E6F",@"#C44153",@"",@"#FFFFFF",@"#000000", @"#FDECA7",@"#F3B0A0",@"#5590D2",@"#424E42",nil];
         }else{
             _colorArray = [NSMutableArray arrayWithObjects:@"#FFFFFF",@"#000000", @"#EF5B3D",@"#F98945",@"#F7DB78",@"#5EE16F",@"#51A0FD",nil];
@@ -70,8 +70,15 @@
         _paintSlider.minimumValue = 1;
         _paintSlider.maximumValue = 10;     
     }else{
-        _paintSlider.minimumValue = 10;
-        _paintSlider.maximumValue = 30;
+        if (_type == 6) {
+            _paintSlider.minimumValue = 0;
+            _paintSlider.maximumValue = 1;
+        }
+        else
+        {
+            _paintSlider.minimumValue = 10;
+            _paintSlider.maximumValue = 30;
+        }
     }
     
     
@@ -195,8 +202,14 @@
     if (slider.value == slider.maximumValue && (_type == 4 || _type == 6) ){
         return;
     }
-    GVUserDe.waterTitleFontSize = (NSInteger)slider.value;
-    [self.delegate changeWaterFontSize:GVUserDe.waterTitleFontSize];
+    if (_type == 6) {
+        [self.delegate changeSliderValue:slider.value];
+    }
+    else
+    {
+        GVUserDe.waterTitleFontSize = (NSInteger)slider.value;
+        [self.delegate changeWaterFontSize:GVUserDe.waterTitleFontSize];
+    }
 }
 
 -(void)more{

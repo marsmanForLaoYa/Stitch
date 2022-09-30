@@ -14,6 +14,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSArray *pictures;
 @property (nonatomic, copy) NSDictionary *gridsDic;
 
+@property (nonatomic, assign) CGFloat imagePadding;
+
+- (void)setShowViewBackgroundColorWithHex:(NSString *)hex;
+
 @end
 
 @class GridShowImgView;

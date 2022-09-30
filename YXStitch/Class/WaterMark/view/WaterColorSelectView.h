@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol WaterColorSelectViewDelegate <NSObject>
 @optional
 - (void)changeWaterFontSize:(NSInteger)size;
+- (void)changeSliderValue:(CGFloat)value;
 - (void)changeWaterFontColor:(NSString *)color;
 - (void)changeFillBKImageWith:(NSInteger)tag;
 @end
