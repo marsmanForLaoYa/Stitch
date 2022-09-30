@@ -125,7 +125,6 @@
         self.navigationController.navigationBar.titleTextAttributes = dict;
     }
     self.navigationController.navigationBar.barTintColor = [UIColor blackColor];
-    
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
