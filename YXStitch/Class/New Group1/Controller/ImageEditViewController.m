@@ -69,7 +69,7 @@
 @property (nonatomic, strong)NSMutableArray *dataArr;//维护单个画布的路径数组
 
 @property (nonatomic, strong)NSMutableArray *imageViewsArr;//维护图片数组
-@property (nonatomic, strong)NSMutableArray *originWidthArr;//
+@property (nonatomic, strong)NSMutableArray *originWidthArr;//图片原始宽度数组
 @property (nonatomic, strong)NSMutableArray *originHeightArr;
 @property (nonatomic, strong)NSMutableArray *originzTopArr;
 
@@ -1272,7 +1272,7 @@
     CGPoint endP = [self pointWithTouches:touches];
 }
 
-#pragma mark--开始新增一个路径
+//--开始新增一个路径
 -(void)startAddNewPathWithPoint:(CGPoint )startP andType:(NSInteger )type{
     _path = [PaintPath paintPathWithLineWidth:_pathWidth
                                                    startPoint:startP];
@@ -1308,7 +1308,7 @@
     [[self mutableArrayValueForKey:@"canceledlayers"] removeAllObjects];
 }
 
-#pragma mark -- 画笔结束添加选中view
+//- 画笔结束添加选中view
 -(void)addSelectBorderView{
    // [_selectView removeFromSuperview];
     if (_selectView == nil){
