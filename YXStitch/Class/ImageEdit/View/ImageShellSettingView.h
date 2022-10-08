@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ImageShellSettingView : BaseView
 @property (nonatomic ,strong)UIButton *selectBtn;
 @property (nonatomic ,assign)BOOL isVer;
-@property (nonatomic ,copy)void(^btnClick)(NSInteger tag);
+@property (nonatomic ,copy)void(^btnClick)(NSInteger tag ,BOOL isSelected);
 @property (nonatomic ,strong)UILabel *phoneTypeLab;
 @property (nonatomic ,strong)UIImageView *phoneBKIMG;
 @end

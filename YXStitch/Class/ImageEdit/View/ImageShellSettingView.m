@@ -7,6 +7,13 @@
 
 #import "ImageShellSettingView.h"
 
+@interface ImageShellSettingView ()
+@property (nonatomic ,strong)UIButton *verBtn;
+@property (nonatomic ,strong)UIButton *bkBtn;
+@property (nonatomic ,strong)UIButton *bangBtn;
+@end
+
+
 @implementation ImageShellSettingView
 
 - (id)initWithFrame:(CGRect)frame{
@@ -63,13 +70,14 @@
     }];
     NSArray *iconArr;
     if (_isVer){
-        iconArr = @[@"套壳横竖_selected",@"套壳背景_unSelected",@"套壳刘海_unSelected"];
+        iconArr = @[@"套壳横竖_unSelected",@"套壳背景_unSelected",@"套壳刘海_unSelected"];
     }else{
-        iconArr = @[@"套壳横竖_unSelected",@"套壳背景unSelected",@"套壳刘海_unSelected"];
+        iconArr = @[@"套壳横竖_selected",@"套壳背景unSelected",@"套壳刘海_unSelected"];
     }
     for (NSInteger i = 0; i < iconArr.count; i ++) {
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
         btn.tag = i + 1;
+        btn.selected = NO;
         [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
         [btn setImage:IMG(iconArr[i]) forState:UIControlStateNormal];
         [contentView addSubview:btn];
@@ -84,13 +92,18 @@
             
         }];
         if (i == 0){
-            _selectBtn = btn;
+            _verBtn= btn;
+        }else if (i == 1){
+            _bkBtn = btn;
+        }else{
+            _bangBtn = btn;
         }
     }
     
     UIButton *phoneTypeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [phoneTypeBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
-    phoneTypeBtn.tag = 0;
+    phoneTypeBtn.tag = 100;
+    phoneTypeBtn.selected = NO;
     [phoneTypeBtn setBackgroundImage:IMG(@"机型背景") forState:UIControlStateNormal];
     [contentView addSubview:phoneTypeBtn];
     [phoneTypeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -129,49 +142,50 @@
     
 }
 -(void)btnClick:(UIButton *)btn{
-    if (btn.tag == 0){
-        self.btnClick(btn.tag);
+    if (btn.tag == 0 || btn.tag == 100){
+        self.btnClick(btn.tag,btn.selected);
+        btn.selected = !btn.selected;
     }else{
-        if (_selectBtn != btn){
-            switch (btn.tag) {
-                case 1:
-                    if (_isVer){
+        switch (btn.tag) {
+            case 1:
+                if (_isVer){
+                    if (!_verBtn.selected){
                         [btn setImage:IMG(@"套壳横竖_selected") forState:UIControlStateNormal];
                     }else{
                         [btn setImage:IMG(@"套壳横竖_unSelected") forState:UIControlStateNormal];
                     }
                     
-                    break;
-                case 2:
-                    [btn setImage:IMG(@"套壳背景_selected") forState:UIControlStateNormal];
-                    break;
-                case 3:
-                    [btn setImage:IMG(@"套壳刘海_selected") forState:UIControlStateNormal];
-                default:
-                    break;
-            }
-            switch (_selectBtn.tag) {
-                case 1:
-                    if (_isVer){
-                        [_selectBtn setImage:IMG(@"套壳横竖_unSelected") forState:UIControlStateNormal];
-                        
+                }else{
+                    if (_verBtn.selected){
+                        [btn setImage:IMG(@"套壳横竖_unSelected") forState:UIControlStateNormal];
                     }else{
-                        [_selectBtn setImage:IMG(@"套壳横竖_selected") forState:UIControlStateNormal];
+                        [btn setImage:IMG(@"套壳横竖_selected") forState:UIControlStateNormal];
                     }
-                    
-                    break;
-                case 2:
-                    [_selectBtn setImage:IMG(@"套壳背景_unSelected") forState:UIControlStateNormal];
-                    break;
-                case 3:
-                    [_selectBtn setImage:IMG(@"套壳刘海_unSelected") forState:UIControlStateNormal];
-                    break;
-                default:
-                    break;
-            }
-            _selectBtn = btn;
-            self.btnClick(btn.tag);
+                }
+                self.btnClick(_verBtn.tag,_verBtn.selected);
+                _verBtn.selected = !_verBtn.selected;
+                break;
+            case 2:
+                if (!_bkBtn.selected){
+                    [btn setImage:IMG(@"套壳背景_selected") forState:UIControlStateNormal];
+                }else{
+                    [btn setImage:IMG(@"套壳背景_unSelected") forState:UIControlStateNormal];
+                }
+                self.btnClick(_bkBtn.tag,_bkBtn.selected);
+                _bkBtn.selected = !_bkBtn.selected;
+                break;
+            case 3:
+                if (!_bangBtn.selected){
+                    [btn setImage:IMG(@"套壳刘海_selected") forState:UIControlStateNormal];
+                }else{
+                    [btn setImage:IMG(@"套壳刘海_unSelected") forState:UIControlStateNormal];
+                }
+                self.btnClick(_bangBtn.tag,_bangBtn.selected);
+                _bangBtn.selected = !_bangBtn.selected;
+            default:
+                break;
         }
+        
     }
     
 }
