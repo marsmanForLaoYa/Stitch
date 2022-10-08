@@ -8,19 +8,21 @@
 
 /* Begin PBXBuildFile section */
 		88A9881C3EEEB1AA517CAE1C /* libPods-YXStitch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1A9AF54F55FC18D9EDC22C /* libPods-YXStitch.a */; };
-		BBB52A2628E6932A0027DA9C /* GridLayout_6.json in Resources */ = {isa = PBXBuildFile; fileRef = BBB52A1228E693290027DA9C /* GridLayout_6.json */; };
-		BBB52A2728E6932A0027DA9C /* GridLayout_7.json in Resources */ = {isa = PBXBuildFile; fileRef = BBB52A1328E693290027DA9C /* GridLayout_7.json */; };
-		BBB52A2828E6932A0027DA9C /* GridLayout_4.json in Resources */ = {isa = PBXBuildFile; fileRef = BBB52A1428E693290027DA9C /* GridLayout_4.json */; };
-		BBB52A2928E6932A0027DA9C /* GridLayout_8.json in Resources */ = {isa = PBXBuildFile; fileRef = BBB52A1528E693290027DA9C /* GridLayout_8.json */; };
-		BBB52A2A28E6932A0027DA9C /* GridLayout_9.json in Resources */ = {isa = PBXBuildFile; fileRef = BBB52A1628E693290027DA9C /* GridLayout_9.json */; };
-		BBB52A2B28E6932A0027DA9C /* GridLayout_5.json in Resources */ = {isa = PBXBuildFile; fileRef = BBB52A1728E693290027DA9C /* GridLayout_5.json */; };
-		BBB52A2C28E6932A0027DA9C /* GridLayout_2.json in Resources */ = {isa = PBXBuildFile; fileRef = BBB52A1828E693290027DA9C /* GridLayout_2.json */; };
-		BBB52A2D28E6932A0027DA9C /* GridLayout_3.json in Resources */ = {isa = PBXBuildFile; fileRef = BBB52A1928E693290027DA9C /* GridLayout_3.json */; };
-		BBB52A2E28E6932A0027DA9C /* PictureLayoutController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBB52A1C28E693290027DA9C /* PictureLayoutController.m */; };
-		BBB52A2F28E6932A0027DA9C /* GridCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BBB52A1E28E693290027DA9C /* GridCell.m */; };
-		BBB52A3028E6932A0027DA9C /* GridSelectedView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBB52A2228E693290027DA9C /* GridSelectedView.m */; };
-		BBB52A3128E6932A0027DA9C /* GridShowView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBB52A2428E693290027DA9C /* GridShowView.m */; };
-		BBB52A3228E6932A0027DA9C /* LayoutBottomView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBB52A2528E693290027DA9C /* LayoutBottomView.m */; };
+		BBBBA3D028F1069000406C43 /* PictureLayoutController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBBA3BE28F1069000406C43 /* PictureLayoutController.m */; };
+		BBBBA3D128F1069000406C43 /* GridCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBBA3C028F1069000406C43 /* GridCell.m */; };
+		BBBBA3D228F1069000406C43 /* GridSelectedView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBBA3C428F1069000406C43 /* GridSelectedView.m */; };
+		BBBBA3D428F1069000406C43 /* LayoutBottomView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBBA3C728F1069000406C43 /* LayoutBottomView.m */; };
+		BBBBA3DE28F106AB00406C43 /* GridLayout_6.json in Resources */ = {isa = PBXBuildFile; fileRef = BBBBA3D628F106AB00406C43 /* GridLayout_6.json */; };
+		BBBBA3DF28F106AB00406C43 /* GridLayout_7.json in Resources */ = {isa = PBXBuildFile; fileRef = BBBBA3D728F106AB00406C43 /* GridLayout_7.json */; };
+		BBBBA3E028F106AB00406C43 /* GridLayout_4.json in Resources */ = {isa = PBXBuildFile; fileRef = BBBBA3D828F106AB00406C43 /* GridLayout_4.json */; };
+		BBBBA3E128F106AB00406C43 /* GridLayout_8.json in Resources */ = {isa = PBXBuildFile; fileRef = BBBBA3D928F106AB00406C43 /* GridLayout_8.json */; };
+		BBBBA3E228F106AB00406C43 /* GridLayout_9.json in Resources */ = {isa = PBXBuildFile; fileRef = BBBBA3DA28F106AB00406C43 /* GridLayout_9.json */; };
+		BBBBA3E328F106AB00406C43 /* GridLayout_5.json in Resources */ = {isa = PBXBuildFile; fileRef = BBBBA3DB28F106AB00406C43 /* GridLayout_5.json */; };
+		BBBBA3E428F106AB00406C43 /* GridLayout_2.json in Resources */ = {isa = PBXBuildFile; fileRef = BBBBA3DC28F106AB00406C43 /* GridLayout_2.json */; };
+		BBBBA3E528F106AB00406C43 /* GridLayout_3.json in Resources */ = {isa = PBXBuildFile; fileRef = BBBBA3DD28F106AB00406C43 /* GridLayout_3.json */; };
+		BBBBA3E828F1076300406C43 /* GridShowView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBBA3E728F1076300406C43 /* GridShowView.m */; };
+		BBBBA3EB28F10C9900406C43 /* GridScaleView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBBA3EA28F10C9900406C43 /* GridScaleView.m */; };
+		BBBBA3ED28F113C000406C43 /* Scales.json in Resources */ = {isa = PBXBuildFile; fileRef = BBBBA3EC28F113C000406C43 /* Scales.json */; };
 		FB00324928B8AB910028BC61 /* MyCustomSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = FB00324828B8AB910028BC61 /* MyCustomSlider.m */; };
 		FB086F6628A662CB0062EBA5 /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB687EC828A0DE65002D557B /* ReplayKit.framework */; };
 		FB086F6828A662D30062EBA5 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB086F6728A662D30062EBA5 /* AudioToolbox.framework */; };
@@ -196,24 +198,27 @@
 		113BB414313D98CCCD8D49AD /* Pods-YXStitch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YXStitch.debug.xcconfig"; path = "Target Support Files/Pods-YXStitch/Pods-YXStitch.debug.xcconfig"; sourceTree = "<group>"; };
 		3F1A9AF54F55FC18D9EDC22C /* libPods-YXStitch.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YXStitch.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B8C87E9AD95B7468BA24009E /* Pods-YXStitch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YXStitch.release.xcconfig"; path = "Target Support Files/Pods-YXStitch/Pods-YXStitch.release.xcconfig"; sourceTree = "<group>"; };
-		BBB52A1228E693290027DA9C /* GridLayout_6.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = GridLayout_6.json; sourceTree = "<group>"; };
-		BBB52A1328E693290027DA9C /* GridLayout_7.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = GridLayout_7.json; sourceTree = "<group>"; };
-		BBB52A1428E693290027DA9C /* GridLayout_4.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = GridLayout_4.json; sourceTree = "<group>"; };
-		BBB52A1528E693290027DA9C /* GridLayout_8.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = GridLayout_8.json; sourceTree = "<group>"; };
-		BBB52A1628E693290027DA9C /* GridLayout_9.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = GridLayout_9.json; sourceTree = "<group>"; };
-		BBB52A1728E693290027DA9C /* GridLayout_5.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = GridLayout_5.json; sourceTree = "<group>"; };
-		BBB52A1828E693290027DA9C /* GridLayout_2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = GridLayout_2.json; sourceTree = "<group>"; };
-		BBB52A1928E693290027DA9C /* GridLayout_3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = GridLayout_3.json; sourceTree = "<group>"; };
-		BBB52A1C28E693290027DA9C /* PictureLayoutController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PictureLayoutController.m; sourceTree = "<group>"; };
-		BBB52A1E28E693290027DA9C /* GridCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GridCell.m; sourceTree = "<group>"; };
-		BBB52A1F28E693290027DA9C /* GridSelectedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GridSelectedView.h; sourceTree = "<group>"; };
-		BBB52A2028E693290027DA9C /* GridShowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GridShowView.h; sourceTree = "<group>"; };
-		BBB52A2128E693290027DA9C /* LayoutBottomView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayoutBottomView.h; sourceTree = "<group>"; };
-		BBB52A2228E693290027DA9C /* GridSelectedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GridSelectedView.m; sourceTree = "<group>"; };
-		BBB52A2328E693290027DA9C /* GridCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GridCell.h; sourceTree = "<group>"; };
-		BBB52A2428E693290027DA9C /* GridShowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GridShowView.m; sourceTree = "<group>"; };
-		BBB52A2528E693290027DA9C /* LayoutBottomView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LayoutBottomView.m; sourceTree = "<group>"; };
-		BBB52A3328E6B5880027DA9C /* PictureLayoutController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PictureLayoutController.h; sourceTree = "<group>"; };
+		BBBBA3BD28F1069000406C43 /* PictureLayoutController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PictureLayoutController.h; sourceTree = "<group>"; };
+		BBBBA3BE28F1069000406C43 /* PictureLayoutController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PictureLayoutController.m; sourceTree = "<group>"; };
+		BBBBA3C028F1069000406C43 /* GridCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GridCell.m; sourceTree = "<group>"; };
+		BBBBA3C128F1069000406C43 /* GridSelectedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GridSelectedView.h; sourceTree = "<group>"; };
+		BBBBA3C328F1069000406C43 /* LayoutBottomView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayoutBottomView.h; sourceTree = "<group>"; };
+		BBBBA3C428F1069000406C43 /* GridSelectedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GridSelectedView.m; sourceTree = "<group>"; };
+		BBBBA3C528F1069000406C43 /* GridCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GridCell.h; sourceTree = "<group>"; };
+		BBBBA3C728F1069000406C43 /* LayoutBottomView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LayoutBottomView.m; sourceTree = "<group>"; };
+		BBBBA3D628F106AB00406C43 /* GridLayout_6.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = GridLayout_6.json; sourceTree = "<group>"; };
+		BBBBA3D728F106AB00406C43 /* GridLayout_7.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = GridLayout_7.json; sourceTree = "<group>"; };
+		BBBBA3D828F106AB00406C43 /* GridLayout_4.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = GridLayout_4.json; sourceTree = "<group>"; };
+		BBBBA3D928F106AB00406C43 /* GridLayout_8.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = GridLayout_8.json; sourceTree = "<group>"; };
+		BBBBA3DA28F106AB00406C43 /* GridLayout_9.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = GridLayout_9.json; sourceTree = "<group>"; };
+		BBBBA3DB28F106AB00406C43 /* GridLayout_5.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = GridLayout_5.json; sourceTree = "<group>"; };
+		BBBBA3DC28F106AB00406C43 /* GridLayout_2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = GridLayout_2.json; sourceTree = "<group>"; };
+		BBBBA3DD28F106AB00406C43 /* GridLayout_3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = GridLayout_3.json; sourceTree = "<group>"; };
+		BBBBA3E628F1076300406C43 /* GridShowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GridShowView.h; sourceTree = "<group>"; };
+		BBBBA3E728F1076300406C43 /* GridShowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GridShowView.m; sourceTree = "<group>"; };
+		BBBBA3E928F10C9900406C43 /* GridScaleView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GridScaleView.h; sourceTree = "<group>"; };
+		BBBBA3EA28F10C9900406C43 /* GridScaleView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GridScaleView.m; sourceTree = "<group>"; };
+		BBBBA3EC28F113C000406C43 /* Scales.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Scales.json; sourceTree = "<group>"; };
 		FB00324728B8AB880028BC61 /* MyCustomSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyCustomSlider.h; sourceTree = "<group>"; };
 		FB00324828B8AB910028BC61 /* MyCustomSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyCustomSlider.m; sourceTree = "<group>"; };
 		FB086F6728A662D30062EBA5 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -497,53 +502,56 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
-		BBB52A1028E693290027DA9C /* Layout */ = {
+		BBBBA3B228F1069000406C43 /* Layout */ = {
 			isa = PBXGroup;
 			children = (
-				BBB52A1128E693290027DA9C /* Resources */,
-				BBB52A1A28E693290027DA9C /* Controller */,
-				BBB52A1D28E693290027DA9C /* View */,
+				BBBBA3D528F106AB00406C43 /* Resources */,
+				BBBBA3BC28F1069000406C43 /* Controller */,
+				BBBBA3BF28F1069000406C43 /* View */,
 			);
 			path = Layout;
 			sourceTree = "<group>";
 		};
-		BBB52A1128E693290027DA9C /* Resources */ = {
+		BBBBA3BC28F1069000406C43 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				BBB52A1828E693290027DA9C /* GridLayout_2.json */,
-				BBB52A1928E693290027DA9C /* GridLayout_3.json */,
-				BBB52A1428E693290027DA9C /* GridLayout_4.json */,
-				BBB52A1728E693290027DA9C /* GridLayout_5.json */,
-				BBB52A1228E693290027DA9C /* GridLayout_6.json */,
-				BBB52A1328E693290027DA9C /* GridLayout_7.json */,
-				BBB52A1528E693290027DA9C /* GridLayout_8.json */,
-				BBB52A1628E693290027DA9C /* GridLayout_9.json */,
-			);
-			path = Resources;
-			sourceTree = "<group>";
-		};
-		BBB52A1A28E693290027DA9C /* Controller */ = {
-			isa = PBXGroup;
-			children = (
-				BBB52A3328E6B5880027DA9C /* PictureLayoutController.h */,
-				BBB52A1C28E693290027DA9C /* PictureLayoutController.m */,
+				BBBBA3BD28F1069000406C43 /* PictureLayoutController.h */,
+				BBBBA3BE28F1069000406C43 /* PictureLayoutController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
 		};
-		BBB52A1D28E693290027DA9C /* View */ = {
+		BBBBA3BF28F1069000406C43 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				BBB52A2328E693290027DA9C /* GridCell.h */,
-				BBB52A1E28E693290027DA9C /* GridCell.m */,
-				BBB52A1F28E693290027DA9C /* GridSelectedView.h */,
-				BBB52A2228E693290027DA9C /* GridSelectedView.m */,
-				BBB52A2028E693290027DA9C /* GridShowView.h */,
-				BBB52A2428E693290027DA9C /* GridShowView.m */,
-				BBB52A2128E693290027DA9C /* LayoutBottomView.h */,
-				BBB52A2528E693290027DA9C /* LayoutBottomView.m */,
+				BBBBA3C528F1069000406C43 /* GridCell.h */,
+				BBBBA3C028F1069000406C43 /* GridCell.m */,
+				BBBBA3C128F1069000406C43 /* GridSelectedView.h */,
+				BBBBA3C428F1069000406C43 /* GridSelectedView.m */,
+				BBBBA3E628F1076300406C43 /* GridShowView.h */,
+				BBBBA3E728F1076300406C43 /* GridShowView.m */,
+				BBBBA3E928F10C9900406C43 /* GridScaleView.h */,
+				BBBBA3EA28F10C9900406C43 /* GridScaleView.m */,
+				BBBBA3C328F1069000406C43 /* LayoutBottomView.h */,
+				BBBBA3C728F1069000406C43 /* LayoutBottomView.m */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		BBBBA3D528F106AB00406C43 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				BBBBA3DC28F106AB00406C43 /* GridLayout_2.json */,
+				BBBBA3DD28F106AB00406C43 /* GridLayout_3.json */,
+				BBBBA3D828F106AB00406C43 /* GridLayout_4.json */,
+				BBBBA3DB28F106AB00406C43 /* GridLayout_5.json */,
+				BBBBA3D628F106AB00406C43 /* GridLayout_6.json */,
+				BBBBA3D728F106AB00406C43 /* GridLayout_7.json */,
+				BBBBA3D928F106AB00406C43 /* GridLayout_8.json */,
+				BBBBA3DA28F106AB00406C43 /* GridLayout_9.json */,
+				BBBBA3EC28F113C000406C43 /* Scales.json */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		FB26948328E590A000565F4B /* Cell */ = {
@@ -558,7 +566,7 @@
 		FB2BBD1128AF6861001DDFAE /* Caption */ = {
 			isa = PBXGroup;
 			children = (
-				BBB52A1028E693290027DA9C /* Layout */,
+				BBBBA3B228F1069000406C43 /* Layout */,
 				FB2BBD1528AF85DA001DDFAE /* View */,
 				FB2BBD1228AF688A001DDFAE /* CaptionViewController.h */,
 				FB2BBD1328AF688A001DDFAE /* CaptionViewController.m */,
@@ -1272,16 +1280,16 @@
 				FB3EFE7C28A3C21D006C3889 /* lightIcon-App-60x60@3x.png in Resources */,
 				FB3EFE8828A3C21D006C3889 /* lightIcon-App-83.5x83.5@2x.png in Resources */,
 				FB3EFE7E28A3C21D006C3889 /* lightIcon-App-76x76@1x.png in Resources */,
-				BBB52A2A28E6932A0027DA9C /* GridLayout_9.json in Resources */,
+				BBBBA3E228F106AB00406C43 /* GridLayout_9.json in Resources */,
 				FB3EFE7B28A3C21D006C3889 /* Icon-App-20x20@3x.png in Resources */,
 				FB3EFE7428A3C21D006C3889 /* lightIcon-App-20x20@2x.png in Resources */,
 				FB3EFE7328A3C21D006C3889 /* lightIcon-App-29x29@2x.png in Resources */,
-				BBB52A2628E6932A0027DA9C /* GridLayout_6.json in Resources */,
+				BBBBA3DE28F106AB00406C43 /* GridLayout_6.json in Resources */,
 				FB3EFE7A28A3C21D006C3889 /* Icon-App-83.5x83.5@2x.png in Resources */,
-				BBB52A2D28E6932A0027DA9C /* GridLayout_3.json in Resources */,
-				BBB52A2928E6932A0027DA9C /* GridLayout_8.json in Resources */,
+				BBBBA3E528F106AB00406C43 /* GridLayout_3.json in Resources */,
+				BBBBA3E128F106AB00406C43 /* GridLayout_8.json in Resources */,
 				FB3EFE8328A3C21D006C3889 /* Icon-App-60x60@2x.png in Resources */,
-				BBB52A2B28E6932A0027DA9C /* GridLayout_5.json in Resources */,
+				BBBBA3E328F106AB00406C43 /* GridLayout_5.json in Resources */,
 				FB3EFE6E28A3C21D006C3889 /* Icon-App-29x29@1x.png in Resources */,
 				FB3EFE7D28A3C21D006C3889 /* lightIcon-App-60x60@2x.png in Resources */,
 				FB3EFE6D28A3C21D006C3889 /* lightIcon-App-29x29@3x.png in Resources */,
@@ -1291,12 +1299,13 @@
 				FB3EFE7128A3C21D006C3889 /* lightIcon-App-1024x1024@1x.png in Resources */,
 				FB3EFE7528A3C21D006C3889 /* Icon-App-20x20@1x.png in Resources */,
 				FB3EFE7228A3C21D006C3889 /* Icon-App-40x40@1x.png in Resources */,
-				BBB52A2828E6932A0027DA9C /* GridLayout_4.json in Resources */,
-				BBB52A2C28E6932A0027DA9C /* GridLayout_2.json in Resources */,
+				BBBBA3E028F106AB00406C43 /* GridLayout_4.json in Resources */,
+				BBBBA3E428F106AB00406C43 /* GridLayout_2.json in Resources */,
 				FB3EFE8228A3C21D006C3889 /* Icon-App-60x60@3x.png in Resources */,
+				BBBBA3ED28F113C000406C43 /* Scales.json in Resources */,
 				FB2E287028AA1B62006BDAB0 /* SZImageTableViewCell.xib in Resources */,
 				FB3EFE7928A3C21D006C3889 /* lightIcon-App-29x29@1x.png in Resources */,
-				BBB52A2728E6932A0027DA9C /* GridLayout_7.json in Resources */,
+				BBBBA3DF28F106AB00406C43 /* GridLayout_7.json in Resources */,
 				FB687EB928A0DE30002D557B /* LaunchScreen.storyboard in Resources */,
 				FB3EFE8028A3C21D006C3889 /* Icon-App-29x29@3x.png in Resources */,
 				FB3EFE6F28A3C21D006C3889 /* lightIcon-App-20x20@3x.png in Resources */,
@@ -1377,6 +1386,7 @@
 				FB2E283728AA1A13006BDAB0 /* SZImageMergeInfo.m in Sources */,
 				FB687F0D28A0FF83002D557B /* AppGroupData.m in Sources */,
 				FB687EB128A0DE2E002D557B /* ViewController.m in Sources */,
+				BBBBA3EB28F10C9900406C43 /* GridScaleView.m in Sources */,
 				FB2D5A0A28A1F4AF006085BC /* BaseViewController.m in Sources */,
 				FB2E283828AA1A13006BDAB0 /* SZConstraint.m in Sources */,
 				FB3EFE4728A3A423006C3889 /* BuyDetailView.m in Sources */,
@@ -1386,7 +1396,6 @@
 				FB2E285B28AA1A21006BDAB0 /* ZWMGuideView.m in Sources */,
 				FB2E287428AA1B62006BDAB0 /* SZScrollView.m in Sources */,
 				FB2E285C28AA1A21006BDAB0 /* AdaptationTool.m in Sources */,
-				BBB52A3128E6932A0027DA9C /* GridShowView.m in Sources */,
 				FBA1862928ACFC740001DF8C /* FullWaterMarkView.m in Sources */,
 				FBF12BEE28BC4EDE008F10EA /* IMGFuctionView.m in Sources */,
 				FB7E659228A49BE00079C9F3 /* URLSchemesViewController.m in Sources */,
@@ -1407,7 +1416,7 @@
 				FB9B943428DC455C009D55FB /* UIBezierPath+GetAllPoints.m in Sources */,
 				FB7E659528A49E6F0079C9F3 /* UrlSchemeTableView.m in Sources */,
 				FB3EFE3528A3561E006C3889 /* SettingTableViewCell.m in Sources */,
-				BBB52A3028E6932A0027DA9C /* GridSelectedView.m in Sources */,
+				BBBBA3D228F1069000406C43 /* GridSelectedView.m in Sources */,
 				FB687EBC28A0DE30002D557B /* main.m in Sources */,
 				FBD32A9928DDC303000A548F /* NSString+Extension.m in Sources */,
 				FB2E286228AA1A34006BDAB0 /* SZMergeResult.m in Sources */,
@@ -1423,7 +1432,7 @@
 				FB2E285728AA1A21006BDAB0 /* UIImage+Category.m in Sources */,
 				FB2E287128AA1B62006BDAB0 /* SZImagePreVewController.m in Sources */,
 				FB2E285628AA1A21006BDAB0 /* CAGradientLayer+Gradient.m in Sources */,
-				BBB52A2E28E6932A0027DA9C /* PictureLayoutController.m in Sources */,
+				BBBBA3D028F1069000406C43 /* PictureLayoutController.m in Sources */,
 				FB2E285928AA1A21006BDAB0 /* UIImage+Logo.m in Sources */,
 				FBA068FA28DAAA2D00AAB7E6 /* ImageEditBottomView.m in Sources */,
 				FB2E286F28AA1B62006BDAB0 /* SZEditorView.m in Sources */,
@@ -1433,7 +1442,7 @@
 				FB2E285A28AA1A21006BDAB0 /* UIImage+Stiching.m in Sources */,
 				FB7574A828AE18890034D95B /* SelectPictureViewController.m in Sources */,
 				FBE5467928C0BCC300B40FD8 /* GuiderVisitorView.m in Sources */,
-				BBB52A2F28E6932A0027DA9C /* GridCell.m in Sources */,
+				BBBBA3D128F1069000406C43 /* GridCell.m in Sources */,
 				FB3EFE4A28A3B828006C3889 /* SelectMainIconViewController.m in Sources */,
 				FB687EFF28A0E9F1002D557B /* KSViewController.m in Sources */,
 				FB7E659B28A4A6110079C9F3 /* PrefenceTableViewCell.m in Sources */,
@@ -1446,7 +1455,7 @@
 				FB5D46A628AA3FEE0015E2A5 /* StitchResultView.m in Sources */,
 				FB26948628E590BB00565F4B /* ShellTableViewCell.m in Sources */,
 				FBD32A9628DDC2D2000A548F /* UIBezierPath+Arrow.m in Sources */,
-				BBB52A3228E6932A0027DA9C /* LayoutBottomView.m in Sources */,
+				BBBBA3D428F1069000406C43 /* LayoutBottomView.m in Sources */,
 				FB687EFE28A0E9F1002D557B /* BaseView.m in Sources */,
 				FB6FC66E28B60CB500BE4AA1 /* StichingImageView.m in Sources */,
 				FB2BBD1828AF8D21001DDFAE /* CaptionBottomView.m in Sources */,
@@ -1463,6 +1472,7 @@
 				FB2BBD1428AF688A001DDFAE /* CaptionViewController.m in Sources */,
 				FB00324928B8AB910028BC61 /* MyCustomSlider.m in Sources */,
 				FB26948228E57E5200565F4B /* imageShellSelectView.m in Sources */,
+				BBBBA3E828F1076300406C43 /* GridShowView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

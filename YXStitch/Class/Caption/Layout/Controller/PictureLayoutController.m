@@ -11,15 +11,25 @@
 #import "GridShowView.h"
 #import "WaterColorSelectView.h"
 #import "ColorPlateView.h"
+#import "GridScaleView.h"
+
+#define kBottomHeight 80
+#define kContainerHeight (SCREEN_HEIGHT - (Nav_HEIGHT + kBottomHeight))
+
 @interface PictureLayoutController ()<WaterColorSelectViewDelegate>
 
-@property (nonatomic, strong) LayoutBottomView *bottomView;
-@property (nonatomic, strong) GridSelectedView *gridSelectedView;
-@property (nonatomic, strong) NSArray *grids;
 @property (nonatomic, strong) GridShowView *gridsShowView;
 
-@property (nonatomic ,strong)WaterColorSelectView *colorSelectView;
-@property (nonatomic ,strong)ColorPlateView *colorPlateView;
+@property (nonatomic, strong) LayoutBottomView *bottomView;
+
+@property (nonatomic, strong) GridSelectedView *gridSelectedView;
+@property (nonatomic, copy) NSArray *grids;
+
+@property (nonatomic, strong) GridScaleView *gridScaleView;
+@property (nonatomic, copy) NSArray *scales;
+
+@property (nonatomic ,strong) WaterColorSelectView *colorSelectView;
+@property (nonatomic ,strong) ColorPlateView *colorPlateView;
 
 @end
 
@@ -30,21 +40,29 @@
     // Do any additional setup after loading the view.
     self.view.backgroundColor = RGB(25, 25, 25);
 
-    [self getDataSources];
+    [self getLayoutGrids];
+    [self getScaleGrids];
 //    [self drawGridsWithIndex:0];
     [self setBottomView];
-    [self initlalizeGridShowView];
+    [self initlalizeGridShowViewWithWidth:1 height:1];
  
     [self addGridSelectedView];
+    [self addGridScalesView];
     [self addColorSelectedView];
 }
 
 #pragma mark - dataSources
-- (void)getDataSources {
+- (void)getLayoutGrids {
     NSString *jsonName = [NSString stringWithFormat:@"GridLayout_%lu", (unsigned long)self.pictures.count];
     NSString *path = [[NSBundle mainBundle] pathForResource:jsonName ofType:@"json"];
     NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfFile:path] options:NSJSONReadingAllowFragments error:nil];
     self.grids = dic[@"types"];
+}
+
+- (void)getScaleGrids {
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"Scales" ofType:@"json"];
+    NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfFile:path] options:NSJSONReadingAllowFragments error:nil];
+    self.scales = dic[@"data"];
 }
 
 #pragma mark - Create views
@@ -56,7 +74,7 @@
 
 - (void)setBottomView {
     
-    LayoutBottomView *bottomView = [[LayoutBottomView alloc] initWithFrame:CGRectMake(0, SCREEN_HEIGHT - Nav_HEIGHT - 80, SCREEN_WIDTH, 80)];
+    LayoutBottomView *bottomView = [[LayoutBottomView alloc] initWithFrame:CGRectMake(0, SCREEN_HEIGHT - Nav_HEIGHT - kBottomHeight, SCREEN_WIDTH, kBottomHeight)];
     bottomView.backgroundColor = RGB(25, 25, 25);
     @weakify(self);
     bottomView.layoutBottomBlock = ^(NSInteger index) {
@@ -67,13 +85,25 @@
     _bottomView = bottomView;
 }
 
-- (void)initlalizeGridShowView
+- (void)initlalizeGridShowViewWithWidth:(NSInteger)width height:(NSInteger)height
 {
-    GridShowView *gridsShowView = [[GridShowView alloc] initWithFrame:CGRectMake(0, 100, SCREEN_WIDTH, SCREEN_WIDTH)];
-    gridsShowView.centerY = SCREEN_HEIGHT / 2;
-    gridsShowView.pictures = self.pictures;
-    [self.view addSubview:gridsShowView];
-    _gridsShowView = gridsShowView;
+    if (!_gridsShowView) {
+        GridShowView *gridsShowView = [[GridShowView alloc] initWithFrame:CGRectZero];
+        [self.view addSubview:gridsShowView];
+        _gridsShowView = gridsShowView;
+        _gridsShowView.pictures = self.pictures;
+    }
+    CGFloat viewWidth = SCREEN_WIDTH;
+    CGFloat viewHeight = viewWidth * height / width;
+    
+    if (viewHeight >= kContainerHeight) {
+        viewHeight = kContainerHeight;
+        viewWidth = kContainerHeight * width / height;
+    }
+    _gridsShowView.width = viewWidth;
+    _gridsShowView.height = viewHeight;
+    _gridsShowView.centerY = kContainerHeight / 2 + Nav_HEIGHT;
+    _gridsShowView.centerX = self.view.centerX;
 }
 
 - (void)addGridSelectedView
@@ -115,6 +145,47 @@
     }];
 }
 
+- (void)addGridScalesView
+{
+    GridScaleView *gridScaleView = [[GridScaleView alloc] initWithFrame:CGRectMake(10, 0, SCREEN_WIDTH - 20, 60)];
+    gridScaleView.bottom = self.bottomView.top;
+    @weakify(self);
+    gridScaleView.gridScaleItemSelectedBlock = ^(NSInteger scaleWidth, NSInteger scaleHeight) {
+        @strongify(self);
+        NSLog(@"%ld %ld", scaleWidth, scaleHeight);
+        [self initlalizeGridShowViewWithWidth:scaleWidth height:scaleHeight];
+        self.gridsShowView.gridsDic = self.gridsShowView.gridsDic;
+    };
+
+    gridScaleView.backgroundColor = RGB(25, 25, 25);
+    [self.view addSubview:gridScaleView];
+    _gridScaleView = gridScaleView;
+    self.gridScaleView.scales = self.scales;
+    //隐藏
+    [self hiddenGridScaleView];
+}
+
+- (void)showGridScaleView {
+    [UIView animateWithDuration:0.1 animations:^{
+
+        self.gridScaleView.hidden = NO;
+        self.gridScaleView.bottom = self.bottomView.top;
+
+    } completion:^(BOOL finished) {
+
+    }];
+}
+
+- (void)hiddenGridScaleView {
+    [UIView animateWithDuration:0.1 animations:^{
+        self.gridScaleView.bottom = self.gridSelectedView.bottom + 30;
+        
+
+    } completion:^(BOOL finished) {
+        self.gridScaleView.hidden = YES;
+    }];
+}
+
 -(void)addColorSelectedView {
     MJWeakSelf
     _colorSelectView = [[WaterColorSelectView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 160)];
@@ -153,7 +224,6 @@
 
     //vale 0-1;
     self.gridsShowView.imagePadding = value * 20;
-
 }
 
 - (void)changeWaterFontColor:(NSString *)color{
@@ -198,6 +268,10 @@
                 [self hiddenColorSelectedView];
             }
             
+            if(!self.gridScaleView.hidden) {
+                [self hiddenGridScaleView];
+            }
+            
             if(self.gridSelectedView.hidden) {
                 [self showGridSelectedView];
             }
@@ -210,6 +284,21 @@
         case 1:
         {
             
+            if(!self.colorSelectView.hidden) {
+                [self hiddenColorSelectedView];
+            }
+            
+            if(!self.gridSelectedView.hidden) {
+                [self hiddenGridSelectedView];
+            }
+            
+            if(self.gridScaleView.hidden) {
+                [self showGridScaleView];
+            }
+            else
+            {
+                [self hiddenGridScaleView];
+            }
             
         }
             break;
@@ -217,6 +306,10 @@
         {
             if(!self.gridSelectedView.hidden) {
                 [self hiddenGridSelectedView];
+            }
+            
+            if(!self.gridScaleView.hidden) {
+                [self hiddenGridScaleView];
             }
             
             if(self.colorSelectView.hidden) {

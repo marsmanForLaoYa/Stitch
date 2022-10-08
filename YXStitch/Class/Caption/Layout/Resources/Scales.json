@@ -1,0 +1,47 @@
+{
+    "data":[
+        {
+            "name":"1:1",
+            "scaleWidth":1,
+            "scaleHeight":1,
+            "image-normal":"grid_scale_1-1_normal",
+            "image-selected":"grid_scale_1-1_selected"
+        },
+        {
+            "name":"4:5",
+            "scaleWidth":4,
+            "scaleHeight":5,
+            "image-normal":"grid_scale_4-5_normal",
+            "image-selected":"grid_scale_4-5_selected"
+        },
+        {
+            "name":"3:4",
+            "scaleWidth":3,
+            "scaleHeight":4,
+            "image-normal":"grid_scale_3-4_normal",
+            "image-selected":"grid_scale_3-4_selected"
+        },
+        {
+            "name":"9:16",
+            "scaleWidth":9,
+            "scaleHeight":16,
+            "image-normal":"grid_scale_9-16_normal",
+            "image-selected":"grid_scale_9-16_selected"
+        },
+        {
+            "name":"16:9",
+            "scaleWidth":16,
+            "scaleHeight":9,
+            "image-normal":"grid_scale_16-9_normal",
+            "image-selected":"grid_scale_16-9_selected"
+        },
+        {
+            "name":"4:3",
+            "scaleWidth":4,
+            "scaleHeight":3,
+            "image-normal":"grid_scale_4-3_normal",
+            "image-selected":"grid_scale_4-3_selected"
+        }
+    ]
+}
+

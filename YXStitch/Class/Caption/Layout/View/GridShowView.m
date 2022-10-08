@@ -50,7 +50,8 @@
 
 - (void)setGridsDic:(NSDictionary *)gridsDic
 {
-    
+    //清除上一个边框
+    [lastShowImgView clearBorder];
     _gridsDic = gridsDic;
     [self createLayoutSubImageViewWithGridsDic:gridsDic];
 }
@@ -148,19 +149,19 @@ GridShowImgView *lastShowImgView;
 
 - (GridPanEdge)getPanEdgeWithImageView:(GridShowImgView *)imageView {
     GridPanEdge panEdge = GridPanEdgeNone;
-    if(imageView.left != _imagePadding) {
+    if(fabs(imageView.left - _imagePadding) > 0.1) {
         panEdge = panEdge | GridPanEdgeLeft;
     }
     
-    if(imageView.top != _imagePadding) {
+    if(fabs(imageView.top - _imagePadding) > 0.1 ) {
         panEdge = panEdge | GridPanEdgeTop;
     }
     
-    if(imageView.right + _imagePadding != self.width) {
+    if(fabs(imageView.right + _imagePadding - self.width) > 0.1) {
         panEdge = panEdge | GridPanEdgeRight;
     }
     
-    if(imageView.bottom + _imagePadding != self.height) {
+    if(fabs(imageView.bottom + _imagePadding - self.height) > 0.1) {
         panEdge = panEdge | GridPanEdgeBottom;
     }
     return panEdge;
