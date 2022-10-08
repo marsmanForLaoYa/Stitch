@@ -1627,6 +1627,8 @@ GridShowImgView *lastShowImgView;
             self.imageView.width = self.originImgViewWidth * maxScale;
             self.imageView.height = self.originImgViewHeight * maxScale;
         }
+        //设置contentSize
+        self.scrollView.contentSize = CGSizeMake(self.imageView.width, self.imageView.height);
     }
     else
     {
@@ -1644,15 +1646,31 @@ GridShowImgView *lastShowImgView;
             w = _originImgViewWidth * maxScale;
             h = _originImgViewHeight * maxScale;
         }
-        
+
+        CGFloat offsetX = w - self.imageView.width;
+        CGFloat offsetY = h - self.imageView.height;
         self.imageView.width = w;
         self.imageView.height = h;
         pinchGesture.scale = 1.0;
+        
+        //设置contentSize
+        self.scrollView.contentSize = CGSizeMake(self.imageView.width, self.imageView.height);
+        //scrollView缩放从中间向四周扩散
+        CGPoint offset = self.scrollView.contentOffset;
+        offset.y = offset.y + offsetY / 2;
+        offset.x = offset.x + offsetX / 2;
+        
+        if(offset.y < 0) {
+            offset.y = 0;
+        }
+        
+        if(offset.x < 0) {
+            offset.x = 0;
+        }
+        
+        [self.scrollView setContentOffset:offset animated:NO];
     }
-    
     _pinchScale = self.imageView.width / self.width;
-    self.scrollView.contentSize = CGSizeMake(self.imageView.width, self.imageView.height);
-    [self scrollToCenter];
 }
 
 #pragma mark - lazy
