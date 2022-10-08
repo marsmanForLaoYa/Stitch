@@ -121,28 +121,7 @@
     self.gridSelectedView.grids = self.grids;
 
     //隐藏
-    [self hiddenGridSelectedView];
-}
-
-- (void)showGridSelectedView {
-    [UIView animateWithDuration:0.1 animations:^{
-
-        self.gridSelectedView.hidden = NO;
-        self.gridSelectedView.bottom = self.bottomView.top;
-
-    } completion:^(BOOL finished) {
-
-    }];
-}
-
-- (void)hiddenGridSelectedView {
-    [UIView animateWithDuration:0.1 animations:^{
-        self.gridSelectedView.bottom = self.gridSelectedView.bottom + 30;
-        
-
-    } completion:^(BOOL finished) {
-        self.gridSelectedView.hidden = YES;
-    }];
+    [self hiddenGridSelectedViewAnimated:NO];
 }
 
 - (void)addGridScalesView
@@ -162,28 +141,7 @@
     _gridScaleView = gridScaleView;
     self.gridScaleView.scales = self.scales;
     //隐藏
-    [self hiddenGridScaleView];
-}
-
-- (void)showGridScaleView {
-    [UIView animateWithDuration:0.1 animations:^{
-
-        self.gridScaleView.hidden = NO;
-        self.gridScaleView.bottom = self.bottomView.top;
-
-    } completion:^(BOOL finished) {
-
-    }];
-}
-
-- (void)hiddenGridScaleView {
-    [UIView animateWithDuration:0.1 animations:^{
-        self.gridScaleView.bottom = self.gridSelectedView.bottom + 30;
-        
-
-    } completion:^(BOOL finished) {
-        self.gridScaleView.hidden = YES;
-    }];
+    [self hiddenGridScaleViewAnimated:NO];
 }
 
 -(void)addColorSelectedView {
@@ -197,26 +155,112 @@
     };
     [self.view addSubview:_colorSelectView];
     
-    [self hiddenColorSelectedView];
+    [self hiddenColorSelectedViewAnimated:NO];
 }
 
-- (void)showColorSelectedView {
-    [UIView animateWithDuration:0.1 animations:^{
+#pragma mark - show && hidden
+- (void)showGridSelectedViewAnimated:(BOOL)animated {
+    if(animated) {
+        [UIView animateWithDuration:0.1 animations:^{
 
+            self.gridSelectedView.hidden = NO;
+            self.gridSelectedView.bottom = self.bottomView.top;
+
+        } completion:^(BOOL finished) {
+
+        }];
+    }
+    else
+    {
+        self.gridSelectedView.hidden = NO;
+        self.gridSelectedView.bottom = self.bottomView.top;
+    }
+}
+
+- (void)hiddenGridSelectedViewAnimated:(BOOL)animated {
+    
+    if(animated) {
+        [UIView animateWithDuration:0.1 animations:^{
+            self.gridSelectedView.bottom = self.gridSelectedView.bottom + 30;
+        } completion:^(BOOL finished) {
+            self.gridSelectedView.hidden = YES;
+        }];
+    }
+    else
+    {
+        self.gridSelectedView.bottom = self.gridSelectedView.bottom + 30;
+        self.gridSelectedView.hidden = YES;
+    }
+}
+
+- (void)showGridScaleViewAnimated:(BOOL)animated {
+    
+    if(animated) {
+        [UIView animateWithDuration:0.1 animations:^{
+
+            self.gridScaleView.hidden = NO;
+            self.gridScaleView.bottom = self.bottomView.top;
+
+        } completion:^(BOOL finished) {
+
+        }];
+    }
+    else
+    {
+        self.gridScaleView.hidden = NO;
+        self.gridScaleView.bottom = self.bottomView.top;
+    }
+}
+
+- (void)hiddenGridScaleViewAnimated:(BOOL)animated {
+    
+    if(animated) {
+        [UIView animateWithDuration:0.1 animations:^{
+            self.gridScaleView.bottom = self.gridSelectedView.bottom + 30;
+        } completion:^(BOOL finished) {
+            self.gridScaleView.hidden = YES;
+        }];
+    }
+    else
+    {
+        self.gridScaleView.bottom = self.gridSelectedView.bottom + 30;
+        self.gridScaleView.hidden = YES;
+    }
+}
+
+- (void)showColorSelectedViewAnimated:(BOOL)animated {
+    
+    if(animated) {
+        [UIView animateWithDuration:0.1 animations:^{
+
+            self.colorSelectView.hidden = NO;
+            self.colorSelectView.bottom = self.bottomView.top;
+
+        } completion:^(BOOL finished) {
+
+        }];
+    }
+    else
+    {
         self.colorSelectView.hidden = NO;
         self.colorSelectView.bottom = self.bottomView.top;
-
-    } completion:^(BOOL finished) {
-
-    }];
+    }
 }
 
-- (void)hiddenColorSelectedView {
-    [UIView animateWithDuration:0.1 animations:^{
+- (void)hiddenColorSelectedViewAnimated:(BOOL)animated {
+    
+    if(animated) {
+        [UIView animateWithDuration:0.1 animations:^{
+            self.colorSelectView.bottom = self.colorSelectView.bottom + 30;
+        } completion:^(BOOL finished) {
+            self.colorSelectView.hidden = YES;
+        }];
+    }
+    else
+    {
         self.colorSelectView.bottom = self.colorSelectView.bottom + 30;
-    } completion:^(BOOL finished) {
         self.colorSelectView.hidden = YES;
-    }];
+    }
 }
 
 #pragma mark -- colorSelectViewDelegate
@@ -265,19 +309,19 @@
         case 0:
         {
             if(!self.colorSelectView.hidden) {
-                [self hiddenColorSelectedView];
+                [self hiddenColorSelectedViewAnimated:NO];
             }
             
             if(!self.gridScaleView.hidden) {
-                [self hiddenGridScaleView];
+                [self hiddenGridScaleViewAnimated:NO];
             }
             
             if(self.gridSelectedView.hidden) {
-                [self showGridSelectedView];
+                [self showGridSelectedViewAnimated:YES];
             }
             else
             {
-                [self hiddenGridSelectedView];
+                [self hiddenGridSelectedViewAnimated:YES];
             }
         }
             break;
@@ -285,19 +329,19 @@
         {
             
             if(!self.colorSelectView.hidden) {
-                [self hiddenColorSelectedView];
+                [self hiddenColorSelectedViewAnimated:NO];
             }
             
             if(!self.gridSelectedView.hidden) {
-                [self hiddenGridSelectedView];
+                [self hiddenGridSelectedViewAnimated:NO];
             }
             
             if(self.gridScaleView.hidden) {
-                [self showGridScaleView];
+                [self showGridScaleViewAnimated:YES];
             }
             else
             {
-                [self hiddenGridScaleView];
+                [self hiddenGridScaleViewAnimated:YES];
             }
             
         }
@@ -305,21 +349,20 @@
         case 2:
         {
             if(!self.gridSelectedView.hidden) {
-                [self hiddenGridSelectedView];
+                [self hiddenGridSelectedViewAnimated:NO];
             }
             
             if(!self.gridScaleView.hidden) {
-                [self hiddenGridScaleView];
+                [self hiddenGridScaleViewAnimated:NO];
             }
             
             if(self.colorSelectView.hidden) {
-                [self showColorSelectedView];
+                [self showColorSelectedViewAnimated:YES];
             }
             else
             {
-                [self hiddenColorSelectedView];
+                [self hiddenColorSelectedViewAnimated:YES];
             }
-            
         }
             break;
             

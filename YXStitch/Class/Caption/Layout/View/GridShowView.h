@@ -56,6 +56,7 @@ typedef NS_ENUM(NSUInteger, PanViewEdge) {
 
 @interface GridShowImgView : UIView
 
+@property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) UIImage *image;
 @property (nonatomic, assign) NSInteger row;
 @property (nonatomic, assign) NSInteger column;

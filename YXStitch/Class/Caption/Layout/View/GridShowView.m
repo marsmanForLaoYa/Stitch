@@ -81,41 +81,31 @@
             CGFloat margin = [dicColumn[@"margin"] floatValue] * (subImgViewWidth + _imagePadding);
             CGFloat top = [dicColumn[@"top"] floatValue];
 
-            UIImage *image = self.pictures[index];
-
-            CGFloat imageScale = 0;
-            CGFloat imageHeight = 0;
-            if (image) {
-                imageScale = SCREEN_WIDTH / image.size.width;
-                imageHeight = image.size.height * imageScale;
-            }
-            
-            GridShowImgView *imageView;
+            GridShowImgView *showImgView;
             // top * subImgViewHeight为前面所有视图所占高度 (top + 1) * padding为padding的高度
             CGFloat imgViewTop = top * subImgViewHeight + (top + 1) * _imagePadding;
             //width * subImgViewWidth为前面所有视图所占宽度 (width - 1) * padding为padding的宽度
             CGFloat imgViewWidth = width * subImgViewWidth + (width - 1) * _imagePadding;
             //height * subImgViewHeight为当前视图所占高度 (height - 1) * padding为当前视图所占的padding高度
             CGFloat imgViewHeight = height * subImgViewHeight + (height - 1) * _imagePadding;
+            
+            //获取图片高度/宽度
+            UIImage *image = self.pictures[index];
+            
             if(self.gridsImageViews.count < self.pictures.count)
             {
-                imageView = [self creatSubviewsWithFrame:CGRectMake(left + margin, imgViewTop, SCREEN_WIDTH, imageHeight) viewHeight:imgViewHeight viewWidth:imgViewWidth];
-                
-                imageView.scrollView.contentSize = CGSizeMake(SCREEN_WIDTH, imageHeight);
+                showImgView = [self creatSubviewsWithFrame:CGRectMake(left + margin, imgViewTop, imgViewWidth, imgViewHeight)];
             }
             else
             {
-                imageView = self.gridsImageViews[index];
-                imageView.frame = CGRectMake(left + margin,imgViewTop, imgViewWidth, imgViewHeight);
-                imageView.scrollView.contentSize = CGSizeMake(SCREEN_WIDTH, imageHeight);
+                showImgView = self.gridsImageViews[index];
+                showImgView.frame = CGRectMake(left + margin,imgViewTop, imgViewWidth, imgViewHeight);
             }
-            imageView.image = self.pictures[index];
+            showImgView.image = self.pictures[index];
             //初始化view
-            [imageView initGestureView];
-            
-            imageView.gridPanEdge = [self getPanEdgeWithImageView:imageView];
-            
-            NSLog(@"imageView.bottom:%f self.bottom:%f", imageView.bottom + _imagePadding, self.bottom);
+            [showImgView initGestureView];
+            //设置可编辑的边缘
+            showImgView.gridPanEdge = [self getPanEdgeWithImageView:showImgView];
             
             index ++;
             left += width * subImgViewWidth + (width - 1) * _imagePadding + _imagePadding;
@@ -124,7 +114,7 @@
 }
 
 GridShowImgView *lastShowImgView;
-- (GridShowImgView *)creatSubviewsWithFrame:(CGRect)frame viewHeight:(CGFloat)viewHeight viewWidth:(CGFloat)viewWidth {
+- (GridShowImgView *)creatSubviewsWithFrame:(CGRect)frame {
     GridShowImgView *subImgView = [[GridShowImgView alloc] initWithFrame:frame];
     @weakify(self);
     subImgView.gridShowImgViewTapBlock = ^(GridShowImgView * _Nonnull showImgView) {
@@ -141,9 +131,6 @@ GridShowImgView *lastShowImgView;
     subImgView.delegate = self;
     [self addSubview:subImgView];
     [self.gridsImageViews addObject:subImgView];
-    subImgView.frame = CGRectMake(frame.origin.x, frame.origin.y, viewWidth, viewHeight);
-    
-//    NSLog(@"%@", NSStringFromCGRect(frame));
     return subImgView;
 }
 
@@ -1279,7 +1266,7 @@ GridShowImgView *lastShowImgView;
     if(
         (view1.left <= view2.left && fabs(view1.right + _imagePadding - view2.left) > kCompensatePrecision && view1.right <= view2.right) ||
         (view1.left >= view2.left && view1.right <= view2.right) ||
-        (view1.left >= view2.left && view1.left - _imagePadding < view2.right && view1.right >= view2.right) ||
+        (view1.left >= view2.left && fabs(view1.left - _imagePadding - view2.right) < kCompensatePrecision && view1.right >= view2.right) ||
         (view1.left <= view2.left && view1.right >= view2.right)
        ) {//重叠
 
@@ -1292,9 +1279,9 @@ GridShowImgView *lastShowImgView;
 //判断上下边距 是否重叠
 - (BOOL)judgeLeftAndRightIsNoOverlapBetweenView1:(GridShowImgView *)view1 secondView:(GridShowImgView *)view2 {
     if(
-       (view1.top <= view2.top && view1.bottom + _imagePadding > view2.top && view1.bottom < view2.bottom) ||
+       (view1.top <= view2.top && fabs(view1.bottom + _imagePadding - view2.top) > kCompensatePrecision && view1.bottom < view2.bottom) ||
        (view1.top >= view2.top && view1.bottom < view2.bottom) ||
-       (view1.top > view2.top && view1.top - _imagePadding < view2.bottom && view1.bottom >= view2.bottom) ||
+       (view1.top > view2.top && fabs(view1.top - _imagePadding - view2.bottom) < kCompensatePrecision && view1.bottom >= view2.bottom) ||
        (view1.top <= view2.top && view1.bottom >= view2.bottom)
        ) {//重叠
 
@@ -1314,14 +1301,19 @@ GridShowImgView *lastShowImgView;
 #define kCanPanViewMinWidth 30
 #define kCanPanViewHeight 10
 #define kViewBorderWidth 3
+//捏合手势放大最大比例
+#define kPinchMaxScale 2
 @interface GridShowImgView ()
-
-@property (nonatomic, strong) UIImageView *imageView;
 
 @property (nonatomic, strong) UIView *leftCanPanView;
 @property (nonatomic, strong) UIView *topCanPanView;
 @property (nonatomic, strong) UIView *rightCanPanView;
 @property (nonatomic, strong) UIView *bottomCanPanView;
+//缩放比例
+@property(nonatomic, assign) CGFloat pinchScale;
+
+@property(nonatomic, assign) CGFloat originImgViewWidth;
+@property(nonatomic, assign) CGFloat originImgViewHeight;
 
 @end
 @implementation GridShowImgView
@@ -1336,6 +1328,7 @@ GridShowImgView *lastShowImgView;
     if (self) {
         self.contentMode = UIViewContentModeScaleAspectFill;
         self.clipsToBounds = NO;
+        _pinchScale = 1.0;
 
         [self configViews];
     }
@@ -1343,7 +1336,7 @@ GridShowImgView *lastShowImgView;
 }
 
 - (void)configViews{
-    
+    //添加点击手势
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapSelectedViewAction)];
     [self addGestureRecognizer:tap];
     
@@ -1364,16 +1357,64 @@ GridShowImgView *lastShowImgView;
     [self addGestureWithView:self.topPanGestureView action:@selector(topPanGestureView:)];
     [self addGestureWithView:self.rightPanGestureView action:@selector(rightPanGestureView:)];
     [self addGestureWithView:self.bottomPanGestureView action:@selector(bottomPanGestureView:)];
-    
-    self.imageView.frame = self.bounds;
-    self.imageView.width = SCREEN_WIDTH;
+    //添加imageView
     [self.scrollView addSubview:self.imageView];
+    
+    //添加缩放手势
+    UIPinchGestureRecognizer *pinch = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchSelectedViewAction:)];
+    [self.imageView addGestureRecognizer:pinch];
 }
 
 #pragma mark - setter
 - (void)setImage:(UIImage *)image{
     _image = image;
     _imageView.image = image;
+    //改变imageview的frame
+    [self changeImageViewFrame];
+}
+
+- (void)changeImageViewFrame {
+    
+    //计算imageview的宽高
+    CGFloat imageHeight = self.image.size.height;
+    CGFloat imageWidth = self.image.size.width;
+    CGFloat scaleWH = imageWidth / imageHeight;
+    
+    CGFloat imageMinWidth = 100;
+    CGFloat imageMinHeight = 200;
+
+    imageWidth = self.width;
+    if(imageWidth < imageMinWidth) {
+        imageWidth = imageMinWidth;
+    }
+    
+    imageHeight = imageWidth / scaleWH;
+    if(imageHeight < imageMinHeight) {
+        imageHeight = imageMinHeight;
+    }
+    
+    if(imageHeight < self.height) {
+        imageHeight = self.height;
+    }
+    imageWidth = scaleWH * imageHeight;
+    
+    _originImgViewWidth = imageWidth;
+    _originImgViewHeight = imageHeight;
+    //设置contentSize
+    self.scrollView.contentSize = CGSizeMake(imageWidth, imageHeight);
+    //设置imageview的大小
+    self.imageView.frame = CGRectMake(0, 0, imageWidth, imageHeight);
+    
+    //scrollview滚动到中间
+    [self scrollToCenter];
+}
+
+//scrollview滚动到中间
+- (void)scrollToCenter {
+    CGPoint offset = self.scrollView.contentOffset;
+    offset.y = (self.scrollView.contentSize.height - self.scrollView.bounds.size.height + self.scrollView.contentInset.bottom) / 2;
+    offset.x = (self.scrollView.contentSize.width - self.scrollView.bounds.size.width + self.scrollView.contentInset.right) / 2;
+    [self.scrollView setContentOffset:offset animated:NO];
 }
 
 - (void)setGridPanEdge:(GridPanEdge)gridPanEdge
@@ -1436,6 +1477,8 @@ GridShowImgView *lastShowImgView;
     }
     self.topCanPanView.frame = CGRectMake(topCanPanViewLeft, - kCanPanViewWidth / 2+ kViewBorderWidth / 2, topCanPanViewWidth, kCanPanViewHeight);
     self.bottomCanPanView.frame = CGRectMake(topCanPanViewLeft, self.height - kCanPanViewWidth / 2 - kViewBorderWidth / 2, topCanPanViewWidth, kCanPanViewHeight);
+    //改变imageview的frame
+    [self changeImageViewFrame];
 }
 
 #pragma mark - Method
@@ -1504,6 +1547,7 @@ GridShowImgView *lastShowImgView;
     [self panAction:panGesture edge:PanViewEdgeBottom];
 }
 
+//平移手势
 - (void)panAction:(UIPanGestureRecognizer *)panGesture edge:(PanViewEdge)panViewEdge {
     UIView *view = panGesture.view;
     CGPoint touPoint = [panGesture translationInView:view];
@@ -1566,10 +1610,56 @@ GridShowImgView *lastShowImgView;
     }
 }
 
+//缩放手势
+- (void)pinchSelectedViewAction:(UIPinchGestureRecognizer *)pinchGesture {
+    
+    CGFloat maxScale = kPinchMaxScale;
+    
+    if (pinchGesture.state == UIGestureRecognizerStateEnded)
+    {
+        if (self.imageView.width <= _originImgViewWidth) {
+
+            self.imageView.width = self.originImgViewWidth;
+            self.imageView.height = self.originImgViewHeight;
+        }
+        else if (self.imageView.width >= _originImgViewWidth * maxScale){
+
+            self.imageView.width = self.originImgViewWidth * maxScale;
+            self.imageView.height = self.originImgViewHeight * maxScale;
+        }
+    }
+    else
+    {
+        NSLog(@"recognizer.scale:%f", pinchGesture.scale);
+        CGFloat w = self.imageView.width * pinchGesture.scale;
+        CGFloat h = self.imageView.height * pinchGesture.scale;
+        
+        if (w <= _originImgViewWidth)
+        {
+            w = _originImgViewWidth;
+            h = _originImgViewHeight;
+        }
+        else if (w >= self.width * maxScale)
+        {
+            w = _originImgViewWidth * maxScale;
+            h = _originImgViewHeight * maxScale;
+        }
+        
+        self.imageView.width = w;
+        self.imageView.height = h;
+        pinchGesture.scale = 1.0;
+    }
+    
+    _pinchScale = self.imageView.width / self.width;
+    self.scrollView.contentSize = CGSizeMake(self.imageView.width, self.imageView.height);
+    [self scrollToCenter];
+}
+
 #pragma mark - lazy
 - (UIImageView *)imageView{
     if (!_imageView) {
         _imageView = [[UIImageView alloc] init];
+        _imageView.userInteractionEnabled = YES;
     }
     return _imageView;
 }
@@ -1579,6 +1669,7 @@ GridShowImgView *lastShowImgView;
     if(!_scrollView)
     {
         _scrollView = [[UIScrollView alloc] init];
+        _scrollView.backgroundColor = [UIColor clearColor];
         _scrollView.alwaysBounceVertical = YES;// 垂直
         _scrollView.alwaysBounceHorizontal = YES; // 水平
         _scrollView.showsVerticalScrollIndicator = NO;

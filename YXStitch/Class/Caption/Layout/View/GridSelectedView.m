@@ -79,29 +79,18 @@
     return cell;
 }
 
+NSIndexPath *selectedIndexPath;
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    if(selectedIndexPath!= nil && [indexPath isEqual:selectedIndexPath]) {
+        return;
+    }
+    selectedIndexPath = indexPath;
     
     if(_gridSelectedItemBlock)
     {
         _gridSelectedItemBlock(indexPath.item);
     }
-//    if (indexPath.item == self.colorArray.count) {
-//
-//        [UIView animateWithDuration:0.5 animations:^{
-//            self.selectColorView.hidden = NO;
-//            collectionView.x = -SCREEN_WIDTH;
-//            self.selectColorView.x = 0;
-//        } completion:^(BOOL finished) {
-//            collectionView.hidden  = YES;
-//            self.selectColorView.hidden = NO;
-//        }];
-//    }else {
-//
-//        self.customSubView.customSubviewModel.tintColor = self.colorArray[indexPath.item];
-//        [self.customSubView updateSubViewModel:self.customSubView.customSubviewModel];
-//        [self updateOtherViewWithSubView:self.customSubView];
-//    }
 }
 
 //对于水平滚动网格，此值表示连续列之间的最小间距。(行间距)
