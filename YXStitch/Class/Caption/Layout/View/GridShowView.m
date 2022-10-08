@@ -10,7 +10,7 @@
 
 #define kGridElementMinWidth 60
 #define kGridElementMinHeight 60
-
+#define kCompensatePrecision 0.1
 @interface GridShowView ()<GridShowImgViewDelegate>
 
 @property (nonatomic, strong) NSMutableArray *gridsImageViews;
@@ -149,19 +149,19 @@ GridShowImgView *lastShowImgView;
 
 - (GridPanEdge)getPanEdgeWithImageView:(GridShowImgView *)imageView {
     GridPanEdge panEdge = GridPanEdgeNone;
-    if(fabs(imageView.left - _imagePadding) > 0.1) {
+    if(fabs(imageView.left - _imagePadding) > kCompensatePrecision) {
         panEdge = panEdge | GridPanEdgeLeft;
     }
     
-    if(fabs(imageView.top - _imagePadding) > 0.1 ) {
+    if(fabs(imageView.top - _imagePadding) > kCompensatePrecision ) {
         panEdge = panEdge | GridPanEdgeTop;
     }
     
-    if(fabs(imageView.right + _imagePadding - self.width) > 0.1) {
+    if(fabs(imageView.right + _imagePadding - self.width) > kCompensatePrecision) {
         panEdge = panEdge | GridPanEdgeRight;
     }
     
-    if(fabs(imageView.bottom + _imagePadding - self.height) > 0.1) {
+    if(fabs(imageView.bottom + _imagePadding - self.height) > kCompensatePrecision) {
         panEdge = panEdge | GridPanEdgeBottom;
     }
     return panEdge;
@@ -1277,7 +1277,7 @@ GridShowImgView *lastShowImgView;
 //判断左右边距 是否重叠
 - (BOOL)judgeBottomAndTopIsNoOverlapBetweenView1:(GridShowImgView *)view1 secondView:(GridShowImgView *)view2 {
     if(
-        (view1.left <= view2.left && view1.right + _imagePadding > view2.left && view1.right <= view2.right) ||
+        (view1.left <= view2.left && fabs(view1.right + _imagePadding - view2.left) > kCompensatePrecision && view1.right <= view2.right) ||
         (view1.left >= view2.left && view1.right <= view2.right) ||
         (view1.left >= view2.left && view1.left - _imagePadding < view2.right && view1.right >= view2.right) ||
         (view1.left <= view2.left && view1.right >= view2.right)

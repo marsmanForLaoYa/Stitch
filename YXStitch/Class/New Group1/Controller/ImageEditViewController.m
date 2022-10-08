@@ -203,10 +203,10 @@
     contentHeight += firstImageView.height;
     firstImageView.tag = 100;
     [_contentScrollView addSubview:firstImageView];
-    [_imageViewsArr addObject:firstImageView];
-    [_originWidthArr addObject:[NSNumber numberWithFloat:VerViewWidth]];
-    [_originHeightArr addObject:[NSNumber numberWithFloat:(CGFloat)(icon.size.height/icon.size.width) * VerViewWidth]];
-    [_originzTopArr addObject:[NSNumber numberWithFloat:0.0]];
+    [self.imageViewsArr addObject:firstImageView];
+    [self.originWidthArr addObject:[NSNumber numberWithFloat:VerViewWidth]];
+    [self.originHeightArr addObject:[NSNumber numberWithFloat:(CGFloat)(icon.size.height/icon.size.width) * VerViewWidth]];
+    [self.originzTopArr addObject:[NSNumber numberWithFloat:0.0]];
     for (NSInteger i = 1; i < _imgArr.count; i ++) {
         UIImage *icon = _imgArr[i];
         CGFloat imgHeight = (CGFloat)(icon.size.height/icon.size.width) * VerViewWidth;
@@ -215,12 +215,12 @@
         imageView.image = icon;
         imageView.centerX = firstImageView.centerX;
         contentHeight += imgHeight;
-        [_originWidthArr addObject:[NSNumber numberWithFloat:VerViewWidth]];
-        [_originHeightArr addObject:[NSNumber numberWithFloat:imgHeight]];
-        [_originzTopArr addObject:[NSNumber numberWithFloat:firstImageView.bottom]];
+        [self.originWidthArr addObject:[NSNumber numberWithFloat:VerViewWidth]];
+        [self.originHeightArr addObject:[NSNumber numberWithFloat:imgHeight]];
+        [self.originzTopArr addObject:[NSNumber numberWithFloat:firstImageView.bottom]];
         [_contentScrollView addSubview:imageView];
         firstImageView = imageView;
-        [_imageViewsArr addObject:imageView];
+        [self.imageViewsArr addObject:imageView];
         
     }
     _contentScrollView.contentSize = CGSizeMake(_contentScrollView.width,contentHeight > SCREEN_HEIGHT?contentHeight: SCREEN_HEIGHT);
@@ -237,9 +237,9 @@
     firstImageView.tag = 100;
     //    [_originRightArr addObject:[NSNumber numberWithFloat:0]];
     [_contentScrollView addSubview:firstImageView];
-    [_imageViewsArr addObject:firstImageView];
-    [_originWidthArr addObject:[NSNumber numberWithFloat:(CGFloat)(icon.size.width / icon.size.height) * HorViewHeight]];
-    [_originHeightArr addObject:[NSNumber numberWithFloat:HorViewHeight]];
+    [self.imageViewsArr addObject:firstImageView];
+    [self.originWidthArr addObject:[NSNumber numberWithFloat:(CGFloat)(icon.size.width / icon.size.height) * HorViewHeight]];
+    [self.originHeightArr addObject:[NSNumber numberWithFloat:HorViewHeight]];
     for (NSInteger i = 1; i < _imgArr.count; i ++) {
         UIImage *icon = _imgArr[i];
         CGFloat imgWidth = (CGFloat)(icon.size.width/icon.size.height) * HorViewHeight;
@@ -250,9 +250,9 @@
         contentWidth += imgWidth;
         [_contentScrollView addSubview:imageView];
         firstImageView = imageView;
-        [_originWidthArr addObject:[NSNumber numberWithFloat:imgWidth]];
-        [_originHeightArr addObject:[NSNumber numberWithFloat:HorViewHeight]];
-        [_imageViewsArr addObject:imageView];
+        [self.originWidthArr addObject:[NSNumber numberWithFloat:imgWidth]];
+        [self.originHeightArr addObject:[NSNumber numberWithFloat:HorViewHeight]];
+        [self.imageViewsArr addObject:imageView];
         
     }
     _contentScrollView.contentSize = CGSizeMake(contentWidth,HorViewHeight);
@@ -1072,7 +1072,7 @@
                     slayer.lineWidth = _path.lineWidth;
                    // slayer.opacity = 0.8;
                     [_contentScrollView.layer addSublayer:slayer];
-                    [_dataArr addObject:_path];
+                    [self.dataArr addObject:_path];
                     _slayer = slayer;
                     [[self mutableArrayValueForKey:REMOVED_LAYERS] removeAllObjects];
                     [[self mutableArrayValueForKey:LAYERS] addObject:_slayer];
@@ -1529,45 +1529,45 @@ static inline CGPoint XBPointOnPowerCurveLine(CGPoint p0, CGPoint p1, CGPoint p2
 #pragma mark --lazy
 -(NSMutableArray *)layers{
     if (!_layers ){
-        _layers = [[NSMutableArray alloc]init];
+        self.layers = [NSMutableArray array];
     }
     return _layers;
 }
 -(NSMutableArray *)removedLayers{
     if (!_removedLayers ){
-        _removedLayers = [[NSMutableArray alloc]init];
+        self.removedLayers = [NSMutableArray array];
     }
     return _removedLayers;
 }
 
 -(NSMutableArray *)originWidthArr{
     if (!_originWidthArr){
-        _originWidthArr = [[NSMutableArray alloc]init];
+        self.originWidthArr = [NSMutableArray array];
     }
     return _originWidthArr;
 }
 
 -(NSMutableArray *)originHeightArr{
     if (!_originHeightArr){
-        _originHeightArr = [[NSMutableArray alloc]init];
+        self.originHeightArr = [NSMutableArray array];
     }
     return _originHeightArr;
 }
 -(NSMutableArray *)originzTopArr{
     if (!_originzTopArr){
-        _originzTopArr = [[NSMutableArray alloc]init];
+        self.originzTopArr = [NSMutableArray array];
     }
     return _originzTopArr;
 }
 -(NSMutableArray *)imageViewsArr{
     if (!_imageViewsArr){
-        _imageViewsArr = [[NSMutableArray alloc]init];
+        self.imageViewsArr = [NSMutableArray array];
     }
     return _imageViewsArr;
 }
 -(NSMutableArray *)dataArr{
     if (!_dataArr){
-        _dataArr = [[NSMutableArray array]init];
+        self.dataArr = [NSMutableArray array];
     }
     return _dataArr;
 }
