@@ -6,21 +6,23 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@class GridShowImgView;
 NS_ASSUME_NONNULL_BEGIN
-
+typedef void(^GridShowViewSelecedImageBlock) (UIImage *image);
 @interface GridShowView : UIView
 
 @property (nonatomic, copy) NSArray *pictures;
 @property (nonatomic, copy) NSDictionary *gridsDic;
-
 @property (nonatomic, assign) CGFloat imagePadding;
-
+@property (nonatomic, copy) GridShowViewSelecedImageBlock gridShowViewSelecedImageBlock;
+@property (nonatomic, strong) GridShowImgView *lastShowImgView;
 - (void)setShowViewBackgroundColorWithHex:(NSString *)hex;
+- (void)clearSelectedShowImgView;
+//清除选中的view上的样式
+- (void)changeSelectedShowImgViewWithImage:(UIImage *)image;
 
 @end
 
-@class GridShowImgView;
 typedef void (^GridShowImgViewTapBlock)(GridShowImgView *showImgView);
 
 typedef NS_OPTIONS(NSUInteger, GridPanEdge) {
@@ -60,6 +62,7 @@ typedef NS_ENUM(NSUInteger, PanViewEdge) {
 @property (nonatomic, strong) UIImage *image;
 @property (nonatomic, assign) NSInteger row;
 @property (nonatomic, assign) NSInteger column;
+@property (nonatomic, assign) NSInteger index;
 @property (nonatomic, copy) GridShowImgViewTapBlock gridShowImgViewTapBlock;
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UIView *leftPanGestureView;

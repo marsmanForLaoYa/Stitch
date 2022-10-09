@@ -23,6 +23,7 @@
 		BBBBA3E828F1076300406C43 /* GridShowView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBBA3E728F1076300406C43 /* GridShowView.m */; };
 		BBBBA3EB28F10C9900406C43 /* GridScaleView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBBA3EA28F10C9900406C43 /* GridScaleView.m */; };
 		BBBBA3ED28F113C000406C43 /* Scales.json in Resources */ = {isa = PBXBuildFile; fileRef = BBBBA3EC28F113C000406C43 /* Scales.json */; };
+		BBBBA3F028F180D600406C43 /* GridEditView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBBA3EF28F180D600406C43 /* GridEditView.m */; };
 		FB00324928B8AB910028BC61 /* MyCustomSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = FB00324828B8AB910028BC61 /* MyCustomSlider.m */; };
 		FB086F6628A662CB0062EBA5 /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB687EC828A0DE65002D557B /* ReplayKit.framework */; };
 		FB086F6828A662D30062EBA5 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB086F6728A662D30062EBA5 /* AudioToolbox.framework */; };
@@ -219,6 +220,8 @@
 		BBBBA3E928F10C9900406C43 /* GridScaleView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GridScaleView.h; sourceTree = "<group>"; };
 		BBBBA3EA28F10C9900406C43 /* GridScaleView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GridScaleView.m; sourceTree = "<group>"; };
 		BBBBA3EC28F113C000406C43 /* Scales.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Scales.json; sourceTree = "<group>"; };
+		BBBBA3EE28F180D600406C43 /* GridEditView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GridEditView.h; sourceTree = "<group>"; };
+		BBBBA3EF28F180D600406C43 /* GridEditView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GridEditView.m; sourceTree = "<group>"; };
 		FB00324728B8AB880028BC61 /* MyCustomSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyCustomSlider.h; sourceTree = "<group>"; };
 		FB00324828B8AB910028BC61 /* MyCustomSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyCustomSlider.m; sourceTree = "<group>"; };
 		FB086F6728A662D30062EBA5 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -534,6 +537,8 @@
 				BBBBA3EA28F10C9900406C43 /* GridScaleView.m */,
 				BBBBA3C328F1069000406C43 /* LayoutBottomView.h */,
 				BBBBA3C728F1069000406C43 /* LayoutBottomView.m */,
+				BBBBA3EE28F180D600406C43 /* GridEditView.h */,
+				BBBBA3EF28F180D600406C43 /* GridEditView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1466,6 +1471,7 @@
 				FB2D5A0728A1EE2A006085BC /* HomeSettingViewController.m in Sources */,
 				FB2D5A2428A26564006085BC /* UIView+LVShot.m in Sources */,
 				FB8B4E4328AB8BFF00313ECD /* UIScrollView+LVShot.m in Sources */,
+				BBBBA3F028F180D600406C43 /* GridEditView.m in Sources */,
 				FB2D5A1E28A25D63006085BC /* SaveViewController.m in Sources */,
 				FB3EFE3E28A39485006C3889 /* BuyViewController.m in Sources */,
 				FBF59EFB28AC98BF00D9C6CF /* ColorPlateView.m in Sources */,

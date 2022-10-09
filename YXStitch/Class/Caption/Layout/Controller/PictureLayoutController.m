@@ -12,11 +12,12 @@
 #import "WaterColorSelectView.h"
 #import "ColorPlateView.h"
 #import "GridScaleView.h"
+#import "GridEditView.h"
 
 #define kBottomHeight 80
 #define kContainerHeight (SCREEN_HEIGHT - (Nav_HEIGHT + kBottomHeight))
 
-@interface PictureLayoutController ()<WaterColorSelectViewDelegate>
+@interface PictureLayoutController ()<WaterColorSelectViewDelegate, HXCustomNavigationControllerDelegate,HXPhotoViewDelegate,HXPhotoViewDelegate>
 
 @property (nonatomic, strong) GridShowView *gridsShowView;
 
@@ -31,6 +32,14 @@
 @property (nonatomic ,strong) WaterColorSelectView *colorSelectView;
 @property (nonatomic ,strong) ColorPlateView *colorPlateView;
 
+@property (nonatomic, strong) GridEditView *gridEditView;
+
+#pragma mark - 相册
+@property (weak, nonatomic) HXPhotoView *photoView;
+@property (strong, nonatomic) HXPhotoManager *manager;
+#pragma mark - 翻转
+@property (nonatomic ,assign)BOOL isTurn;
+
 @end
 
 @implementation PictureLayoutController
@@ -42,13 +51,21 @@
 
     [self getLayoutGrids];
     [self getScaleGrids];
-//    [self drawGridsWithIndex:0];
+
+    //添加底部三个按钮
     [self setBottomView];
-    [self initlalizeGridShowViewWithWidth:1 height:1];
- 
+    //初始化排列view
+    [self initlalizeGridShowViewWithScaleWidth:1 scaleHeight:1];
+    //添加选中showview的控制view
+    [self addEditShowViewControl];
+    //选中布局
     [self addGridSelectedView];
+    //选中画布
     [self addGridScalesView];
+    //选中边框
     [self addColorSelectedView];
+    
+    _isTurn = NO;
 }
 
 #pragma mark - dataSources
@@ -85,25 +102,91 @@
     _bottomView = bottomView;
 }
 
-- (void)initlalizeGridShowViewWithWidth:(NSInteger)width height:(NSInteger)height
+- (void)initlalizeGridShowViewWithScaleWidth:(NSInteger)scaleWidth scaleHeight:(NSInteger)scaleHeight
 {
     if (!_gridsShowView) {
         GridShowView *gridsShowView = [[GridShowView alloc] initWithFrame:CGRectZero];
+        @weakify(self);
+        gridsShowView.gridShowViewSelecedImageBlock = ^(UIImage * _Nonnull image) {
+            @strongify(self);
+            [self showGridEditViewAnimated:YES];
+        };
         [self.view addSubview:gridsShowView];
         _gridsShowView = gridsShowView;
         _gridsShowView.pictures = self.pictures;
     }
     CGFloat viewWidth = SCREEN_WIDTH;
-    CGFloat viewHeight = viewWidth * height / width;
+    CGFloat viewHeight = viewWidth * scaleHeight / scaleWidth;
     
     if (viewHeight >= kContainerHeight) {
         viewHeight = kContainerHeight;
-        viewWidth = kContainerHeight * width / height;
+        viewWidth = kContainerHeight * scaleWidth / scaleHeight;
     }
     _gridsShowView.width = viewWidth;
     _gridsShowView.height = viewHeight;
     _gridsShowView.centerY = kContainerHeight / 2 + Nav_HEIGHT;
     _gridsShowView.centerX = self.view.centerX;
+}
+
+//添加选中showview的控制view
+- (void)addEditShowViewControl {
+    GridEditView *gridEditView = [[GridEditView alloc] initWithFrame:CGRectZero];
+    @weakify(self);
+    gridEditView.btnClick = ^(NSInteger tag) {
+        @strongify(self);
+        switch (tag) {
+            case 0:
+            {
+                //旋转
+               UIImage * flipImage = [Tools image:self.gridsShowView.lastShowImgView.image rotation:UIImageOrientationDown];
+                [self.gridsShowView changeSelectedShowImgViewWithImage:flipImage];
+            }
+                break;
+            case 1:
+            {
+                //水平镜像
+                UIImage *flipImage = [Tools turnImageWith:self.gridsShowView.lastShowImgView.image AndType:1 AndisTurn:self.isTurn];
+                self.isTurn = !self.isTurn;
+                [self.gridsShowView changeSelectedShowImgViewWithImage:flipImage];
+            }
+                break;
+            case 2:
+            {
+                //垂直镜像
+                UIImage *flipImage = [Tools turnImageWith:self.gridsShowView.lastShowImgView.image AndType:2 AndisTurn:self.isTurn];
+                [self.gridsShowView changeSelectedShowImgViewWithImage:flipImage];
+            }
+                break;
+        
+            case 3: {
+                //更换图片
+                if (self.photoView == nil){
+                    [self addPhotoView];
+                }
+                HXCustomNavigationController *nav = [[HXCustomNavigationController alloc] initWithManager:self.manager delegate:self];
+                nav.modalPresentationStyle = UIModalPresentationOverFullScreen;
+                nav.modalPresentationCapturesStatusBarAppearance = YES;
+                [self.view.viewController presentViewController:nav animated:YES completion:nil];
+            }
+                break;
+                
+            case 100:
+            {
+                [self hiddenGridEditViewAnimated:YES];
+            }
+                break;
+            default:
+                break;
+        }
+    };
+    gridEditView.width = self.bottomView.width;
+    gridEditView.height = self.bottomView.height;
+    gridEditView.left = self.bottomView.left;
+    gridEditView.bottom = self.bottomView.bottom;
+    [self.view addSubview:gridEditView];
+    _gridEditView = gridEditView;
+    //隐藏editView
+    [self hiddenGridEditViewAnimated:NO];
 }
 
 - (void)addGridSelectedView
@@ -132,7 +215,7 @@
     gridScaleView.gridScaleItemSelectedBlock = ^(NSInteger scaleWidth, NSInteger scaleHeight) {
         @strongify(self);
         NSLog(@"%ld %ld", scaleWidth, scaleHeight);
-        [self initlalizeGridShowViewWithWidth:scaleWidth height:scaleHeight];
+        [self initlalizeGridShowViewWithScaleWidth:scaleWidth scaleHeight:scaleHeight];
         self.gridsShowView.gridsDic = self.gridsShowView.gridsDic;
     };
 
@@ -159,6 +242,56 @@
 }
 
 #pragma mark - show && hidden
+- (void)showGridEditViewAnimated:(BOOL)animated {
+    if(animated) {
+        [UIView animateWithDuration:0.1 animations:^{
+
+            self.gridEditView.hidden = NO;
+            self.gridEditView.top = self.bottomView.top;
+
+        } completion:^(BOOL finished) {
+
+        }];
+    }
+    else
+    {
+        self.gridEditView.hidden = NO;
+        self.gridEditView.top = self.bottomView.top;
+    }
+    
+    //隐藏其它view
+    if(!self.gridSelectedView.hidden) {
+        [self hiddenGridSelectedViewAnimated:NO];
+    }
+    
+    if(!self.gridScaleView.hidden) {
+        [self hiddenGridScaleViewAnimated:NO];
+    }
+    
+    if(!self.colorSelectView.hidden) {
+        [self hiddenColorSelectedViewAnimated:NO];
+    }
+}
+
+- (void)hiddenGridEditViewAnimated:(BOOL)animated {
+    
+    if(animated) {
+        [UIView animateWithDuration:0.1 animations:^{
+            self.gridEditView.top = self.gridEditView.bottom;
+        } completion:^(BOOL finished) {
+            self.gridEditView.hidden = YES;
+        }];
+    }
+    else
+    {
+        self.gridEditView.top = self.gridEditView.bottom;
+        self.gridEditView.hidden = YES;
+    }
+    
+    //清除选中view的边框
+    [self.gridsShowView clearSelectedShowImgView];
+}
+
 - (void)showGridSelectedViewAnimated:(BOOL)animated {
     if(animated) {
         [UIView animateWithDuration:0.1 animations:^{
@@ -368,6 +501,50 @@
             
         default:
             break;
+    }
+}
+
+#pragma mark -photoViewDelegate
+
+-(void)addPhotoView{
+    HXPhotoView *photoView = [HXPhotoView photoManager:self.manager scrollDirection:UICollectionViewScrollDirectionVertical];
+    photoView.frame = CGRectMake(0, 12, SCREEN_WIDTH, 0);
+    photoView.collectionView.contentInset = UIEdgeInsetsMake(0, 12, 0, 12);
+    photoView.delegate = self;
+    photoView.outerCamera = NO;
+    photoView.previewStyle = HXPhotoViewPreViewShowStyleDark;
+    photoView.previewShowDeleteButton = YES;
+    photoView.showAddCell = YES;
+    [photoView.collectionView reloadData];
+    [self.view addSubview:photoView];
+    photoView.hidden = YES;
+    self.photoView = photoView;
+}
+
+- (HXPhotoManager *)manager {
+    if (!_manager) {
+        _manager = [[HXPhotoManager alloc] initWithType:HXPhotoManagerSelectedTypePhoto];
+        _manager.configuration.type = HXConfigurationTypeWXChat;
+        //设定高级用户和普通选择图片数量
+        _manager.configuration.maxNum = 1;
+        _manager.configuration.photoListBottomView = ^(HXPhotoBottomView *bottomView) {
+            
+        };
+        _manager.configuration.previewBottomView = ^(HXPhotoPreviewBottomView *bottomView) {
+            
+        };
+
+    }
+    return _manager;
+}
+
+-(void)photoNavigationViewController:(HXCustomNavigationController *)photoNavigationViewController didDoneWithResult:(HXPickerResult *)result{
+    @weakify(self);
+    for (HXPhotoModel *photoModel in result.models) {
+        [Tools getImageWithAsset:photoModel.asset withBlock:^(UIImage * _Nonnull image) {
+            @strongify(self);
+            [self.gridsShowView changeSelectedShowImgViewWithImage:image];
+        }];
     }
 }
 
