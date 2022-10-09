@@ -40,7 +40,7 @@
 #define LAYERS @"layers"
 #define REMOVED_LAYERS @"removedLayers"
 
-@interface ImageEditViewController ()<WaterColorSelectViewDelegate,UIScrollViewDelegate,UnlockFuncViewDelegate,CheckProViewDelegate>
+@interface ImageEditViewController ()<WaterColorSelectViewDelegate,UIScrollViewDelegate,UnlockFuncViewDelegate,CheckProViewDelegate,UIGestureRecognizerDelegate>
 @property (nonatomic ,strong)ImageEditMarkView *imgEditMarkView;
 @property (nonatomic ,strong)WaterColorSelectView *colorSelectView;
 @property (nonatomic ,strong)ImageEditBottomView *bottomView;
@@ -156,7 +156,8 @@
     [_contentView addSubview:_contentScrollView];
     
     UIPanGestureRecognizer *tapGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestureAction:)];
-    _contentScrollView.delaysContentTouches = NO;
+    _contentScrollView.delaysContentTouches = YES;
+    tapGesture.delegate = self;
     [_contentScrollView addGestureRecognizer:tapGesture];
     
     CGFloat imageFakewidth = 0.0;
@@ -227,6 +228,12 @@
         
     }
     _contentScrollView.contentSize = CGSizeMake(_contentScrollView.width,contentHeight);
+    
+    if (contentHeight < SCREEN_HEIGHT){
+        [_contentScrollView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(@((SCREEN_HEIGHT - contentHeight)/2));
+        }];
+    }
 }
 
 //横拼
@@ -522,13 +529,12 @@
         }
     }else if(tag == 100){
         //删除
-        _markType = DELETELAYER;
-    }else if(tag == 200){
-        
-        //撤销
-        _markType = UNDO;
+        //_markType = DELETELAYER;
         [self undo];
-        
+    }else if(tag == 200){
+        //撤销
+       // _markType = UNDO;
+        [self undo];
     }else{
         
     }
@@ -735,7 +741,7 @@
         
                 
     }else{
-        [self shellSelectViewDiss];
+        //[self shellSelectViewDiss];
         if (type == 1){
             //横竖切换
             if (_isVer){
@@ -799,16 +805,19 @@
 }
 
 #pragma mark --撤销
-- (void)undo
-{
+- (void)undo{
     _selectView.hidden = YES;
     if (!self.layers.count) return;
+    [self.dataArr removeLastObject];
     [[self mutableArrayValueForKey:REMOVED_LAYERS] addObject:self.layers.lastObject];
     [self.layers.lastObject removeFromSuperlayer];
     [[self mutableArrayValueForKey:LAYERS] removeLastObject];
+    if (_markType == LINE){
+        _selectView.hidden = YES;
+    }
     if (self.layers.count == 0){
-        [_imgEditMarkView.deleteBtn setImage:IMG(@"删除垃圾桶_unSelected") forState:UIControlStateNormal];
-        [_imgEditMarkView.backBtn setImage:IMG(@"撤销_unSelected") forState:UIControlStateNormal];
+        [_imgEditMarkView.deleteBtn setBackgroundImage:IMG(@"删除垃圾桶_unSelected") forState:UIControlStateNormal];
+        [_imgEditMarkView.backBtn setBackgroundImage:IMG(@"撤销_unSelected") forState:UIControlStateNormal];
     }
     
 }
@@ -1147,7 +1156,7 @@
                 }
             }
         }else if (gesture.state == UIGestureRecognizerStateChanged){
-            if (!_isSelectPath){
+            if (!_isSelectPath && _path != nil){
                 if (CGPointEqualToPoint(_stratPoint, point)) {
                     return;
                 }
@@ -1180,7 +1189,7 @@
                 }
             }
         }else{
-            if (!_isSelectPath && (_markType > 0 && _markType != UNDO && _markType != DELETELAYER && _markType != WORD)){
+            if (!_isSelectPath && (_markType > 0 && _markType != UNDO && _markType != DELETELAYER && _markType != WORD) && _path != nil){
                 if ((_markType == LINE || _markType == MOSAIC)){
                     NSArray *arr = [_path points];
                     NSMutableArray *dataArr = [NSMutableArray array];
@@ -1200,10 +1209,7 @@
                         [self addColoeSelectedViewWithType:2];
                         [self addSelectBorderView];
                     }
-                    if (_dataArr.count > 0){
-                        [_imgEditMarkView.deleteBtn setImage:IMG(@"删除垃圾桶_selected") forState:UIControlStateNormal];
-                        [_imgEditMarkView.backBtn setImage:IMG(@"撤销_selected") forState:UIControlStateNormal];
-                    }
+                    
                 }else if (_markType == RECTANGLE){
                     //画矩形
                     [_colorSelectView removeFromSuperview];
@@ -1214,6 +1220,12 @@
                     [_colorSelectView removeFromSuperview];
                     [self addColoeSelectedViewWithType:2];
                 }
+                if (_dataArr.count > 0){
+                    [_imgEditMarkView.deleteBtn setBackgroundImage:IMG(@"删除垃圾桶_selected") forState:UIControlStateNormal];
+                    [_imgEditMarkView.backBtn setBackgroundImage:IMG(@"撤销_selected") forState:UIControlStateNormal];
+                }
+                    
+                _path = nil;
             }
         }
     }
@@ -1529,6 +1541,16 @@ static inline CGPoint XBPointOnPowerCurveLine(CGPoint p0, CGPoint p1, CGPoint p2
     double dx = (endPoint.x -startPoint.x);
     double dy = (endPoint.y - startPoint.y);
     return sqrt(dx*dx + dy*dy);
+}
+
+#pragma mark -- UIGestureRecognizerDelegate
+-(BOOL)gestureRecognizer:(UIGestureRecognizer*) gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer*)otherGestureRecognizer{
+    if ([gestureRecognizer.view isKindOfClass:[UIScrollView class]]) {
+        return NO;
+    }else {
+        return YES;
+        
+    }
 }
 
 #pragma mark -- 处理放大缩小手势

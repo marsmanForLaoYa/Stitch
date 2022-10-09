@@ -14,6 +14,7 @@
 @interface GridSelectedView ()<UICollectionViewDataSource, UICollectionViewDelegate>
 
 @property(nonatomic, strong) UICollectionView *collectionView;
+@property(nonatomic, strong) NSIndexPath *selectedIndexPath;
 
 @end
 
@@ -79,13 +80,12 @@
     return cell;
 }
 
-NSIndexPath *selectedIndexPath;
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(selectedIndexPath!= nil && [indexPath isEqual:selectedIndexPath]) {
+    if(self.selectedIndexPath!= nil && [indexPath isEqual:self.selectedIndexPath]) {
         return;
     }
-    selectedIndexPath = indexPath;
+    self.selectedIndexPath = indexPath;
     
     if(_gridSelectedItemBlock)
     {

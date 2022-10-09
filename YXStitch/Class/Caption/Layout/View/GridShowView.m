@@ -6,7 +6,6 @@
 //
 
 #import "GridShowView.h"
-@class GridShowImgView;
 
 #define kGridElementMinWidth 60
 #define kGridElementMinHeight 60
@@ -51,7 +50,7 @@
 - (void)setGridsDic:(NSDictionary *)gridsDic
 {
     //清除上一个边框
-    [lastShowImgView clearBorder];
+    [self.lastShowImgView clearBorder];
     _gridsDic = gridsDic;
     [self createLayoutSubImageViewWithGridsDic:gridsDic];
 }
@@ -89,9 +88,6 @@
             //height * subImgViewHeight为当前视图所占高度 (height - 1) * padding为当前视图所占的padding高度
             CGFloat imgViewHeight = height * subImgViewHeight + (height - 1) * _imagePadding;
             
-            //获取图片高度/宽度
-            UIImage *image = self.pictures[index];
-            
             if(self.gridsImageViews.count < self.pictures.count)
             {
                 showImgView = [self creatSubviewsWithFrame:CGRectMake(left + margin, imgViewTop, imgViewWidth, imgViewHeight)];
@@ -102,6 +98,7 @@
                 showImgView.frame = CGRectMake(left + margin,imgViewTop, imgViewWidth, imgViewHeight);
             }
             showImgView.image = self.pictures[index];
+            showImgView.index = index;
             //初始化view
             [showImgView initGestureView];
             //设置可编辑的边缘
@@ -113,26 +110,56 @@
     }
 }
 
-GridShowImgView *lastShowImgView;
 - (GridShowImgView *)creatSubviewsWithFrame:(CGRect)frame {
     GridShowImgView *subImgView = [[GridShowImgView alloc] initWithFrame:frame];
     @weakify(self);
     subImgView.gridShowImgViewTapBlock = ^(GridShowImgView * _Nonnull showImgView) {
         @strongify(self);
         //清除上一个边框
-        [lastShowImgView clearBorder];
+        [self.lastShowImgView clearBorder];
         //显示当前选中view的边框
         [showImgView showBorder];
         //记录当前选中的view
-        lastShowImgView = showImgView;
+        self.lastShowImgView = showImgView;
         //把选中的view放在最上层
         [self bringSubviewToFront:showImgView];
+        if(self.gridShowViewSelecedImageBlock) {
+            self.gridShowViewSelecedImageBlock(showImgView.image);
+        }
     };
     subImgView.delegate = self;
     [self addSubview:subImgView];
     [self.gridsImageViews addObject:subImgView];
     return subImgView;
 }
+
+//清除选中的view上的样式
+- (void)clearSelectedShowImgView {
+    //清除上一个边框
+    [self.lastShowImgView clearBorder];
+    self.lastShowImgView = nil;
+}
+
+//清除选中的view上的样式
+- (void)changeSelectedShowImgViewWithImage:(UIImage *)image {
+ 
+    self.lastShowImgView.image = image;
+    
+    NSMutableArray *arrImages = [NSMutableArray array];
+    for (int i = 0; i < self.pictures.count; i++) {
+        UIImage *picImage = self.pictures[i];
+        if(i == self.lastShowImgView.index) {
+            [arrImages addObject:image];
+        }
+        else
+        {
+            [arrImages addObject:picImage];
+        }
+    }
+
+    self.pictures = [NSArray arrayWithArray:arrImages];
+}
+
 
 - (GridPanEdge)getPanEdgeWithImageView:(GridShowImgView *)imageView {
     GridPanEdge panEdge = GridPanEdgeNone;
@@ -1264,9 +1291,9 @@ GridShowImgView *lastShowImgView;
 //判断左右边距 是否重叠
 - (BOOL)judgeBottomAndTopIsNoOverlapBetweenView1:(GridShowImgView *)view1 secondView:(GridShowImgView *)view2 {
     if(
-        (view1.left <= view2.left && fabs(view1.right + _imagePadding - view2.left) > kCompensatePrecision && view1.right <= view2.right) ||
+        (view1.left <= view2.left && view1.right + _imagePadding > view2.left && view1.right <= view2.right) ||
         (view1.left >= view2.left && view1.right <= view2.right) ||
-        (view1.left >= view2.left && fabs(view1.left - _imagePadding - view2.right) < kCompensatePrecision && view1.right >= view2.right) ||
+        (view1.left >= view2.left && view1.left - _imagePadding < view2.right && view1.right >= view2.right) ||
         (view1.left <= view2.left && view1.right >= view2.right)
        ) {//重叠
 
@@ -1279,9 +1306,9 @@ GridShowImgView *lastShowImgView;
 //判断上下边距 是否重叠
 - (BOOL)judgeLeftAndRightIsNoOverlapBetweenView1:(GridShowImgView *)view1 secondView:(GridShowImgView *)view2 {
     if(
-       (view1.top <= view2.top && fabs(view1.bottom + _imagePadding - view2.top) > kCompensatePrecision && view1.bottom < view2.bottom) ||
+       (view1.top <= view2.top && view1.bottom + _imagePadding > view2.top && view1.bottom < view2.bottom) ||
        (view1.top >= view2.top && view1.bottom < view2.bottom) ||
-       (view1.top > view2.top && fabs(view1.top - _imagePadding - view2.bottom) < kCompensatePrecision && view1.bottom >= view2.bottom) ||
+       (view1.top > view2.top && view1.top - _imagePadding < view2.bottom && view1.bottom >= view2.bottom) ||
        (view1.top <= view2.top && view1.bottom >= view2.bottom)
        ) {//重叠
 

@@ -158,7 +158,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
     [_contentScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(@(Nav_H));
         make.centerX.width.equalTo(_contentView);
-        make.height.equalTo(@(SCREEN_HEIGHT - 80 - Nav_H));
+        make.height.equalTo(@(SCREEN_HEIGHT - Nav_H));
     }];
     if (_type != 4){
         [self addVerticalContentView];
@@ -210,7 +210,12 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
         [_originBottomArr addObject:[NSNumber numberWithFloat:contentHeight]];
         
     }
-    _contentScrollView.contentSize = CGSizeMake(_contentScrollView.width,contentHeight > SCREEN_HEIGHT?contentHeight: SCREEN_HEIGHT);
+    _contentScrollView.contentSize = CGSizeMake(_contentScrollView.width,contentHeight);
+    if (contentHeight < SCREEN_HEIGHT){
+        [_contentScrollView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(@((SCREEN_HEIGHT - contentHeight)/2));
+        }];
+    }
 }
 
 //横拼

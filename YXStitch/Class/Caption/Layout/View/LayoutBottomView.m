@@ -29,7 +29,6 @@ static NSInteger BottomItemBaseTag = 1100;
     NSArray *imagesNormal = @[@"bottom_layout_normal", @"bottom_canvas_normal", @"bottom_border_normal"];
     NSArray *imagesSelected = @[@"bottom_layout_selected", @"bottom_canvas_selected", @"bottom_border_selected"];
     NSArray *titles = @[@"布局", @"画布", @"边框"];
-    
     CGFloat ButtonWidth = 60;
     CGFloat padding = (SCREEN_WIDTH - ButtonWidth * 3) / (titles.count + 1);
     CGFloat left = padding;
