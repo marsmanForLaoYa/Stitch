@@ -53,12 +53,12 @@
 @property (nonatomic ,strong)imageShellSelectView *shellSelectView;//外框类型选择
 
 
-@property (nonatomic ,strong)UIView *contentView;
+@property (nonatomic ,strong)CustomScrollView *contentView;
 @property (nonatomic ,strong)CustomScrollView *contentScrollView;
 @property (nonatomic ,strong)UIImageView *imageView;
 @property (nonatomic ,strong)UIView *bgView;
 @property (nonatomic ,strong)CheckProView *checkProView;
-@property (nonatomic ,strong)UIView *shellBkView;//套壳背景view
+@property (nonatomic ,strong)UIScrollView *shellBkView;//套壳背景view
 @property (nonatomic ,strong)UIImageView *shellBkImageView;//套壳背景imageview
 
 @property (nonatomic ,assign)NSInteger editType;//编辑类型
@@ -66,7 +66,7 @@
 @property (nonatomic ,assign)NSInteger borderType;//边框类型
 @property (nonatomic ,assign)CGFloat currentBorderValue;//当前border值
 @property (nonatomic ,strong)UIPinchGestureRecognizer *pinchRecognizer;
-@property (nonatomic ,strong)UIPanGestureRecognizer *panRecognizer;
+@property (nonatomic ,strong)UIPanGestureRecognizer *panRecognizer;;
 
 @property (nonatomic, strong)NSMutableArray *dataArr;//维护单个画布的路径数组
 
@@ -93,6 +93,13 @@
 @property (nonatomic, assign)NSInteger mosaicStyle;//马赛克默认样式
 @property (nonatomic, strong)UIColor *fillColor;//填充颜色
 @property (nonatomic, assign)BOOL isStartPaint;
+@property (nonatomic, assign)BOOL isHaveBang;//是否有刘海 默认无刘海
+@property (nonatomic, assign)BOOL ishaveBkColor;//是否有背景色 默认有背景色
+@property (nonatomic, assign)BOOL isShellVer;//是否是横屏套壳
+@property (nonatomic, assign)BOOL isAddShell;//是否套壳
+@property (nonatomic, strong)NSString *phoneTypeStr;//手机类型str
+@property (nonatomic, strong)NSString *addLabStr;//添加的文本str
+
 
 
 @end
@@ -105,11 +112,10 @@
     self.title = [NSString stringWithFormat:@"%@",_titleStr];
     _isSelectPath = NO;
     _isStartPaint = NO;
-//    _dataArr = [NSMutableArray array];
-//    _imageViewsArr = [NSMutableArray array];
-//    _originWidthArr = [NSMutableArray array];
-//    _originHeightArr = [NSMutableArray array];
-//    _originzTopArr = [NSMutableArray array];
+    _isShellVer = _isVer;
+    _ishaveBkColor = YES;
+    _isHaveBang = NO;
+    _isAddShell = NO;
     [self setupViews];
     [self setupNavItems];
     [self addBottomView];
@@ -140,7 +146,7 @@
 
 #pragma mark --initUI
 -(void)setupViews{
-    _contentView = [UIView new];
+    _contentView = [CustomScrollView new];
     _contentView.userInteractionEnabled = YES;
     _contentView.backgroundColor = [UIColor clearColor];
     [self.view addSubview:_contentView];
@@ -151,14 +157,7 @@
     _contentScrollView = [CustomScrollView new];
     _contentScrollView.delegate = self;
     _contentScrollView.backgroundColor = [UIColor clearColor];
-    _contentScrollView.userInteractionEnabled = YES;
-    _contentScrollView.scrollEnabled = YES;
     [_contentView addSubview:_contentScrollView];
-    
-    UIPanGestureRecognizer *tapGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestureAction:)];
-    _contentScrollView.delaysContentTouches = YES;
-    tapGesture.delegate = self;
-    [_contentScrollView addGestureRecognizer:tapGesture];
     
     CGFloat imageFakewidth = 0.0;
     CGFloat imageFakeHeight= 0.0;
@@ -180,13 +179,13 @@
     [_contentScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
         if (_isVer){
             make.top.equalTo(@(Nav_H));
-            make.centerX.equalTo(_contentView);
-            make.width.equalTo(@(scrollWidth));
+            make.centerX.height.equalTo(_contentView);
+            make.width.equalTo(@(imageFakewidth));
         }else{
             make.width.equalTo(@(SCREEN_WIDTH));
             make.centerY.equalTo(_contentView);
+            make.height.equalTo(@(imageFakeHeight));
         }
-        make.height.equalTo(@(scrollHeight));
     }];
     if (_isVer){
         //竖拼
@@ -203,8 +202,8 @@
     UIImage *icon = _imgArr[0];
     StitchingButton *firstImageView = [[StitchingButton alloc]initWithFrame:CGRectMake(0, 0, VerViewWidth, (CGFloat)(icon.size.height/icon.size.width) * VerViewWidth)];
     firstImageView.image = icon;
-    firstImageView.userInteractionEnabled = YES;
     contentHeight += firstImageView.height;
+    firstImageView.userInteractionEnabled = YES;
     firstImageView.tag = 100;
     [_contentScrollView addSubview:firstImageView];
     [self.imageViewsArr addObject:firstImageView];
@@ -215,9 +214,8 @@
         UIImage *icon = _imgArr[i];
         CGFloat imgHeight = (CGFloat)(icon.size.height/icon.size.width) * VerViewWidth;
         StitchingButton *imageView = [[StitchingButton alloc]initWithFrame:CGRectMake(0, firstImageView.bottom, VerViewWidth, imgHeight)];
-        imageView.userInteractionEnabled = YES;
         imageView.image = icon;
-        imageView.centerX = firstImageView.centerX;
+        imageView.userInteractionEnabled = YES;
         contentHeight += imgHeight;
         [self.originWidthArr addObject:[NSNumber numberWithFloat:VerViewWidth]];
         [self.originHeightArr addObject:[NSNumber numberWithFloat:imgHeight]];
@@ -227,12 +225,26 @@
         [self.imageViewsArr addObject:imageView];
         
     }
-    _contentScrollView.contentSize = CGSizeMake(_contentScrollView.width,contentHeight);
+    _contentScrollView.contentSize = CGSizeMake(_contentScrollView.width,contentHeight + 80);
     
     if (contentHeight < SCREEN_HEIGHT){
-        [_contentScrollView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(@((SCREEN_HEIGHT - contentHeight)/2));
-        }];
+        //        [_contentScrollView mas_updateConstraints:^(MASConstraintMaker *make) {
+        //            make.top.equalTo(@((SCREEN_HEIGHT - contentHeight)/2));
+        //        }];
+        //        NSInteger centerIndex = _imgArr.count / 2;
+        //        StitchingButton *centenIMG = _imageViewsArr[centerIndex];
+        //        centenIMG.centerY = self.view.centerY;
+        //        StitchingButton *topIMG = centenIMG;
+        //        for (NSInteger i = centerIndex - 1 ; i <= 0; i --) {
+        //            StitchingButton *img = _imageViewsArr[i];
+        //            img.bottom = topIMG.top;
+        //            topIMG = img;
+        //        }
+        //        for (NSInteger i = centerIndex + 1; i < _imageViewsArr.count; i ++) {
+        //            StitchingButton *img = _imageViewsArr[i];
+        //            img.top = centenIMG.bottom;
+        //            centenIMG = img;
+        //        }
     }
 }
 
@@ -249,6 +261,7 @@
     [_contentScrollView addSubview:firstImageView];
     [self.imageViewsArr addObject:firstImageView];
     [self.originWidthArr addObject:[NSNumber numberWithFloat:(CGFloat)(icon.size.width / icon.size.height) * HorViewHeight]];
+    [self.originzTopArr addObject:[NSNumber numberWithFloat:0]];
     [self.originHeightArr addObject:[NSNumber numberWithFloat:HorViewHeight]];
     for (NSInteger i = 1; i < _imgArr.count; i ++) {
         UIImage *icon = _imgArr[i];
@@ -261,6 +274,8 @@
         [_contentScrollView addSubview:imageView];
         firstImageView = imageView;
         [self.originWidthArr addObject:[NSNumber numberWithFloat:imgWidth]];
+        [self.originzTopArr addObject:[NSNumber numberWithFloat:imageView.left]];
+        NSLog(@"right==%lf",imageView.left);
         [self.originHeightArr addObject:[NSNumber numberWithFloat:HorViewHeight]];
         [self.imageViewsArr addObject:imageView];
         
@@ -305,7 +320,7 @@
     //    _panRecognizer.maximumNumberOfTouches = 1;
     //    [_contentView addGestureRecognizer:_panRecognizer];
     _pinchRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinch:)];
-    [_contentView addGestureRecognizer:_pinchRecognizer];
+    [_contentScrollView addGestureRecognizer:_pinchRecognizer];
 }
 
 #pragma mark ---btnClick && viewDelegateClick
@@ -371,7 +386,7 @@
     _imgEditMarkView.hidden = YES;
     _selectView.hidden = YES;
     _borderSettingView.hidden = YES;
-   // _bottomView.hidden = YES;
+    // _bottomView.hidden = YES;
     _editType = tag;
     if(tag == 1){
         //标注
@@ -389,6 +404,7 @@
         };
     }else if (tag ==2){
         //边框
+        [_contentScrollView removeGestureRecognizer:_panRecognizer];
         _borderType = 0;
         if (_borderSettingView == nil){
             _borderSettingView = [[ImageBorderSettingView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH,100)];
@@ -405,11 +421,80 @@
         };
     }else if (tag == 3){
         //套壳
+        [_contentScrollView removeGestureRecognizer:_panRecognizer];
+        _isAddShell = YES;
         if (_isVer){
-            UIImageView *tmp = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, _contentScrollView.width, _contentScrollView.contentSize.height)];
-            tmp.image = IMG(@"刘海iphone14 Pro max金色");
-            [_contentScrollView addSubview:tmp];
-            [_contentScrollView bringSubviewToFront:tmp];
+            [_contentScrollView removeAllSubviews];
+            [_imageViewsArr removeAllObjects];
+            [_originzTopArr removeAllObjects];
+            [_originWidthArr removeAllObjects];
+            [_originHeightArr removeAllObjects];
+            CGFloat width = SCREEN_WIDTH - 120;
+            [_contentScrollView mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.width.equalTo(@(width));
+                make.top.equalTo(_contentView);
+            }];
+            CGFloat contentHeight = 0.0;
+            UIImage *icon = _imgArr[0];
+            StitchingButton *firstImageView = [[StitchingButton alloc]initWithFrame:CGRectMake(3,0, width-6 , (CGFloat)(icon.size.height/icon.size.width) * width)];
+            firstImageView.image = icon;
+            UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:firstImageView.bounds byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight cornerRadii:CGSizeMake(55, 55)];
+            CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+            maskLayer.frame = firstImageView.bounds;
+            maskLayer.path = maskPath.CGPath;
+            firstImageView.layer.mask = maskLayer;
+            firstImageView.userInteractionEnabled = YES;
+            contentHeight += firstImageView.height;
+            firstImageView.tag = 100;
+            [_contentScrollView addSubview:firstImageView];
+            [self.imageViewsArr addObject:firstImageView];
+            [self.originWidthArr addObject:[NSNumber numberWithFloat:width - 6]];
+            [self.originHeightArr addObject:[NSNumber numberWithFloat:(CGFloat)(icon.size.height/icon.size.width) * VerViewWidth]];
+            [self.originzTopArr addObject:[NSNumber numberWithFloat:0]];
+            for (NSInteger i = 1; i < _imgArr.count; i ++) {
+                UIImage *icon = _imgArr[i];
+                CGFloat imgHeight = (CGFloat)(icon.size.height/icon.size.width) * width;
+                StitchingButton *imageView = [[StitchingButton alloc]initWithFrame:CGRectMake(3, firstImageView.bottom, width-6 , imgHeight)];
+                imageView.userInteractionEnabled = YES;
+                imageView.image = icon;
+                contentHeight += imgHeight;
+                if (i == _imgArr.count - 1){
+                    UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:imageView.bounds byRoundingCorners:UIRectCornerBottomLeft | UIRectCornerBottomRight cornerRadii:CGSizeMake(55, 55)];
+                    CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+                    maskLayer.frame = imageView.bounds;
+                    maskLayer.path = maskPath.CGPath;
+                    imageView.layer.mask = maskLayer;
+                }
+                [self.originWidthArr addObject:[NSNumber numberWithFloat:width-6]];
+                [self.originHeightArr addObject:[NSNumber numberWithFloat:imgHeight]];
+                [self.originzTopArr addObject:[NSNumber numberWithFloat:firstImageView.bottom]];
+                [_contentScrollView addSubview:imageView];
+                firstImageView = imageView;
+                [self.imageViewsArr addObject:imageView];
+                
+            }
+            [_contentScrollView setContentSize:CGSizeMake(_contentScrollView.size.width, contentHeight)];
+            
+            _shellBkImageView  = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0,width, _contentScrollView.contentSize.height)];
+            _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone14 Pro max金色"];
+            [_contentScrollView addSubview:_shellBkImageView];
+            if(contentHeight < SCREEN_HEIGHT){
+                [_contentScrollView setContentSize:CGSizeMake(_contentScrollView.size.width, SCREEN_HEIGHT + 60)];
+                
+            }else{
+                [_contentScrollView setContentSize:CGSizeMake(_contentScrollView.size.width, contentHeight + Nav_HEIGHT + 80)];
+            }
+            [_contentScrollView setBackgroundColor:[UIColor clearColor]];
+//            _contentScrollView.layer.masksToBounds = YES;
+//            _contentScrollView.layer.cornerRadius = 55;
+            _contentView.contentSize = _contentScrollView.contentSize;
+            [_contentView setBackgroundColor:[UIColor orangeColor]];
+            
+        }else{
+            _shellBkImageView  = [[UIImageView alloc]initWithFrame:CGRectMake(20, 20, SCREEN_WIDTH - 40, 200)];
+            _shellBkImageView.image = IMG(@"刘海iphone14 Pro max金色横屏");
+            [_contentScrollView addSubview:_shellBkImageView];
+            [_contentScrollView bringSubviewToFront:_shellBkImageView];
         }
         if (_shellSettingView == nil){
             _shellSettingView = [[ImageShellSettingView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH,100)];
@@ -438,6 +523,13 @@
     }
 }
 
+-(void)addContentScrollViewPangesture{
+    _panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureAction:)];
+    _contentScrollView.delaysContentTouches = NO;
+    //        _panRecognizer.delegate = self;
+    [_contentScrollView addGestureRecognizer:_panRecognizer];
+}
+
 #pragma mark --标注编辑
 -(void)imgMarkEditViewBtnClickWithTag:(NSInteger )tag{
     
@@ -445,8 +537,10 @@
     [_colorSelectView removeFromSuperview];
     [_mosaicView removeFromSuperview];
     _isStartPaint = NO;
+   
     if (tag == 0){
         //取消
+        _selectView.hidden = YES;
         _markType = 0;
         [UIView animateWithDuration:0.3 animations:^{
             weakSelf.imgEditMarkView.frame = CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, weakSelf.imgEditMarkView.height);
@@ -454,89 +548,82 @@
             weakSelf.imgEditMarkView.hidden = YES;
             //weakSelf.bottomView.hidden = NO;
         }];
-    }else if (tag == 1 || tag == 4 || tag == 2){
-        _pathWidth = 5;
-        _pathLineColor = [UIColor orangeColor];
-        if (tag == 2){
-            //实心填充
-            _markType = FILLRECTANGLE;
-            [_colorSelectView removeFromSuperview];
-            [self addColoeSelectedViewWithType:3];
-        }else{
-            //空心填充 //箭头
-            [_colorSelectView removeFromSuperview];
-            [self addColoeSelectedViewWithType:1];
-            if (tag == 1){
-                _markType = RECTANGLE;
+        [_contentScrollView removeGestureRecognizer:_panRecognizer];
+        _contentScrollView.scrollEnabled = YES;
+    }else{
+        [self addContentScrollViewPangesture];
+        if (tag == 1 || tag == 4 || tag == 2){
+            _pathWidth = 5;
+            _pathLineColor = [UIColor orangeColor];
+            if (tag == 2){
+                //实心填充
+                _markType = FILLRECTANGLE;
+                [_colorSelectView removeFromSuperview];
+                [self addColoeSelectedViewWithType:3];
             }else{
-                _markType = ARROW;
-            }
-        }
-    }else if(tag == 3){
-        //马赛克
-        _markType = MOSAIC;
-        _mosaicView = [[MosaicStyleSelectView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, 80)];
-        _mosaicShape = 100;
-        _mosaicStyle = 200;
-        [self.view addSubview:_mosaicView];
-        _pathWidth = 15;
-        _pathLineColor = [UIColor orangeColor];
-        //选择样式
-        _mosaicView.shapeBtnClick = ^(NSInteger tag) {
-            //weakSelf.mosaicShape = tag;
-            if (tag == 100){
-                weakSelf.markType = MOSAICRECTANGLE;
-            }else if(tag == 101){
-                weakSelf.markType = MOSAICOVAL;
-            }else{
-                weakSelf.markType = MOSAIC;
-            }
-        };
-        //选择图案
-        _mosaicView.styleBtnClick = ^(NSInteger tag) {
-            weakSelf.mosaicStyle = tag;
-        };
-        [UIView animateWithDuration:0.3 animations:^{
-            weakSelf.mosaicView.frame = CGRectMake(0, SCREEN_HEIGHT - 80 - weakSelf.mosaicView.height, SCREEN_WIDTH, weakSelf.mosaicView.height);
-        }];
-    }else if(tag == 5){
-        //画笔
-        _markType = LINE;
-        _pathWidth = 5;
-        _pathLineColor = [UIColor orangeColor];
-        [_colorSelectView removeFromSuperview];
-        [self addColoeSelectedViewWithType:2];
-    }else if(tag == 6){
-        //文本
-        _markType = WORD;
-        if (!_titleView){
-            _titleView = [WaterTitleView new];
-            _titleView.type = 2;
-            [_titleView.titleTV becomeFirstResponder];
-            _titleView.btnClick = ^(NSInteger tag) {
-                weakSelf.titleView.hidden = YES;
+                //空心填充 //箭头
+                [_colorSelectView removeFromSuperview];
+                [self addColoeSelectedViewWithType:1];
                 if (tag == 1){
-                    [weakSelf addEditLabWithStr:weakSelf.titleView.titleTV.text];
-                    [weakSelf addTipsViewWithType:1];
+                    _markType = RECTANGLE;
+                }else{
+                    _isStartPaint = YES;
+                    _markType = ARROW;
+                }
+            }
+        }else if(tag == 3){
+            //马赛克
+            _markType = MOSAIC;
+            _mosaicView = [[MosaicStyleSelectView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, 80)];
+            _mosaicShape = 100;
+            _mosaicStyle = 200;
+            [self.view addSubview:_mosaicView];
+            _pathWidth = 15;
+            _pathLineColor = [UIColor orangeColor];
+            //选择样式
+            _mosaicView.shapeBtnClick = ^(NSInteger tag) {
+                //weakSelf.mosaicShape = tag;
+                if (tag == 100){
+                    weakSelf.markType = MOSAICRECTANGLE;
+                }else if(tag == 101){
+                    weakSelf.markType = MOSAICOVAL;
+                }else{
+                    weakSelf.markType = MOSAIC;
                 }
             };
-            [self.view.window addSubview:_titleView];
-            [_titleView mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.edges.equalTo(self.view);
+            //选择图案
+            _mosaicView.styleBtnClick = ^(NSInteger tag) {
+                weakSelf.mosaicStyle = tag;
+            };
+            [UIView animateWithDuration:0.3 animations:^{
+                weakSelf.mosaicView.frame = CGRectMake(0, SCREEN_HEIGHT - 80 - weakSelf.mosaicView.height, SCREEN_WIDTH, weakSelf.mosaicView.height);
             }];
+        }else if(tag == 5){
+            //画笔
+            _markType = LINE;
+            _pathWidth = 5;
+            _pathLineColor = [UIColor orangeColor];
+            [_colorSelectView removeFromSuperview];
+            [self addColoeSelectedViewWithType:2];
+        }else if(tag == 6){
+            //文本
+            _markType = WORD;
+            _pathWidth = 15;
+            _isStartPaint = YES;
+            _pathLineColor = [UIColor orangeColor];
+            [_colorSelectView removeFromSuperview];
+            [self addColoeSelectedViewWithType:1];
+        }else if(tag == 100){
+            //删除
+            //_markType = DELETELAYER;
+            [self undo];
+        }else if(tag == 200){
+            //撤销
+            // _markType = UNDO;
+            [self undo];
         }else{
-            _titleView.hidden = NO;
+            
         }
-    }else if(tag == 100){
-        //删除
-        //_markType = DELETELAYER;
-        [self undo];
-    }else if(tag == 200){
-        //撤销
-       // _markType = UNDO;
-        [self undo];
-    }else{
-        
     }
 }
 #pragma mark --边框编辑
@@ -548,26 +635,17 @@
             weakSelf.borderSettingView.frame = CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, weakSelf.borderSettingView.height);
         } completion:^(BOOL finished) {
             weakSelf.borderSettingView.hidden = YES;
-           // weakSelf.bottomView.hidden = NO;
+            // weakSelf.bottomView.hidden = NO;
         }];
+        _selectView.hidden = YES;
+        [_contentScrollView removeGestureRecognizer:_panRecognizer];
+        _contentScrollView.scrollEnabled = YES;
     }else{
-        if (_editType == 2 && _borderType <= 0 && _colorSelectView == nil){
-//            [_colorSelectView removeFromSuperview];
-            if (_colorSelectView == nil){
-                [self addColoeSelectedViewWithType:4];
-                _pathWidth = 1;
-                _pathLineColor = [UIColor orangeColor];
-            }
-        }
-        
+        _borderType = tag;
         if (tag == 1){
             //无边框
             _pathWidth = 0;
             _pathLineColor = [UIColor clearColor];
-        }
-        _borderType = tag;
-        [self changeImageBorderWithType:_borderType AndBorderWidth:_pathWidth AndColor:_pathLineColor];
-        if (_borderType == 1){
             [UIView animateWithDuration:0.3 animations:^{
                 weakSelf.colorSelectView.frame = CGRectMake(0, SCREEN_HEIGHT - 80, SCREEN_WIDTH, weakSelf.colorSelectView.height);
             } completion:^(BOOL finished) {
@@ -575,138 +653,195 @@
                 weakSelf.colorSelectView = nil;
                 weakSelf.borderType = 0;
             }];
-            
+        }else{
+            if (_colorSelectView == nil){
+                [self addColoeSelectedViewWithType:4];
+            }
+            _pathWidth = 1;
+            _pathLineColor = [UIColor orangeColor];
         }
+        [self changeImageBorderWithType:_borderType AndBorderWidth:_pathWidth AndColor:_pathLineColor];
         
     }
 }
 
 #pragma mark -- 改变边框
 -(void)changeImageBorderWithType:(NSInteger)type AndBorderWidth:(CGFloat)width AndColor:(UIColor *)color{
+    if (width == 1){
+        width = 0;
+    }
     CGFloat changeScale = 1 - width / 100;
-    if (type == 2){
-        StitchingButton *image = _imageViewsArr[0];
-        image.backgroundColor = color;
-        CGFloat imgWidth  = [_originWidthArr[0]floatValue];
-        CGFloat imgHeight = [_originHeightArr[0]floatValue];
-        image.imgView.bottom = image.bottom;
-        image.imgView.width = imgWidth * changeScale;
-        image.imgView.height = imgHeight *changeScale;
-        image.imgView.centerX = image.centerX;
-        StitchingButton *firstImage = image;
-        for (NSInteger i = 1; i < _imageViewsArr.count ; i ++) {
-            StitchingButton *imageView = _imageViewsArr[i];
-            imageView.backgroundColor = color;
-            CGFloat imgWidth  = [_originWidthArr[i]floatValue];
-            CGFloat imgHeight = [_originHeightArr[i]floatValue];
-            CGFloat imgTop = [_originzTopArr[i]floatValue];
-            imageView.imgView.width = imgWidth * changeScale;
-            imageView.imgView.height = imgHeight *changeScale;
-            imageView.imgView.top = 0;
-            if (i != 1){
-                imageView.top = imgTop * changeScale;
-            }else{
-                imageView.top = firstImage.bottom;
-            }
-            imageView.imgView.centerX = image.centerX;
-            firstImage = imageView;
-        }
-    }else if (type == 3){
-        
-    }else if (type == 4){
-        
-    }else{
-        for (NSInteger i = 0; i < _imageViewsArr.count; i ++) {
-            StitchingButton *image = _imageViewsArr[i];
+    if(_isVer){
+        if (type == 2){
+            StitchingButton *image = _imageViewsArr[0];
             image.backgroundColor = color;
-            CGFloat imgWidth  = [_originWidthArr[i]floatValue];
-            CGFloat imgHeight = [_originHeightArr[i]floatValue];
-            CGFloat top = [_originzTopArr[i] floatValue];
-            image.frame = CGRectMake(0, top, imgWidth, imgHeight);
-            image.imgView.frame = CGRectMake(0, 0, imgWidth, imgHeight);
-        }
-    }
-    for (NSInteger i = 0; i < _imageViewsArr.count ; i ++) {
-        StitchingButton *image = _imageViewsArr[i];
-        image.backgroundColor = color;
-        CGFloat imgWidth  = [_originWidthArr[i]floatValue];
-        CGFloat imgHeight = [_originHeightArr[i]floatValue];
-        //[image.layer removeAllSublayers];
-        if (type != 1){
-            if (type == 2){
-                //外边框
-                if (_isVer){
-//                    image.imgView.frame = CGRectMake(image.imgView.origin.x, image.imgView.origin.y, imgWidth * changeScale, imgHeight * changeScale);
-                   // image.imgView.bottom = image.bottom;
-                    //image.imgView.centerX = image.centerX;
-                    if (i == 0){
-                        //[image setDirectionBorderWithTop:YES left:YES bottom:NO right:YES borderColor:color withBorderWidth:width];
-                    }else if (i == _imageViewsArr.count - 1){
-                       // [image setDirectionBorderWithTop:NO left:YES bottom:YES right:YES borderColor:color withBorderWidth:width];
-                    }else{
-                        //[image setDirectionBorderWithTop:NO left:YES bottom:NO right:YES borderColor:color withBorderWidth:width];
-                    }
+            CGFloat imgWidth  = [_originWidthArr[0]floatValue];
+            CGFloat imgHeight = [_originHeightArr[0]floatValue];
+            image.imgView.bottom = image.bottom;
+            image.imgView.width = imgWidth * changeScale;
+            image.imgView.height = imgHeight *changeScale;
+            image.imgView.left = (imgWidth - image.imgView.width)/2;
+            StitchingButton *firstImage = image;
+            for (NSInteger i = 1; i < _imageViewsArr.count ; i ++) {
+                StitchingButton *imageView = _imageViewsArr[i];
+                imageView.backgroundColor = color;
+                CGFloat imgWidth  = [_originWidthArr[i]floatValue];
+                CGFloat imgHeight = [_originHeightArr[i]floatValue];
+                CGFloat imgTop = [_originzTopArr[i]floatValue];
+                imageView.imgView.width = imgWidth * changeScale;
+                imageView.imgView.height = imgHeight *changeScale;
+                imageView.imgView.top = 0;
+                if (i != 1){
+                    imageView.top = imgTop * changeScale;
                 }else{
-                    if (i == 0){
-                        //[image setDirectionBorderWithTop:YES left:YES bottom:YES right:NO borderColor:color withBorderWidth:width];
-                    }else if (i == _imageViewsArr.count - 1){
-                       // [image setDirectionBorderWithTop:YES left:NO bottom:YES right:YES borderColor:color withBorderWidth:width];
-                    }else{
-                       // [image setDirectionBorderWithTop:YES left:NO bottom:YES right:NO borderColor:color withBorderWidth:width];
-                    }
+                    imageView.top = firstImage.bottom;
                 }
-                
-                
-            }else if (type == 3){
-                //内边框
-                if (_isVer){
-                    if (i == 0){
-                        [image setDirectionBorderWithTop:NO left:NO bottom:YES right:NO borderColor:color withBorderWidth:width];
-                    }else if (i == _imageViewsArr.count - 1){
-                        [image setDirectionBorderWithTop:YES left:NO bottom:NO right:NO borderColor:color withBorderWidth:width];
-                    }else{
-                        [image setDirectionBorderWithTop:YES left:NO bottom:YES right:NO borderColor:color withBorderWidth:width];
-                    }
+                imageView.imgView.left = firstImage.imgView.left;
+                firstImage = imageView;
+            }
+        }else if (type == 3){
+            _contentScrollView.backgroundColor = color;
+            for (NSInteger i = 1; i < _imageViewsArr.count; i ++) {
+                StitchingButton *img = _imageViewsArr[i];
+                CGFloat top = [_originzTopArr[i] floatValue];
+                if (i == 1){
+                    img.frame = CGRectMake(img.left, top +  width, img.width, img.height);
                 }else{
-                    if (i != 0 && i != _imageViewsArr.count - 1){
-                        [image setDirectionBorderWithTop:NO left:YES bottom:NO right:YES borderColor:color withBorderWidth:width];
-                    }
+                    img.frame = CGRectMake(img.left, top + i * width, img.width, img.height);
                 }
+                _imageViewsArr[i] = img;
                 
+            }
+            if (_isVer){
+//                _contentScrollView.contentSize = CGSizeMake(_contentView.width, _contentScrollView.contentSize.height + width * _imageViewsArr.count);
             }else{
-                //全边框
-//                image.width = image.width - width / 10;
-                [image setDirectionBorderWithTop:YES left:YES bottom:YES right:YES borderColor:color withBorderWidth:width];
+                
+            }
+            
+        }else if (type == 4){
+            _contentScrollView.backgroundColor = color;
+            for (NSInteger i = 0; i < _imageViewsArr.count ; i ++) {
+                StitchingButton *imageView = _imageViewsArr[i];
+                CGFloat imgWidth  = [_originWidthArr[i]floatValue];
+                CGFloat imgHeight = [_originHeightArr[i]floatValue];
+                CGFloat imgTop = [_originzTopArr[i]floatValue];
+                imageView.width = imgWidth * changeScale;
+                imageView.height = imgHeight *changeScale;
+                imageView.top = imgTop +  width;
+                if (_isAddShell){
+                    imageView.left = 3 + width;
+                }else{
+                    imageView.left = 0 + width;
+                }
+                
+            }
+        }else{
+            for (NSInteger i = 0; i < _imageViewsArr.count; i ++) {
+                StitchingButton *image = _imageViewsArr[i];
+                image.backgroundColor = color;
+                image.backgroundColor = [UIColor clearColor];
+                CGFloat imgWidth  = [_originWidthArr[i]floatValue];
+                CGFloat imgHeight = [_originHeightArr[i]floatValue];
+                CGFloat top = [_originzTopArr[i] floatValue];
+                image.frame = CGRectMake(0, top, imgWidth, imgHeight);
+                image.imgView.frame = CGRectMake(0, 0, imgWidth, imgHeight);
             }
         }
-        
+    }else{
+        if (type == 1){
+            //无边框
+            for (NSInteger i = 0; i < _imageViewsArr.count; i ++) {
+                StitchingButton *image = _imageViewsArr[i];
+                image.backgroundColor = color;
+                image.backgroundColor = [UIColor clearColor];
+                CGFloat imgWidth  = [_originWidthArr[i]floatValue];
+                CGFloat imgHeight = [_originHeightArr[i]floatValue];
+                CGFloat left = [_originzTopArr[i]floatValue];
+                image.frame = CGRectMake(left, 0, imgWidth, imgHeight);
+                image.imgView.frame = CGRectMake(0, 0, imgWidth, imgHeight);
+            }
+            
+        }else if (type == 2){
+            //内框
+            StitchingButton *image = _imageViewsArr[0];
+            image.backgroundColor = color;
+            CGFloat imgWidth  = [_originWidthArr[0]floatValue];
+            CGFloat imgHeight = [_originHeightArr[0]floatValue];
+            image.imgView.width = imgWidth * changeScale;
+            image.imgView.height = imgHeight *changeScale;
+            image.imgView.left = width;
+            image.imgView.top =  width;
+            StitchingButton *firstImage = image;
+            for (NSInteger i = 1; i < _imageViewsArr.count ; i ++) {
+                StitchingButton *imageView = _imageViewsArr[i];
+                imageView.backgroundColor = color;
+                CGFloat imgWidth  = [_originWidthArr[i]floatValue];
+                CGFloat imgHeight = [_originHeightArr[i]floatValue];
+                //CGFloat imgTop = [_originzTopArr[i]floatValue];
+                imageView.imgView.width = imgWidth * changeScale;
+                imageView.imgView.height = imgHeight *changeScale;
+                imageView.imgView.top = width;
+                imageView.left = firstImage.right;
+                firstImage = imageView;
+            }
+        }else if (type == 3){
+            //外框
+        }else{
+            //全框
+        }
     }
-//    if (width >= _currentBorderValue){
-//        if (_isVer){
-//            [_contentScrollView mas_remakeConstraints:^(MASConstraintMaker *make) {
+        
+//    for (NSInteger i = 0; i < _imageViewsArr.count ; i ++) {
+//        StitchingButton *image = _imageViewsArr[i];
+//        image.backgroundColor = color;
+//        CGFloat imgWidth  = [_originWidthArr[i]floatValue];
+//        CGFloat imgHeight = [_originHeightArr[i]floatValue];
+//        [image.imgView.layer removeAllSublayers];
+//        if (type != 1){
+//            if (type == 2){
+//                //外边框
 //                if (_isVer){
-//                    make.top.equalTo(@(Nav_HEIGHT));
-//                    make.height.equalTo(@(SCREEN_HEIGHT - 80 - Nav_HEIGHT));
-//                    make.center.equalTo(_contentView);
-//                    make.width.equalTo(@(_contentScrollView.width + width));
+//                    if (i == 0){
+//                        [image.imgView setDirectionBorderWithTop:YES left:YES bottom:NO right:YES borderColor:color withBorderWidth:width];
+//                    }else if (i == _imageViewsArr.count - 1){
+//                        [image.imgView setDirectionBorderWithTop:NO left:YES bottom:YES right:YES borderColor:color withBorderWidth:width];
+//                    }else{
+//                        [image.imgView setDirectionBorderWithTop:NO left:YES bottom:NO right:YES borderColor:color withBorderWidth:width];
+//                    }
 //                }else{
-//                    make.width.equalTo(@(SCREEN_WIDTH));
-//                    make.centerY.equalTo(_contentView);
+//                    if (i == 0){
+//                        [image.imgView setDirectionBorderWithTop:YES left:YES bottom:YES right:NO borderColor:color withBorderWidth:width];
+//                    }else if (i == _imageViewsArr.count - 1){
+//                        [image.imgView setDirectionBorderWithTop:YES left:NO bottom:YES right:YES borderColor:color withBorderWidth:width];
+//                    }else{
+//                        [image.imgView setDirectionBorderWithTop:YES left:NO bottom:YES right:NO borderColor:color withBorderWidth:width];
+//                    }
 //                }
-//            }];
 //
-//        }else{
-//            _contentScrollView.frame = CGRectMake(_contentScrollView.top, _contentScrollView.left, _contentScrollView.width, _contentScrollView.height + width);
-//            _contentScrollView.center = _contentView.center;
+//
+//            }else if (type == 3){
+//                //内边框
+//                if (_isVer){
+//                    if (i == 0){
+//                        [image.imgView setDirectionBorderWithTop:NO left:NO bottom:YES right:NO borderColor:color withBorderWidth:width];
+//                    }else if (i == _imageViewsArr.count - 1){
+//                        [image.imgView setDirectionBorderWithTop:YES left:NO bottom:NO right:NO borderColor:color withBorderWidth:width];
+//                    }else{
+//                        [image.imgView setDirectionBorderWithTop:YES left:NO bottom:YES right:NO borderColor:color withBorderWidth:width];
+//                    }
+//                }else{
+//                    if (i != 0 && i != _imageViewsArr.count - 1){
+//                        [image.imgView setDirectionBorderWithTop:NO left:YES bottom:NO right:YES borderColor:color withBorderWidth:width];
+//                    }
+//                }
+//
+//            }else{
+//                //全边框
+//                //                image.width = image.width - width / 10;
+//                [image.imgView setDirectionBorderWithTop:YES left:YES bottom:YES right:YES borderColor:color withBorderWidth:width];
+//            }
 //        }
-//    }else{
-//        if (_isVer){
-//            _contentScrollView.frame = CGRectMake(_contentScrollView.top, _contentScrollView.left, _contentScrollView.width - width, _contentScrollView.height);
-//            _contentScrollView.center = _contentView.center;
-//        }else{
-//            _contentScrollView.frame = CGRectMake(_contentScrollView.top, _contentScrollView.left, _contentScrollView.width, _contentScrollView.height - width);
-//            _contentScrollView.center = _contentView.center;
-//        }
+//
 //    }
     _currentBorderValue = width;
 }
@@ -716,6 +851,9 @@
     if (type == 0){
         //取消
         [self shellSelectViewDiss];
+        _selectView.hidden = YES;
+        [_contentScrollView removeGestureRecognizer:_panRecognizer];
+        _contentScrollView.scrollEnabled = YES;
     }else if (type == 100){
         //机型选择
         if (!isSelected){
@@ -727,9 +865,10 @@
             [UIView animateWithDuration:0.3 animations:^{
                 weakSelf.shellSelectView.frame = CGRectMake(0, SCREEN_HEIGHT - weakSelf.shellSelectView.height - 80, SCREEN_WIDTH, weakSelf.shellSelectView.height);
             }];
-            _shellSelectView.selectClick = ^(NSString * _Nonnull str, UIColor * _Nonnull color) {
+            _shellSelectView.selectClick = ^(NSString * _Nonnull str, UIColor * _Nonnull color, NSInteger tag) {
                 weakSelf.shellSettingView.phoneTypeLab.text = str;
                 weakSelf.shellSettingView.phoneBKIMG.backgroundColor = color;
+                [weakSelf changeShellWithStr:str andTag:tag];
             };
         }else{
             [UIView animateWithDuration:0.3 animations:^{
@@ -739,7 +878,7 @@
             }];
         }
         
-                
+        
     }else{
         //[self shellSelectViewDiss];
         if (type == 1){
@@ -779,14 +918,1067 @@
             
         }else{
             if (!isSelected){
-                //无刘海
+                //有刘海
+                _isHaveBang = YES;
             }else{
                 //有刘海
+                _isHaveBang = NO;
             }
         }
     }
 }
 
+-(void)changeShellWithStr:(NSString *)str andTag:(NSInteger)tag{
+    MJWeakSelf
+    _phoneTypeStr = str;
+    // _iphoneArr = @[@"无套壳",@"iPad Pro",@"iPad",@"iPhone 14Pro Max",@"iPhone14 Pro",@"iPhone 14 Plus",@"iPhone 14",@"iPhone 13 Pro Max",@"iPhone 13 Pro",@"iPhone 13",@"iPhone 13 Mini",@"iPhone 12 Pro Max",@"iPhone 12 Pro",@"iPhone 12",@"iPhone 12 Mini",@"iPhone 11 Pro Max",@"iPhone 11 Pro",@"iPhone XR/11",@"iPhone 8 Plus",@"iPhone 8"];
+    if (_isHaveBang){
+        //有刘海
+    }else{
+        //无刘海
+    }
+    if ([str isEqualToString:@"无套壳"]){
+        [_contentScrollView setBackgroundColor:[UIColor clearColor]];
+        [_contentScrollView removeAllSubviews];
+        [_imageViewsArr removeAllObjects];
+        [_originzTopArr removeAllObjects];
+        [_originWidthArr removeAllObjects];
+        [_originHeightArr removeAllObjects];
+        if (_isVer){
+            [self addVerticalContentView];
+            [_contentScrollView mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.width.equalTo(@(VerViewWidth));
+            }];
+        }else{
+            [self addHorizontalContentView];
+        }
+    }else{
+        if (_isHaveBang){
+            if ([str isEqualToString:@"iPad Pro"]){
+                if (_isShellVer){
+                    
+                }else{
+                    
+                }
+            }else if ([str isEqualToString:@"iPad"]){
+                if (_isShellVer){
+                    
+                }
+            }else if ([str isEqualToString:@"iPhone 14Pro Max"]){
+                if (tag == 1){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone14 Pro max紫色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone14 Pro max紫色横屏"];
+                    }
+                }else if (tag == 2){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone14 Pro max金色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone14 Pro max金色横屏"];
+                    }
+                }else if (tag == 3){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone14 Pro max银色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone14 Pro max银色横屏"];
+                    }
+                }else if (tag == 4){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone14 Pro max灰色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone14 Pro max灰色横屏"];
+                    }
+                }else{
+                    
+                }
+            }else if ([str isEqualToString:@"iPhone14 Pro"]){
+                if (tag == 1){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone14 Pro紫色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone14 Pro紫色横屏"];
+                    }
+                }else if (tag == 2){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone14 Pro金色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone14 Pro金色横屏"];
+                    }
+                }else if (tag == 3){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone14 Pro银色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone14 Pro银色横屏"];
+                    }
+                }else if (tag == 4){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone14 Pro灰色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone14 Pro灰色横屏"];
+                    }
+                }else{
+                    
+                }
+            }else if ([str isEqualToString:@"iPhone 14 Plus"]){
+                if (tag == 1){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone14 Plus淡蓝色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone14 Plus淡蓝色横屏"];
+                    }
+                }else if (tag == 2){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone14 Plus黑色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone14 Plus黑色横屏"];
+                    }
+                }else if (tag == 3){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone14 Plus紫色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone14 Plus紫色横屏"];
+                    }
+                }else if (tag == 4){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone14 Plus红色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone14 Plus红色横屏"];
+                    }
+                }else{
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone14 Plus银色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone14 Plus银色横屏"];
+                    }
+                }
+            }else if ([str isEqualToString:@"iPhone 14"]){
+                if (tag == 1){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone14 蓝色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone14 蓝色横屏"];
+                    }
+                }else if (tag == 2){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone14 蓝色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone14 蓝色横屏"];
+                    }
+                }else if (tag == 3){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone14 紫色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone14 紫色横屏"];
+                    }
+                }else if (tag == 4){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone14 红色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone14 红色横屏"];
+                    }
+                }else{
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone14 银色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone14 银色横屏"];
+                    }
+                }
+            }else if ([str isEqualToString:@"iPhone 13 Pro Max"]){
+                if (tag == 1){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 Pro max银色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 Pro max银色横屏"];
+                    }
+                }else if (tag == 2){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 Pro max蓝色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 Pro max蓝色横屏"];
+                    }
+                }else if (tag == 3){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 Pro max墨绿色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 Pro max墨绿色横屏"];
+                    }
+                }else if (tag == 4){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 Pro max金色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 Pro max金色横屏"];
+                    }
+                }else{
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 Pro max黑色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 Pro max黑色横屏"];
+                    }
+                }
+            }else if ([str isEqualToString:@"iPhone 13 Pro"]){
+                if (tag == 1){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 Pro银色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 Pro银色横屏"];
+                    }
+                }else if (tag == 2){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 Pro蓝色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 Pro蓝色横屏"];
+                    }
+                }else if (tag == 3){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 Pro墨绿色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 Pro墨绿色横屏"];
+                    }
+                }else if (tag == 4){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 Pro金色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 Pro金色横屏"];
+                    }
+                }else{
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 Pro黑色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 Pro黑色横屏"];
+                    }
+                }
+            }else if ([str isEqualToString:@"iPhone 13"]){
+                if (tag == 1){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 墨绿色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 墨绿色横屏"];
+                    }
+                }else if (tag == 2){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 玫瑰金"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 玫瑰金横屏"];
+                    }
+                }else if (tag == 3){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 蓝色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 蓝色横屏"];
+                    }
+                }else if (tag == 4){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 金色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 金色横屏"];
+                    }
+                }else if (tag == 5){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 黑色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 黑色横屏"];
+                    }
+                }else{
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 红"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 红色横屏"];
+                    }
+                }
+            }else if ([str isEqualToString:@"iPhone 13 Mini"]){
+                if (tag == 1){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 Mini墨绿色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 Mini墨绿色横屏"];
+                    }
+                }else if (tag == 2){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 Mini玫瑰金"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 Mini玫瑰金横屏"];
+                    }
+                }else if (tag == 3){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 Mini蓝色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 Mini蓝色横屏"];
+                    }
+                }else if (tag == 4){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 Mini银色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 Mini银色横屏"];
+                    }
+                }else if (tag == 5){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 Mini黑色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 Mini黑色横屏"];
+                    }
+                }else{
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 Mini红色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 Mini红色横屏"];
+                    }
+                }
+            }else if ([str isEqualToString:@"iPhone 12 Pro Max"]){
+                if (tag == 1){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone12 Pro max银色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone12 Pro max银色横屏"];
+                    }
+                }else if (tag == 2){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone12 Pro max藏青色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone12 Pro max藏青色横屏"];
+                    }
+                }else if (tag == 3){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone12 Pro max金色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone12 Pro max金色横屏"];
+                    }
+                }else if (tag == 4){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone12 Pro max黑色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone12 Pro max黑色横屏"];
+                    }
+                }else if (tag == 5){
+                    
+                }else{
+                    
+                }
+            }else if ([str isEqualToString:@"iPhone 12 Pro"]){
+                if (tag == 1){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone12 Pro银色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone12 Pro银色横屏"];
+                    }
+                }else if (tag == 2){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone12 Pro藏青色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone12 Pro藏青色横屏"];
+                    }
+                }else if (tag == 3){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone12 Pro金色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone12 Pro金色横屏"];
+                    }
+                }else if (tag == 4){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone12 Pro黑色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone12 Pro黑色横屏"];
+                    }
+                }else if (tag == 5){
+                    
+                }else{
+                    
+                }
+            }else if ([str isEqualToString:@"iPhone 12"]){
+                if (tag == 1){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone12 金色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone12 金色横屏"];
+                    }
+                }else if (tag == 2){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone12 紫色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone12 紫色横屏"];
+                    }
+                }else if (tag == 3){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone12 藏蓝色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone12 藏蓝色横屏"];
+                    }
+                }else if (tag == 4){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone12 绿色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone12 绿色横屏"];
+                    }
+                }else if (tag == 5){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone12 红色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone12 红色横屏"];
+                    }
+                }else{
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone12 黑色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone12 黑色横屏"];
+                    }
+                }
+            }else if ([str isEqualToString:@"iPhone 12 Mini"]){
+                if (tag == 1){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone12 Mini银色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone12 Mini银色横屏"];
+                    }
+                }else if (tag == 2){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone12 Mini紫色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone12 Mini紫色横屏"];
+                    }
+                }else if (tag == 3){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone12 Mini藏蓝色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone12 Mini藏蓝色横屏"];
+                    }
+                }else if (tag == 4){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone12 Mini绿色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone12 Mini绿色横屏"];
+                    }
+                }else if (tag == 5){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone12 Mini红色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone12 红色横屏"];
+                    }
+                }else{
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone12 Mini黑色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone12 Mini黑色横屏"];
+                    }
+                }
+            }else if ([str isEqualToString:@"iPhone 11 Pro Max"]){
+                if (tag == 1){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone 11 Pro max银色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone 11 Pro max银色横屏"];
+                    }
+                }else if (tag == 2){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone 11 Pro max墨绿色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone 11 Pro max墨绿色横屏"];
+                    }
+                }else if (tag == 3){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone 11 Pro max黑色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone 11 Pro max黑色横屏"];
+                    }
+                }else if (tag == 4){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone 11 Pro max金色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone 11 Pro max金色横屏"];
+                    }
+                }else if (tag == 5){
+                    
+                }else{
+                    
+                }
+            }else if ([str isEqualToString:@"iPhone 11 Pro"]){
+                if (tag == 1){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone 11 Pro银色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone 11 Pro银色横屏"];
+                    }
+                }else if (tag == 2){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone 11 Pro墨绿色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone 11 Pro墨绿色横屏"];
+                    }
+                }else if (tag == 3){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone 11 Pro黑色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone 11 Pro黑色横屏"];
+                    }
+                }else if (tag == 4){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone 11 Pro金色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone 11 Pro金色横屏"];
+                    }
+                }else if (tag == 5){
+                    
+                }else{
+                    
+                }
+            }else if ([str isEqualToString:@"iPhone XR/11"]){
+                if (tag == 1){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone 11银色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone 11银色横屏"];
+                    }
+                }else if (tag == 2){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone 11金色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone 11金色横屏"];
+                    }
+                }else if (tag == 3){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone 11绿色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone 11绿色横屏"];
+                    }
+                }else if (tag == 4){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone 11黑色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone 11黑色横屏"];
+                    }
+                }else if (tag == 5){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone 11红色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone 11红色横屏"];
+                    }
+                }else{
+                    
+                }
+            }else if ([str isEqualToString:@"iPhone 8 Plus"]){
+                
+            }else if ([str isEqualToString:@"iPhone 8"]){
+                
+            }else{
+                
+            }
+        }else{
+            if ([str isEqualToString:@"iPad Pro"]){
+                if (_isShellVer){
+                    
+                }else{
+                    
+                }
+            }else if ([str isEqualToString:@"iPad"]){
+                if (_isShellVer){
+                    
+                }
+            }else if ([str isEqualToString:@"iPhone 14Pro Max"]){
+                if (tag == 1){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone14 Pro max紫色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone14 Pro max紫色横屏"];
+                    }
+                }else if (tag == 2){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone14 Pro max金色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone14 Pro max金色横屏"];
+                    }
+                }else if (tag == 3){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone14 Pro max银色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone14 Pro max银色横屏"];
+                    }
+                }else if (tag == 4){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone14 Pro max灰色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone14 Pro max灰色横屏"];
+                    }
+                }else{
+                    
+                }
+            }else if ([str isEqualToString:@"iPhone14 Pro"]){
+                if (tag == 1){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone14 Pro紫色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone14 Pro紫色横屏"];
+                    }
+                }else if (tag == 2){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone14 Pro金色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone14 Pro金色横屏"];
+                    }
+                }else if (tag == 3){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone14 Pro银色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone14 Pro银色横屏"];
+                    }
+                }else if (tag == 4){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone14 Pro灰色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone14 Pro灰色横屏"];
+                    }
+                }else{
+                    
+                }
+            }else if ([str isEqualToString:@"iPhone 14 Plus"]){
+                if (tag == 1){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone14 Plus蓝色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone14 Plus蓝色横屏"];
+                    }
+                }else if (tag == 2){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone14 Plus黑色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone14 Plus黑色横屏"];
+                    }
+                }else if (tag == 3){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone14 Plus紫色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone14 Plus紫色横屏"];
+                    }
+                }else if (tag == 4){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone14 Plus红色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone14 Plus红色横屏"];
+                    }
+                }else{
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone14 Plus银色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone14 Plus银色横屏"];
+                    }
+                }
+            }else if ([str isEqualToString:@"iPhone 14"]){
+                if (tag == 1){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone14 蓝色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone14 蓝色横屏"];
+                    }
+                }else if (tag == 2){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone14 黑色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone14 黑色横屏"];
+                    }
+                }else if (tag == 3){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone14 紫色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone14 紫色横屏"];
+                    }
+                }else if (tag == 4){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone14 红色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone14 红色横屏"];
+                    }
+                }else{
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone14 银色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone14 银色横屏"];
+                    }
+                }
+            }else if ([str isEqualToString:@"iPhone 13 Pro Max"]){
+                if (tag == 1){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13 Pro max银色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13 Pro max银色横屏"];
+                    }
+                }else if (tag == 2){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13 Pro max蓝色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13 Pro max蓝色横屏"];
+                    }
+                }else if (tag == 3){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13 Pro max绿色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13 Pro max绿色横屏"];
+                    }
+                }else if (tag == 4){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13 Pro max金色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13 Pro max金色横屏"];
+                    }
+                }else{
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13 Pro max黑色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13 Pro max黑色横屏"];
+                    }
+                }
+            }else if ([str isEqualToString:@"iPhone 13 Pro"]){
+                if (tag == 1){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13 Pro银色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13 Pro银色横屏"];
+                    }
+                }else if (tag == 2){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13 Pro蓝色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13 Pro蓝色横屏"];
+                    }
+                }else if (tag == 3){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13 Pro绿色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13 Pro绿色横屏"];
+                    }
+                }else if (tag == 4){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13 Pro金色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13 Pro金色横屏"];
+                    }
+                }else{
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13 Pro黑色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13 Pro黑色横屏"];
+                    }
+                }
+            }else if ([str isEqualToString:@"iPhone 13"]){
+                if (tag == 1){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13绿色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13绿色横屏"];
+                    }
+                }else if (tag == 2){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13玫瑰金"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13玫瑰金横屏"];
+                    }
+                }else if (tag == 3){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13蓝色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13蓝色横屏"];
+                    }
+                }else if (tag == 4){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13银色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13银色横屏"];
+                    }
+                }else if (tag == 5){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13黑色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13黑色横屏"];
+                    }
+                }else{
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13红色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13红色横屏"];
+                    }
+                }
+            }else if ([str isEqualToString:@"iPhone 13 Mini"]){
+                if (tag == 1){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13 mini绿色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13 mini绿色横屏"];
+                    }
+                }else if (tag == 2){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13 mini玫瑰金"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13 mini玫瑰金横屏"];
+                    }
+                }else if (tag == 3){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13 mini蓝色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13 mini蓝色横屏"];
+                    }
+                }else if (tag == 4){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13 mini银色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13 mini银色横屏"];
+                    }
+                }else if (tag == 5){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13 mini黑色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13 mini黑色横屏"];
+                    }
+                }else{
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13 mini红色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone13 mini红色横屏"];
+                    }
+                }
+            }else if ([str isEqualToString:@"iPhone 12 Pro Max"]){
+                if (tag == 1){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone12 Pro max银色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone12 Pro max银色横屏"];
+                    }
+                }else if (tag == 2){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone12 Pro max蓝色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone12 Pro max蓝色横屏"];
+                    }
+                }else if (tag == 3){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone12 Pro max金色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone12 Pro max金色横屏"];
+                    }
+                }else if (tag == 4){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone12 Pro max黑色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone12 Pro max黑色横屏"];
+                    }
+                }else if (tag == 5){
+                    
+                }else{
+                    
+                }
+            }else if ([str isEqualToString:@"iPhone 12 Pro"]){
+                if (tag == 1){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone12 Pro银色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone12 Pro银色横屏"];
+                    }
+                }else if (tag == 2){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone12 Pro蓝色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone12 Pro蓝色横屏"];
+                    }
+                }else if (tag == 3){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone12 Pro金色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone12 Pro金色横屏"];
+                    }
+                }else if (tag == 4){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone12 Pro黑色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone12 Pro黑色横屏"];
+                    }
+                }else if (tag == 5){
+                    
+                }else{
+                    
+                }
+            }else if ([str isEqualToString:@"iPhone 12"]){
+                if (tag == 1){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone12金色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone12金色横屏"];
+                    }
+                }else if (tag == 2){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone12紫色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone12紫色横屏"];
+                    }
+                }else if (tag == 3){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone12蓝色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone12蓝色横屏"];
+                    }
+                }else if (tag == 4){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone12绿色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone12绿色横屏"];
+                    }
+                }else if (tag == 5){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone12红色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone12红色横屏"];
+                    }
+                }else{
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone12黑色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone12黑色横屏"];
+                    }
+                }
+            }else if ([str isEqualToString:@"iPhone 12 Mini"]){
+                if (tag == 1){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone12金色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone12金色横屏"];
+                    }
+                }else if (tag == 2){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone12紫色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone12紫色横屏"];
+                    }
+                }else if (tag == 3){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone12蓝色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone12蓝色横屏"];
+                    }
+                }else if (tag == 4){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone12绿色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone12绿色横屏"];
+                    }
+                }else if (tag == 5){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone12红色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone12红色横屏"];
+                    }
+                }else{
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone12黑色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone12黑色横屏"];
+                    }
+                }
+            }else if ([str isEqualToString:@"iPhone 11 Pro Max"]){
+                if (tag == 1){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone 11 Pro max银色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone 11 Pro max银色横屏"];
+                    }
+                }else if (tag == 2){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone 11 Pro max墨绿色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone 11 Pro max墨绿色横屏"];
+                    }
+                }else if (tag == 3){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone 11 Pro max黑色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone 11 Pro max黑色横屏"];
+                    }
+                }else if (tag == 4){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone 11 Pro max金色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone 11 Pro max金色横屏"];
+                    }
+                }else if (tag == 5){
+                    
+                }else{
+                    
+                }
+            }else if ([str isEqualToString:@"iPhone 11 Pro"]){
+                if (tag == 1){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone 11 Pro银色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone 11 Pro银色横屏"];
+                    }
+                }else if (tag == 2){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone 11 Pro墨绿色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone 11 Pro墨绿色横屏"];
+                    }
+                }else if (tag == 3){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone 11 Pro黑色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone 11 Pro黑色横屏"];
+                    }
+                }else if (tag == 4){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone 11 Pro金色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone 11 Pro金色横屏"];
+                    }
+                }else if (tag == 5){
+                    
+                }else{
+                    
+                }
+            }else if ([str isEqualToString:@"iPhone XR/11"]){
+                if (tag == 1){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone 11银色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone 11银色横屏"];
+                    }
+                }else if (tag == 2){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone 11金色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone 11金色横屏"];
+                    }
+                }else if (tag == 3){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone 11绿色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone 11绿色横屏"];
+                    }
+                }else if (tag == 4){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone 11黑色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone 11黑色横屏"];
+                    }
+                }else if (tag == 5){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone 11红色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone 11红色横屏"];
+                    }
+                }else{
+                    
+                }
+            }else if ([str isEqualToString:@"iPhone 8 Plus"]){
+                
+            }else if ([str isEqualToString:@"iPhone 8"]){
+                
+            }else{
+                
+            }
+        }
+    }
+    
+}
+
+-(UIImage *)changeIMGWithImageName:(NSString *)name{
+    UIImage *newImage = IMG(name);
+    newImage = [newImage stretchableImageWithLeftCapWidth:floorf(newImage.size.width/2) topCapHeight:floorf(newImage.size.height/2)];
+    return newImage;
+}
 -(void)shellSelectViewDiss{
     MJWeakSelf
     [UIView animateWithDuration:0.3 animations:^{
@@ -881,7 +2073,13 @@
 #pragma mark --添加颜色选择view
 -(void)addColoeSelectedViewWithType:(NSInteger)type{
     MJWeakSelf
-    _colorSelectView = [[WaterColorSelectView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT - 80, SCREEN_WIDTH, type == 1?100:160)];
+    NSInteger height ;
+    if (type == 1 ){
+        height = 100;
+    }else{
+        height = 160;
+    }
+    _colorSelectView = [[WaterColorSelectView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT - 80, SCREEN_WIDTH, height)];
     _colorSelectView.type = type;
     _colorSelectView.delegate = self;
     _colorSelectView.moreColorClick = ^{
@@ -894,8 +2092,35 @@
 }
 
 #pragma mark -- 添加文本lab
--(void)addEditLabWithStr:(NSString *)str{
+-(void)addEditLabWithType:(NSInteger )type{
+    CGSize textSize = [Tools sizeOfText:_addLabStr andFontSize:_pathWidth];
+    _stratPoint.x + textSize.width > SCREEN_WIDTH ? _stratPoint.x = SCREEN_WIDTH - textSize.width : _stratPoint.x;
     
+    CATextLayer *textLayer = [CATextLayer layer];
+    textLayer.frame = CGRectMake(_stratPoint.x, _stratPoint.y, textSize.width, textSize.height);
+    textLayer.fontSize = _pathWidth;
+    textLayer.foregroundColor = _pathLineColor.CGColor;
+    
+    textLayer.alignmentMode = kCAAlignmentCenter;
+    textLayer.string = _addLabStr;
+    textLayer.contentsScale = 2.0f;
+    textLayer.wrapped = YES;
+    [_contentScrollView.layer addSublayer:textLayer];
+    
+    _slayer = (CAShapeLayer *)textLayer;
+    [_contentScrollView.layer addSublayer:_slayer];
+    [_dataArr addObject:[UIBezierPath new]];
+    [[self mutableArrayValueForKey:REMOVED_LAYERS] removeAllObjects];
+    [[self mutableArrayValueForKey:LAYERS] addObject:_slayer];
+    if (_dataArr.count > 0){
+        [_imgEditMarkView.deleteBtn setBackgroundImage:IMG(@"删除垃圾桶_selected") forState:UIControlStateNormal];
+        [_imgEditMarkView.backBtn setBackgroundImage:IMG(@"撤销_selected") forState:UIControlStateNormal];
+    }
+    if (type == 1){
+        [_colorSelectView removeFromSuperview];
+        [self addColoeSelectedViewWithType:1];
+    }
+   
 }
 
 #pragma mark -- 添加颜色选择器
@@ -926,32 +2151,38 @@
     }];
 }
 
-
 #pragma mark -- colorSelectViewDelegate
 - (void)changeWaterFontSize:(NSInteger)size{
     
     if (_editType == 1){
         //标注
-        _pathWidth = size / 2 ;
+        _pathWidth = size * 3 ;
         //改变大小
         if (_isStartPaint){
             NSInteger index = [_layers indexOfObject:_slayer];
             if (_markType == RECTANGLE || _markType == LINE){
                 //修改边框 //修改画笔
                 if (_slayer != nil){
-                    _path.lineWidth = size / 2;
-                    _slayer.lineWidth = size / 2;
+                    _path.lineWidth = size * 3;
+                    _slayer.lineWidth = size * 3;
                     //        [self rectDrawBy:size / 2 AndColor:_currentPath.color];
                     [self rectDrawBy:index];
                 }
                 
             }else if (_markType == WORD){
                 //修改文本
-                
+                _pathWidth = size * 3;
+                if (_slayer){
+                    [self.dataArr removeLastObject];
+                    [[self mutableArrayValueForKey:REMOVED_LAYERS] addObject:self.layers.lastObject];
+                    [self.layers.lastObject removeFromSuperlayer];
+                    [[self mutableArrayValueForKey:LAYERS] removeLastObject];
+                    [self addEditLabWithType:2];
+                }
             }else if(_markType == ARROW){
                 //修改箭头
+                _pathWidth = size * 3;
                 if (_slayer != nil){
-                    _pathWidth = size / 2;
                     _slayer.lineWidth = _pathWidth;
                     [self rectDrawBy:index];
                 }
@@ -978,7 +2209,7 @@
                 _slayer.strokeColor = HexColor(color).CGColor;
             }else if (_markType == LINE){
                 //修改画笔
-               // _path.pathColor = HexColor(color);
+                // _path.pathColor = HexColor(color);
                 _slayer.strokeColor = HexColor(color).CGColor;
             }else{
                 //实心填充方框
@@ -990,7 +2221,14 @@
             }
         }else if (_markType == WORD){
             //修改文本
-            
+            _pathLineColor = HexColor(color);
+            if (_slayer){
+                [self.dataArr removeLastObject];
+                [[self mutableArrayValueForKey:REMOVED_LAYERS] addObject:self.layers.lastObject];
+                [self.layers.lastObject removeFromSuperlayer];
+                [[self mutableArrayValueForKey:LAYERS] removeLastObject];
+                [self addEditLabWithType:2];
+            }
         }else if(_markType == ARROW){
             //修改箭头
             if (_slayer != nil){
@@ -1007,7 +2245,7 @@
         [self changeImageBorderWithType:_borderType AndBorderWidth:_pathWidth AndColor:_pathLineColor];
     }else if (_editType == 3){
         //套壳
-        self.view.backgroundColor = HexColor(color);
+        _contentView.backgroundColor = HexColor(color);
     }
     
 }
@@ -1068,21 +2306,30 @@
 }
 
 #pragma mark -------------画笔事件-------------
-#pragma mark tagGesture事件
-- (void)tapGestureAction:(UIPanGestureRecognizer *)gesture{
+#pragma mark Gesture
+- (void)panGestureAction:(UIPanGestureRecognizer *)gesture{
+    MJWeakSelf
     CGPoint point = [gesture locationInView:_contentScrollView];
     if (_editType == 1){
         if (gesture.state == UIGestureRecognizerStateBegan){
             _stratPoint = point;
             _isStartPaint = YES;
+            
             if (_markType != 0 && _markType != UNDO && _markType != DELETELAYER){
-                //[_contentView removeGestureRecognizer:_panRecognizer];
-                [_contentView removeGestureRecognizer:_pinchRecognizer];
+                //
+                [_contentScrollView removeGestureRecognizer:_pinchRecognizer];
                 if ([self judgleIsAtPathRectWithStartP:point] && _markType == LINE){
                     _isSelectPath = YES;
                     [self addSelectBorderView];
                 }else{
                     [self colorViewDismiss];
+                    if (_markType == MOSAIC || _markType == MOSAICOVAL || _markType == MOSAICRECTANGLE){
+                        [UIView animateWithDuration:0.3 animations:^{
+                            weakSelf.mosaicView.frame = CGRectMake(0, SCREEN_HEIGHT - 80, SCREEN_WIDTH, weakSelf.mosaicView.height);
+                        } completion:^(BOOL finished) {
+                            [weakSelf.mosaicView removeFromSuperview];
+                        }];
+                    }
                     if (_markType == LINE || _markType == MOSAIC){
                         UIBezierPath *path = [UIBezierPath pathWitchColor:_pathLineColor lineWidth:_pathWidth];
                         [path moveToPoint:point];
@@ -1101,7 +2348,7 @@
                         if (_markType == LINE){
                             _path.boundRect = CGPathGetPathBoundingBox(_path.CGPath);
                         }
-                       
+                        
                         slayer.path = _path.CGPath;
                         slayer.backgroundColor = [UIColor clearColor].CGColor;
                         if (_markType == LINE || _markType == RECTANGLE || _markType == MOSAICOVAL || _markType == MOSAIC || _markType == MOSAICRECTANGLE || _markType == FILLRECTANGLE ) {
@@ -1110,7 +2357,7 @@
                                 if (_mosaicStyle == 200){
                                     if (_markType != MOSAIC){
                                         slayer.fillColor = [UIColor colorWithPatternImage:IMG(@"马赛克填充_03")].CGColor;
-                                    
+                                        
                                     }else{
                                         slayer.fillColor = [UIColor clearColor].CGColor;
                                     }
@@ -1145,7 +2392,7 @@
                         slayer.lineCap = kCALineCapRound;
                         slayer.lineJoin = kCALineJoinRound;
                         slayer.lineWidth = _path.lineWidth;
-                       // slayer.opacity = 0.8;
+                        // slayer.opacity = 0.8;
                         [_contentScrollView.layer addSublayer:slayer];
                         [self.dataArr addObject:_path];
                         _slayer = slayer;
@@ -1168,7 +2415,7 @@
                     [_path addLineToPoint:point];
                 }else if(_markType == ARROW){
                     [self.layers removeObject:_path];
-                    _path = [UIBezierPath arrow:_stratPoint toEnd:point tailWidth:TAIL_WIDTH *rate headWidth:HEAD_WIDTH * rate headLength:HEAD_LENGTH * rate];
+                    _path = [UIBezierPath arrow:_stratPoint toEnd:point tailWidth:_pathWidth *rate headWidth:_pathWidth * 4 * rate headLength:HEAD_LENGTH * rate];
                 }else if(_markType == RECTANGLE || _markType == MOSAICRECTANGLE || _markType == FILLRECTANGLE){
                     [self.layers removeObject:_path];
                     _path = [UIBezierPath bezierPathWithRect:CGRectMake(_stratPoint.x, _stratPoint.y, point.x - _stratPoint.x, point.y - _stratPoint.y)];
@@ -1201,21 +2448,22 @@
                     if (dataArr.count == arr.count){
                         [self smoothedPathWithPoints:dataArr andGranularity:2 andType:1 AndPath:_path];
                     }
-                    [self addGestureRecognizer];
                     _isSelectPath = YES;
-                    [_colorSelectView removeFromSuperview];
                     _currentPath = _path;
-                    if (_markType != MOSAIC){
+                    if (_markType == LINE){
+                        [_colorSelectView removeFromSuperview];
                         [self addColoeSelectedViewWithType:2];
                         [self addSelectBorderView];
                     }
-                    
+                    [self addGestureRecognizer];
                 }else if (_markType == RECTANGLE){
                     //画矩形
                     [_colorSelectView removeFromSuperview];
                     [self addColoeSelectedViewWithType:1];
                 }else if (_markType == ARROW){
                     _currentPath = _path;
+                    [_colorSelectView removeFromSuperview];
+                    [self addColoeSelectedViewWithType:1];
                 }else if (_markType == FILLRECTANGLE){
                     [_colorSelectView removeFromSuperview];
                     [self addColoeSelectedViewWithType:2];
@@ -1224,7 +2472,6 @@
                     [_imgEditMarkView.deleteBtn setBackgroundImage:IMG(@"删除垃圾桶_selected") forState:UIControlStateNormal];
                     [_imgEditMarkView.backBtn setBackgroundImage:IMG(@"撤销_selected") forState:UIControlStateNormal];
                 }
-                    
                 _path = nil;
             }
         }
@@ -1234,82 +2481,54 @@
 #pragma mark touches事件
 - (CGPoint)pointWithTouches:(NSSet *)touches{
     UITouch *touch = [touches anyObject];
-    return [touch locationInView:_contentScrollView];
+    return [touch locationInView:_contentView];
+    
 }
 
 #pragma mark -- touchesBegan
 
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    MJWeakSelf
     CGPoint startP = [self pointWithTouches:touches];
     _stratPoint = startP;
-    
     if (CGRectContainsPoint(_contentScrollView.frame, startP)){
-        //点击不在
-        //[self colorViewDismiss];
+        if (_editType == 1){
+            if ([self judgleIsAtPathRectWithStartP:startP] && _markType == LINE){
+                _isSelectPath = YES;
+                [self addSelectBorderView];
+            }
+            if (_markType == WORD){
+                //文本
+                _isStartPaint = YES;
+                if (!_titleView){
+                    _titleView = [WaterTitleView new];
+                    _titleView.type = 2;
+                    [_titleView.titleTV becomeFirstResponder];
+                    _titleView.btnClick = ^(NSInteger tag) {
+                        weakSelf.titleView.hidden = YES;
+                        if (tag == 1){
+                            weakSelf.addLabStr = weakSelf.titleView.titleTV.text;
+                            [weakSelf addEditLabWithType:1];
+                        }
+                    };
+                    [self.view.window addSubview:_titleView];
+                    [_titleView mas_makeConstraints:^(MASConstraintMaker *make) {
+                        make.edges.equalTo(self.view);
+                    }];
+                }else{
+                    _titleView.hidden = NO;
+                    _titleView.titleTV.text = @"";
+                }
+            }
+        }
+        
+    }else{
+        [self colorViewDismiss];
     }
-    
-   // CGRectContainsPoint(_contentView.frame,startP
-//    if (_markType == LINE || (_markType == MOSAIC && _mosaicShape == 102) ){
-//        //画笔模式
-//        //先判断是不是点击在某个画笔的范围内
-//
-//        if (_markType == LINE){
-//
-//        }else{
-//            _mosaicView.hidden = YES;
-//            [self startAddNewPathWithPoint:startP andType:2];
-//        }
-//    }else if (_markType == RECTANGLE || _markType == FILLRECTANGLE || _markType == MOSAIC){
-//        //画矩形
-//        [_contentView removeGestureRecognizer:_panRecognizer];
-//        [_contentView removeGestureRecognizer:_pinchRecognizer];
-//
-//        if (_markType == RECTANGLE){
-//            _borderView = [UIView new];
-//            _borderView.layer.borderWidth = 1;
-//            _borderView.layer.borderColor = [UIColor whiteColor].CGColor;
-//            [_contentView addSubview:_borderView];
-//        }else if (_markType == FILLRECTANGLE){
-//            _fillBorderView = [UIView new];
-//            if (!_fillColor){
-//                _fillBorderView.backgroundColor = [UIColor whiteColor];
-//            }else{
-//                _fillBorderView.backgroundColor = _fillColor;
-//            }
-//
-//            [_contentView addSubview:_fillBorderView];
-//        }else{
-//            //马赛克
-//        }
-//
-//
-//    }
 }
 
 -(void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-    CGPoint moveP = [self pointWithTouches:touches];
-
-//    if ((_markType == LINE || _markType == MOSAIC) && !_isSelectPath){
-//        [_path addLineToPoint:moveP];
-//        _path.boundRect = CGPathGetPathBoundingBox(_path.CGPath);
-//        _slayer.path = _path.CGPath;
-//        if (_dataArr.count - 1 <= _dataArr.count){
-//            _dataArr[_dataArr.count - 1] = _path;
-//            _layers[_dataArr.count - 1] = _slayer;
-//        }
-//    }else if (_markType == RECTANGLE ||_markType == FILLRECTANGLE){
-//        //画矩形
-//        CGFloat offsetX = moveP.x - _stratPoint.x ;
-//        CGFloat offsetY = moveP.y- _stratPoint.y;
-//        if (_markType == 1){
-//            _borderView.frame = CGRectMake(_stratPoint.x,_stratPoint.y, offsetX, offsetY);
-//        }else{
-//            _fillBorderView.frame = CGRectMake(_stratPoint.x,_stratPoint.y, offsetX, offsetY);
-//        }
-//
-//    }
-    
-    
+  //  CGPoint moveP = [self pointWithTouches:touches];
 }
 -(void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
   //  CGPoint endP = [self pointWithTouches:touches];
@@ -1317,7 +2536,7 @@
     
 }
 -(void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-    CGPoint endP = [self pointWithTouches:touches];
+    //CGPoint endP = [self pointWithTouches:touches];
 }
 
 //--开始新增一个路径

@@ -16,9 +16,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor blackColor];
-        self.alpha = 0.9;
-        
-        
+        self.alpha = 0.9;  
     }
     return self;
 }
@@ -31,7 +29,9 @@
 - (void)setupViews{
     _titleTV = [UITextView new];
     _titleTV.backgroundColor = [UIColor blackColor];
-    _titleTV.text = GVUserDe.waterTitle.length > 0? GVUserDe.waterTitle:@"@拼图";
+    if (_type != 2){
+        _titleTV.text = GVUserDe.waterTitle.length > 0? GVUserDe.waterTitle:@"@拼图";
+    }
     _titleTV.delegate = self;
 //    if (GVUserDe.waterTitleColor.length > 0){
 //        _titleTV.textColor = HexColor(GVUserDe.waterTitleColor);
@@ -53,7 +53,7 @@
         make.width.equalTo(@(SCREEN_WIDTH - 32));
         make.left.equalTo(@16);
         make.top.equalTo(@86);
-        make.height.equalTo(@200);
+        make.height.equalTo(@400);
     }];
 }
  
@@ -116,5 +116,23 @@
         [SVProgressHUD showInfoWithStatus:@"水印文字长度不能超过10个"];
     }
 }
+
+-(BOOL)textViewShouldEndEditing:(UITextView *)textView{
+    [_titleTV resignFirstResponder];
+    if(_titleTV.text.length > 0){
+        GVUserDe.waterTitle = _titleTV.text;
+        [_titleTV resignFirstResponder];
+        self.btnClick(1);
+    }else{
+        if (_type == 1){
+            [SVProgressHUD showInfoWithStatus:@"水印文字不能为空"];
+        }else{
+            [SVProgressHUD showInfoWithStatus:@"文字不能为空"];
+        }
+        
+    }
+    return YES;
+}
+
 
 @end

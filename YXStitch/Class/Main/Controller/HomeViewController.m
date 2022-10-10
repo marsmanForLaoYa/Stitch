@@ -16,10 +16,11 @@
 #import "ScrrenStitchHintView.h"
 #import "SaveViewController.h"
 #import "GuiderVisitorView.h"
-
 #import "WaterMarkViewController.h"
 #import "SelectPictureViewController.h"
 #import "CaptionViewController.h"
+#import "CustomScrollView.h"
+#import "UIScrollView+UITouch.h"
 
 @interface HomeViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,MoveCollectionViewCellDelegate,ScrrenStitchHintViewDelegate>
 
@@ -71,9 +72,9 @@
     if (GVUserDe.isAutoCheckRecentlyIMG) {
         [SVProgressHUD showWithStatus:@"自动检测到有连续截图"];
         [self screenStitchWithType:1];
-    }
-    
+    }    
 }
+
 
 - (void)sliderValueChanged:(UISlider *)slider{
     // Slider当前位置的值

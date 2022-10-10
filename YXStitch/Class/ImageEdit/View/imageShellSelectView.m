@@ -79,6 +79,7 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     ShellTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"ShellTableViewCell" forIndexPath:indexPath];
     [cell configModelWithTag:indexPath.row AndStr:_iphoneArr[indexPath.row]];
+    cell.selectionStyle = UITableViewCellSelectionStyleGray;
     return cell;
 
 }
@@ -87,7 +88,7 @@
     if (_selectIndex != indexPath.row){
         [self layouColorViewType:indexPath.row];
         _selectIndex = indexPath.row;
-        self.selectClick(_iphoneArr[indexPath.row], _defaultColor);
+        self.selectClick(_iphoneArr[indexPath.row], _defaultColor,1);
     }
     
 }
@@ -109,7 +110,7 @@
         }else if (type == 5 || type == 6){
             colorArr = @[@"#A7C1D9",@"#54524F",@"#B7AFE6",@"#D93030",@"#FFFFFF"];
         }else if (type == 7 || type == 8){
-            colorArr = @[@"#FFFFFF",@"#B7AFE6",@"#023B63",@"#D8EFD5",@"#54524F",@"#25212B"];
+            colorArr = @[@"#FFFFFF",@"#023B63",@"#D8EFD5",@"#54524F",@"#25212B"];
             
         }else if (type == 9 || type == 10){
             colorArr = @[@"#394C38",@"#FADDD7",@"#276787",@"#FFFFFF",@"#232A31",@"#BF0013"];
@@ -121,7 +122,7 @@
         }else if (type == 15 || type == 16){
             colorArr = @[@"#EBEBE3",@"#4E5851",@"#535150",@"#FAD7BD"];
         }else if (type == 17){
-            colorArr = @[@"#F9F6EF",@"#D1CDDA",@"#FFE681",@"#AEE1CD",@"#1F2020",@"#BA0C2E"];
+            colorArr = @[@"#F9F6EF",@"#D1CDDA",@"#AEE1CD",@"#1F2020",@"#BA0C2E"];
         }else if (type == 18){
             colorArr = @[@"#E2E3E4",@"#F7E8DD",@"#272729"];
         }else{
@@ -131,7 +132,7 @@
         [_colorView removeAllSubviews];
         for (NSInteger i = 0; i < colorArr.count; i++) {
             UIButton *colorBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-            colorBtn.tag = i;
+            colorBtn.tag = i + 1;
             colorBtn.frame = CGRectMake(28 + (i % 2) * 50, (i / 2 * 50) + 28 , 28, 28);
             colorBtn.layer.cornerRadius = 28 / 2;
             colorBtn.layer.masksToBounds = YES;
@@ -143,7 +144,7 @@
                 }else{
                     colorBtn.layer.borderColor = [UIColor whiteColor].CGColor;
                 }
-                colorBtn.layer.borderWidth = 2;
+                colorBtn.layer.borderWidth = 4;
                 _defaultColor = HexColor(colorArr[i]);
             }
             colorBtn.backgroundColor = HexColor(colorArr[i]);
@@ -159,13 +160,14 @@
         _selectColorBtn.layer.borderWidth = 0;
         _selectColorBtn.layer.borderColor = [UIColor clearColor].CGColor;
         btn.layer.borderWidth = 4;
-        if ([btn.backgroundColor isEqual:[UIColor whiteColor]]){
+        NSString *colorStr = [Tools HexStringWithColor:btn.backgroundColor HasAlpha:NO];
+        if ([colorStr isEqualToString:@"#ffffff"]){
             btn.layer.borderColor = [UIColor redColor].CGColor;
         }else{
             btn.layer.borderColor = [UIColor whiteColor].CGColor;
         }
         _selectColorBtn = btn;
-        self.selectClick(_iphoneArr[_selectIndex], btn.backgroundColor);
+        self.selectClick(_iphoneArr[_selectIndex], btn.backgroundColor,btn.tag);
     }
 }
 

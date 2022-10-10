@@ -72,7 +72,7 @@
     if (_isVer){
         iconArr = @[@"套壳横竖_unSelected",@"套壳背景_unSelected",@"套壳刘海_unSelected"];
     }else{
-        iconArr = @[@"套壳横竖_selected",@"套壳背景unSelected",@"套壳刘海_unSelected"];
+        iconArr = @[@"套壳横竖_selected",@"套壳背景_unSelected",@"套壳刘海_unSelected"];
     }
     for (NSInteger i = 0; i < iconArr.count; i ++) {
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];

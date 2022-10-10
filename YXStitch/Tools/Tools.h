@@ -76,6 +76,14 @@ NS_ASSUME_NONNULL_BEGIN
 //计算文本高度
 + (CGFloat)heightWithLabelFont:(UIFont *)font withLabelWidth:(CGFloat)width AndStr:(NSString *)labStr ;
 
+/**
+ 计算文字显示区域
+ 
+ @param text 文字
+ @return 区域
+ */
++(CGSize)sizeOfText:(NSString *)text andFontSize:(NSInteger)fontSize;
+
 //计算文本宽度
 + (CGFloat)WidthWithLabelFont:(UIFont *)font withLabelHeight:(CGFloat)height AndStr:(NSString *)labStr ;
 

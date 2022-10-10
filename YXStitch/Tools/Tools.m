@@ -12,6 +12,7 @@
 #import <sys/sysctl.h>
 #import <CoreMedia/CoreMedia.h>
 #import <sys/utsname.h>
+#import "NSString+Extension.h"
 
 #define BEfORETIME -(100 * 60)
 
@@ -524,6 +525,12 @@
     return NO;
 }
 
++(CGSize)sizeOfText:(NSString *)text andFontSize:(NSInteger)fontSize{
+    CGSize textSize = [text sizeOfMaxSize:CGSizeMake(150, MAXFLOAT) font:[UIFont systemFontOfSize:fontSize]];
+    textSize.height += 50;
+    return textSize;
+}
+
 #pragma mark - CMSampleBufferRef转换为UIImage
 -(UIImage *)bufferToImage:(CMSampleBufferRef)buffer{
     
@@ -798,6 +805,8 @@
         
     }];
 }
+
+
 
 +(PHAssetCollection *)creatPHAssetWithAlbumName:(NSString *)albumName {
     

@@ -10,7 +10,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface imageShellSelectView : BaseView
-@property (nonatomic ,copy)void(^selectClick)(NSString *str ,UIColor *color);
+@property (nonatomic ,copy)void(^selectClick)(NSString *str ,UIColor *color,NSInteger tag);
 @property (nonatomic ,strong)UIButton *selectColorBtn;
 @end
 

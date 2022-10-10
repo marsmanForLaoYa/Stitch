@@ -31,7 +31,7 @@
 
 -(void)layoutSubviews{
     if (!_isLoad){
-        if (_type == 4 || _type == 5 || _type == 6){
+        if (_type == 4 || _type == 6){
             _colorArray = [NSMutableArray arrayWithObjects:@"#D2D0DE",@"#C0DCE8",@"#A0C7B2",@"#F6C9A8 ",@"#7D7D85",@"#3B5169",@"#4C6E6F",@"#C44153",@"",@"#FFFFFF",@"#000000", @"#FDECA7",@"#F3B0A0",@"#5590D2",@"#424E42",nil];
         }else{
             _colorArray = [NSMutableArray arrayWithObjects:@"#FFFFFF",@"#000000", @"#EF5B3D",@"#F98945",@"#F7DB78",@"#5EE16F",@"#51A0FD",nil];
@@ -68,7 +68,11 @@
     _paintSlider.userInteractionEnabled = YES;
     if (_type!= 6){
         _paintSlider.minimumValue = 1;
-        _paintSlider.maximumValue = 10;     
+        _paintSlider.maximumValue = 10;
+        if(_type == 5 || _type == 2){
+            _paintSlider.minimumValue = 10;
+            _paintSlider.maximumValue = 30;
+        }
     }else{
         if (_type == 6) {
             _paintSlider.minimumValue = 0;

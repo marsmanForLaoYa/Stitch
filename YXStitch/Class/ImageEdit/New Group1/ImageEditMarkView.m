@@ -83,7 +83,7 @@
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
         btn.tag = (i + 1) * 100;
         [btn addTarget:self action:@selector(funcClick:) forControlEvents:UIControlEventTouchUpInside];
-        [btn setBackgroundImage:IMG(funcArr[1-i]) forState:UIControlStateNormal];
+        [btn setImage:IMG(funcArr[1-i]) forState:UIControlStateNormal];
         [contentView addSubview:btn];
         if (i == 0){
             _deleteBtn = btn;
