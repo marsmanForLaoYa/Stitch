@@ -49,6 +49,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.view.backgroundColor = RGB(25, 25, 25);
+    
+    self.title = [NSString stringWithFormat:@"%ld张图片", self.pictures.count];
 
     [self setupNavItems];
     //获取数据
@@ -99,6 +101,14 @@
     [saveBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *saveItem = [[UIBarButtonItem alloc]initWithCustomView:saveBtn];
     self.navigationItem.rightBarButtonItem = saveItem;
+    
+    UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+    leftBtn.tag = 1;
+    [leftBtn setBackgroundImage:IMG(@"stitch_white_back") forState:UIControlStateNormal];
+    [leftBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [leftBtn addTarget:self action:@selector(btnBackClick:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithCustomView:leftBtn];
+    self.navigationItem.leftBarButtonItem = item;
 }
 
 #pragma mark - dataSources
@@ -149,6 +159,10 @@
         msg = @"保存图片成功" ;
     }
     NSLog(@"%@", msg);
+}
+
+- (void)btnBackClick:(UIButton *)btn {
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - Create views
