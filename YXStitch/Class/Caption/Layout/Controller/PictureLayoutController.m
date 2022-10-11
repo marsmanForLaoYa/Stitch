@@ -13,6 +13,7 @@
 #import "ColorPlateView.h"
 #import "GridScaleView.h"
 #import "GridEditView.h"
+#import "SaveViewController.h"
 
 #define kBottomHeight 80
 #define kContainerHeight (SCREEN_HEIGHT - (Nav_HEIGHT + kBottomHeight))
@@ -49,6 +50,8 @@
     // Do any additional setup after loading the view.
     self.view.backgroundColor = RGB(25, 25, 25);
 
+    [self setupNavItems];
+    //获取数据
     [self getLayoutGrids];
     [self getScaleGrids];
 
@@ -68,6 +71,36 @@
     _isTurn = NO;
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    if (@available(iOS 15.0, *)) {
+        [Tools setNaviBarBKColorWith:self.navigationController andBKColor:[UIColor blackColor] andFontColor:[UIColor whiteColor]];
+    }else{
+        UIColor *color = [UIColor whiteColor];
+        NSDictionary *dict = [NSDictionary dictionaryWithObject:color forKey:NSForegroundColorAttributeName];
+        self.navigationController.navigationBar.titleTextAttributes = dict;
+    }
+    self.navigationController.navigationBar.barTintColor = [UIColor blackColor];
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    UIColor *color = [UIColor blackColor];
+    NSDictionary *dict = [NSDictionary dictionaryWithObject:color forKey:NSForegroundColorAttributeName];
+    self.navigationController.navigationBar.titleTextAttributes = dict;
+    self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
+    [Tools setNaviBarBKColorWith:self.navigationController andBKColor:[UIColor whiteColor] andFontColor:[UIColor blackColor]];
+}
+
+-(void)setupNavItems{
+    UIButton *saveBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+    saveBtn.tag = 0;
+    [saveBtn setBackgroundImage:IMG(@"水印保存") forState:UIControlStateNormal];
+    [saveBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *saveItem = [[UIBarButtonItem alloc]initWithCustomView:saveBtn];
+    self.navigationItem.rightBarButtonItem = saveItem;
+}
+
 #pragma mark - dataSources
 - (void)getLayoutGrids {
     NSString *jsonName = [NSString stringWithFormat:@"GridLayout_%lu", (unsigned long)self.pictures.count];
@@ -80,6 +113,42 @@
     NSString *path = [[NSBundle mainBundle] pathForResource:@"Scales" ofType:@"json"];
     NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfFile:path] options:NSJSONReadingAllowFragments error:nil];
     self.scales = dic[@"data"];
+}
+
+#pragma mark - Method
+- (void)btnClick:(UIButton *)btn {
+    @weakify(self);
+    [SVProgressHUD showWithStatus:@"正在生成图片中.."];
+    [TYSnapshotScroll screenSnapshot:self.gridsShowView finishBlock:^(UIImage *snapshotImage) {
+        @strongify(self);
+        [SVProgressHUD showSuccessWithStatus:@"图片已保存至拼图相册中"];
+        SaveViewController *saveVC = [SaveViewController new];
+        saveVC.screenshotIMG = snapshotImage;
+        if (GVUserDe.isAutoSaveIMGAlbum){
+            //保存到拼图相册
+            [Tools saveImageWithImage:saveVC.screenshotIMG albumName:@"拼图" withBlock:^(NSString * _Nonnull identify) {
+                saveVC.identify = identify;
+            }];
+        }else{
+            UIImageWriteToSavedPhotosAlbum(snapshotImage, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
+        }
+        
+        saveVC.isVer = YES;
+        saveVC.type = 2;
+        [self.navigationController pushViewController:saveVC animated:YES];
+    }];
+}
+
+- (void)image: (UIImage *) image didFinishSavingWithError: (NSError *) error contextInfo: (void *) contextInfo{
+    
+    NSString *msg = nil ;
+    
+    if(error != NULL){
+        msg = @"保存图片失败" ;
+    }else{
+        msg = @"保存图片成功" ;
+    }
+    NSLog(@"%@", msg);
 }
 
 #pragma mark - Create views
