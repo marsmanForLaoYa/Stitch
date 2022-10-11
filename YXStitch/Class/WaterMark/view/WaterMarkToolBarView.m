@@ -17,7 +17,6 @@
 @property (nonatomic ,strong)WaterTitleView *titleView;
 @property (nonatomic ,strong)WaterColorSelectView *colorSelectView;
 @property (nonatomic ,strong)ColorPlateView *colorPlateView;
-
 @end
 
 
@@ -28,14 +27,50 @@
     if (self) {
         self.backgroundColor = HexColor(@"#1A1A1A");
         _selectIndex = GVUserDe.waterPosition;
-        NSLog(@"GVUserDe.waterPosition==%ld",GVUserDe.waterPosition);
-        [self setupViews];
-        [self setupLayout];
-        
+       // NSLog(@"GVUserDe.waterPosition==%ld",GVUserDe.waterPosition);
     }
     return self;
 }
-- (void)setupViews {
+-(void)layoutSubviews{
+    [self setupViews];
+    [self setupLayout];
+    
+}
+- (void)setupViews {    
+    if (_type == 2){
+        UIView *cancelView = [UIView new];
+        cancelView.backgroundColor = HexColor(@"#1A1A1A");
+        [self addSubview:cancelView];
+        [cancelView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.left.width.equalTo(self);
+            make.height.equalTo(@20);
+        }];
+        
+        UIButton *cancelBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+        [cancelBtn addTarget:self action:@selector(iconBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+        cancelBtn.tag = 0;
+        [cancelBtn setBackgroundColor:HexColor(@"#0D0D0D")];
+        cancelBtn.layer.cornerRadius = 4;
+        cancelBtn.layer.masksToBounds = YES;
+        [cancelView addSubview:cancelBtn];
+        [cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.width.equalTo(@40);
+            make.height.equalTo(@20);
+            make.right.equalTo(cancelView.mas_right).offset(-37);
+            make.top.equalTo(@2);
+        }];
+        UIImageView *cancelIMG = [UIImageView new];
+        cancelIMG.image = IMG(@"set关闭");
+        [cancelBtn addSubview:cancelIMG];
+        [cancelIMG mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.width.height.equalTo(@12);
+            make.centerY.centerX.equalTo(cancelBtn);
+        }];
+    }
+    
+    
+    
+    
     NSMutableArray *arr = [NSMutableArray arrayWithObjects:@"选中无水印",@"未选中水印左",@"未选中水印居中",@"未选中水印右",@"未选中水印全屏", nil];
     NSString *str;
     switch (GVUserDe.waterPosition) {
@@ -67,7 +102,12 @@
         [iconBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.width.height.equalTo(@40);
             make.left.equalTo(@(15 + (50 * i)));
-            make.top.equalTo(@6);
+            if (_type == 1){
+                make.top.equalTo(@26);
+            }else{
+                make.top.equalTo(@6);
+            }
+            
         }];
         
         UIImageView *icon = [UIImageView new];
@@ -151,7 +191,7 @@
 
 -(void)iconBtnClick:(UIButton *)btn{
     MJWeakSelf
-    if (btn.tag == 1){
+    if (btn.tag == 1 && btn.tag == 0){
         self.btnClick(btn.tag);
     }else{
         if (btn.tag != _selectIndex) {
@@ -203,7 +243,7 @@
     }
     
     
-    if (btn.tag != 1){
+    if (btn.tag != 1 && btn.tag != 0){
         if (_colorSelectView == nil){
             _colorSelectView = [WaterColorSelectView new];
             _colorSelectView.type = 5;

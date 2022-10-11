@@ -185,15 +185,15 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
 }
 
 -(void)cancelClick{
-    [self.delegate btnClickWithTag:4];
+    [self.delegate stitchBtnClickWithTag:4];
 }
 
 -(void)exportClick{
-    [self.delegate btnClickWithTag:5];
+    [self.delegate stitchBtnClickWithTag:5];
 }
 
 -(void)functionClick:(UIButton *)btn{
-    [self.delegate btnClickWithTag:btn.tag];
+    [self.delegate stitchBtnClickWithTag:btn.tag];
 //    if (btn.tag == 0) {
 //        //长屏
 //    }else if (btn.tag == 1){

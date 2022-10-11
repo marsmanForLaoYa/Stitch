@@ -20,6 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) id<WaterMarkToolBarViewDelegate> delegate;
 @property (nonatomic ,assign)NSInteger selectIndex;
 @property (nonatomic ,copy)void(^btnClick)(NSInteger tag);
+@property (nonatomic ,assign)NSInteger type;
 @end
 
 NS_ASSUME_NONNULL_END

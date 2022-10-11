@@ -25,7 +25,7 @@
 #import "ImageBorderSettingView.h"
 #import "ImageShellSettingView.h"
 #import "imageShellSelectView.h"
-
+#import "WaterMarkToolBarView.h"
 
 #define HEAD_LENGTH 100
 #define HEAD_WIDTH 30
@@ -40,7 +40,7 @@
 #define LAYERS @"layers"
 #define REMOVED_LAYERS @"removedLayers"
 
-@interface ImageEditViewController ()<WaterColorSelectViewDelegate,UIScrollViewDelegate,UnlockFuncViewDelegate,CheckProViewDelegate,UIGestureRecognizerDelegate>
+@interface ImageEditViewController ()<WaterColorSelectViewDelegate,UIScrollViewDelegate,UnlockFuncViewDelegate,CheckProViewDelegate,UIGestureRecognizerDelegate,WaterMarkToolBarViewDelegate>
 @property (nonatomic ,strong)ImageEditMarkView *imgEditMarkView;
 @property (nonatomic ,strong)WaterColorSelectView *colorSelectView;
 @property (nonatomic ,strong)ImageEditBottomView *bottomView;
@@ -51,6 +51,7 @@
 @property (nonatomic ,strong)ImageBorderSettingView *borderSettingView;//设置边框
 @property (nonatomic ,strong)ImageShellSettingView *shellSettingView;//设置外壳
 @property (nonatomic ,strong)imageShellSelectView *shellSelectView;//外框类型选择
+@property (nonatomic ,strong)WaterMarkToolBarView *waterToolView;//水印view
 
 
 @property (nonatomic ,strong)CustomScrollView *contentView;
@@ -293,8 +294,7 @@
     
     UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeSystem];
     leftBtn.tag = 1;
-    leftBtn.titleLabel.font = Font18;
-    [leftBtn setTitle:@"返回" forState:UIControlStateNormal];
+    [leftBtn setBackgroundImage:IMG(@"stitch_white_back") forState:UIControlStateNormal];
     [leftBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [leftBtn addTarget:self action:@selector(checkBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithCustomView:leftBtn];
@@ -424,84 +424,16 @@
         [_contentScrollView removeGestureRecognizer:_panRecognizer];
         _isAddShell = YES;
         if (_isVer){
-            [_contentScrollView removeAllSubviews];
-            [_imageViewsArr removeAllObjects];
-            [_originzTopArr removeAllObjects];
-            [_originWidthArr removeAllObjects];
-            [_originHeightArr removeAllObjects];
-            CGFloat width = SCREEN_WIDTH - 120;
-            [_contentScrollView mas_updateConstraints:^(MASConstraintMaker *make) {
-                make.width.equalTo(@(width));
-                make.top.equalTo(_contentView);
-            }];
-            CGFloat contentHeight = 0.0;
-            UIImage *icon = _imgArr[0];
-            StitchingButton *firstImageView = [[StitchingButton alloc]initWithFrame:CGRectMake(3,0, width-6 , (CGFloat)(icon.size.height/icon.size.width) * width)];
-            firstImageView.image = icon;
-            UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:firstImageView.bounds byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight cornerRadii:CGSizeMake(55, 55)];
-            CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
-            maskLayer.frame = firstImageView.bounds;
-            maskLayer.path = maskPath.CGPath;
-            firstImageView.layer.mask = maskLayer;
-            firstImageView.userInteractionEnabled = YES;
-            contentHeight += firstImageView.height;
-            firstImageView.tag = 100;
-            [_contentScrollView addSubview:firstImageView];
-            [self.imageViewsArr addObject:firstImageView];
-            [self.originWidthArr addObject:[NSNumber numberWithFloat:width - 6]];
-            [self.originHeightArr addObject:[NSNumber numberWithFloat:(CGFloat)(icon.size.height/icon.size.width) * VerViewWidth]];
-            [self.originzTopArr addObject:[NSNumber numberWithFloat:0]];
-            for (NSInteger i = 1; i < _imgArr.count; i ++) {
-                UIImage *icon = _imgArr[i];
-                CGFloat imgHeight = (CGFloat)(icon.size.height/icon.size.width) * width;
-                StitchingButton *imageView = [[StitchingButton alloc]initWithFrame:CGRectMake(3, firstImageView.bottom, width-6 , imgHeight)];
-                imageView.userInteractionEnabled = YES;
-                imageView.image = icon;
-                contentHeight += imgHeight;
-                if (i == _imgArr.count - 1){
-                    UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:imageView.bounds byRoundingCorners:UIRectCornerBottomLeft | UIRectCornerBottomRight cornerRadii:CGSizeMake(55, 55)];
-                    CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
-                    maskLayer.frame = imageView.bounds;
-                    maskLayer.path = maskPath.CGPath;
-                    imageView.layer.mask = maskLayer;
-                }
-                [self.originWidthArr addObject:[NSNumber numberWithFloat:width-6]];
-                [self.originHeightArr addObject:[NSNumber numberWithFloat:imgHeight]];
-                [self.originzTopArr addObject:[NSNumber numberWithFloat:firstImageView.bottom]];
-                [_contentScrollView addSubview:imageView];
-                firstImageView = imageView;
-                [self.imageViewsArr addObject:imageView];
-                
-            }
-            [_contentScrollView setContentSize:CGSizeMake(_contentScrollView.size.width, contentHeight)];
-            
-            _shellBkImageView  = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0,width, _contentScrollView.contentSize.height)];
-            _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone14 Pro max金色"];
-            [_contentScrollView addSubview:_shellBkImageView];
-            if(contentHeight < SCREEN_HEIGHT){
-                [_contentScrollView setContentSize:CGSizeMake(_contentScrollView.size.width, SCREEN_HEIGHT + 60)];
-                
-            }else{
-                [_contentScrollView setContentSize:CGSizeMake(_contentScrollView.size.width, contentHeight + Nav_HEIGHT + 80)];
-            }
-            [_contentScrollView setBackgroundColor:[UIColor clearColor]];
-//            _contentScrollView.layer.masksToBounds = YES;
-//            _contentScrollView.layer.cornerRadius = 55;
-            _contentView.contentSize = _contentScrollView.contentSize;
-            [_contentView setBackgroundColor:[UIColor orangeColor]];
-            
+            [self changeShellViewWithType:1];
         }else{
-            _shellBkImageView  = [[UIImageView alloc]initWithFrame:CGRectMake(20, 20, SCREEN_WIDTH - 40, 200)];
-            _shellBkImageView.image = IMG(@"刘海iphone14 Pro max金色横屏");
-            [_contentScrollView addSubview:_shellBkImageView];
-            [_contentScrollView bringSubviewToFront:_shellBkImageView];
+            [self changeShellViewWithType:2];
         }
+        _shellSettingView.hidden = NO;
         if (_shellSettingView == nil){
             _shellSettingView = [[ImageShellSettingView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH,100)];
             _shellSettingView.isVer = _isVer;
             [self.view addSubview:_shellSettingView];
         }
-        _shellSettingView.hidden = NO;
         [UIView animateWithDuration:0.3 animations:^{
             weakSelf.shellSettingView.frame = CGRectMake(0, SCREEN_HEIGHT - weakSelf.shellSettingView.height, SCREEN_WIDTH, weakSelf.shellSettingView.height);
         }];
@@ -515,11 +447,26 @@
         //        }
     }else{
         //水印
-        if (GVUserDe.isMember){
-            
-        }else{
-            [self addTipsViewWithType:2];
+        if (_waterToolView == nil){
+            _waterToolView = [[WaterMarkToolBarView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH,100)];
+            _waterToolView.delegate = self;
+            _waterToolView.type = 2;
+            [self.view addSubview:_waterToolView];
         }
+        _waterToolView.hidden = NO;
+        _waterToolView.btnClick = ^(NSInteger tag) {
+            [weakSelf waterSettingWithTag:tag];
+        };
+        [UIView animateWithDuration:0.3 animations:^{
+            weakSelf.waterToolView.frame = CGRectMake(0, SCREEN_HEIGHT - weakSelf.waterToolView.height, SCREEN_WIDTH, weakSelf.waterToolView.height);
+        }];
+        
+        
+//        if (GVUserDe.isMember){
+//
+//        }else{
+//            [self addTipsViewWithType:2];
+//        }
     }
 }
 
@@ -530,7 +477,103 @@
     [_contentScrollView addGestureRecognizer:_panRecognizer];
 }
 
-#pragma mark --标注编辑
+-(void)waterSettingWithTag:(NSInteger )tag{
+    MJWeakSelf
+    if (tag == 5){
+        //全屏
+//        [_contentScrollView addSubview:[FullWaterMarkView addWaterMarkView:GVUserDe.waterTitle.length > 0 ? GVUserDe.waterTitle : @"@拼图" andSize:GVUserDe.waterTitleFontSize > 10 ?GVUserDe.waterTitleFontSize : 14 andColor:GVUserDe.waterTitleColor.length >0?GVUserDe.waterTitleColor: @"ffffff"]];
+    }else{
+        if (tag == 0){
+            [UIView animateWithDuration:0.3 animations:^{
+                weakSelf.waterToolView.frame = CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, weakSelf.waterToolView.height);
+            } completion:^(BOOL finished) {
+                weakSelf.waterToolView.hidden = YES;
+            }];
+        }else{
+            
+        }
+//        _waterLab = [UILabel new];
+//        if (GVUserDe.waterTitleColor.length >0){
+//            _waterLab.textColor = HexColor(GVUserDe.waterTitleColor);
+//        }else{
+//            _waterLab.textColor = [UIColor whiteColor];
+//        }
+//
+//        if (GVUserDe.waterTitle.length > 0){
+//            _waterLab.text = GVUserDe.waterTitle;
+//        }else{
+//            _waterLab.text = @"@拼图";
+//        }
+//        if (GVUserDe.waterTitleFontSize > 10){
+//            _waterLab.font = [UIFont systemFontOfSize:GVUserDe.waterTitleFontSize];
+//        }else{
+//            _waterLab.font = Font13;
+//        }
+//        [_BKIMG addSubview:_waterLab];
+//        [_waterLab mas_makeConstraints:^(MASConstraintMaker *make) {
+//            make.bottom.equalTo(_BKIMG.mas_bottom).offset(-8);
+//            if (tag == 2){
+//                //水印在左
+//                make.left.equalTo(@10);
+//            }else if (tag == 3){
+//                //居中
+//                make.centerX.equalTo(_BKIMG);
+//            }else{
+//                //右
+//                make.right.equalTo(_BKIMG.mas_right).offset(-8);
+//            }
+//        }];
+    }
+   
+}
+
+-(void)btnClickWithTag:(NSInteger)tag{
+    MJWeakSelf
+    if (tag == 1) {
+        [_tipsView removeFromSuperview];
+        [self.navigationController pushViewController:[BuyViewController new] animated:YES];
+        
+    }else{
+        if (_bgView == nil){
+            _bgView = [Tools addBGViewWithFrame:self.view.frame];
+            [self.view addSubview:_bgView];
+        }
+        _bgView.hidden = NO;
+        [self.view bringSubviewToFront:_bgView];
+        if (_checkProView == nil){
+            _checkProView = [[CheckProView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, 550)];
+            _checkProView.delegate = self;
+            [self.view.window addSubview:_checkProView];
+        }
+        _checkProView.hidden = NO;
+        [self.view.window bringSubviewToFront:_checkProView];
+        [UIView animateWithDuration:0.3 animations:^{
+            weakSelf.checkProView.frame = CGRectMake(0, SCREEN_HEIGHT - weakSelf.checkProView.height, SCREEN_WIDTH , weakSelf.checkProView.height);
+        }];
+    }
+}
+
+-(void)cancelClickWithTag:(NSInteger)tag{
+    MJWeakSelf
+    if (tag == 1){
+        [UIView animateWithDuration:0.3 animations:^{
+            weakSelf.checkProView.frame = CGRectMake(0, SCREEN_HEIGHT+ 100 , SCREEN_WIDTH , weakSelf.checkProView.height);
+            weakSelf.bgView.hidden = YES;
+        }];
+    }else{
+        [UIView animateWithDuration:0.3 animations:^{
+            weakSelf.checkProView.frame = CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, 550);
+        } completion:^(BOOL finished) {
+            weakSelf.bgView.hidden = YES;
+            [weakSelf.checkProView removeFromSuperview];
+        }];
+        [_tipsView removeFromSuperview];
+        
+        [self.navigationController pushViewController:[BuyViewController new] animated:YES];
+    }
+}
+
+#pragma mark --Edit Method
 -(void)imgMarkEditViewBtnClickWithTag:(NSInteger )tag{
     
     MJWeakSelf
@@ -626,7 +669,6 @@
         }
     }
 }
-#pragma mark --边框编辑
 -(void)imageBorderSettingWithTag:(NSInteger )tag{
     MJWeakSelf
     if (tag == 0){
@@ -657,15 +699,14 @@
             if (_colorSelectView == nil){
                 [self addColoeSelectedViewWithType:4];
             }
-            _pathWidth = 1;
-            _pathLineColor = [UIColor orangeColor];
+            _pathWidth = 2;
         }
+        
+        _pathLineColor = [UIColor orangeColor];
         [self changeImageBorderWithType:_borderType AndBorderWidth:_pathWidth AndColor:_pathLineColor];
         
     }
 }
-
-#pragma mark -- 改变边框
 -(void)changeImageBorderWithType:(NSInteger)type AndBorderWidth:(CGFloat)width AndColor:(UIColor *)color{
     if (width == 1){
         width = 0;
@@ -673,43 +714,82 @@
     CGFloat changeScale = 1 - width / 100;
     if(_isVer){
         if (type == 2){
-            StitchingButton *image = _imageViewsArr[0];
-            image.backgroundColor = color;
-            CGFloat imgWidth  = [_originWidthArr[0]floatValue];
-            CGFloat imgHeight = [_originHeightArr[0]floatValue];
-            image.imgView.bottom = image.bottom;
-            image.imgView.width = imgWidth * changeScale;
-            image.imgView.height = imgHeight *changeScale;
-            image.imgView.left = (imgWidth - image.imgView.width)/2;
-            StitchingButton *firstImage = image;
-            for (NSInteger i = 1; i < _imageViewsArr.count ; i ++) {
-                StitchingButton *imageView = _imageViewsArr[i];
-                imageView.backgroundColor = color;
-                CGFloat imgWidth  = [_originWidthArr[i]floatValue];
-                CGFloat imgHeight = [_originHeightArr[i]floatValue];
-                CGFloat imgTop = [_originzTopArr[i]floatValue];
-                imageView.imgView.width = imgWidth * changeScale;
-                imageView.imgView.height = imgHeight *changeScale;
-                imageView.imgView.top = 0;
-                if (i != 1){
-                    imageView.top = imgTop * changeScale;
+            if (_isShellVer){
+                StitchingButton *image = _imageViewsArr[0];
+                image.backgroundColor = color;
+                CGFloat imgWidth  = [_originWidthArr[0]floatValue];
+                CGFloat imgHeight = [_originHeightArr[0]floatValue];
+                CGFloat top = [_originzTopArr[1]floatValue];
+                if (!_isAddShell){
+                    image.imgView.bottom = image.bottom;
                 }else{
-                    imageView.top = firstImage.bottom;
+//                    image.imgView.bottom = image.bottom + 20;
                 }
-                imageView.imgView.left = firstImage.imgView.left;
-                firstImage = imageView;
+                image.imgView.width = imgWidth * changeScale;
+                image.imgView.height = imgHeight *changeScale;
+                image.imgView.left = (imgWidth - image.imgView.width)/2;
+                StitchingButton *firstImage = image;
+                for (NSInteger i = 1; i < _imageViewsArr.count ; i ++) {
+                    StitchingButton *imageView = _imageViewsArr[i];
+                    imageView.backgroundColor = color;
+                    CGFloat imgWidth  = [_originWidthArr[i]floatValue];
+                    CGFloat imgHeight = [_originHeightArr[i]floatValue];
+                    CGFloat imgTop = [_originzTopArr[i]floatValue];
+                    imageView.imgView.width = imgWidth * changeScale;
+                    imageView.imgView.height = imgHeight *changeScale;
+                    imageView.imgView.top = 0;
+                    if (i != 1){
+                        imageView.top = imgTop * changeScale;
+                    }else{
+                        imageView.top = firstImage.bottom;
+                    }
+                    imageView.imgView.left = firstImage.imgView.left;
+                    firstImage = imageView;
+                }
+            }else{
+                //_contentScrollView.backgroundColor = color;
+                StitchingButton *image = _imageViewsArr[0];
+                image.backgroundColor = color;
+                CGFloat imgWidth  = [_originWidthArr[0]floatValue];
+                CGFloat imgHeight = [_originHeightArr[0]floatValue];
+                image.width = imgWidth * changeScale;
+                image.height = imgHeight *changeScale;
+                if (_isAddShell){
+                    image.left = width * 2 + 23;
+                    image.top =  width * 2 + 20;
+                }else{
+                    image.left = width;
+                    image.top =  width;
+                }
+                
+                _imageViewsArr[0] = image;
+                StitchingButton *firstImage = image;
+                for (NSInteger i = 1; i < _imageViewsArr.count ; i ++) {
+                    StitchingButton *imageView = _imageViewsArr[i];
+                    imageView.backgroundColor = color;
+                    CGFloat imgWidth  = [_originWidthArr[i]floatValue];
+                    CGFloat imgHeight = [_originHeightArr[i]floatValue];
+                    imageView.width = imgWidth * changeScale;
+                    imageView.height = imgHeight *changeScale;
+                    imageView.top = firstImage.top;
+                    imageView.left = firstImage.right;
+                   // _imageViewsArr[i] = imageView;
+                    firstImage = imageView;
+                }
             }
+            
         }else if (type == 3){
             _contentScrollView.backgroundColor = color;
             for (NSInteger i = 1; i < _imageViewsArr.count; i ++) {
                 StitchingButton *img = _imageViewsArr[i];
+                img.backgroundColor = color;
                 CGFloat top = [_originzTopArr[i] floatValue];
                 if (i == 1){
                     img.frame = CGRectMake(img.left, top +  width, img.width, img.height);
                 }else{
                     img.frame = CGRectMake(img.left, top + i * width, img.width, img.height);
                 }
-                _imageViewsArr[i] = img;
+                //_imageViewsArr[i] = img;
                 
             }
             if (_isVer){
@@ -722,6 +802,7 @@
             _contentScrollView.backgroundColor = color;
             for (NSInteger i = 0; i < _imageViewsArr.count ; i ++) {
                 StitchingButton *imageView = _imageViewsArr[i];
+                imageView.backgroundColor = color;
                 CGFloat imgWidth  = [_originWidthArr[i]floatValue];
                 CGFloat imgHeight = [_originHeightArr[i]floatValue];
                 CGFloat imgTop = [_originzTopArr[i]floatValue];
@@ -762,32 +843,63 @@
             }
             
         }else if (type == 2){
-            //内框
+            //外框
+            _contentScrollView.backgroundColor = color;
             StitchingButton *image = _imageViewsArr[0];
-            image.backgroundColor = color;
             CGFloat imgWidth  = [_originWidthArr[0]floatValue];
             CGFloat imgHeight = [_originHeightArr[0]floatValue];
-            image.imgView.width = imgWidth * changeScale;
-            image.imgView.height = imgHeight *changeScale;
-            image.imgView.left = width;
-            image.imgView.top =  width;
+            image.width = imgWidth * changeScale;
+            image.height = imgHeight *changeScale;
+            if (_isAddShell){
+                image.left = width + 23;
+                image.top =  width + 20;
+            }else{
+                image.left = width;
+                image.top =  width;
+            }
+            
+            _imageViewsArr[0] = image;
             StitchingButton *firstImage = image;
             for (NSInteger i = 1; i < _imageViewsArr.count ; i ++) {
                 StitchingButton *imageView = _imageViewsArr[i];
-                imageView.backgroundColor = color;
                 CGFloat imgWidth  = [_originWidthArr[i]floatValue];
                 CGFloat imgHeight = [_originHeightArr[i]floatValue];
-                //CGFloat imgTop = [_originzTopArr[i]floatValue];
-                imageView.imgView.width = imgWidth * changeScale;
-                imageView.imgView.height = imgHeight *changeScale;
-                imageView.imgView.top = width;
+                imageView.width = imgWidth * changeScale;
+                imageView.height = imgHeight *changeScale;
+                imageView.top = firstImage.top;
                 imageView.left = firstImage.right;
+                
+                _imageViewsArr[i] = imageView;
                 firstImage = imageView;
             }
         }else if (type == 3){
-            //外框
+            //内框
+            width = width * 1.5;
+            _contentScrollView.backgroundColor = color;
+            for (NSInteger i = 1; i < _imageViewsArr.count; i ++) {
+                StitchingButton *img = _imageViewsArr[i];
+                CGFloat top = [_originzTopArr[i] floatValue];
+                if (i == 1){
+                    img.frame = CGRectMake(top + width, img.top, img.width, img.height);
+                }else{
+                    img.frame = CGRectMake(top + i * width,img.top, img.width, img.height);
+                }
+                _imageViewsArr[i] = img;
+                
+            }
         }else{
             //全框
+            _contentScrollView.backgroundColor = color;
+            for (NSInteger i = 0; i < _imageViewsArr.count ; i ++) {
+                StitchingButton *imageView = _imageViewsArr[i];
+                CGFloat imgWidth  = [_originWidthArr[i]floatValue];
+                CGFloat imgHeight = [_originHeightArr[i]floatValue];
+                CGFloat imgTop = [_originzTopArr[i]floatValue];
+                imageView.width = imgWidth * changeScale;
+                imageView.height = imgHeight *changeScale;
+                imageView.top =  width;
+                imageView.left = imgTop + width;
+            }
         }
     }
         
@@ -845,7 +957,6 @@
 //    }
     _currentBorderValue = width;
 }
-#pragma mark -- 编辑外壳
 -(void)changeImageShellWithType:(NSInteger)type AndSelected:(BOOL)isSelected{
     MJWeakSelf
     if (type == 0){
@@ -883,30 +994,27 @@
         //[self shellSelectViewDiss];
         if (type == 1){
             //横竖切换
-            if (_isVer){
-                //竖屏进来
-                if (!isSelected){
-                    //切换成横屏
-                    _isVer = NO;
+            if (!isSelected){
+                //竖屏进来切换成横屏
+                if (_isVer){
+                    _isShellVer = NO;
                     [self changeShellViewWithType:2];
                 }else{
-                    //竖屏
-                    _isVer = YES;
+                    _isShellVer = YES;
                     [self changeShellViewWithType:1];
                 }
+                
             }else{
-                //横屏进入
-                if (!isSelected){
-                    //切换成竖屏
-                    _isVer = YES;
+                //恢复 横屏/竖屏
+                if (_isVer){
+                    _isShellVer = YES;
                     [self changeShellViewWithType:1];
                 }else{
-                    //切换成横屏
-                    _isVer = NO;
+                    _isShellVer = NO;
                     [self changeShellViewWithType:2];
                 }
+                
             }
-            
         }else if (type == 2){
             //背景调整
             if(!isSelected){
@@ -1987,16 +2095,14 @@
         weakSelf.shellSettingView.hidden = YES;
     }];
 }
-
--(void)changeShellViewWithType:(NSInteger )type{
-    if (type == 1){
-        //竖屏
-    }else{
-        //横屏
-    }
+-(void)colorViewDismiss{
+    MJWeakSelf
+    [UIView animateWithDuration:0.3 animations:^{
+        weakSelf.colorSelectView.frame = CGRectMake(0, SCREEN_HEIGHT - 80, SCREEN_WIDTH, weakSelf.colorSelectView.height);
+    } completion:^(BOOL finished) {
+        weakSelf.colorSelectView.hidden = YES;
+    }];
 }
-
-#pragma mark --撤销
 - (void)undo{
     _selectView.hidden = YES;
     if (!self.layers.count) return;
@@ -2014,84 +2120,7 @@
     
 }
 
-#pragma mark --非会员弹出提示
--(void)addTipsViewWithType:(NSInteger)type{
-    _tipsView = [UnlockFuncView new];
-    _tipsView.delegate = self;
-    _tipsView.type = type;
-    [self.view.window addSubview:_tipsView];
-    [_tipsView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.view);
-    }];
-}
-
--(void)btnClickWithTag:(NSInteger)tag{
-    MJWeakSelf
-    if (tag == 1) {
-        [_tipsView removeFromSuperview];
-        [self.navigationController pushViewController:[BuyViewController new] animated:YES];
-        
-    }else{
-        if (_bgView == nil){
-            _bgView = [Tools addBGViewWithFrame:self.view.frame];
-            [self.view addSubview:_bgView];
-        }
-        _bgView.hidden = NO;
-        [self.view bringSubviewToFront:_bgView];
-        if (_checkProView == nil){
-            _checkProView = [[CheckProView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, 550)];
-            _checkProView.delegate = self;
-            [self.view.window addSubview:_checkProView];
-        }
-        _checkProView.hidden = NO;
-        [self.view.window bringSubviewToFront:_checkProView];
-        [UIView animateWithDuration:0.3 animations:^{
-            weakSelf.checkProView.frame = CGRectMake(0, SCREEN_HEIGHT - weakSelf.checkProView.height, SCREEN_WIDTH , weakSelf.checkProView.height);
-        }];
-    }
-}
-
--(void)cancelClickWithTag:(NSInteger)tag{
-    MJWeakSelf
-    if (tag == 1){
-        [UIView animateWithDuration:0.3 animations:^{
-            weakSelf.checkProView.frame = CGRectMake(0, SCREEN_HEIGHT+ 100 , SCREEN_WIDTH , weakSelf.checkProView.height);
-            weakSelf.bgView.hidden = YES;
-        }];
-    }else{
-        [UIView animateWithDuration:0.3 animations:^{
-            weakSelf.checkProView.frame = CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, 550);
-        } completion:^(BOOL finished) {
-            weakSelf.bgView.hidden = YES;
-            [weakSelf.checkProView removeFromSuperview];
-        }];
-        [_tipsView removeFromSuperview];
-        
-        [self.navigationController pushViewController:[BuyViewController new] animated:YES];
-    }
-}
-#pragma mark --添加颜色选择view
--(void)addColoeSelectedViewWithType:(NSInteger)type{
-    MJWeakSelf
-    NSInteger height ;
-    if (type == 1 ){
-        height = 100;
-    }else{
-        height = 160;
-    }
-    _colorSelectView = [[WaterColorSelectView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT - 80, SCREEN_WIDTH, height)];
-    _colorSelectView.type = type;
-    _colorSelectView.delegate = self;
-    _colorSelectView.moreColorClick = ^{
-        [weakSelf addColorPlateView];
-    };
-    [self.view addSubview:_colorSelectView];
-    [UIView animateWithDuration:0.3 animations:^{
-        weakSelf.colorSelectView.frame = CGRectMake(0, SCREEN_HEIGHT - 80 - weakSelf.colorSelectView.height, weakSelf.colorSelectView.width, weakSelf.colorSelectView.height);
-    }];
-}
-
-#pragma mark -- 添加文本lab
+#pragma mark --Create View
 -(void)addEditLabWithType:(NSInteger )type{
     CGSize textSize = [Tools sizeOfText:_addLabStr andFontSize:_pathWidth];
     _stratPoint.x + textSize.width > SCREEN_WIDTH ? _stratPoint.x = SCREEN_WIDTH - textSize.width : _stratPoint.x;
@@ -2122,8 +2151,218 @@
     }
    
 }
-
-#pragma mark -- 添加颜色选择器
+-(void)addColoeSelectedViewWithType:(NSInteger)type{
+    MJWeakSelf
+    NSInteger height ;
+    if (type == 1 ){
+        height = 100;
+    }else{
+        height = 160;
+    }
+    _colorSelectView = [[WaterColorSelectView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT - 80, SCREEN_WIDTH, height)];
+    _colorSelectView.type = type;
+    _colorSelectView.delegate = self;
+    _colorSelectView.moreColorClick = ^{
+        [weakSelf addColorPlateView];
+    };
+    [self.view addSubview:_colorSelectView];
+    [UIView animateWithDuration:0.3 animations:^{
+        weakSelf.colorSelectView.frame = CGRectMake(0, SCREEN_HEIGHT - 80 - weakSelf.colorSelectView.height, weakSelf.colorSelectView.width, weakSelf.colorSelectView.height);
+    }];
+}
+-(void)changeShellViewWithType:(NSInteger )type{
+    [_contentScrollView removeAllSubviews];
+    [_imageViewsArr removeAllObjects];
+    [_originzTopArr removeAllObjects];
+    [_originWidthArr removeAllObjects];
+    [_originHeightArr removeAllObjects];
+    if (type == 1){
+        //竖屏
+        _isShellVer = YES;
+        CGFloat width = SCREEN_WIDTH - 120;
+        [_contentView mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.edges.equalTo(self.view);
+        }];
+        [_contentScrollView mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.width.equalTo(@(width));
+            make.centerX.equalTo(_contentView);
+            make.height.equalTo(@(SCREEN_HEIGHT - Nav_HEIGHT - 80));
+            make.top.equalTo(_contentView);
+        }];
+        CGFloat contentHeight = 0.0;
+        UIImage *icon = _imgArr[0];
+        StitchingButton *firstImageView = [[StitchingButton alloc]initWithFrame:CGRectMake(3,0, width-6 , (CGFloat)(icon.size.height/icon.size.width) * width)];
+        firstImageView.image = icon;
+        UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:firstImageView.bounds byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight cornerRadii:CGSizeMake(55, 55)];
+        CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+        maskLayer.frame = firstImageView.bounds;
+        maskLayer.path = maskPath.CGPath;
+        firstImageView.layer.mask = maskLayer;
+        firstImageView.userInteractionEnabled = YES;
+        contentHeight += firstImageView.height;
+        firstImageView.tag = 100;
+        [_contentScrollView addSubview:firstImageView];
+        [self.imageViewsArr addObject:firstImageView];
+        [self.originWidthArr addObject:[NSNumber numberWithFloat:width - 6]];
+        [self.originHeightArr addObject:[NSNumber numberWithFloat:(CGFloat)(icon.size.height/icon.size.width) * VerViewWidth]];
+        [self.originzTopArr addObject:[NSNumber numberWithFloat:0]];
+        for (NSInteger i = 1; i < _imgArr.count; i ++) {
+            UIImage *icon = _imgArr[i];
+            CGFloat imgHeight = (CGFloat)(icon.size.height/icon.size.width) * width;
+            StitchingButton *imageView = [[StitchingButton alloc]initWithFrame:CGRectMake(3, firstImageView.bottom, width-6 , imgHeight)];
+            imageView.userInteractionEnabled = YES;
+            imageView.image = icon;
+            contentHeight += imgHeight;
+            if (i == _imgArr.count - 1){
+                UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:imageView.bounds byRoundingCorners:UIRectCornerBottomLeft | UIRectCornerBottomRight cornerRadii:CGSizeMake(55, 55)];
+                CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+                maskLayer.frame = imageView.bounds;
+                maskLayer.path = maskPath.CGPath;
+                imageView.layer.mask = maskLayer;
+            }
+            [self.originWidthArr addObject:[NSNumber numberWithFloat:width-6]];
+            [self.originHeightArr addObject:[NSNumber numberWithFloat:imgHeight]];
+            [self.originzTopArr addObject:[NSNumber numberWithFloat:firstImageView.bottom]];
+            [_contentScrollView addSubview:imageView];
+            firstImageView = imageView;
+            [self.imageViewsArr addObject:imageView];
+            
+        }
+        [_contentScrollView setContentSize:CGSizeMake(_contentScrollView.size.width, contentHeight)];
+        _shellBkImageView  = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0,width, _contentScrollView.contentSize.height)];
+        if(contentHeight < SCREEN_HEIGHT){
+            CGFloat newHeight = 0;
+            StitchingButton *firstIMG;
+            for (NSInteger i = 0 ; i < _imageViewsArr.count; i ++) {
+                StitchingButton *img = _imageViewsArr[i];
+                if (i == 0){
+                    img.frame = CGRectMake(3, 0, img.width - 6, img.height * 3);
+                    img.imgView.height = img.height;
+                    UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:img.bounds byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight cornerRadii:CGSizeMake(55, 55)];
+                    CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+                    maskLayer.frame = img.bounds;
+                    maskLayer.path = maskPath.CGPath;
+                    img.layer.mask = maskLayer;
+                }else{
+                    img.frame = CGRectMake(3, firstIMG.bottom, img.width - 6, img.height * 3);
+                    img.imgView.height = img.height;
+                    if (i == _imageViewsArr.count - 1){
+                        UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:img.bounds byRoundingCorners:UIRectCornerBottomLeft | UIRectCornerBottomRight cornerRadii:CGSizeMake(55, 55)];
+                        CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+                        maskLayer.frame = img.bounds;
+                        maskLayer.path = maskPath.CGPath;
+                        img.layer.mask = maskLayer;
+                    }
+                    _originzTopArr[i] = [NSNumber numberWithFloat:img.top];
+                }
+                _originHeightArr[i] = [NSNumber numberWithFloat:img.height];
+                newHeight += img.height;
+                firstIMG = img;
+            }
+            [_contentScrollView setContentSize:CGSizeMake(_contentScrollView.size.width, newHeight)];
+            [_shellBkImageView setFrame:CGRectMake(0, 0, _shellBkImageView.width,newHeight )];
+        }else{
+            [_contentScrollView setContentSize:CGSizeMake(_contentScrollView.size.width, contentHeight + Nav_HEIGHT + 80)];
+        }
+        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone14 Pro max金色"];
+        [_contentScrollView addSubview:_shellBkImageView];
+        [_contentScrollView setBackgroundColor:[UIColor clearColor]];
+        _contentScrollView.layer.masksToBounds = YES;
+        _contentScrollView.layer.cornerRadius = 55;
+        _contentView.contentSize = CGSizeMake(SCREEN_WIDTH, _contentView.height);
+        [_contentView setBackgroundColor:HexColor(@"#C0DCE8")];
+    }else{
+        //横屏
+        _isShellVer = NO;
+        [_contentView setBackgroundColor:[UIColor clearColor]];
+        [_contentScrollView mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.width.equalTo(@(SCREEN_WIDTH));
+            make.centerY.equalTo(self.view);
+            make.height.equalTo(@(HorViewHeight));
+        }];
+        
+        CGFloat contentWidth = 0.0;
+        CGFloat height = HorViewHeight - 40;
+        UIImage *icon = _imgArr[0];
+        StitchingButton *firstImageView = [[StitchingButton alloc]initWithFrame:CGRectMake(20,23, (CGFloat)(icon.size.width / icon.size.height) * height, height - 6)];
+        firstImageView.image = icon;
+        firstImageView.userInteractionEnabled = YES;
+        contentWidth += firstImageView.width;
+        firstImageView.tag = 100;
+        UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:firstImageView.bounds byRoundingCorners:UIRectCornerTopLeft | UIRectCornerBottomLeft cornerRadii:CGSizeMake(55, 55)];
+        CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+        maskLayer.frame = firstImageView.bounds;
+        maskLayer.path = maskPath.CGPath;
+        firstImageView.layer.mask = maskLayer;
+        [_contentScrollView addSubview:firstImageView];
+        [self.imageViewsArr addObject:firstImageView];
+        [self.originWidthArr addObject:[NSNumber numberWithFloat:(CGFloat)(icon.size.width / icon.size.height) * height]];
+        [self.originzTopArr addObject:[NSNumber numberWithFloat:23]];
+        [self.originHeightArr addObject:[NSNumber numberWithFloat:height - 6]];
+        for (NSInteger i = 1; i < _imgArr.count; i ++) {
+            UIImage *icon = _imgArr[i];
+            CGFloat imgWidth = (CGFloat)(icon.size.width/icon.size.height) * height;
+            StitchingButton *imageView = [[StitchingButton alloc]initWithFrame:CGRectMake(firstImageView.right, firstImageView.top, imgWidth, height - 6)];
+            imageView.image = icon;
+            imageView.userInteractionEnabled = YES;
+            imageView.tag = (i+1) * 100;
+            if (i == _imgArr.count - 1){
+                UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:imageView.bounds byRoundingCorners:UIRectCornerTopRight | UIRectCornerBottomRight cornerRadii:CGSizeMake(55, 55)];
+                CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+                maskLayer.frame = imageView.bounds;
+                maskLayer.path = maskPath.CGPath;
+                imageView.layer.mask = maskLayer;
+            }
+            contentWidth += imgWidth;
+            [_contentScrollView addSubview:imageView];
+            firstImageView = imageView;
+            [self.originWidthArr addObject:[NSNumber numberWithFloat:imgWidth]];
+            [self.originzTopArr addObject:[NSNumber numberWithFloat:imageView.left]];
+            [self.originHeightArr addObject:[NSNumber numberWithFloat:height - 6]];
+            [self.imageViewsArr addObject:imageView];
+        }
+        _shellBkImageView = [[UIImageView alloc]initWithFrame:CGRectMake(20, 20, contentWidth, height)];
+        if (contentWidth >= SCREEN_WIDTH){
+            _contentScrollView.contentSize = CGSizeMake(contentWidth,HorViewHeight);
+        }else{
+            CGFloat newWidth = 0;
+            StitchingButton *firtsIMG;
+            for (NSInteger i = 0; i < _imageViewsArr.count; i ++) {
+                StitchingButton *img = _imageViewsArr[i];
+                if (i == 0){
+                    img.frame = CGRectMake(img.left, img.top,img.width * 2, img.height);
+                    img.imgView.width = img.width;
+                    UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:img.bounds byRoundingCorners:UIRectCornerTopLeft | UIRectCornerBottomLeft cornerRadii:CGSizeMake(55, 55)];
+                    CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+                    maskLayer.frame = img.bounds;
+                    maskLayer.path = maskPath.CGPath;
+                    img.layer.mask = maskLayer;
+                }else{
+                    img.frame = CGRectMake(firtsIMG.right, img.top, img.width * 2, img.height);
+                    img.imgView.width = img.width;
+                    if (i == _imageViewsArr.count - 1){
+                        UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:img.bounds byRoundingCorners:UIRectCornerTopRight | UIRectCornerBottomRight cornerRadii:CGSizeMake(55, 55)];
+                        CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+                        maskLayer.frame = img.bounds;
+                        maskLayer.path = maskPath.CGPath;
+                        img.layer.mask = maskLayer;
+                    }
+                    _originzTopArr[i] = [NSNumber numberWithFloat:firtsIMG.right];
+                }
+                newWidth += img.width;
+                _originWidthArr[i] = [NSNumber numberWithFloat:img.width];
+                firtsIMG = img;
+            }
+            [_contentScrollView setContentSize:CGSizeMake(newWidth, _contentScrollView.height)];
+            [_shellBkImageView setFrame:CGRectMake(20, 20, newWidth,height)];
+        }
+        _contentScrollView.layer.masksToBounds = YES;
+        _contentScrollView.layer.cornerRadius = 0;
+        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone14 Pro max金色横屏"];
+        [_contentScrollView addSubview:_shellBkImageView];
+        [_contentScrollView setBackgroundColor:HexColor(@"#C0DCE8")];
+    }
+}
 -(void)addColorPlateView{
     MJWeakSelf
     _colorPlateView = [[ColorPlateView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, RYRealAdaptWidthValue(575))];
@@ -2151,7 +2390,35 @@
     }];
 }
 
-#pragma mark -- colorSelectViewDelegate
+-(void)addTipsViewWithType:(NSInteger)type{
+    _tipsView = [UnlockFuncView new];
+    _tipsView.delegate = self;
+    _tipsView.type = type;
+    [self.view.window addSubview:_tipsView];
+    [_tipsView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.view);
+    }];
+}
+
+-(void)addSelectBorderView{
+   // [_selectView removeFromSuperview];
+    if (_selectView == nil){
+        _selectView = [UIView new];
+        _originRect = _selectView.frame;
+        _selectView.layer.borderWidth = 1;
+        _selectView.layer.borderColor = [UIColor redColor].CGColor;
+        [_contentScrollView addSubview:_selectView];
+        UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(selectPathPanGesture:)];
+        panGestureRecognizer.maximumNumberOfTouches = 1;
+        [_selectView addGestureRecognizer:panGestureRecognizer];
+    }
+    _selectView.frame =  CGRectMake(_currentPath.boundRect.origin.x - 5, _currentPath.boundRect.origin.y - 5, _currentPath.boundRect.size.width + 10, _currentPath.boundRect.size.height + 10);
+    _originRect = _selectView.frame;
+    _selectView.hidden = NO;
+        
+}
+
+#pragma mark --ColorSelectViewDelegate
 - (void)changeWaterFontSize:(NSInteger)size{
     
     if (_editType == 1){
@@ -2245,7 +2512,12 @@
         [self changeImageBorderWithType:_borderType AndBorderWidth:_pathWidth AndColor:_pathLineColor];
     }else if (_editType == 3){
         //套壳
-        _contentView.backgroundColor = HexColor(color);
+        if (_isShellVer){
+            _contentView.backgroundColor = HexColor(color);
+        }else{
+            _contentScrollView.backgroundColor = HexColor(color);
+        }
+        
     }
     
 }
@@ -2306,7 +2578,6 @@
 }
 
 #pragma mark -------------画笔事件-------------
-#pragma mark Gesture
 - (void)panGestureAction:(UIPanGestureRecognizer *)gesture{
     MJWeakSelf
     CGPoint point = [gesture locationInView:_contentScrollView];
@@ -2478,15 +2749,12 @@
     }
     
 }
-#pragma mark touches事件
+#pragma mark --touches事件
 - (CGPoint)pointWithTouches:(NSSet *)touches{
     UITouch *touch = [touches anyObject];
     return [touch locationInView:_contentView];
     
 }
-
-#pragma mark -- touchesBegan
-
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     MJWeakSelf
     CGPoint startP = [self pointWithTouches:touches];
@@ -2575,24 +2843,6 @@
     [[self mutableArrayValueForKey:@"canceledlayers"] removeAllObjects];
 }
 
-//- 画笔结束添加选中view
--(void)addSelectBorderView{
-   // [_selectView removeFromSuperview];
-    if (_selectView == nil){
-        _selectView = [UIView new];
-        _originRect = _selectView.frame;
-        _selectView.layer.borderWidth = 1;
-        _selectView.layer.borderColor = [UIColor redColor].CGColor;
-        [_contentScrollView addSubview:_selectView];
-        UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(selectPathPanGesture:)];
-        panGestureRecognizer.maximumNumberOfTouches = 1;
-        [_selectView addGestureRecognizer:panGestureRecognizer];
-    }
-    _selectView.frame =  CGRectMake(_currentPath.boundRect.origin.x - 5, _currentPath.boundRect.origin.y - 5, _currentPath.boundRect.size.width + 10, _currentPath.boundRect.size.height + 10);
-    _originRect = _selectView.frame;
-    _selectView.hidden = NO;
-        
-}
 #pragma makr -- 判断点是否在二阶曲线上
 -(BOOL)judgleIsAtPathRectWithStartP:(CGPoint )startP{
     NSMutableArray *tmpArr = [NSMutableArray array];
@@ -2614,7 +2864,7 @@
     _isSelectPath = NO;
     return NO;
 }
-#pragma mark  重赋值path路径
+#pragma mark  --重赋值path路径
 -(void)rectDrawBy:(NSInteger )index{
     //NSInteger index = [_dataArr indexOfObject:_currentPath];
     if (index <= _dataArr.count - 1){
@@ -2628,14 +2878,7 @@
     }
 }
 
--(void)colorViewDismiss{
-    MJWeakSelf
-    [UIView animateWithDuration:0.3 animations:^{
-        weakSelf.colorSelectView.frame = CGRectMake(0, SCREEN_HEIGHT - 80, SCREEN_WIDTH, weakSelf.colorSelectView.height);
-    } completion:^(BOOL finished) {
-        weakSelf.colorSelectView.hidden = YES;
-    }];
-}
+
 
 #pragma mark --补充点算法
 #define POINT(_INDEX_) [(NSValue *)[points objectAtIndex:_INDEX_] CGPointValue]
@@ -2771,15 +3014,12 @@ static inline CGPoint XBPointOnPowerCurveLine(CGPoint p0, CGPoint p1, CGPoint p2
         
     }
 }
-
-#pragma mark -- 处理放大缩小手势
 - (void)handlePinch:(UIPinchGestureRecognizer *)recognizer {
     CGFloat scale = recognizer.scale;
     recognizer.view.transform = CGAffineTransformScale(recognizer.view.transform, scale, scale);
     recognizer.scale = 1;
 }
 
-#pragma mark -- 处理拖动手势
 - (void)selectonPanGesture:(UIPanGestureRecognizer *)gesture {
     CGPoint translatedPoint = [gesture translationInView:self.view];
     CGPoint newCenter = CGPointMake(gesture.view.center.x+ translatedPoint.x, gesture.view.center.y + translatedPoint.y);
@@ -2787,8 +3027,6 @@ static inline CGPoint XBPointOnPowerCurveLine(CGPoint p0, CGPoint p1, CGPoint p2
     gesture.view.center = newCenter;
     [gesture setTranslation:CGPointMake(0, 0) inView:self.view];
 }
-
-//处理选中path拖动问题
 -(void)selectPathPanGesture:(UIPanGestureRecognizer *)gesture {
     [self colorViewDismiss];
     CGPoint translatedPoint = [gesture translationInView:self.view];
@@ -2833,9 +3071,6 @@ static inline CGPoint XBPointOnPowerCurveLine(CGPoint p0, CGPoint p1, CGPoint p2
     _originRect = _selectView.frame;
     
 }
-
-
-
 
 #pragma mark --lazy
 -(NSMutableArray *)layers{

@@ -92,6 +92,9 @@
             
         }];
         if (i == 0){
+            if (!_isVer){
+                btn.selected = YES;
+            }
             _verBtn= btn;
         }else if (i == 1){
             _bkBtn = btn;
@@ -158,7 +161,7 @@
                 }else{
                     if (_verBtn.selected){
                         [btn setImage:IMG(@"套壳横竖_unSelected") forState:UIControlStateNormal];
-                    }else{
+                    }else{   
                         [btn setImage:IMG(@"套壳横竖_selected") forState:UIControlStateNormal];
                     }
                 }

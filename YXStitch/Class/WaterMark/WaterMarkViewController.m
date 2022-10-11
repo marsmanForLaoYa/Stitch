@@ -72,6 +72,7 @@
     
     _toolView = [WaterMarkToolBarView new];
     _toolView.delegate = self;
+    _toolView.type = 1;
     _toolView.btnClick = ^(NSInteger tag) {
         [weakSelf waterSettingWithTag:tag];
     };
@@ -89,13 +90,9 @@
     [saveBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *saveItem = [[UIBarButtonItem alloc]initWithCustomView:saveBtn];
     self.navigationItem.rightBarButtonItem = saveItem;
-    
-    
     UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeSystem];
     leftBtn.tag = 1;
-//    [leftBtn setBackgroundImage:IMG(@"whiteback") forState:UIControlStateNormal];
-    leftBtn.titleLabel.font = Font18;
-    [leftBtn setTitle:@"返回" forState:UIControlStateNormal];
+    [leftBtn setBackgroundImage:IMG(@"stitch_white_back") forState:UIControlStateNormal];
     [leftBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [leftBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithCustomView:leftBtn];

@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol ScrrenStitchHintViewDelegate <NSObject>
 @optional
-- (void)btnClickWithTag:(NSInteger)tag;
+- (void)stitchBtnClickWithTag:(NSInteger)tag;
 - (void)showResult:(SZImageGenerator *)result;
 @end
 

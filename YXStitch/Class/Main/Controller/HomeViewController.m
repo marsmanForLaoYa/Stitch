@@ -21,8 +21,15 @@
 #import "CaptionViewController.h"
 #import "CustomScrollView.h"
 #import "UIScrollView+UITouch.h"
+#import "CaptionViewController.h"
+#import "UIView+HXExtension.h"
+#import "KSViewController.h"
+#import "UnlockFuncView.h"
+#import "BuyViewController.h"
+#import "CheckProView.h"
+#import "PictureLayoutController.h"
 
-@interface HomeViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,MoveCollectionViewCellDelegate,ScrrenStitchHintViewDelegate>
+@interface HomeViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,MoveCollectionViewCellDelegate,ScrrenStitchHintViewDelegate,HXPhotoViewDelegate,UIImagePickerControllerDelegate, HXPhotoViewCellCustomProtocol,HXCustomNavigationControllerDelegate,UnlockFuncViewDelegate,CheckProViewDelegate>
 
 @property (nonatomic ,strong)UIView *iconView;
 @property (nonatomic ,strong)UICollectionView *MJColloctionView;
@@ -37,6 +44,20 @@
 @property (nonatomic ,strong)StitchResultView *resultView;
 @property (nonatomic ,strong)GuiderVisitorView *guiderView;
 
+@property (strong, nonatomic) HXPhotoManager *manager;
+@property (weak, nonatomic) HXPhotoView *photoView;
+@property (strong, nonatomic) UIScrollView *scrollView;
+@property (nonatomic ,strong)HXPhotoBottomView *bottomView;
+@property (assign, nonatomic) BOOL needDeleteItem;
+@property (assign, nonatomic) BOOL showHud;
+@property (nonatomic, strong)NSTimer *reTimer;
+@property (nonatomic ,assign)BOOL isOpenAlbum;
+@property (nonatomic ,assign)NSInteger showBottomViewStatus;
+@property (nonatomic ,strong)UIButton *clearBtn;
+@property (nonatomic ,assign)NSInteger selectInex;
+@property (nonatomic ,strong)UnlockFuncView *funcView;
+@property (nonatomic ,strong)CheckProView *checkProView;
+
 @property (nonatomic ,strong)NSMutableArray *stitchArr;
 
 @end
@@ -47,6 +68,7 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     self.title = @"首页";
+    
     if (GVUserDe.waterPosition <= 1){
         GVUserDe.waterPosition = 1;
     }
@@ -63,36 +85,58 @@
     [self setupLayout];
     [self setupNavItems];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(noty:) name:@"homeChange" object:nil];
-//    [self.view bringSubviewToFront:_imageView];
-//    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES);
-//    NSString *path = [paths objectAtIndex:0];
-//    NSLog(@"path==%@",path);
-  //  [self getByAppGroup2];
     //检测连续截图
     if (GVUserDe.isAutoCheckRecentlyIMG) {
         [SVProgressHUD showWithStatus:@"自动检测到有连续截图"];
         [self screenStitchWithType:1];
-    }    
+    }
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openAlbum:) name:@"openAlbum" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closeAlbum:) name:@"closeAlbum" object:nil];
 }
 
-
-- (void)sliderValueChanged:(UISlider *)slider{
-    // Slider当前位置的值
-    NSLog(@"%f", slider.value);
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+    [super traitCollectionDidChange:previousTraitCollection];
+#ifdef __IPHONE_13_0
+    if (@available(iOS 13.0, *)) {
+        [self preferredStatusBarUpdateAnimation];
+        [self changeStatus];
+    }
+#endif
 }
-
-#pragma mark - NSFileManager
-- (void)getByAppGroup2{
-    //获取分组的共享目录
-    NSURL *groupURL = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:@"group.test.appgroup"];//此处id要与开发者中心创建时一致
-    NSURL *fileURL = [groupURL URLByAppendingPathComponent:@"demo.txt"];
-    //读取文件
-    NSString *str = [NSString stringWithContentsOfURL:fileURL encoding:NSUTF8StringEncoding error:nil];
-    NSLog(@"str = %@", str);
+- (UIStatusBarStyle)preferredStatusBarStyle {
+#ifdef __IPHONE_13_0
+    if (@available(iOS 13.0, *)) {
+        if (UITraitCollection.currentTraitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
+            return UIStatusBarStyleLightContent;
+        }
+    }
+#endif
+    return UIStatusBarStyleDefault;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];   
+    [super viewWillAppear:animated];
+    _isOpenAlbum = NO;
+    _showBottomViewStatus = 0;
+    _selectInex = 0;
+    _reTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timerMethod) userInfo:nil repeats:YES];
+    [self changeStatus];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self changeStatus];
+}
+
+-(void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:animated];
+    
+}
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    if (_reTimer != nil){
+        [self destoryTimer];
+    }
 }
 
 - (void)noty:(NSNotification *)noty {
@@ -155,7 +199,15 @@
     }else if ([cellName isEqualToString:@"网页滚动截图"]){
         vc = [EnterURLViewController new];
     }else if ([cellName isEqualToString:@"拼图"]){
-        vc = [SelectPictureViewController new];
+//        vc = [SelectPictureViewController new];
+        if (_photoView == nil){
+            [self addPhotoView];
+        }
+        _isOpenAlbum = YES;
+        HXCustomNavigationController *nav = [[HXCustomNavigationController alloc] initWithManager:self.manager delegate:self];
+        nav.modalPresentationStyle = UIModalPresentationOverFullScreen;
+        nav.modalPresentationCapturesStatusBarAppearance = YES;
+        [self.view.viewController presentViewController:nav animated:YES completion:nil];
     }else if ([cellName isEqualToString:@"水印"]){
         vc = [WaterMarkViewController new];
     }else if ([cellName isEqualToString:@"设置"]){
@@ -342,7 +394,7 @@
 
 
 #pragma mark -- viewDelegate
--(void)btnClickWithTag:(NSInteger)tag{
+-(void)stitchBtnClickWithTag:(NSInteger)tag{
     MJWeakSelf
     if (tag == 4){
         [weakSelf checkScreenStitchViewDiss];
@@ -412,8 +464,347 @@
         make.top.equalTo(@50);
         make.height.equalTo(@(_checkScreenStitchView.height - 128));
     }];
+}
+#pragma mark 定时器检测图片选择器状态
+-(void)timerMethod{
+    if (_isOpenAlbum){
+        if (self.manager.selectedCount == 0){
+            _showBottomViewStatus = 0;
+            if (_showBottomViewStatus == 0){
+                _clearBtn.hidden = YES;
+                _showBottomViewStatus = 1;
+                [self setupBottomViewWithType:1];
+            }
+        }else {
+            if (_clearBtn == nil){
+                _clearBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+                [_clearBtn setBackgroundImage:IMG(@"清空") forState:UIControlStateNormal];
+                [_clearBtn addTarget:self action:@selector(clearSelectIMG) forControlEvents:UIControlEventTouchUpInside];
+                [self.view.window addSubview:_clearBtn];
+                [_clearBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.width.equalTo(@70);
+                    make.height.equalTo(@30);
+                    make.bottom.equalTo(@-100);
+                    make.left.equalTo(@(SCREEN_WIDTH - 86));
+                }];
+                
+            }
+            _clearBtn.hidden = NO;
+            [self.view.window bringSubviewToFront:_clearBtn];
+            if (self.manager.selectedCount == 1){
+               _showBottomViewStatus = 1;
+               if (_showBottomViewStatus == 1){
+                   _showBottomViewStatus = 2;
+                   [self setupBottomViewWithType:2];
+               }
+           }else{
+               _showBottomViewStatus = 2;
+               if (_showBottomViewStatus == 2){
+                   _showBottomViewStatus = 0;
+                   [self setupBottomViewWithType:3];
+               }
+           }
+        }
+        
+    }
+}
+//销毁定时器
+-(void)destoryTimer{
+    if (_reTimer) {
+        [_reTimer setFireDate:[NSDate distantFuture]];
+        [_reTimer invalidate];
+        _reTimer = nil;
+    }
+}
+
+//打开相册
+-(void)openAlbum:(NSNotification *)noti{
+    _isOpenAlbum = YES;
+}
+//关闭相册
+-(void)closeAlbum:(NSNotification *)noti{
+    _isOpenAlbum = NO;
+    _showBottomViewStatus = 0;
+    _clearBtn.hidden = YES;
+}
+
+-(void)btnClickWithTag:(NSInteger)tag{
+    MJWeakSelf
+    if (tag == 1) {
+        [_funcView removeFromSuperview];
+//        [self.navigationController pushViewController:[BuyViewController new] animated:YES];
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"dismiss" object:nil];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [weakSelf.navigationController pushViewController:[BuyViewController new ] animated:YES];
+        });
+    }else{
+        MJWeakSelf
+        if (_bgView == nil){
+            _bgView = [Tools addBGViewWithFrame:self.view.frame];
+            [self.view addSubview:_bgView];
+        }else{
+            _bgView.hidden = NO;
+            [self.view bringSubviewToFront:_bgView];
+        }
+        if (_checkProView == nil){
+            _checkProView = [[CheckProView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, 550)];
+            _checkProView.delegate = self;
+            [self.view.window addSubview:_checkProView];
+        }
+        _checkProView.hidden = NO;
+        [self.view.window bringSubviewToFront:_checkProView];
+        [UIView animateWithDuration:0.3 animations:^{
+            weakSelf.checkProView.frame = CGRectMake(0, SCREEN_HEIGHT - weakSelf.checkProView.height, SCREEN_WIDTH , weakSelf.checkProView.height);
+        }];
+    }
+}
+
+-(void)cancelClickWithTag:(NSInteger)tag{
+    MJWeakSelf
+    if (tag == 1){
+        [UIView animateWithDuration:0.3 animations:^{
+            weakSelf.checkProView.frame = CGRectMake(0, SCREEN_HEIGHT + 100, SCREEN_WIDTH , weakSelf.checkProView.height);
+            weakSelf.bgView.hidden = YES;
+        }];
+    }else{
+        [UIView animateWithDuration:0.3 animations:^{
+            weakSelf.checkProView.frame = CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, 550);
+        } completion:^(BOOL finished) {
+            weakSelf.bgView.hidden = YES;
+            [weakSelf.checkProView removeFromSuperview];
+        }];
+        [_funcView removeFromSuperview];
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"dismiss" object:nil];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [weakSelf.navigationController pushViewController:[BuyViewController new] animated:YES];
+        });
+    }
+}
+
+
+#pragma mark -- 清空选择图片
+- (void)clearSelectIMG {
+    if (self.manager.selectedCount > 0 ){
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"clearData" object:nil];
+        _showBottomViewStatus = 0;
+        _clearBtn.hidden = YES;
+        [self setupBottomViewWithType:1];
+       
+    }else{
+        [SVProgressHUD showInfoWithStatus:@"您未选择任何图片"];
+    }
+}
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored"-Wdeprecated-declarations"
+- (void)changeStatus {
+#ifdef __IPHONE_13_0
+    if (@available(iOS 13.0, *)) {
+        if (UITraitCollection.currentTraitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
+            [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
+            return;
+        }
+    }
+#endif
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
+}
+#pragma clang diagnostic pop
+
+#pragma mark -photoViewDelegate
+
+-(void)addPhotoView{
+    HXPhotoView *photoView = [HXPhotoView photoManager:self.manager scrollDirection:UICollectionViewScrollDirectionVertical];
+    photoView.frame = CGRectMake(0, 12, SCREEN_WIDTH, 0);
+    photoView.collectionView.contentInset = UIEdgeInsetsMake(0, 12, 0, 12);
+    photoView.delegate = self;
+    photoView.outerCamera = NO;
+    photoView.previewStyle = HXPhotoViewPreViewShowStyleDark;
+    photoView.previewShowDeleteButton = YES;
+    photoView.showAddCell = YES;
+    [photoView.collectionView reloadData];
+    [_MJColloctionView addSubview:photoView];
+    photoView.hidden = YES;
+    self.photoView = photoView;
     
-    
+}
+- (HXPhotoManager *)manager {
+    MJWeakSelf
+    if (!_manager) {
+        _manager = [[HXPhotoManager alloc] initWithType:HXPhotoManagerSelectedTypePhoto];
+        _manager.configuration.type = HXConfigurationTypeWXChat;
+        //设定高级用户和普通选择图片数量
+        _manager.configuration.maxNum = 10000;
+        _manager.configuration.photoListBottomView = ^(HXPhotoBottomView *bottomView) {
+            bottomView.backgroundColor = [UIColor whiteColor];
+            weakSelf.bottomView = bottomView;
+            [weakSelf.bottomView removeAllSubviews];
+            [weakSelf setupBottomViewWithType:1];
+        };
+        _manager.configuration.previewBottomView = ^(HXPhotoPreviewBottomView *bottomView) {
+            
+        };
+
+    }
+    return _manager;
+}
+-(void)photoNavigationViewController:(HXCustomNavigationController *)photoNavigationViewController didDoneWithResult:(HXPickerResult *)result{
+    MJWeakSelf
+    [self.manager.selectedArray arrayByAddingObjectsFromArray:result.models];
+}
+
+-(void)setupBottomViewWithType:(NSInteger )type{
+    [_bottomView removeAllSubviews];
+    if(type == 1){
+        UILabel *tipLab = [UILabel new];
+        tipLab.text = @"点击或滑动来选择图片";
+        tipLab.font = FontBold(16);
+        tipLab.textAlignment = NSTextAlignmentCenter;
+        [_bottomView addSubview:tipLab];
+        [tipLab mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerX.centerY.equalTo(_bottomView);
+        }];
+    }else {
+        NSArray *iconArr ;
+        NSArray *textArr;
+        if (type == 2){
+            iconArr = @[@"裁切icon",@"黑编辑icon"];
+            textArr = @[@"裁切",@"编辑"];
+        }else{
+            iconArr = @[@"截长屏icon",@"拼接icon",@"布局icon",@"字幕icon"];
+            textArr = @[@"截长屏",@"拼接",@"布局",@"字幕"];
+        }
+        CGFloat btnWidth = _bottomView.width / iconArr.count;
+        for (NSInteger i = 0; i < iconArr.count; i ++) {
+            UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
+            btn.tag = type * 100 + i;
+            [btn addTarget:self action:@selector(imgEdit:) forControlEvents:UIControlEventTouchUpInside];
+            [_bottomView addSubview:btn];
+            [btn mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.width.equalTo(@(btnWidth));
+                make.height.top.equalTo(_bottomView);
+                make.left.equalTo(@( i * btnWidth));
+            }];
+            
+            UIImageView *icon = [UIImageView new];
+            icon.image = IMG(iconArr[i]);
+            [btn addSubview:icon];
+            [icon mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.width.height.equalTo(@22);
+                make.centerX.equalTo(btn);
+                make.top.equalTo(@8);
+            }];
+            
+            UILabel *textLab = [UILabel new];
+            textLab.textAlignment = NSTextAlignmentCenter;
+            textLab.text = textArr[i];
+            textLab.font = Font13;
+            textLab.textColor = [UIColor blackColor];
+            [btn addSubview:textLab];
+            [textLab mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.width.left.equalTo(btn);
+                make.top.equalTo(icon.mas_bottom).offset(4);
+            }];
+        }
+    }
+}
+
+#pragma mark -- 图片编辑btn事件
+-(void)imgEdit:(UIButton *)btn{
+    MJWeakSelf
+    if (btn.tag < 300){
+        if (btn.tag == 200){
+            //选择一图裁切
+        }else{
+            //选择一图编辑
+        }
+    }else{
+        _isOpenAlbum = NO;
+        [_clearBtn removeFromSuperview];
+        _clearBtn = nil;
+        if (!GVUserDe.isMember && self.manager.selectedCount > 9){
+            //非会员弹出提示
+            _funcView = [UnlockFuncView new];
+            _funcView.delegate = weakSelf;
+            _funcView.type = 3;
+            [self.view.window addSubview:_funcView];
+            [_funcView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.edges.equalTo(self.view);
+            }];
+        }else{
+            if (btn.tag == 300){
+                //多图截长屏
+                CaptionViewController *vc = [CaptionViewController new];
+                vc.type = 4;
+                __block NSMutableArray *arr = [NSMutableArray array];
+                for (HXPhotoModel *photoModel in [self.manager selectedArray]) {
+                    [arr addObject:photoModel.asset];
+                }
+                vc.dataArr = arr;
+                [[NSNotificationCenter defaultCenter]postNotificationName:@"dismiss" object:nil];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [weakSelf.navigationController pushViewController:vc animated:YES];
+                });
+            }else if(btn.tag == 301){
+                //多图拼接
+                CaptionViewController *vc = [CaptionViewController new];
+                vc.type = 2;
+                __block NSMutableArray *arr = [NSMutableArray array];
+                for (HXPhotoModel *photoModel in [self.manager selectedArray]) {
+                    [Tools getImageWithAsset:photoModel.asset withBlock:^(UIImage * _Nonnull image) {
+                        [arr addObject:image];
+                    }];
+                }
+                
+                vc.dataArr = arr;
+                [[NSNotificationCenter defaultCenter]postNotificationName:@"dismiss" object:nil];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [weakSelf.navigationController pushViewController:vc animated:YES];
+                });
+                
+            }else if(btn.tag == 302){
+                //多图布局
+                PictureLayoutController *layoutVC = [[PictureLayoutController alloc] init];
+                
+                __block NSMutableArray *arr = [NSMutableArray array];
+                for (HXPhotoModel *photoModel in [self.manager selectedArray]) {
+                    [Tools getImageWithAsset:photoModel.asset withBlock:^(UIImage * _Nonnull image) {
+                        [arr addObject:image];
+                    }];
+                }
+                
+                layoutVC.pictures = arr;
+                
+                [[NSNotificationCenter defaultCenter]postNotificationName:@"dismiss" object:nil];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [weakSelf.navigationController pushViewController:layoutVC animated:YES];
+                });
+
+            }else{
+                //多图字幕
+                if ([self.manager selectedArray].count > 1){
+                    
+                    CaptionViewController *vc = [CaptionViewController new];
+                    vc.type = 1;
+                    __block NSMutableArray *arr = [NSMutableArray array];
+                    for (HXPhotoModel *photoModel in [self.manager selectedArray]) {
+                        [Tools getImageWithAsset:photoModel.asset withBlock:^(UIImage * _Nonnull image) {
+                            [arr addObject:image];
+                        }];
+                    }
+                    
+                    vc.dataArr = arr;
+                    [[NSNotificationCenter defaultCenter]postNotificationName:@"dismiss" object:nil];
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        [weakSelf.navigationController pushViewController:vc animated:YES];
+                    });
+                }else{
+                    [SVProgressHUD showInfoWithStatus:@"电影截图拼接至少2张图片"];
+                }
+                
+            }
+        }
+        
+    }
 }
 
 
