@@ -71,7 +71,7 @@
     
     
     
-    NSMutableArray *arr = [NSMutableArray arrayWithObjects:@"选中无水印",@"未选中水印左",@"未选中水印居中",@"未选中水印右",@"未选中水印全屏", nil];
+    NSMutableArray *arr = [NSMutableArray arrayWithObjects:@"未选中无水印",@"未选中水印左",@"未选中水印居中",@"未选中水印右",@"未选中水印全屏", nil];
     NSString *str;
     switch (GVUserDe.waterPosition) {
         case 1:
@@ -102,7 +102,7 @@
         [iconBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.width.height.equalTo(@40);
             make.left.equalTo(@(15 + (50 * i)));
-            if (_type == 1){
+            if (_type == 2){
                 make.top.equalTo(@26);
             }else{
                 make.top.equalTo(@6);
@@ -199,7 +199,7 @@
             UIImageView *selectIMG = (UIImageView *)[self viewWithTag:btn.tag * 100];
             switch (_selectIndex) {
                 case 1:
-                    findIMG.image = [UIImage imageNamed:@"选中无水印"];
+                    findIMG.image = [UIImage imageNamed:@"未选中无水印"];
                     break;
                 case 2:
                     findIMG.image = [UIImage imageNamed:@"未选中水印左"];

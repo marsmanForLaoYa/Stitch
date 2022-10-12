@@ -10,9 +10,6 @@
 		88A9881C3EEEB1AA517CAE1C /* libPods-YXStitch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1A9AF54F55FC18D9EDC22C /* libPods-YXStitch.a */; };
 		BBB4687728F57A2100F15765 /* XWOpenCVHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBB4687528F57A2100F15765 /* XWOpenCVHelper.mm */; };
 		BBB4687A28F57A9200F15765 /* SharePath.m in Sources */ = {isa = PBXBuildFile; fileRef = BBB4687928F57A9200F15765 /* SharePath.m */; };
-		BBB4687F28F57BCF00F15765 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB4687E28F57BCF00F15765 /* opencv2.framework */; };
-		BBB4688028F57BF100F15765 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB4687E28F57BCF00F15765 /* opencv2.framework */; };
-		BBB4688128F57BF100F15765 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB4687E28F57BCF00F15765 /* opencv2.framework */; };
 		BBB4688228F57C4B00F15765 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB687ED528A0DE65002D557B /* UIKit.framework */; };
 		BBB4688428F57C5400F15765 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB4688328F57C5400F15765 /* CoreImage.framework */; };
 		BBB4688628F57C7700F15765 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB4688528F57C7700F15765 /* CoreGraphics.framework */; };
@@ -50,6 +47,8 @@
 		FB086F7428A662FF0062EBA5 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB086F7328A662FF0062EBA5 /* CoreMedia.framework */; };
 		FB086F7628A663090062EBA5 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB086F7528A663090062EBA5 /* SystemConfiguration.framework */; };
 		FB0D9E2828B4D1420057DC37 /* UIScrollView+UITouch.m in Sources */ = {isa = PBXBuildFile; fileRef = FB0D9E2728B4D1420057DC37 /* UIScrollView+UITouch.m */; };
+		FB1AB31D28F66938008C36FC /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB1AB31C28F66938008C36FC /* opencv2.framework */; };
+		FB1AB31E28F669BE008C36FC /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB1AB31C28F66938008C36FC /* opencv2.framework */; };
 		FB1B8DE728D06F5F0080AE74 /* AddWaterMark.m in Sources */ = {isa = PBXBuildFile; fileRef = FB1B8DE628D06F5F0080AE74 /* AddWaterMark.m */; };
 		FB26948228E57E5200565F4B /* imageShellSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = FB26948128E57E5200565F4B /* imageShellSelectView.m */; };
 		FB26948628E590BB00565F4B /* ShellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FB26948528E590BB00565F4B /* ShellTableViewCell.m */; };
@@ -218,7 +217,6 @@
 		BBB4687628F57A2100F15765 /* XWOpenCVHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XWOpenCVHelper.h; sourceTree = "<group>"; };
 		BBB4687828F57A9200F15765 /* SharePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SharePath.h; sourceTree = "<group>"; };
 		BBB4687928F57A9200F15765 /* SharePath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SharePath.m; sourceTree = "<group>"; };
-		BBB4687E28F57BCF00F15765 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = opencv2.framework; sourceTree = "<group>"; };
 		BBB4688328F57C5400F15765 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		BBB4688528F57C7700F15765 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		BBB4688728F57C8100F15765 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
@@ -261,6 +259,7 @@
 		FB086F7528A663090062EBA5 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		FB0D9E2628B4D1420057DC37 /* UIScrollView+UITouch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+UITouch.h"; sourceTree = "<group>"; };
 		FB0D9E2728B4D1420057DC37 /* UIScrollView+UITouch.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+UITouch.m"; sourceTree = "<group>"; };
+		FB1AB31C28F66938008C36FC /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = opencv2.framework; sourceTree = "<group>"; };
 		FB1B8DE528D06F530080AE74 /* AddWaterMark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddWaterMark.h; sourceTree = "<group>"; };
 		FB1B8DE628D06F5F0080AE74 /* AddWaterMark.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddWaterMark.m; sourceTree = "<group>"; };
 		FB26948028E57E5200565F4B /* imageShellSelectView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = imageShellSelectView.h; sourceTree = "<group>"; };
@@ -500,7 +499,7 @@
 				FB086F6828A662D30062EBA5 /* AudioToolbox.framework in Frameworks */,
 				FB086F6628A662CB0062EBA5 /* ReplayKit.framework in Frameworks */,
 				88A9881C3EEEB1AA517CAE1C /* libPods-YXStitch.a in Frameworks */,
-				BBB4687F28F57BCF00F15765 /* opencv2.framework in Frameworks */,
+				FB1AB31D28F66938008C36FC /* opencv2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -508,6 +507,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FB1AB31E28F669BE008C36FC /* opencv2.framework in Frameworks */,
 				FB687EC928A0DE65002D557B /* ReplayKit.framework in Frameworks */,
 				BBB4688C28F57C9500F15765 /* AVFoundation.framework in Frameworks */,
 				BBB4688B28F57C8F00F15765 /* CoreMedia.framework in Frameworks */,
@@ -516,7 +516,6 @@
 				BBB4688628F57C7700F15765 /* CoreGraphics.framework in Frameworks */,
 				BBB4688428F57C5400F15765 /* CoreImage.framework in Frameworks */,
 				BBB4688228F57C4B00F15765 /* UIKit.framework in Frameworks */,
-				BBB4688028F57BF100F15765 /* opencv2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -524,7 +523,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BBB4688128F57BF100F15765 /* opencv2.framework in Frameworks */,
 				FB687ED428A0DE65002D557B /* ReplayKit.framework in Frameworks */,
 				FB687ED628A0DE65002D557B /* UIKit.framework in Frameworks */,
 			);
@@ -540,13 +538,6 @@
 				B8C87E9AD95B7468BA24009E /* Pods-YXStitch.release.xcconfig */,
 			);
 			path = Pods;
-			sourceTree = "<group>";
-		};
-		BBB4687228F579F700F15765 /* ThirdPart */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = ThirdPart;
 			sourceTree = "<group>";
 		};
 		BBB4688F28F57E8700F15765 /* Replay */ = {
@@ -975,8 +966,7 @@
 		FB687EA828A0DE2E002D557B /* YXStitch */ = {
 			isa = PBXGroup;
 			children = (
-				BBB4687E28F57BCF00F15765 /* opencv2.framework */,
-				BBB4687228F579F700F15765 /* ThirdPart */,
+				FB1AB31C28F66938008C36FC /* opencv2.framework */,
 				FB3EFE8928A3CAE2006C3889 /* Global */,
 				FB3EFE4B28A3C201006C3889 /* AppIcon */,
 				FB687EEF28A0DEC3002D557B /* Base */,

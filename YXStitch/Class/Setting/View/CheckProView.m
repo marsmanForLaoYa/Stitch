@@ -60,7 +60,7 @@
         make.height.equalTo(@(self.height - proIMG.height - 100));
     }];
     
-    NSArray *arr = @[@"set滚动截图",@"set拼接",@"set布局",@"set删除",@"set删除",@"set删除"];
+    NSArray *arr = @[@"set滚动截图",@"set拼接",@"set布局",@"set删除",@"set水印",@"set带壳"];
     NSArray *titleArr = @[@"滚动截图",@"不限数量拼接",@"所有布局模版",@"一键删除原图",@"自定义水印设置",@"带壳截图"];
     NSArray *subArr = @[@"通过录屏来制作一张长截图",@"图片拼接不再限制数量",@"解锁超过100种布局模板",@"拼接完成后可一键删除原图",@"多种形式的水印，自由设置",@"给你的截图带上设备外壳"];
     scrollView.contentSize = CGSizeMake(self.width, 110 * arr.count);

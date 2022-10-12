@@ -36,7 +36,7 @@
     NSArray *iconArr;
     NSArray *textArr;
     if(_type == 1){
-        iconArr = @[@"字幕调整未选中" ,@"字幕裁切未选中",@"字幕切割未选中",@"字幕编辑未选中"];
+        iconArr = @[@"字幕调整选中" ,@"字幕裁切未选中",@"字幕切割未选中",@"字幕编辑未选中"];
         textArr = @[@"调整",@"裁切",@"切割",@"编辑"];
     }else if(_type == 2){
         iconArr = @[@"横拼" ,@"字幕裁切未选中",@"字幕切割未选中",@"字幕编辑未选中"];
@@ -49,7 +49,6 @@
     for (NSInteger i = 0; i < iconArr.count; i ++) {
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
         btn.tag = i + 1;
-        btn.selected = YES;
         [btn setBackgroundColor:[UIColor clearColor]];
         [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:btn];
@@ -58,6 +57,11 @@
             make.height.top.equalTo(self);
             make.left.equalTo(@( i * btnWidth));
         }];
+        if (_type == 1 && i == 0){
+            btn.selected = YES;
+        }else{
+            btn.selected = NO;
+        }
         
         UIImageView *icon = [UIImageView new];
         icon.image = IMG(iconArr[i]);
@@ -93,122 +97,99 @@
 }
 
 -(void)btnClick:(UIButton *)btn{
-    UIImageView *selectIMG = (UIImageView *)[self viewWithTag:btn.tag * 100];
-    UIImageView *beforeIMG = (UIImageView *)[self viewWithTag:_selectIndex * 100];
+    UIImageView *selectIMG = [UIImageView new];
+    UIImageView *beforeIMG = [UIImageView new];
+    NSLog(@"btn.tag==%ld",btn.tag);
     if (btn.tag == _selectIndex){
-        if (btn.selected){
-            switch (_selectIndex) {
-                case 1:
-                    if(_type == 1){
-                        beforeIMG.image = IMG(@"字幕调整未选中");
-                    }else if (_type == 2){
-                        _typeLab.text = @"横拼";
-                        beforeIMG.image = IMG(@"横拼");
-                    }else{
-                        _typeLab.text = @"恢复滚动条";
-                        beforeIMG.image = IMG(@"恢复滚动条");
-                    }
-                    break;
-                case 2:
-                    beforeIMG.image = IMG(@"字幕裁切选中");
-                    _preLab.text = @"裁切";
-                case 3:
-                    beforeIMG.image = IMG(@"字幕切割未选中");
-                default:
-                    break;
+        selectIMG = (UIImageView *)[self viewWithTag:btn.tag * 100];
+        if (btn.tag == 1){
+            if (btn.selected){
+                if(_type == 1){
+                    selectIMG.image = IMG(@"字幕调整未选中");
+                }else if (_type == 2){
+                    _typeLab.text = @"竖拼";
+                    selectIMG.image = IMG(@"横拼");
+                }else{
+                    _typeLab.text = @"擦除滚动条";
+                    selectIMG.image = IMG(@"擦除滚动条");
+                }
+            }else{
+                if(_type == 1){
+                    selectIMG.image = IMG(@"字幕调整选中");
+                }else if (_type == 2){
+                    _typeLab.text = @"横拼";
+                    selectIMG.image = IMG(@"横拼");
+                }else{
+                    _typeLab.text = @"恢复滚动条";
+                    selectIMG.image = IMG(@"恢复滚动条");
+                }
+                
+            }
+        }else if (btn.tag == 2){
+            if ([_preLab.text isEqualToString: @"裁切"]){
+                selectIMG.image = IMG(@"预览选中");
+                _preLab.text = @"预览";
+            }else{
+                selectIMG.image = IMG(@"字幕裁切选中");
+                _preLab.text = @"裁切";
             }
         }else{
-            switch (_selectIndex) {
-                case 1:
-                    beforeIMG.image = IMG(@"无边框_unSelected");
-                    if(_type == 1){
-                        
-                    }else if (_type == 2){
-                        _typeLab.text = @"竖拼";
-                        beforeIMG.image = IMG(@"横拼");
-                    }else{
-                        _typeLab.text = @"擦除滚动条";
-                        beforeIMG.image = IMG(@"擦除滚动条");
-                    }
-                    break;
-                case 2:
-                    beforeIMG.image = IMG(@"预览选中");
-                    _preLab.text = @"预览";
-                case 3:
-                    beforeIMG.image = IMG(@"字幕切割选中");
-                default:
-                    break;
+            if (btn.selected){
+                selectIMG.image = IMG(@"字幕切割未选中");
+            }else{
+                selectIMG.image = IMG(@"字幕切割选中");
             }
         }
-        btn.selected  = !btn.selected;
+        btn.selected = !btn.selected;
     }else{
-        switch (_selectIndex) {
-            case 1:
-                if (_type == 1){
-                    beforeIMG.image = IMG(@"字幕调整未选中");
-                }else if(_type == 2){
-                   // beforeIMG.image = IMG(@"字幕调整未选中");
+        selectIMG = (UIImageView *)[self viewWithTag:btn.tag * 100];
+        beforeIMG = (UIImageView *)[self viewWithTag:_selectIndex * 100];
+        
+        if (_selectIndex == 1){
+            if(_type == 1){
+                beforeIMG.image = IMG(@"字幕调整未选中");
+            }else if (_type == 2){
+                _typeLab.text = @"竖拼";
+                beforeIMG.image = IMG(@"横拼");
+            }else{
+                _typeLab.text = @"擦除滚动条";
+                beforeIMG.image = IMG(@"擦除滚动条");
+            }
+        }else if (_selectIndex == 2){
+            beforeIMG.image = IMG(@"字幕裁切未选中");
+        }else if (_selectIndex == 3){
+            beforeIMG.image = IMG(@"字幕切割未选中");
+        }
+        btn.selected = YES;
+        if (btn.tag == 1){
+            if(_type == 1){
+                selectIMG.image = IMG(@"字幕调整未选中");
+                btn.selected = NO;
+            }else if (_type == 2){
+                selectIMG.image = IMG(@"横拼");
+                if ([_typeLab.text isEqualToString:@"竖拼"]){
+                    _typeLab.text = @"横拼";
                 }else{
-                    
+                    _typeLab.text = @"竖拼";
                 }
-                
-                break;
-            case 2:
-                beforeIMG.image = IMG(@"字幕裁切未选中");
-                break;
-            case 3:
-                beforeIMG.image = IMG(@"字幕切割未选中");
-                break;
-            case 4:
-               // beforeIMG.image = [UIImage imageNamed:@"未选中水印右"];
-                break;
-            default:
-                break;
+            }else if (_type == 3 || _type == 4){
+                if ([_typeLab.text isEqualToString:@"擦除滚动条"]){
+                    _typeLab.text = @"恢复滚动条";
+                    selectIMG.image = IMG(@"恢复滚动条");
+                }else{
+                    _typeLab.text = @"擦除滚动条";
+                    selectIMG.image = IMG(@"擦除滚动条");
+                }
+            }
+        }else if (btn.tag == 2){
+            selectIMG.image = IMG(@"预览选中");
+            _preLab.text = @"预览";
+        }else if (btn.tag == 3){
+            selectIMG.image = IMG(@"字幕切割选中");
+        }else{
+            
         }
         
-        switch (btn.tag) {
-            case 1:
-                if (_type == 1){
-                    selectIMG.image = IMG(@"无边框_unSelected");
-                }
-                if (_type == 2){
-                    selectIMG.image = IMG(@"横拼");
-                    if ([_typeLab.text isEqualToString:@"竖拼"]){
-                        _typeLab.text = @"横拼";
-                    }else{
-                        _typeLab.text = @"竖拼";
-                    }
-                }
-                if (_type == 3 || _type == 4){
-                    if ([_typeLab.text isEqualToString:@"擦除滚动条"]){
-                        _typeLab.text = @"恢复滚动条";
-                        selectIMG.image = IMG(@"恢复滚动条");
-                    }else{
-                        _typeLab.text = @"擦除滚动条";
-                        selectIMG.image = IMG(@"擦除滚动条");
-                    }
-                }
-                
-                break;
-            case 2:
-                
-                if ([_preLab.text isEqualToString:@"预览"]){
-                    _preLab.text = @"裁切";
-                    selectIMG.image = IMG(@"字幕裁切选中");
-                }else{
-                    selectIMG.image = IMG(@"预览选中");
-                    _preLab.text = @"预览";
-                }
-                break;
-            case 3:
-                selectIMG.image = IMG(@"选中水印居中");
-                break;
-            case 4:
-                //selectIMG.image = [UIImage imageNamed:@"选中水印右"];
-                break;
-            default:
-                break;
-        }
     }
     _selectIndex = btn.tag;
     self.btnClick(btn.tag);

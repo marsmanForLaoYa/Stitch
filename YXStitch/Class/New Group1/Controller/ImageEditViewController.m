@@ -2230,13 +2230,13 @@
         }
         [_contentScrollView setContentSize:CGSizeMake(_contentScrollView.size.width, contentHeight)];
         _shellBkImageView  = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0,width, _contentScrollView.contentSize.height)];
-        if(contentHeight < SCREEN_HEIGHT){
+        if(contentHeight < 400){
             CGFloat newHeight = 0;
             StitchingButton *firstIMG;
             for (NSInteger i = 0 ; i < _imageViewsArr.count; i ++) {
                 StitchingButton *img = _imageViewsArr[i];
                 if (i == 0){
-                    img.frame = CGRectMake(3, 0, img.width - 6, img.height * 3);
+                    img.frame = CGRectMake(3, 0, img.width - 6, img.height * 2);
                     img.imgView.height = img.height;
                     UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:img.bounds byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight cornerRadii:CGSizeMake(55, 55)];
                     CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
@@ -2244,7 +2244,7 @@
                     maskLayer.path = maskPath.CGPath;
                     img.layer.mask = maskLayer;
                 }else{
-                    img.frame = CGRectMake(3, firstIMG.bottom, img.width - 6, img.height * 3);
+                    img.frame = CGRectMake(3, firstIMG.bottom, img.width - 6, img.height * 2);
                     img.imgView.height = img.height;
                     if (i == _imageViewsArr.count - 1){
                         UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:img.bounds byRoundingCorners:UIRectCornerBottomLeft | UIRectCornerBottomRight cornerRadii:CGSizeMake(55, 55)];

@@ -45,13 +45,13 @@
         make.width.left.top.equalTo(self.view);
         make.height.equalTo(@190);
     }];
-    UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-    leftBtn.tag = 1;
-    [leftBtn setBackgroundImage:IMG(@"stitch_white_back") forState:UIControlStateNormal];
-    [leftBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [leftBtn addTarget:self action:@selector(btnClick) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithCustomView:leftBtn];
-    self.navigationItem.leftBarButtonItem = item;
+//    UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+//    leftBtn.tag = 1;
+//    [leftBtn setBackgroundImage:IMG(@"stitch_white_back") forState:UIControlStateNormal];
+//    [leftBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+//    [leftBtn addTarget:self action:@selector(btnClick) forControlEvents:UIControlEventTouchUpInside];
+//    UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithCustomView:leftBtn];
+//    self.navigationItem.leftBarButtonItem = item;
     
 }
 
