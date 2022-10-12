@@ -58,6 +58,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)logout;
 
++(UIViewController *)getCurrentVC;
+
++ (BOOL)checkLogin;
++ (BOOL)checkIsVipMember;
+
 @end
 
 NS_ASSUME_NONNULL_END

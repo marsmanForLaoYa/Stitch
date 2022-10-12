@@ -77,12 +77,25 @@
     [super viewWillAppear:animated];
     XWNavigationController *nav = (XWNavigationController *)self.navigationController;
     [nav addNavBarShadowImageWithColor:[UIColor blackColor]];
+    
+    NSDictionary *titleAttr= @{
+                               NSForegroundColorAttributeName:RGB(255, 255, 255),
+                               NSFontAttributeName:[UIFont systemFontOfSize:18]
+                               };
+    //设置导航栏标题字体颜色、分割线颜色
+    [nav addNavBarTitleTextAttributes:titleAttr barShadowHidden:NO shadowColor:RGB(233, 233, 233)];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     XWNavigationController *nav = (XWNavigationController *)self.navigationController;
     [nav addNavBarShadowImageWithColor:RGB(255, 255, 255)];
+    NSDictionary *titleAttr= @{
+                               NSForegroundColorAttributeName:RGB(0, 0, 0),
+                               NSFontAttributeName:[UIFont systemFontOfSize:18]
+                               };
+    //设置导航栏标题字体颜色、分割线颜色
+    [nav addNavBarTitleTextAttributes:titleAttr barShadowHidden:NO shadowColor:RGB(233, 233, 233)];
 }
 
 -(void)setupNavItems{

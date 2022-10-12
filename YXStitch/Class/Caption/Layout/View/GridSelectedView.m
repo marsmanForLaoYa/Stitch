@@ -82,6 +82,16 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    if(indexPath.item > 0) {
+        
+        if(![User checkIsVipMember]) {
+            //设置默认选中第一个
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+            [self.collectionView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+            [self collectionView:self.collectionView didSelectItemAtIndexPath:indexPath];
+            return;
+        }
+    }
     if(self.selectedIndexPath!= nil && [indexPath isEqual:self.selectedIndexPath]) {
         return;
     }

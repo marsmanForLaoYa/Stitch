@@ -31,6 +31,8 @@
     self = [super init];
     if (self) {
 
+//        _login = YES;
+//        _vipMember = YES;
     }
     return self;
 }
@@ -128,24 +130,52 @@
     self.login = NO;
 }
 
-//- (instancetype)initWithCoder:(NSCoder *)coder
-//{
-//    self = [super init];
-//    if (self) {
-////        [self setValue:[coder decodeObjectForKey:@"account"] forKey:@"account"];
-//        self.account = [coder decodeObjectForKey:@"account"];
-//    }
-//    return self;
-//}
-//
-//- (void)encodeWithCoder:(NSCoder *)coder
-//{
-////    [coder encodeObject:[self valueForKey:@"account"] forKey:@"account"];
-//    [coder encodeObject:self.account forKey:@"account"];
-//}
-//
-//+ (BOOL)supportsSecureCoding{
-//    return YES;
-//}
+// 获取当前控制器
++(UIViewController *)getCurrentVC {
+    
+    UIViewController *keyVC = nil;
+    keyVC = [self viewControllerWithTab:[[UIApplication sharedApplication].keyWindow rootViewController]];
+    while (keyVC.presentedViewController) {
+        keyVC = [self viewControllerWithTab:keyVC.presentedViewController];
+    }
+    return keyVC;
+}
+
++(UIViewController *)viewControllerWithTab:(UIViewController *)viewController {
+    
+    if ([viewController isKindOfClass:[UINavigationController class]]) {
+        return [self viewControllerWithTab:[(UINavigationController *)viewController topViewController]];
+    } else if ([viewController isKindOfClass:[UITabBarController class]]) {
+        return [self viewControllerWithTab:[(UITabBarController *)viewController selectedViewController]];
+    } else {
+        return viewController;
+    }
+    return nil;
+}
+
++ (BOOL)checkLogin
+{
+    BOOL login = [User current].isLogin;
+    if (!login) {
+        [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeNone];
+        [SVProgressHUD showInfoWithStatus:@"未登录"];
+        [SVProgressHUD dismissWithDelay:2.0];
+    }
+    
+    return login;
+}
+
++ (BOOL)checkIsVipMember {
+    
+    if ([self checkLogin]) {
+        BOOL vip = [User current].isVipMember;
+        
+        return vip;
+    }
+    else
+    {
+        return NO;
+    }
+}
 
 @end
