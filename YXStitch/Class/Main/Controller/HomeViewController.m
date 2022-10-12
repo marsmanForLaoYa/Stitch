@@ -152,7 +152,6 @@
     UICollectionViewFlowLayout * layout = [[UICollectionViewFlowLayout alloc] init];
     CGFloat sizeWidth = (CGFloat) 168 / 375  * SCREEN_WIDTH;
     CGFloat sizeHeight = (CGFloat) 160 / 667  * SCREEN_HEIGHT;
-//    CGFloat sizeHeight = 160;
     layout.itemSize = CGSizeMake(sizeWidth, sizeHeight);
     _MJColloctionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, Nav_H,SCREEN_WIDTH,SCREEN_HEIGHT - Nav_H) collectionViewLayout:layout];
     [_MJColloctionView registerClass:[MoveCollectionViewCell class] forCellWithReuseIdentifier:@"MoveCollectionViewCell"];
@@ -190,6 +189,7 @@
     return cell;
 }
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+    MJWeakSelf
     //得到的cell
     MoveCollectionViewCell * cell = (MoveCollectionViewCell *)[self collectionView:collectionView cellForItemAtIndexPath:indexPath];
     NSString *cellName = cell.cellName;
@@ -200,10 +200,6 @@
     }else if ([cellName isEqualToString:@"网页滚动截图"]){
         vc = [EnterURLViewController new];
     }else if ([cellName isEqualToString:@"拼图"]){
-//        vc = [SelectPictureViewController new];
-        if (_photoView == nil){
-            [self addPhotoView];
-        }
         _isOpenAlbum = YES;
         HXCustomNavigationController *nav = [[HXCustomNavigationController alloc] initWithManager:self.manager delegate:self];
         nav.modalPresentationStyle = UIModalPresentationOverFullScreen;
@@ -220,8 +216,6 @@
     }
     [self.navigationController pushViewController:vc animated:YES];
 }
-
-
 
 -(void)GesturePressDelegate:(UIGestureRecognizer *)gestureRecognizer
 {
@@ -329,7 +323,6 @@
     if (type == 2){
         [SVProgressHUD showWithStatus:@"正在检测是否有连续截图..."];
     }
-    
     _stitchArr = [Tools detectionScreenShotIMG];
     //触发提示
     MJWeakSelf
@@ -614,21 +607,23 @@
 
 #pragma mark -photoViewDelegate
 
--(void)addPhotoView{
-    HXPhotoView *photoView = [HXPhotoView photoManager:self.manager scrollDirection:UICollectionViewScrollDirectionVertical];
-    photoView.frame = CGRectMake(0, 12, SCREEN_WIDTH, 0);
-    photoView.collectionView.contentInset = UIEdgeInsetsMake(0, 12, 0, 12);
-    photoView.delegate = self;
-    photoView.outerCamera = NO;
-    photoView.previewStyle = HXPhotoViewPreViewShowStyleDark;
-    photoView.previewShowDeleteButton = YES;
-    photoView.showAddCell = YES;
-    [photoView.collectionView reloadData];
-    [_MJColloctionView addSubview:photoView];
-    photoView.hidden = YES;
-    self.photoView = photoView;
-    
+
+-(HXPhotoView *)photoView{
+    if (!_photoView){
+        _photoView = [HXPhotoView photoManager:self.manager scrollDirection:UICollectionViewScrollDirectionVertical];
+        _photoView.frame = CGRectMake(0, 12, SCREEN_WIDTH, 0);
+        _photoView.collectionView.contentInset = UIEdgeInsetsMake(0, 12, 0, 12);
+        _photoView.delegate = self;
+        _photoView.outerCamera = NO;
+        _photoView.previewStyle = HXPhotoViewPreViewShowStyleDark;
+        _photoView.previewShowDeleteButton = YES;
+        _photoView.showAddCell = YES;
+        [_photoView.collectionView reloadData];
+        [_MJColloctionView addSubview:_photoView];
+    }
+    return _photoView;
 }
+
 - (HXPhotoManager *)manager {
     MJWeakSelf
     if (!_manager) {
@@ -650,7 +645,6 @@
     return _manager;
 }
 -(void)photoNavigationViewController:(HXCustomNavigationController *)photoNavigationViewController didDoneWithResult:(HXPickerResult *)result{
-    MJWeakSelf
     [self.manager.selectedArray arrayByAddingObjectsFromArray:result.models];
 }
 

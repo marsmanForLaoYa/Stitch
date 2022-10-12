@@ -52,52 +52,50 @@
 @property (nonatomic ,strong)ImageShellSettingView *shellSettingView;//设置外壳
 @property (nonatomic ,strong)imageShellSelectView *shellSelectView;//外框类型选择
 @property (nonatomic ,strong)WaterMarkToolBarView *waterToolView;//水印view
-
-
+@property (nonatomic ,strong)CheckProView *checkProView;
 @property (nonatomic ,strong)CustomScrollView *contentView;
 @property (nonatomic ,strong)CustomScrollView *contentScrollView;
-@property (nonatomic ,strong)UIImageView *imageView;
+
 @property (nonatomic ,strong)UIView *bgView;
-@property (nonatomic ,strong)CheckProView *checkProView;
+@property (nonatomic, strong)UIView *selectView;//选中path的边框
+@property (nonatomic, strong)UIView *borderView;//方框view
 @property (nonatomic ,strong)UIScrollView *shellBkView;//套壳背景view
 @property (nonatomic ,strong)UIImageView *shellBkImageView;//套壳背景imageview
 
 @property (nonatomic ,assign)NSInteger editType;//编辑类型
 @property (nonatomic ,assign)NSInteger markType;//标注类型
 @property (nonatomic ,assign)NSInteger borderType;//边框类型
-@property (nonatomic ,assign)CGFloat currentBorderValue;//当前border值
+@property (nonatomic, assign)NSInteger mosaicShape;//马赛克默认形状
+@property (nonatomic, assign)NSInteger mosaicStyle;//马赛克默认样式
+
 @property (nonatomic ,strong)UIPinchGestureRecognizer *pinchRecognizer;
 @property (nonatomic ,strong)UIPanGestureRecognizer *panRecognizer;;
 
 @property (nonatomic, strong)NSMutableArray *dataArr;//维护单个画布的路径数组
-
 @property (nonatomic, strong)NSMutableArray *imageViewsArr;//维护图片数组
 @property (nonatomic, strong)NSMutableArray *originWidthArr;//图片原始宽度数组
 @property (nonatomic, strong)NSMutableArray *originHeightArr;
 @property (nonatomic, strong)NSMutableArray *originTopArr;
-
 @property (nonatomic, strong)NSMutableArray * layers;// 线条数组
 @property (nonatomic, strong)NSMutableArray * removedLayers; //撤销的线条数组
+
 @property (nonatomic, strong)UIBezierPath * __nullable path;//自己当前绘画的路径
 @property (nonatomic, strong)UIBezierPath *currentPath;//当前选中的path
 @property (nonatomic, assign)CGFloat pathWidth; //画笔宽度
 @property (nonatomic, strong)UIColor *pathLineColor; //画笔颜色
-@property (nonatomic, strong)CAShapeLayer *slayer;//当前操作layer层
-
-@property (nonatomic, strong)UIView *selectView;//选中path的边框
-@property (nonatomic, strong)UIView *borderView;//方框view
-@property (nonatomic, strong)UIView *fillBorderView;//填充方框view
-@property (nonatomic, assign)CGPoint stratPoint;
-@property (nonatomic, assign)BOOL isSelectPath;
-@property (nonatomic, assign)CGRect originRect;//记录被修改的原始路径，用于后面移动、修改重构时需要
-@property (nonatomic, assign)NSInteger mosaicShape;//马赛克默认形状
-@property (nonatomic, assign)NSInteger mosaicStyle;//马赛克默认样式
 @property (nonatomic, strong)UIColor *fillColor;//填充颜色
-@property (nonatomic, assign)BOOL isStartPaint;
+@property (nonatomic, strong)CAShapeLayer *slayer;//当前操作layer层
+@property (nonatomic, assign)CGPoint stratPoint;
+@property (nonatomic, assign)CGRect originRect;//记录被修改的原始路径，用于后面移动、修改重构时需要
+
+
+@property (nonatomic, assign)BOOL isStartPaint;//是否开始标记
 @property (nonatomic, assign)BOOL isHaveBang;//是否有刘海 默认无刘海
 @property (nonatomic, assign)BOOL ishaveBkColor;//是否有背景色 默认有背景色
 @property (nonatomic, assign)BOOL isShellVer;//是否是横屏套壳
 @property (nonatomic, assign)BOOL isAddShell;//是否套壳
+@property (nonatomic, assign)BOOL isSelectPath;//是否选中路径
+
 @property (nonatomic, strong)NSString *phoneTypeStr;//手机类型str
 @property (nonatomic, strong)NSString *addLabStr;//添加的文本str
 
@@ -134,6 +132,8 @@
         self.navigationController.navigationBar.titleTextAttributes = dict;
     }
     self.navigationController.navigationBar.barTintColor = [UIColor blackColor];
+    XWNavigationController *nav = (XWNavigationController *)self.navigationController;
+    [nav addNavBarShadowImageWithColor:[UIColor blackColor]];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -143,6 +143,8 @@
     self.navigationController.navigationBar.titleTextAttributes = dict;
     self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
     [Tools setNaviBarBKColorWith:self.navigationController andBKColor:[UIColor whiteColor] andFontColor:[UIColor blackColor]];
+    XWNavigationController *nav = (XWNavigationController *)self.navigationController;
+        [nav addNavBarShadowImageWithColor:RGB(255, 255, 255)];
 }
 
 #pragma mark --initUI
@@ -341,11 +343,8 @@
 -(void)checkBtnClick:(UIButton *)btn{
     MJWeakSelf
     if (btn.tag == 0){
-        //[_cutBtn removeFromSuperview];
         [SVProgressHUD showWithStatus:@"正在生成图片中.."];
-        //UIView *view;
         SaveViewController *saveVC = [SaveViewController new];
-        //        saveVC.screenshotIMG = [Tools imageFromView:_contentView rect:_contentView.frame];
         saveVC.isVer = weakSelf.isVer;
         saveVC.type = 2;
         [TYSnapshotScroll screenSnapshot:_contentScrollView finishBlock:^(UIImage *snapshotImage) {
@@ -359,14 +358,9 @@
                     saveVC.identify = identify;
                 }];
             }else{
-                //                UIImageWriteToSavedPhotosAlbum(snapshotImage, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
-            }
-            
-            
+                UIImageWriteToSavedPhotosAlbum(snapshotImage, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
+            }     
         }];
-        //        [_contentScrollView DDGContentScrollScreenShot:^(UIImage *screenShotImage) {
-        
-        //        }];
         //判断是否是高级会员
         //    if(GVUserDe.isMember){
         //        GVUserDe.waterPosition = _toolView.selectIndex;
@@ -594,7 +588,6 @@
     [_colorSelectView removeFromSuperview];
     [_mosaicView removeFromSuperview];
     _isStartPaint = NO;
-   
     if (tag == 0){
         //取消
         _selectView.hidden = YES;
@@ -916,60 +909,6 @@
             }
         }
     }
-        
-//    for (NSInteger i = 0; i < _imageViewsArr.count ; i ++) {
-//        StitchingButton *image = _imageViewsArr[i];
-//        image.backgroundColor = color;
-//        CGFloat imgWidth  = [_originWidthArr[i]floatValue];
-//        CGFloat imgHeight = [_originHeightArr[i]floatValue];
-//        [image.imgView.layer removeAllSublayers];
-//        if (type != 1){
-//            if (type == 2){
-//                //外边框
-//                if (_isVer){
-//                    if (i == 0){
-//                        [image.imgView setDirectionBorderWithTop:YES left:YES bottom:NO right:YES borderColor:color withBorderWidth:width];
-//                    }else if (i == _imageViewsArr.count - 1){
-//                        [image.imgView setDirectionBorderWithTop:NO left:YES bottom:YES right:YES borderColor:color withBorderWidth:width];
-//                    }else{
-//                        [image.imgView setDirectionBorderWithTop:NO left:YES bottom:NO right:YES borderColor:color withBorderWidth:width];
-//                    }
-//                }else{
-//                    if (i == 0){
-//                        [image.imgView setDirectionBorderWithTop:YES left:YES bottom:YES right:NO borderColor:color withBorderWidth:width];
-//                    }else if (i == _imageViewsArr.count - 1){
-//                        [image.imgView setDirectionBorderWithTop:YES left:NO bottom:YES right:YES borderColor:color withBorderWidth:width];
-//                    }else{
-//                        [image.imgView setDirectionBorderWithTop:YES left:NO bottom:YES right:NO borderColor:color withBorderWidth:width];
-//                    }
-//                }
-//
-//
-//            }else if (type == 3){
-//                //内边框
-//                if (_isVer){
-//                    if (i == 0){
-//                        [image.imgView setDirectionBorderWithTop:NO left:NO bottom:YES right:NO borderColor:color withBorderWidth:width];
-//                    }else if (i == _imageViewsArr.count - 1){
-//                        [image.imgView setDirectionBorderWithTop:YES left:NO bottom:NO right:NO borderColor:color withBorderWidth:width];
-//                    }else{
-//                        [image.imgView setDirectionBorderWithTop:YES left:NO bottom:YES right:NO borderColor:color withBorderWidth:width];
-//                    }
-//                }else{
-//                    if (i != 0 && i != _imageViewsArr.count - 1){
-//                        [image.imgView setDirectionBorderWithTop:NO left:YES bottom:NO right:YES borderColor:color withBorderWidth:width];
-//                    }
-//                }
-//
-//            }else{
-//                //全边框
-//                //                image.width = image.width - width / 10;
-//                [image.imgView setDirectionBorderWithTop:YES left:YES bottom:YES right:YES borderColor:color withBorderWidth:width];
-//            }
-//        }
-//
-//    }
-    _currentBorderValue = width;
 }
 -(void)changeImageShellWithType:(NSInteger)type AndSelected:(BOOL)isSelected{
     MJWeakSelf
@@ -2592,8 +2531,6 @@
             //改变borderview填充内容
             if (_slayer != nil){
                 NSInteger index = [_layers indexOfObject:_slayer];
-                
-                //        _fillBorderView.backgroundColor = _fillColor;
                 _slayer.strokeColor = _fillColor.CGColor;
                 _slayer.fillColor = _fillColor.CGColor;
                 [self rectDrawBy:index];

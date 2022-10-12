@@ -42,6 +42,8 @@
         self.navigationController.navigationBar.titleTextAttributes = dict;
     }
     self.navigationController.navigationBar.barTintColor = [UIColor blackColor];
+    XWNavigationController *nav = (XWNavigationController *)self.navigationController;
+    [nav addNavBarShadowImageWithColor:[UIColor blackColor]];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -52,6 +54,9 @@
     self.navigationController.navigationBar.titleTextAttributes = dict;
     self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
     [Tools setNaviBarBKColorWith:self.navigationController andBKColor:[UIColor whiteColor] andFontColor:[UIColor blackColor]];
+    XWNavigationController *nav = (XWNavigationController *)self.navigationController;
+        [nav addNavBarShadowImageWithColor:RGB(255, 255, 255)];
+
 }
 -(void)setupViews{
     MJWeakSelf
@@ -166,6 +171,7 @@
         [_funcView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.edges.equalTo(self.view);
         }];
+        
     //    if(GVUserDe.isMember){
     //        GVUserDe.waterPosition = _toolView.selectIndex;
     //    }else{

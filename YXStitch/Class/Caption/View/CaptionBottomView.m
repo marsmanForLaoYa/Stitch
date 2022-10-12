@@ -99,7 +99,6 @@
 -(void)btnClick:(UIButton *)btn{
     UIImageView *selectIMG = [UIImageView new];
     UIImageView *beforeIMG = [UIImageView new];
-    NSLog(@"btn.tag==%ld",btn.tag);
     if (btn.tag == _selectIndex){
         selectIMG = (UIImageView *)[self viewWithTag:btn.tag * 100];
         if (btn.tag == 1){
