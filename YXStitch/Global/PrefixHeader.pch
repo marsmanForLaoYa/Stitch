@@ -40,5 +40,7 @@
 #import "NSString+Base64.h"
 #import "NetWorkout.h"
 #import "IAPSubscribeTool.h"
+#import "XWNavigationController.h"
+#import "XWNavigationController+BarStyle.h"
 
 #endif /* PrefixHeader_pch */

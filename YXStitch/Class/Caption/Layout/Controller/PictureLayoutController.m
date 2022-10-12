@@ -75,23 +75,14 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    if (@available(iOS 15.0, *)) {
-        [Tools setNaviBarBKColorWith:self.navigationController andBKColor:[UIColor blackColor] andFontColor:[UIColor whiteColor]];
-    }else{
-        UIColor *color = [UIColor whiteColor];
-        NSDictionary *dict = [NSDictionary dictionaryWithObject:color forKey:NSForegroundColorAttributeName];
-        self.navigationController.navigationBar.titleTextAttributes = dict;
-    }
-    self.navigationController.navigationBar.barTintColor = [UIColor blackColor];
+    XWNavigationController *nav = (XWNavigationController *)self.navigationController;
+    [nav addNavBarShadowImageWithColor:[UIColor blackColor]];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    UIColor *color = [UIColor blackColor];
-    NSDictionary *dict = [NSDictionary dictionaryWithObject:color forKey:NSForegroundColorAttributeName];
-    self.navigationController.navigationBar.titleTextAttributes = dict;
-    self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
-    [Tools setNaviBarBKColorWith:self.navigationController andBKColor:[UIColor whiteColor] andFontColor:[UIColor blackColor]];
+    XWNavigationController *nav = (XWNavigationController *)self.navigationController;
+    [nav addNavBarShadowImageWithColor:RGB(255, 255, 255)];
 }
 
 -(void)setupNavItems{
