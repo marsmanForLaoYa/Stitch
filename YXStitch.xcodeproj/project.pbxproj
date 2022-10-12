@@ -49,6 +49,7 @@
 		FB0D9E2828B4D1420057DC37 /* UIScrollView+UITouch.m in Sources */ = {isa = PBXBuildFile; fileRef = FB0D9E2728B4D1420057DC37 /* UIScrollView+UITouch.m */; };
 		FB1AB31D28F66938008C36FC /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB1AB31C28F66938008C36FC /* opencv2.framework */; };
 		FB1AB31E28F669BE008C36FC /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB1AB31C28F66938008C36FC /* opencv2.framework */; };
+		FB1AB32128F66B2F008C36FC /* HandlerVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = FB1AB32028F66B2F008C36FC /* HandlerVideo.m */; };
 		FB1B8DE728D06F5F0080AE74 /* AddWaterMark.m in Sources */ = {isa = PBXBuildFile; fileRef = FB1B8DE628D06F5F0080AE74 /* AddWaterMark.m */; };
 		FB26948228E57E5200565F4B /* imageShellSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = FB26948128E57E5200565F4B /* imageShellSelectView.m */; };
 		FB26948628E590BB00565F4B /* ShellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FB26948528E590BB00565F4B /* ShellTableViewCell.m */; };
@@ -260,6 +261,8 @@
 		FB0D9E2628B4D1420057DC37 /* UIScrollView+UITouch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+UITouch.h"; sourceTree = "<group>"; };
 		FB0D9E2728B4D1420057DC37 /* UIScrollView+UITouch.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+UITouch.m"; sourceTree = "<group>"; };
 		FB1AB31C28F66938008C36FC /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = opencv2.framework; sourceTree = "<group>"; };
+		FB1AB31F28F66B2F008C36FC /* HandlerVideo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HandlerVideo.h; sourceTree = "<group>"; };
+		FB1AB32028F66B2F008C36FC /* HandlerVideo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HandlerVideo.m; sourceTree = "<group>"; };
 		FB1B8DE528D06F530080AE74 /* AddWaterMark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddWaterMark.h; sourceTree = "<group>"; };
 		FB1B8DE628D06F5F0080AE74 /* AddWaterMark.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddWaterMark.m; sourceTree = "<group>"; };
 		FB26948028E57E5200565F4B /* imageShellSelectView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = imageShellSelectView.h; sourceTree = "<group>"; };
@@ -1054,6 +1057,8 @@
 				FB687F0528A0EA1C002D557B /* Tools.m */,
 				FB687F0728A0ECCC002D557B /* ToastShowView.h */,
 				FB687F0828A0ECCC002D557B /* ToastShowView.m */,
+				FB1AB31F28F66B2F008C36FC /* HandlerVideo.h */,
+				FB1AB32028F66B2F008C36FC /* HandlerVideo.m */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -1444,6 +1449,7 @@
 				FB2E283928AA1A13006BDAB0 /* SZImageGenerator.m in Sources */,
 				FB3EFE8C28A3CB07006C3889 /* GVUserDefaults+Properties.m in Sources */,
 				FB2E283728AA1A13006BDAB0 /* SZImageMergeInfo.m in Sources */,
+				FB1AB32128F66B2F008C36FC /* HandlerVideo.m in Sources */,
 				FB687F0D28A0FF83002D557B /* AppGroupData.m in Sources */,
 				FB687EB128A0DE2E002D557B /* ViewController.m in Sources */,
 				BBBBA3EB28F10C9900406C43 /* GridScaleView.m in Sources */,
