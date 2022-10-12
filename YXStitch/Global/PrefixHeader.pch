@@ -35,5 +35,9 @@
 #import "SDCycleScrollView.h"
 #import "TYSnapshotScroll.h"
 #import "Notifications.h"
+#import "User.h"
+#import "NSString+Base64.h"
+#import "NetWorkout.h"
+#import "IAPSubscribeTool.h"
 
 #endif /* PrefixHeader_pch */

@@ -14,13 +14,11 @@ int aHash(cv::Mat matSrc1, cv::Mat matSrc2)
     cv::Mat matDst1, matDst2;
     cv::resize(matSrc1, matDst1, cv::Size(8, 8), 0, 0, cv::INTER_CUBIC);
     cv::resize(matSrc2, matDst2, cv::Size(8, 8), 0, 0, cv::INTER_CUBIC);
-
     cv::cvtColor(matDst1, matDst1, CV_BGR2GRAY);
     cv::cvtColor(matDst2, matDst2, CV_BGR2GRAY);
 
     int iAvg1 = 0, iAvg2 = 0;
     int arr1[64], arr2[64];
-
     for (int i = 0; i < 8; i++)
     {
         uchar* data1 = matDst1.ptr<uchar>(i);
@@ -34,7 +32,6 @@ int aHash(cv::Mat matSrc1, cv::Mat matSrc2)
 
             arr1[tmp1] = data1[j] / 4 * 4;
             arr2[tmp1] = data2[j] / 4 * 4;
-
             iAvg1 += arr1[tmp1];
             iAvg2 += arr2[tmp1];
         }
