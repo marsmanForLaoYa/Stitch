@@ -14,6 +14,8 @@
 #import "URLSchemesViewController.h"
 #import <MessageUI/MFMailComposeViewController.h>
 #import "WaterMarkViewController.h"
+#import "AdvertisFreeController.h"
+
 @interface SettingViewController ()<CheckProViewDelegate,SettingTableViewDelegate,MFMailComposeViewControllerDelegate>
 @property (nonatomic ,strong)UIView *contentView;
 @property (nonatomic ,strong)SettingTableView *tabletView;
@@ -148,8 +150,11 @@
             //去appstore评价
             break;
         case 5:
+        {
             //分享得会员
-            //[self share];
+            AdvertisFreeController *adVC = [[AdvertisFreeController alloc] init];
+            [self.navigationController pushViewController:adVC animated:YES];
+        }
             break;
         case 6:
             //邮箱

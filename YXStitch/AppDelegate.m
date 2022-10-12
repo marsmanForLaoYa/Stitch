@@ -6,7 +6,8 @@
 //
 
 #import "AppDelegate.h"
-#import "KSViewController.h"
+//#import "KSViewController.h"
+#import "XWNavigationController.h"
 #import "HomeViewController.h"
 #import <UMShare/UMShare.h>
 #import <UMCommon/UMCommon.h>
@@ -64,7 +65,7 @@
     [SVProgressHUD setDefaultStyle:SVProgressHUDStyleDark];
     //设置SVP显示时间
     [SVProgressHUD setMinimumDismissTimeInterval:1];
-    KSViewController *navC = [[KSViewController alloc]initWithRootViewController:[HomeViewController new]];
+    XWNavigationController *navC = [[XWNavigationController alloc]initWithRootViewController:[HomeViewController new]];
     self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
     self.window.rootViewController = navC;
     [self.window makeKeyAndVisible];

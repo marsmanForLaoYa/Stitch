@@ -91,7 +91,7 @@
     }else{
         self.accessoryType = UITableViewCellAccessoryNone;
         UIImageView *icon = [UIImageView new];
-        icon.image = IMG(@"darkIcon");
+        icon.image = IMG(@"xw_login");
         [self addSubview:icon];
         [icon mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(@20);

@@ -19,6 +19,7 @@
 #define RYCurrentLanguage           ([[NSLocale preferredLanguages] objectAtIndex:0])
 
 #pragma mark 判断当前的iPhone设备/系统版本
+#define NORMAL_SCALE  (kScreenWidth/375.0f)
 //判断是否为iPhone
 #define IS_IPHONE                        (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
 //判断是否为iPad

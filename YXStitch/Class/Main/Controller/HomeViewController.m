@@ -209,6 +209,7 @@
         nav.modalPresentationStyle = UIModalPresentationOverFullScreen;
         nav.modalPresentationCapturesStatusBarAppearance = YES;
         [self.view.viewController presentViewController:nav animated:YES completion:nil];
+        return;
     }else if ([cellName isEqualToString:@"水印"]){
         vc = [WaterMarkViewController new];
     }else if ([cellName isEqualToString:@"设置"]){

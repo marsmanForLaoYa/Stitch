@@ -8,7 +8,7 @@
 #import "SelectPictureViewController.h"
 #import "CaptionViewController.h"
 #import "UIView+HXExtension.h"
-#import "KSViewController.h"
+//#import "KSViewController.h"
 #import "UnlockFuncView.h"
 #import "BuyViewController.h"
 #import "CheckProView.h"

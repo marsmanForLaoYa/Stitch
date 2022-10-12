@@ -36,6 +36,24 @@
 		BBBBA3EB28F10C9900406C43 /* GridScaleView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBBA3EA28F10C9900406C43 /* GridScaleView.m */; };
 		BBBBA3ED28F113C000406C43 /* Scales.json in Resources */ = {isa = PBXBuildFile; fileRef = BBBBA3EC28F113C000406C43 /* Scales.json */; };
 		BBBBA3F028F180D600406C43 /* GridEditView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBBA3EF28F180D600406C43 /* GridEditView.m */; };
+		BBC92AD128F670C80023E80F /* YKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = BBC92AC128F670C80023E80F /* YKeychain.m */; };
+		BBC92AD228F670C80023E80F /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = BBC92AC228F670C80023E80F /* User.m */; };
+		BBC92AD328F670C80023E80F /* XWNetTool+Bind.m in Sources */ = {isa = PBXBuildFile; fileRef = BBC92AC528F670C80023E80F /* XWNetTool+Bind.m */; };
+		BBC92AD428F670C80023E80F /* XWNetTool+AppStore.m in Sources */ = {isa = PBXBuildFile; fileRef = BBC92AC928F670C80023E80F /* XWNetTool+AppStore.m */; };
+		BBC92AD528F670C80023E80F /* XWNetTool+Login.m in Sources */ = {isa = PBXBuildFile; fileRef = BBC92ACA28F670C80023E80F /* XWNetTool+Login.m */; };
+		BBC92AD628F670C80023E80F /* XWNetTool.m in Sources */ = {isa = PBXBuildFile; fileRef = BBC92ACB28F670C80023E80F /* XWNetTool.m */; };
+		BBC92AD928F671400023E80F /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = BBC92AD828F671400023E80F /* NSString+Base64.m */; };
+		BBC92AE328F673C10023E80F /* XWModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BBC92AE228F673C10023E80F /* XWModel.m */; };
+		BBC92AFF28F69A3A0023E80F /* IAPSubscribeTool.m in Sources */ = {isa = PBXBuildFile; fileRef = BBC92AFD28F69A390023E80F /* IAPSubscribeTool.m */; };
+		BBC92B2C28F6A2240023E80F /* XWNavigationController+BarStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = BBC92B2828F6A2240023E80F /* XWNavigationController+BarStyle.m */; };
+		BBC92B2D28F6A2240023E80F /* XWNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBC92B2A28F6A2240023E80F /* XWNavigationController.m */; };
+		BBC92B3E28F6A2B60023E80F /* AdvertisFreeController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBC92B3028F6A2B60023E80F /* AdvertisFreeController.m */; };
+		BBC92B3F28F6A2B60023E80F /* MyRecommendController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBC92B3328F6A2B60023E80F /* MyRecommendController.m */; };
+		BBC92B4028F6A2B60023E80F /* RecommendModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BBC92B3528F6A2B60023E80F /* RecommendModel.m */; };
+		BBC92B4128F6A2B60023E80F /* RecommendTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBC92B3928F6A2B60023E80F /* RecommendTableView.m */; };
+		BBC92B4228F6A2B60023E80F /* RecommendCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BBC92B3B28F6A2B60023E80F /* RecommendCell.m */; };
+		BBC92B4328F6A2B60023E80F /* RewardTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = BBC92B3D28F6A2B60023E80F /* RewardTextField.m */; };
+		BBC92B4628F6AD2D0023E80F /* KSViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBC92B4528F6AD2D0023E80F /* KSViewController.m */; };
 		FB00324928B8AB910028BC61 /* MyCustomSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = FB00324828B8AB910028BC61 /* MyCustomSlider.m */; };
 		FB086F6628A662CB0062EBA5 /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB687EC828A0DE65002D557B /* ReplayKit.framework */; };
 		FB086F6828A662D30062EBA5 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB086F6728A662D30062EBA5 /* AudioToolbox.framework */; };
@@ -144,7 +162,6 @@
 		FB687EE128A0DE65002D557B /* StitchScreenShare.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = FB687EC628A0DE64002D557B /* StitchScreenShare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		FB687EF928A0E23F002D557B /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB687EF828A0E23F002D557B /* HomeViewController.m */; };
 		FB687EFE28A0E9F1002D557B /* BaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = FB687EFA28A0E9F1002D557B /* BaseView.m */; };
-		FB687EFF28A0E9F1002D557B /* KSViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB687EFC28A0E9F1002D557B /* KSViewController.m */; };
 		FB687F0628A0EA1C002D557B /* Tools.m in Sources */ = {isa = PBXBuildFile; fileRef = FB687F0528A0EA1C002D557B /* Tools.m */; };
 		FB687F0928A0ECCC002D557B /* ToastShowView.m in Sources */ = {isa = PBXBuildFile; fileRef = FB687F0828A0ECCC002D557B /* ToastShowView.m */; };
 		FB687F0D28A0FF83002D557B /* AppGroupData.m in Sources */ = {isa = PBXBuildFile; fileRef = FB687F0C28A0FF83002D557B /* AppGroupData.m */; };
@@ -248,6 +265,45 @@
 		BBBBA3EE28F180D600406C43 /* GridEditView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GridEditView.h; sourceTree = "<group>"; };
 		BBBBA3EF28F180D600406C43 /* GridEditView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GridEditView.m; sourceTree = "<group>"; };
 		BBC92ABF28F64D3E0023E80F /* Notifications.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Notifications.h; sourceTree = "<group>"; };
+		BBC92AC128F670C80023E80F /* YKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YKeychain.m; sourceTree = "<group>"; };
+		BBC92AC228F670C80023E80F /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
+		BBC92AC528F670C80023E80F /* XWNetTool+Bind.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "XWNetTool+Bind.m"; sourceTree = "<group>"; };
+		BBC92AC628F670C80023E80F /* XWNetTool+AppStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "XWNetTool+AppStore.h"; sourceTree = "<group>"; };
+		BBC92AC728F670C80023E80F /* XWNetTool+Login.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "XWNetTool+Login.h"; sourceTree = "<group>"; };
+		BBC92AC828F670C80023E80F /* XWNetTool+Bind.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "XWNetTool+Bind.h"; sourceTree = "<group>"; };
+		BBC92AC928F670C80023E80F /* XWNetTool+AppStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "XWNetTool+AppStore.m"; sourceTree = "<group>"; };
+		BBC92ACA28F670C80023E80F /* XWNetTool+Login.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "XWNetTool+Login.m"; sourceTree = "<group>"; };
+		BBC92ACB28F670C80023E80F /* XWNetTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XWNetTool.m; sourceTree = "<group>"; };
+		BBC92ACC28F670C80023E80F /* XWNetTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XWNetTool.h; sourceTree = "<group>"; };
+		BBC92ACD28F670C80023E80F /* NetworkAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkAPI.h; sourceTree = "<group>"; };
+		BBC92ACE28F670C80023E80F /* NetworkErrorCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkErrorCode.h; sourceTree = "<group>"; };
+		BBC92ACF28F670C80023E80F /* YKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YKeychain.h; sourceTree = "<group>"; };
+		BBC92AD028F670C80023E80F /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		BBC92AD728F6713F0023E80F /* NSString+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Base64.h"; sourceTree = "<group>"; };
+		BBC92AD828F671400023E80F /* NSString+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Base64.m"; sourceTree = "<group>"; };
+		BBC92ADE28F6731D0023E80F /* NetWorkout.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NetWorkout.h; sourceTree = "<group>"; };
+		BBC92AE128F673C10023E80F /* XWModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XWModel.h; sourceTree = "<group>"; };
+		BBC92AE228F673C10023E80F /* XWModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XWModel.m; sourceTree = "<group>"; };
+		BBC92AFD28F69A390023E80F /* IAPSubscribeTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IAPSubscribeTool.m; sourceTree = "<group>"; };
+		BBC92AFE28F69A390023E80F /* IAPSubscribeTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAPSubscribeTool.h; sourceTree = "<group>"; };
+		BBC92B2828F6A2240023E80F /* XWNavigationController+BarStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "XWNavigationController+BarStyle.m"; sourceTree = "<group>"; };
+		BBC92B2928F6A2240023E80F /* XWNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XWNavigationController.h; sourceTree = "<group>"; };
+		BBC92B2A28F6A2240023E80F /* XWNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XWNavigationController.m; sourceTree = "<group>"; };
+		BBC92B2B28F6A2240023E80F /* XWNavigationController+BarStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "XWNavigationController+BarStyle.h"; sourceTree = "<group>"; };
+		BBC92B3028F6A2B60023E80F /* AdvertisFreeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdvertisFreeController.m; sourceTree = "<group>"; };
+		BBC92B3128F6A2B60023E80F /* MyRecommendController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyRecommendController.h; sourceTree = "<group>"; };
+		BBC92B3228F6A2B60023E80F /* AdvertisFreeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdvertisFreeController.h; sourceTree = "<group>"; };
+		BBC92B3328F6A2B60023E80F /* MyRecommendController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyRecommendController.m; sourceTree = "<group>"; };
+		BBC92B3528F6A2B60023E80F /* RecommendModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecommendModel.m; sourceTree = "<group>"; };
+		BBC92B3628F6A2B60023E80F /* RecommendModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecommendModel.h; sourceTree = "<group>"; };
+		BBC92B3828F6A2B60023E80F /* RecommendCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecommendCell.h; sourceTree = "<group>"; };
+		BBC92B3928F6A2B60023E80F /* RecommendTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecommendTableView.m; sourceTree = "<group>"; };
+		BBC92B3A28F6A2B60023E80F /* RewardTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RewardTextField.h; sourceTree = "<group>"; };
+		BBC92B3B28F6A2B60023E80F /* RecommendCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecommendCell.m; sourceTree = "<group>"; };
+		BBC92B3C28F6A2B60023E80F /* RecommendTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecommendTableView.h; sourceTree = "<group>"; };
+		BBC92B3D28F6A2B60023E80F /* RewardTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RewardTextField.m; sourceTree = "<group>"; };
+		BBC92B4428F6AD2D0023E80F /* KSViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KSViewController.h; sourceTree = "<group>"; };
+		BBC92B4528F6AD2D0023E80F /* KSViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KSViewController.m; sourceTree = "<group>"; };
 		FB00324728B8AB880028BC61 /* MyCustomSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyCustomSlider.h; sourceTree = "<group>"; };
 		FB00324828B8AB910028BC61 /* MyCustomSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyCustomSlider.m; sourceTree = "<group>"; };
 		FB086F6728A662D30062EBA5 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -416,8 +472,6 @@
 		FB687EF728A0E23F002D557B /* HomeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
 		FB687EF828A0E23F002D557B /* HomeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
 		FB687EFA28A0E9F1002D557B /* BaseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseView.m; sourceTree = "<group>"; };
-		FB687EFB28A0E9F1002D557B /* KSViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KSViewController.h; sourceTree = "<group>"; };
-		FB687EFC28A0E9F1002D557B /* KSViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KSViewController.m; sourceTree = "<group>"; };
 		FB687EFD28A0E9F1002D557B /* BaseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseView.h; sourceTree = "<group>"; };
 		FB687F0028A0EA1C002D557B /* Color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Color.h; sourceTree = "<group>"; };
 		FB687F0128A0EA1C002D557B /* Appconfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Appconfig.h; sourceTree = "<group>"; };
@@ -546,13 +600,13 @@
 		BBB4688F28F57E8700F15765 /* Replay */ = {
 			isa = PBXGroup;
 			children = (
-				BBB4687628F57A2100F15765 /* XWOpenCVHelper.h */,
-				BBB4687528F57A2100F15765 /* XWOpenCVHelper.mm */,
+				BBB4689028F580EA00F15765 /* App.h */,
+				BBB4689128F580EA00F15765 /* App.m */,
 				BBC92ABF28F64D3E0023E80F /* Notifications.h */,
 				BBB4687828F57A9200F15765 /* SharePath.h */,
 				BBB4687928F57A9200F15765 /* SharePath.m */,
-				BBB4689028F580EA00F15765 /* App.h */,
-				BBB4689128F580EA00F15765 /* App.m */,
+				BBB4687628F57A2100F15765 /* XWOpenCVHelper.h */,
+				BBB4687528F57A2100F15765 /* XWOpenCVHelper.mm */,
 			);
 			path = Replay;
 			sourceTree = "<group>";
@@ -609,6 +663,98 @@
 				BBBBA3EC28F113C000406C43 /* Scales.json */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		BBC92AC028F670C80023E80F /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				BBC92B2928F6A2240023E80F /* XWNavigationController.h */,
+				BBC92B2A28F6A2240023E80F /* XWNavigationController.m */,
+				BBC92B2B28F6A2240023E80F /* XWNavigationController+BarStyle.h */,
+				BBC92B2828F6A2240023E80F /* XWNavigationController+BarStyle.m */,
+				BBC92B2E28F6A2B60023E80F /* Settings */,
+				BBC92AFE28F69A390023E80F /* IAPSubscribeTool.h */,
+				BBC92AFD28F69A390023E80F /* IAPSubscribeTool.m */,
+				BBC92AC328F670C80023E80F /* NetWork */,
+				BBC92AD728F6713F0023E80F /* NSString+Base64.h */,
+				BBC92AD828F671400023E80F /* NSString+Base64.m */,
+				BBC92AD028F670C80023E80F /* User.h */,
+				BBC92AC228F670C80023E80F /* User.m */,
+				BBC92AE128F673C10023E80F /* XWModel.h */,
+				BBC92AE228F673C10023E80F /* XWModel.m */,
+				BBC92ACF28F670C80023E80F /* YKeychain.h */,
+				BBC92AC128F670C80023E80F /* YKeychain.m */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		BBC92AC328F670C80023E80F /* NetWork */ = {
+			isa = PBXGroup;
+			children = (
+				BBC92AC428F670C80023E80F /* Categary */,
+				BBC92ACB28F670C80023E80F /* XWNetTool.m */,
+				BBC92ACC28F670C80023E80F /* XWNetTool.h */,
+				BBC92ACD28F670C80023E80F /* NetworkAPI.h */,
+				BBC92ACE28F670C80023E80F /* NetworkErrorCode.h */,
+				BBC92ADE28F6731D0023E80F /* NetWorkout.h */,
+			);
+			path = NetWork;
+			sourceTree = "<group>";
+		};
+		BBC92AC428F670C80023E80F /* Categary */ = {
+			isa = PBXGroup;
+			children = (
+				BBC92AC628F670C80023E80F /* XWNetTool+AppStore.h */,
+				BBC92AC928F670C80023E80F /* XWNetTool+AppStore.m */,
+				BBC92AC828F670C80023E80F /* XWNetTool+Bind.h */,
+				BBC92AC528F670C80023E80F /* XWNetTool+Bind.m */,
+				BBC92AC728F670C80023E80F /* XWNetTool+Login.h */,
+				BBC92ACA28F670C80023E80F /* XWNetTool+Login.m */,
+			);
+			path = Categary;
+			sourceTree = "<group>";
+		};
+		BBC92B2E28F6A2B60023E80F /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				BBC92B2F28F6A2B60023E80F /* Controller */,
+				BBC92B3428F6A2B60023E80F /* Model */,
+				BBC92B3728F6A2B60023E80F /* View */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		BBC92B2F28F6A2B60023E80F /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				BBC92B3228F6A2B60023E80F /* AdvertisFreeController.h */,
+				BBC92B3028F6A2B60023E80F /* AdvertisFreeController.m */,
+				BBC92B3128F6A2B60023E80F /* MyRecommendController.h */,
+				BBC92B3328F6A2B60023E80F /* MyRecommendController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		BBC92B3428F6A2B60023E80F /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				BBC92B3628F6A2B60023E80F /* RecommendModel.h */,
+				BBC92B3528F6A2B60023E80F /* RecommendModel.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		BBC92B3728F6A2B60023E80F /* View */ = {
+			isa = PBXGroup;
+			children = (
+				BBC92B3828F6A2B60023E80F /* RecommendCell.h */,
+				BBC92B3B28F6A2B60023E80F /* RecommendCell.m */,
+				BBC92B3C28F6A2B60023E80F /* RecommendTableView.h */,
+				BBC92B3928F6A2B60023E80F /* RecommendTableView.m */,
+				BBC92B3A28F6A2B60023E80F /* RewardTextField.h */,
+				BBC92B3D28F6A2B60023E80F /* RewardTextField.m */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		FB26948328E590A000565F4B /* Cell */ = {
@@ -1037,6 +1183,7 @@
 		FB687EEB28A0DEA1002D557B /* Class */ = {
 			isa = PBXGroup;
 			children = (
+				BBC92AC028F670C80023E80F /* Login */,
 				BBB4688F28F57E8700F15765 /* Replay */,
 				FBA068F228DAA5D800AAB7E6 /* ImageEdit */,
 				FB2BBD1128AF6861001DDFAE /* Caption */,
@@ -1092,10 +1239,10 @@
 		FB687EEF28A0DEC3002D557B /* Base */ = {
 			isa = PBXGroup;
 			children = (
+				BBC92B4428F6AD2D0023E80F /* KSViewController.h */,
+				BBC92B4528F6AD2D0023E80F /* KSViewController.m */,
 				FB687EFD28A0E9F1002D557B /* BaseView.h */,
 				FB687EFA28A0E9F1002D557B /* BaseView.m */,
-				FB687EFB28A0E9F1002D557B /* KSViewController.h */,
-				FB687EFC28A0E9F1002D557B /* KSViewController.m */,
 				FB2D5A0828A1F4AF006085BC /* BaseViewController.h */,
 				FB2D5A0928A1F4AF006085BC /* BaseViewController.m */,
 			);
@@ -1445,15 +1592,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BBC92AD228F670C80023E80F /* User.m in Sources */,
 				FBF59EF828AC8B5400D9C6CF /* WaterColorSelectView.m in Sources */,
+				BBC92B2D28F6A2240023E80F /* XWNavigationController.m in Sources */,
 				FB2E283928AA1A13006BDAB0 /* SZImageGenerator.m in Sources */,
 				FB3EFE8C28A3CB07006C3889 /* GVUserDefaults+Properties.m in Sources */,
 				FB2E283728AA1A13006BDAB0 /* SZImageMergeInfo.m in Sources */,
 				FB1AB32128F66B2F008C36FC /* HandlerVideo.m in Sources */,
 				FB687F0D28A0FF83002D557B /* AppGroupData.m in Sources */,
 				FB687EB128A0DE2E002D557B /* ViewController.m in Sources */,
+				BBC92B4328F6A2B60023E80F /* RewardTextField.m in Sources */,
+				BBC92B3E28F6A2B60023E80F /* AdvertisFreeController.m in Sources */,
+				BBC92B2C28F6A2240023E80F /* XWNavigationController+BarStyle.m in Sources */,
 				BBBBA3EB28F10C9900406C43 /* GridScaleView.m in Sources */,
 				FB2D5A0A28A1F4AF006085BC /* BaseViewController.m in Sources */,
+				BBC92AD628F670C80023E80F /* XWNetTool.m in Sources */,
 				FB2E283828AA1A13006BDAB0 /* SZConstraint.m in Sources */,
 				FB3EFE4728A3A423006C3889 /* BuyDetailView.m in Sources */,
 				FB2E287328AA1B62006BDAB0 /* SZStichingImageView.m in Sources */,
@@ -1469,6 +1622,7 @@
 				FB0D9E2828B4D1420057DC37 /* UIScrollView+UITouch.m in Sources */,
 				FBA068FE28DABEC500AAB7E6 /* PaintPath.m in Sources */,
 				FBECFBD528BA0D30006FCF74 /* StitchingButton.m in Sources */,
+				BBC92B3F28F6A2B60023E80F /* MyRecommendController.m in Sources */,
 				FB2D5A1828A23D51006085BC /* UrlInvalidHintView.m in Sources */,
 				FB3EFE4128A3A241006C3889 /* PriceView.m in Sources */,
 				BBB4689228F580EA00F15765 /* App.m in Sources */,
@@ -1483,17 +1637,23 @@
 				FB9B943428DC455C009D55FB /* UIBezierPath+GetAllPoints.m in Sources */,
 				FB7E659528A49E6F0079C9F3 /* UrlSchemeTableView.m in Sources */,
 				FB3EFE3528A3561E006C3889 /* SettingTableViewCell.m in Sources */,
+				BBC92AE328F673C10023E80F /* XWModel.m in Sources */,
 				BBBBA3D228F1069000406C43 /* GridSelectedView.m in Sources */,
 				FB687EBC28A0DE30002D557B /* main.m in Sources */,
+				BBC92AFF28F69A3A0023E80F /* IAPSubscribeTool.m in Sources */,
 				FBD32A9928DDC303000A548F /* NSString+Extension.m in Sources */,
 				FB2E286228AA1A34006BDAB0 /* SZMergeResult.m in Sources */,
 				FB2E282D28A9E504006BDAB0 /* ScrrenStitchHintView.m in Sources */,
 				FB2E285828AA1A21006BDAB0 /* UINavigationController+Category.m in Sources */,
+				BBC92AD528F670C80023E80F /* XWNetTool+Login.m in Sources */,
 				FB2E283A28AA1A13006BDAB0 /* SZImageFinger.m in Sources */,
+				BBC92B4128F6A2B60023E80F /* RecommendTableView.m in Sources */,
+				BBC92B4028F6A2B60023E80F /* RecommendModel.m in Sources */,
 				FB4E535F28A34C4B0072E1AD /* PreferenceSetViewController.m in Sources */,
 				FB687F0628A0EA1C002D557B /* Tools.m in Sources */,
 				FBF59EF528AC796100D9C6CF /* WaterTitleView.m in Sources */,
 				FB687F0928A0ECCC002D557B /* ToastShowView.m in Sources */,
+				BBC92AD328F670C80023E80F /* XWNetTool+Bind.m in Sources */,
 				FB86DC2E28D9A80700EE8E4D /* ImageEditMarkView.m in Sources */,
 				BBB4687728F57A2100F15765 /* XWOpenCVHelper.mm in Sources */,
 				FB687EF928A0E23F002D557B /* HomeViewController.m in Sources */,
@@ -1501,18 +1661,20 @@
 				FB2E287128AA1B62006BDAB0 /* SZImagePreVewController.m in Sources */,
 				FB2E285628AA1A21006BDAB0 /* CAGradientLayer+Gradient.m in Sources */,
 				BBBBA3D028F1069000406C43 /* PictureLayoutController.m in Sources */,
+				BBC92B4228F6A2B60023E80F /* RecommendCell.m in Sources */,
 				FB2E285928AA1A21006BDAB0 /* UIImage+Logo.m in Sources */,
 				FBA068FA28DAAA2D00AAB7E6 /* ImageEditBottomView.m in Sources */,
 				FB2E286F28AA1B62006BDAB0 /* SZEditorView.m in Sources */,
 				FB63FC1428AB9CC600F62085 /* WaterMarkToolBarView.m in Sources */,
+				BBC92AD428F670C80023E80F /* XWNetTool+AppStore.m in Sources */,
 				FB3EFE3B28A387EA006C3889 /* CheckProView.m in Sources */,
 				FBB863D028A4DB6600F73A80 /* UnlockFuncView.m in Sources */,
 				FB2E285A28AA1A21006BDAB0 /* UIImage+Stiching.m in Sources */,
 				FB7574A828AE18890034D95B /* SelectPictureViewController.m in Sources */,
+				BBC92AD928F671400023E80F /* NSString+Base64.m in Sources */,
 				FBE5467928C0BCC300B40FD8 /* GuiderVisitorView.m in Sources */,
 				BBBBA3D128F1069000406C43 /* GridCell.m in Sources */,
 				FB3EFE4A28A3B828006C3889 /* SelectMainIconViewController.m in Sources */,
-				FB687EFF28A0E9F1002D557B /* KSViewController.m in Sources */,
 				FB7E659B28A4A6110079C9F3 /* PrefenceTableViewCell.m in Sources */,
 				FB2D5A0D28A1F59C006085BC /* UIImage+Color.m in Sources */,
 				FB2D5A2128A264C4006085BC /* WKWebView+LVShot.m in Sources */,
@@ -1522,12 +1684,14 @@
 				FB58D81328E14D5000EC831D /* CustomScrollView.m in Sources */,
 				FB1B8DE728D06F5F0080AE74 /* AddWaterMark.m in Sources */,
 				FB5D46A628AA3FEE0015E2A5 /* StitchResultView.m in Sources */,
+				BBC92AD128F670C80023E80F /* YKeychain.m in Sources */,
 				FB26948628E590BB00565F4B /* ShellTableViewCell.m in Sources */,
 				FBD32A9628DDC2D2000A548F /* UIBezierPath+Arrow.m in Sources */,
 				BBBBA3D428F1069000406C43 /* LayoutBottomView.m in Sources */,
 				FB687EFE28A0E9F1002D557B /* BaseView.m in Sources */,
 				FB6FC66E28B60CB500BE4AA1 /* StichingImageView.m in Sources */,
 				FB2BBD1828AF8D21001DDFAE /* CaptionBottomView.m in Sources */,
+				BBC92B4628F6AD2D0023E80F /* KSViewController.m in Sources */,
 				FB2D5A1428A234C2006085BC /* EnterURLViewController.m in Sources */,
 				FBDA328E28E28E92003B7FA6 /* ImageBorderSettingView.m in Sources */,
 				FB2D5A1128A20DE4006085BC /* MoveCollectionViewCell.m in Sources */,
