@@ -10,6 +10,7 @@
 #import "HomeViewController.h"
 #import <UMShare/UMShare.h>
 #import <UMCommon/UMCommon.h>
+#import "App.h"
 @interface AppDelegate ()
 
 @end
@@ -34,6 +35,8 @@
     }else{
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"firstLaunch"];
     }
+
+    [App sharedInstance];
     return YES;
 }
 

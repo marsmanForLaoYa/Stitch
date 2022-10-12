@@ -8,6 +8,21 @@
 
 /* Begin PBXBuildFile section */
 		88A9881C3EEEB1AA517CAE1C /* libPods-YXStitch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1A9AF54F55FC18D9EDC22C /* libPods-YXStitch.a */; };
+		BBB4687728F57A2100F15765 /* XWOpenCVHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBB4687528F57A2100F15765 /* XWOpenCVHelper.mm */; };
+		BBB4687A28F57A9200F15765 /* SharePath.m in Sources */ = {isa = PBXBuildFile; fileRef = BBB4687928F57A9200F15765 /* SharePath.m */; };
+		BBB4687F28F57BCF00F15765 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB4687E28F57BCF00F15765 /* opencv2.framework */; };
+		BBB4688028F57BF100F15765 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB4687E28F57BCF00F15765 /* opencv2.framework */; };
+		BBB4688128F57BF100F15765 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB4687E28F57BCF00F15765 /* opencv2.framework */; };
+		BBB4688228F57C4B00F15765 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB687ED528A0DE65002D557B /* UIKit.framework */; };
+		BBB4688428F57C5400F15765 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB4688328F57C5400F15765 /* CoreImage.framework */; };
+		BBB4688628F57C7700F15765 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB4688528F57C7700F15765 /* CoreGraphics.framework */; };
+		BBB4688828F57C8100F15765 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB4688728F57C8100F15765 /* CoreVideo.framework */; };
+		BBB4688A28F57C8700F15765 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB4688928F57C8700F15765 /* AssetsLibrary.framework */; };
+		BBB4688B28F57C8F00F15765 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB086F7328A662FF0062EBA5 /* CoreMedia.framework */; };
+		BBB4688C28F57C9500F15765 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB086F6D28A662EB0062EBA5 /* AVFoundation.framework */; };
+		BBB4688D28F57CE200F15765 /* SharePath.m in Sources */ = {isa = PBXBuildFile; fileRef = BBB4687928F57A9200F15765 /* SharePath.m */; };
+		BBB4688E28F57CF100F15765 /* XWOpenCVHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBB4687528F57A2100F15765 /* XWOpenCVHelper.mm */; };
+		BBB4689228F580EA00F15765 /* App.m in Sources */ = {isa = PBXBuildFile; fileRef = BBB4689128F580EA00F15765 /* App.m */; };
 		BBBBA3D028F1069000406C43 /* PictureLayoutController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBBA3BE28F1069000406C43 /* PictureLayoutController.m */; };
 		BBBBA3D128F1069000406C43 /* GridCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBBA3C028F1069000406C43 /* GridCell.m */; };
 		BBBBA3D228F1069000406C43 /* GridSelectedView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBBA3C428F1069000406C43 /* GridSelectedView.m */; };
@@ -121,7 +136,7 @@
 		FB687EB928A0DE30002D557B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FB687EB728A0DE30002D557B /* LaunchScreen.storyboard */; };
 		FB687EBC28A0DE30002D557B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FB687EBB28A0DE30002D557B /* main.m */; };
 		FB687EC928A0DE65002D557B /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB687EC828A0DE65002D557B /* ReplayKit.framework */; };
-		FB687ECD28A0DE65002D557B /* SampleHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = FB687ECC28A0DE65002D557B /* SampleHandler.m */; };
+		FB687ECD28A0DE65002D557B /* SampleHandler.mm in Sources */ = {isa = PBXBuildFile; fileRef = FB687ECC28A0DE65002D557B /* SampleHandler.mm */; };
 		FB687ED428A0DE65002D557B /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB687EC828A0DE65002D557B /* ReplayKit.framework */; };
 		FB687ED628A0DE65002D557B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB687ED528A0DE65002D557B /* UIKit.framework */; };
 		FB687EDA28A0DE65002D557B /* BroadcastSetupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB687ED928A0DE65002D557B /* BroadcastSetupViewController.m */; };
@@ -199,6 +214,17 @@
 		113BB414313D98CCCD8D49AD /* Pods-YXStitch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YXStitch.debug.xcconfig"; path = "Target Support Files/Pods-YXStitch/Pods-YXStitch.debug.xcconfig"; sourceTree = "<group>"; };
 		3F1A9AF54F55FC18D9EDC22C /* libPods-YXStitch.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YXStitch.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B8C87E9AD95B7468BA24009E /* Pods-YXStitch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YXStitch.release.xcconfig"; path = "Target Support Files/Pods-YXStitch/Pods-YXStitch.release.xcconfig"; sourceTree = "<group>"; };
+		BBB4687528F57A2100F15765 /* XWOpenCVHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XWOpenCVHelper.mm; sourceTree = "<group>"; };
+		BBB4687628F57A2100F15765 /* XWOpenCVHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XWOpenCVHelper.h; sourceTree = "<group>"; };
+		BBB4687828F57A9200F15765 /* SharePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SharePath.h; sourceTree = "<group>"; };
+		BBB4687928F57A9200F15765 /* SharePath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SharePath.m; sourceTree = "<group>"; };
+		BBB4687E28F57BCF00F15765 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = opencv2.framework; sourceTree = "<group>"; };
+		BBB4688328F57C5400F15765 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
+		BBB4688528F57C7700F15765 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		BBB4688728F57C8100F15765 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		BBB4688928F57C8700F15765 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		BBB4689028F580EA00F15765 /* App.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = App.h; sourceTree = "<group>"; };
+		BBB4689128F580EA00F15765 /* App.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = App.m; sourceTree = "<group>"; };
 		BBBBA3BD28F1069000406C43 /* PictureLayoutController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PictureLayoutController.h; sourceTree = "<group>"; };
 		BBBBA3BE28F1069000406C43 /* PictureLayoutController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PictureLayoutController.m; sourceTree = "<group>"; };
 		BBBBA3C028F1069000406C43 /* GridCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GridCell.m; sourceTree = "<group>"; };
@@ -222,6 +248,7 @@
 		BBBBA3EC28F113C000406C43 /* Scales.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Scales.json; sourceTree = "<group>"; };
 		BBBBA3EE28F180D600406C43 /* GridEditView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GridEditView.h; sourceTree = "<group>"; };
 		BBBBA3EF28F180D600406C43 /* GridEditView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GridEditView.m; sourceTree = "<group>"; };
+		BBC92ABF28F64D3E0023E80F /* Notifications.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Notifications.h; sourceTree = "<group>"; };
 		FB00324728B8AB880028BC61 /* MyCustomSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyCustomSlider.h; sourceTree = "<group>"; };
 		FB00324828B8AB910028BC61 /* MyCustomSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyCustomSlider.m; sourceTree = "<group>"; };
 		FB086F6728A662D30062EBA5 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -374,7 +401,7 @@
 		FB687EC628A0DE64002D557B /* StitchScreenShare.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = StitchScreenShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB687EC828A0DE65002D557B /* ReplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReplayKit.framework; path = System/Library/Frameworks/ReplayKit.framework; sourceTree = SDKROOT; };
 		FB687ECB28A0DE65002D557B /* SampleHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SampleHandler.h; sourceTree = "<group>"; };
-		FB687ECC28A0DE65002D557B /* SampleHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SampleHandler.m; sourceTree = "<group>"; };
+		FB687ECC28A0DE65002D557B /* SampleHandler.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SampleHandler.mm; sourceTree = "<group>"; };
 		FB687ECE28A0DE65002D557B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FB687ED328A0DE65002D557B /* StitchScreenShareSetupUI.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = StitchScreenShareSetupUI.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB687ED528A0DE65002D557B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -473,6 +500,7 @@
 				FB086F6828A662D30062EBA5 /* AudioToolbox.framework in Frameworks */,
 				FB086F6628A662CB0062EBA5 /* ReplayKit.framework in Frameworks */,
 				88A9881C3EEEB1AA517CAE1C /* libPods-YXStitch.a in Frameworks */,
+				BBB4687F28F57BCF00F15765 /* opencv2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -481,6 +509,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				FB687EC928A0DE65002D557B /* ReplayKit.framework in Frameworks */,
+				BBB4688C28F57C9500F15765 /* AVFoundation.framework in Frameworks */,
+				BBB4688B28F57C8F00F15765 /* CoreMedia.framework in Frameworks */,
+				BBB4688A28F57C8700F15765 /* AssetsLibrary.framework in Frameworks */,
+				BBB4688828F57C8100F15765 /* CoreVideo.framework in Frameworks */,
+				BBB4688628F57C7700F15765 /* CoreGraphics.framework in Frameworks */,
+				BBB4688428F57C5400F15765 /* CoreImage.framework in Frameworks */,
+				BBB4688228F57C4B00F15765 /* UIKit.framework in Frameworks */,
+				BBB4688028F57BF100F15765 /* opencv2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -488,6 +524,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BBB4688128F57BF100F15765 /* opencv2.framework in Frameworks */,
 				FB687ED428A0DE65002D557B /* ReplayKit.framework in Frameworks */,
 				FB687ED628A0DE65002D557B /* UIKit.framework in Frameworks */,
 			);
@@ -503,6 +540,27 @@
 				B8C87E9AD95B7468BA24009E /* Pods-YXStitch.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		BBB4687228F579F700F15765 /* ThirdPart */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ThirdPart;
+			sourceTree = "<group>";
+		};
+		BBB4688F28F57E8700F15765 /* Replay */ = {
+			isa = PBXGroup;
+			children = (
+				BBB4687628F57A2100F15765 /* XWOpenCVHelper.h */,
+				BBB4687528F57A2100F15765 /* XWOpenCVHelper.mm */,
+				BBC92ABF28F64D3E0023E80F /* Notifications.h */,
+				BBB4687828F57A9200F15765 /* SharePath.h */,
+				BBB4687928F57A9200F15765 /* SharePath.m */,
+				BBB4689028F580EA00F15765 /* App.h */,
+				BBB4689128F580EA00F15765 /* App.m */,
+			);
+			path = Replay;
 			sourceTree = "<group>";
 		};
 		BBBBA3B228F1069000406C43 /* Layout */ = {
@@ -917,6 +975,8 @@
 		FB687EA828A0DE2E002D557B /* YXStitch */ = {
 			isa = PBXGroup;
 			children = (
+				BBB4687E28F57BCF00F15765 /* opencv2.framework */,
+				BBB4687228F579F700F15765 /* ThirdPart */,
 				FB3EFE8928A3CAE2006C3889 /* Global */,
 				FB3EFE4B28A3C201006C3889 /* AppIcon */,
 				FB687EEF28A0DEC3002D557B /* Base */,
@@ -941,6 +1001,10 @@
 		FB687EC728A0DE65002D557B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BBB4688928F57C8700F15765 /* AssetsLibrary.framework */,
+				BBB4688728F57C8100F15765 /* CoreVideo.framework */,
+				BBB4688528F57C7700F15765 /* CoreGraphics.framework */,
+				BBB4688328F57C5400F15765 /* CoreImage.framework */,
 				FB086F7528A663090062EBA5 /* SystemConfiguration.framework */,
 				FB086F7328A662FF0062EBA5 /* CoreMedia.framework */,
 				FB086F7128A662F60062EBA5 /* CoreData.framework */,
@@ -961,7 +1025,7 @@
 			children = (
 				FB687EEA28A0DE85002D557B /* StitchScreenShare.entitlements */,
 				FB687ECB28A0DE65002D557B /* SampleHandler.h */,
-				FB687ECC28A0DE65002D557B /* SampleHandler.m */,
+				FB687ECC28A0DE65002D557B /* SampleHandler.mm */,
 				FB687ECE28A0DE65002D557B /* Info.plist */,
 			);
 			path = StitchScreenShare;
@@ -980,6 +1044,7 @@
 		FB687EEB28A0DEA1002D557B /* Class */ = {
 			isa = PBXGroup;
 			children = (
+				BBB4688F28F57E8700F15765 /* Replay */,
 				FBA068F228DAA5D800AAB7E6 /* ImageEdit */,
 				FB2BBD1128AF6861001DDFAE /* Caption */,
 				FB687EF428A0DEF6002D557B /* Setting */,
@@ -1410,6 +1475,7 @@
 				FBECFBD528BA0D30006FCF74 /* StitchingButton.m in Sources */,
 				FB2D5A1828A23D51006085BC /* UrlInvalidHintView.m in Sources */,
 				FB3EFE4128A3A241006C3889 /* PriceView.m in Sources */,
+				BBB4689228F580EA00F15765 /* App.m in Sources */,
 				FB86DC2B28D96C5300EE8E4D /* UIImage+LF_Format.m in Sources */,
 				FB2E287228AA1B62006BDAB0 /* SZImageTableViewCell.m in Sources */,
 				FB7E659828A4A5680079C9F3 /* PrefenceSetTableView.m in Sources */,
@@ -1433,6 +1499,7 @@
 				FBF59EF528AC796100D9C6CF /* WaterTitleView.m in Sources */,
 				FB687F0928A0ECCC002D557B /* ToastShowView.m in Sources */,
 				FB86DC2E28D9A80700EE8E4D /* ImageEditMarkView.m in Sources */,
+				BBB4687728F57A2100F15765 /* XWOpenCVHelper.mm in Sources */,
 				FB687EF928A0E23F002D557B /* HomeViewController.m in Sources */,
 				FB2E285728AA1A21006BDAB0 /* UIImage+Category.m in Sources */,
 				FB2E287128AA1B62006BDAB0 /* SZImagePreVewController.m in Sources */,
@@ -1454,6 +1521,7 @@
 				FB2D5A0D28A1F59C006085BC /* UIImage+Color.m in Sources */,
 				FB2D5A2128A264C4006085BC /* WKWebView+LVShot.m in Sources */,
 				FB2D5A1B28A24743006085BC /* WebViewController.m in Sources */,
+				BBB4687A28F57A9200F15765 /* SharePath.m in Sources */,
 				FB3EFE3828A356BB006C3889 /* SettingTableView.m in Sources */,
 				FB58D81328E14D5000EC831D /* CustomScrollView.m in Sources */,
 				FB1B8DE728D06F5F0080AE74 /* AddWaterMark.m in Sources */,
@@ -1486,7 +1554,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FB687ECD28A0DE65002D557B /* SampleHandler.m in Sources */,
+				BBB4688E28F57CF100F15765 /* XWOpenCVHelper.mm in Sources */,
+				BBB4688D28F57CE200F15765 /* SharePath.m in Sources */,
+				FB687ECD28A0DE65002D557B /* SampleHandler.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1654,6 +1724,11 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = ZDUQAVA425;
 				EXCLUDED_ARCHS = "";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/YXStitch/ThirdPart",
+					"$(PROJECT_DIR)/YXStitch",
+				);
 				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/YXStitch/Global/PrefixHeader.pch";
@@ -1689,6 +1764,11 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = ZDUQAVA425;
 				EXCLUDED_ARCHS = "";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/YXStitch/ThirdPart",
+					"$(PROJECT_DIR)/YXStitch",
+				);
 				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/YXStitch/Global/PrefixHeader.pch";
@@ -1719,6 +1799,12 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = ZDUQAVA425;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/YXStitch/ThirdPart",
+					"$(PROJECT_DIR)/YXStitch",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = StitchScreenShareSetupUI/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = StitchScreenShareSetupUI;
@@ -1743,6 +1829,12 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = ZDUQAVA425;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/YXStitch/ThirdPart",
+					"$(PROJECT_DIR)/YXStitch",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = StitchScreenShareSetupUI/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = StitchScreenShareSetupUI;
@@ -1768,6 +1860,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = ZDUQAVA425;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/YXStitch",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = StitchScreenShare/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "快捷拼图";
@@ -1793,6 +1889,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = ZDUQAVA425;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/YXStitch",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = StitchScreenShare/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "快捷拼图";

@@ -34,5 +34,6 @@
 #import "UIScrollView+LVShot.h"
 #import "SDCycleScrollView.h"
 #import "TYSnapshotScroll.h"
+#import "Notifications.h"
 
 #endif /* PrefixHeader_pch */
