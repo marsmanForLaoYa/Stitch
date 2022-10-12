@@ -68,10 +68,7 @@
             make.width.height.equalTo(@15);
             make.right.equalTo(@-12);
             make.top.equalTo(@12);
-        }];
-        
-        
-        
+        }];   
         [iconIMG mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.equalTo(iconBtn);
             make.height.equalTo(@45);

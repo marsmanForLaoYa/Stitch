@@ -28,6 +28,7 @@
 #import "BuyViewController.h"
 #import "CheckProView.h"
 #import "PictureLayoutController.h"
+#import "ImageEditViewController.h"
 
 @interface HomeViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,MoveCollectionViewCellDelegate,ScrrenStitchHintViewDelegate,HXPhotoViewDelegate,UIImagePickerControllerDelegate, HXPhotoViewCellCustomProtocol,HXCustomNavigationControllerDelegate,UnlockFuncViewDelegate,CheckProViewDelegate>
 
@@ -711,11 +712,41 @@
 #pragma mark -- 图片编辑btn事件
 -(void)imgEdit:(UIButton *)btn{
     MJWeakSelf
+    [_clearBtn removeFromSuperview];
     if (btn.tag < 300){
         if (btn.tag == 200){
             //选择一图裁切
+            CaptionViewController *vc = [CaptionViewController new];
+            vc.type = 2;
+            __block NSMutableArray *arr = [NSMutableArray array];
+            for (HXPhotoModel *photoModel in [self.manager selectedArray]) {
+                [Tools getImageWithAsset:photoModel.asset withBlock:^(UIImage * _Nonnull image) {
+                    [arr addObject:image];
+                }];
+            }
+            
+            vc.dataArr = arr;
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"dismiss" object:nil];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [weakSelf.navigationController pushViewController:vc animated:YES];
+            });
         }else{
             //选择一图编辑
+            ImageEditViewController *vc = [ImageEditViewController new];
+            vc.isVer = YES;
+            vc.type = 1;
+            vc.titleStr = @"1张图片";
+            __block NSMutableArray *arr = [NSMutableArray array];
+            for (HXPhotoModel *photoModel in [self.manager selectedArray]) {
+                [Tools getImageWithAsset:photoModel.asset withBlock:^(UIImage * _Nonnull image) {
+                    [arr addObject:image];
+                }];
+            }
+            vc.imgArr = arr;
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"dismiss" object:nil];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [weakSelf.navigationController pushViewController:vc animated:YES];
+            });
         }
     }else{
         _isOpenAlbum = NO;

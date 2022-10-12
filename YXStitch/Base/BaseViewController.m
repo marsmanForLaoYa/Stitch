@@ -27,7 +27,6 @@
     [self.navigationController.navigationBar setShadowImage:[UIImage new]];
     
     [self setupNavItems];
-    
     [self setupViews];
     [self setupLayout];
 }

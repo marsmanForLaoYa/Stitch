@@ -74,7 +74,7 @@
 @property (nonatomic, strong)NSMutableArray *imageViewsArr;//维护图片数组
 @property (nonatomic, strong)NSMutableArray *originWidthArr;//图片原始宽度数组
 @property (nonatomic, strong)NSMutableArray *originHeightArr;
-@property (nonatomic, strong)NSMutableArray *originzTopArr;
+@property (nonatomic, strong)NSMutableArray *originTopArr;
 
 @property (nonatomic, strong)NSMutableArray * layers;// 线条数组
 @property (nonatomic, strong)NSMutableArray * removedLayers; //撤销的线条数组
@@ -210,7 +210,7 @@
     [self.imageViewsArr addObject:firstImageView];
     [self.originWidthArr addObject:[NSNumber numberWithFloat:VerViewWidth]];
     [self.originHeightArr addObject:[NSNumber numberWithFloat:(CGFloat)(icon.size.height/icon.size.width) * VerViewWidth]];
-    [self.originzTopArr addObject:[NSNumber numberWithFloat:0.0]];
+    [self.originTopArr addObject:[NSNumber numberWithFloat:0.0]];
     for (NSInteger i = 1; i < _imgArr.count; i ++) {
         UIImage *icon = _imgArr[i];
         CGFloat imgHeight = (CGFloat)(icon.size.height/icon.size.width) * VerViewWidth;
@@ -220,7 +220,7 @@
         contentHeight += imgHeight;
         [self.originWidthArr addObject:[NSNumber numberWithFloat:VerViewWidth]];
         [self.originHeightArr addObject:[NSNumber numberWithFloat:imgHeight]];
-        [self.originzTopArr addObject:[NSNumber numberWithFloat:firstImageView.bottom]];
+        [self.originTopArr addObject:[NSNumber numberWithFloat:firstImageView.bottom]];
         [_contentScrollView addSubview:imageView];
         firstImageView = imageView;
         [self.imageViewsArr addObject:imageView];
@@ -229,23 +229,7 @@
     _contentScrollView.contentSize = CGSizeMake(_contentScrollView.width,contentHeight + 80);
     
     if (contentHeight < SCREEN_HEIGHT){
-        //        [_contentScrollView mas_updateConstraints:^(MASConstraintMaker *make) {
-        //            make.top.equalTo(@((SCREEN_HEIGHT - contentHeight)/2));
-        //        }];
-        //        NSInteger centerIndex = _imgArr.count / 2;
-        //        StitchingButton *centenIMG = _imageViewsArr[centerIndex];
-        //        centenIMG.centerY = self.view.centerY;
-        //        StitchingButton *topIMG = centenIMG;
-        //        for (NSInteger i = centerIndex - 1 ; i <= 0; i --) {
-        //            StitchingButton *img = _imageViewsArr[i];
-        //            img.bottom = topIMG.top;
-        //            topIMG = img;
-        //        }
-        //        for (NSInteger i = centerIndex + 1; i < _imageViewsArr.count; i ++) {
-        //            StitchingButton *img = _imageViewsArr[i];
-        //            img.top = centenIMG.bottom;
-        //            centenIMG = img;
-        //        }
+        [self layoutContentView];
     }
 }
 
@@ -262,7 +246,7 @@
     [_contentScrollView addSubview:firstImageView];
     [self.imageViewsArr addObject:firstImageView];
     [self.originWidthArr addObject:[NSNumber numberWithFloat:(CGFloat)(icon.size.width / icon.size.height) * HorViewHeight]];
-    [self.originzTopArr addObject:[NSNumber numberWithFloat:0]];
+    [self.originTopArr addObject:[NSNumber numberWithFloat:0]];
     [self.originHeightArr addObject:[NSNumber numberWithFloat:HorViewHeight]];
     for (NSInteger i = 1; i < _imgArr.count; i ++) {
         UIImage *icon = _imgArr[i];
@@ -275,7 +259,7 @@
         [_contentScrollView addSubview:imageView];
         firstImageView = imageView;
         [self.originWidthArr addObject:[NSNumber numberWithFloat:imgWidth]];
-        [self.originzTopArr addObject:[NSNumber numberWithFloat:imageView.left]];
+        [self.originTopArr addObject:[NSNumber numberWithFloat:imageView.left]];
         NSLog(@"right==%lf",imageView.left);
         [self.originHeightArr addObject:[NSNumber numberWithFloat:HorViewHeight]];
         [self.imageViewsArr addObject:imageView];
@@ -314,7 +298,37 @@
     }];
     
 }
-
+-(void)layoutContentView{
+    NSInteger centenIndex = _imageViewsArr.count / 2;
+    CGFloat alignPointY = 0.0;
+    StitchingButton *lastIMG;
+    if (_imageViewsArr.count < 5){
+        centenIndex += 1;
+    }
+    for (NSInteger i = centenIndex - 1; i >= 0; i --) {
+        StitchingButton *img = _imageViewsArr[i];
+        if (i == centenIndex - 1){
+            img.bottom = self.view.centerY;
+            alignPointY = img.bottom;
+        }else{
+            img.bottom = lastIMG.top;
+        }
+        lastIMG = img;
+        _originTopArr[i] = [NSNumber numberWithFloat:img.top];
+        _imageViewsArr[i] = img;
+    }
+    for (NSInteger i = centenIndex; i < _imageViewsArr.count; i ++) {
+        StitchingButton *img = _imageViewsArr[i];
+        if (i == centenIndex){
+            img.top = alignPointY;
+        }else{
+            img.top = lastIMG.bottom;
+        }
+        lastIMG = img;
+        _originTopArr[i] = [NSNumber numberWithFloat:img.top];
+        _imageViewsArr[i] = img;
+    }
+}
 -(void)addGestureRecognizer{
     //    _panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(selectonPanGesture:)];
     //    _panRecognizer.maximumNumberOfTouches = 1;
@@ -719,7 +733,7 @@
                 image.backgroundColor = color;
                 CGFloat imgWidth  = [_originWidthArr[0]floatValue];
                 CGFloat imgHeight = [_originHeightArr[0]floatValue];
-                CGFloat top = [_originzTopArr[1]floatValue];
+                CGFloat top = [_originTopArr[1]floatValue];
                 if (!_isAddShell){
                     image.imgView.bottom = image.bottom;
                 }else{
@@ -734,7 +748,7 @@
                     imageView.backgroundColor = color;
                     CGFloat imgWidth  = [_originWidthArr[i]floatValue];
                     CGFloat imgHeight = [_originHeightArr[i]floatValue];
-                    CGFloat imgTop = [_originzTopArr[i]floatValue];
+                    CGFloat imgTop = [_originTopArr[i]floatValue];
                     imageView.imgView.width = imgWidth * changeScale;
                     imageView.imgView.height = imgHeight *changeScale;
                     imageView.imgView.top = 0;
@@ -783,7 +797,7 @@
             for (NSInteger i = 1; i < _imageViewsArr.count; i ++) {
                 StitchingButton *img = _imageViewsArr[i];
                 img.backgroundColor = color;
-                CGFloat top = [_originzTopArr[i] floatValue];
+                CGFloat top = [_originTopArr[i] floatValue];
                 if (i == 1){
                     img.frame = CGRectMake(img.left, top +  width, img.width, img.height);
                 }else{
@@ -805,7 +819,7 @@
                 imageView.backgroundColor = color;
                 CGFloat imgWidth  = [_originWidthArr[i]floatValue];
                 CGFloat imgHeight = [_originHeightArr[i]floatValue];
-                CGFloat imgTop = [_originzTopArr[i]floatValue];
+                CGFloat imgTop = [_originTopArr[i]floatValue];
                 imageView.width = imgWidth * changeScale;
                 imageView.height = imgHeight *changeScale;
                 imageView.top = imgTop +  width;
@@ -823,7 +837,7 @@
                 image.backgroundColor = [UIColor clearColor];
                 CGFloat imgWidth  = [_originWidthArr[i]floatValue];
                 CGFloat imgHeight = [_originHeightArr[i]floatValue];
-                CGFloat top = [_originzTopArr[i] floatValue];
+                CGFloat top = [_originTopArr[i] floatValue];
                 image.frame = CGRectMake(0, top, imgWidth, imgHeight);
                 image.imgView.frame = CGRectMake(0, 0, imgWidth, imgHeight);
             }
@@ -837,7 +851,7 @@
                 image.backgroundColor = [UIColor clearColor];
                 CGFloat imgWidth  = [_originWidthArr[i]floatValue];
                 CGFloat imgHeight = [_originHeightArr[i]floatValue];
-                CGFloat left = [_originzTopArr[i]floatValue];
+                CGFloat left = [_originTopArr[i]floatValue];
                 image.frame = CGRectMake(left, 0, imgWidth, imgHeight);
                 image.imgView.frame = CGRectMake(0, 0, imgWidth, imgHeight);
             }
@@ -878,7 +892,7 @@
             _contentScrollView.backgroundColor = color;
             for (NSInteger i = 1; i < _imageViewsArr.count; i ++) {
                 StitchingButton *img = _imageViewsArr[i];
-                CGFloat top = [_originzTopArr[i] floatValue];
+                CGFloat top = [_originTopArr[i] floatValue];
                 if (i == 1){
                     img.frame = CGRectMake(top + width, img.top, img.width, img.height);
                 }else{
@@ -894,7 +908,7 @@
                 StitchingButton *imageView = _imageViewsArr[i];
                 CGFloat imgWidth  = [_originWidthArr[i]floatValue];
                 CGFloat imgHeight = [_originHeightArr[i]floatValue];
-                CGFloat imgTop = [_originzTopArr[i]floatValue];
+                CGFloat imgTop = [_originTopArr[i]floatValue];
                 imageView.width = imgWidth * changeScale;
                 imageView.height = imgHeight *changeScale;
                 imageView.top =  width;
@@ -1047,11 +1061,14 @@
     }
     if ([str isEqualToString:@"无套壳"]){
         [_contentScrollView setBackgroundColor:[UIColor clearColor]];
+        _contentScrollView.layer.masksToBounds = YES;
+        _contentScrollView.layer.cornerRadius = 0;
         [_contentScrollView removeAllSubviews];
         [_imageViewsArr removeAllObjects];
-        [_originzTopArr removeAllObjects];
+        [_originTopArr removeAllObjects];
         [_originWidthArr removeAllObjects];
         [_originHeightArr removeAllObjects];
+        _shellBkImageView = nil;
         if (_isVer){
             [self addVerticalContentView];
             [_contentScrollView mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -1061,16 +1078,26 @@
             [self addHorizontalContentView];
         }
     }else{
+        if (_shellBkImageView == nil){
+            if (_isVer){
+                [self changeShellViewWithType:1];
+            }else{
+                [self changeShellViewWithType:2];
+            }
+            
+        }
         if (_isHaveBang){
             if ([str isEqualToString:@"iPad Pro"]){
                 if (_isShellVer){
-                    
+                    _shellBkImageView.image = [self changeIMGWithImageName:@"iPad Pro"];
                 }else{
-                    
+                    _shellBkImageView.image = [self changeIMGWithImageName:@"iPad Pro横屏"];
                 }
             }else if ([str isEqualToString:@"iPad"]){
                 if (_isShellVer){
-                    
+                    _shellBkImageView.image = [self changeIMGWithImageName:@"ipad"];
+                }else{
+                    _shellBkImageView.image = [self changeIMGWithImageName:@"ipad横屏"];
                 }
             }else if ([str isEqualToString:@"iPhone 14Pro Max"]){
                 if (tag == 1){
@@ -1572,13 +1599,15 @@
         }else{
             if ([str isEqualToString:@"iPad Pro"]){
                 if (_isShellVer){
-                    
+                    _shellBkImageView.image = [self changeIMGWithImageName:@"iPad Pro"];
                 }else{
-                    
+                    _shellBkImageView.image = [self changeIMGWithImageName:@"iPad Pro横屏"];
                 }
             }else if ([str isEqualToString:@"iPad"]){
                 if (_isShellVer){
-                    
+                    _shellBkImageView.image = [self changeIMGWithImageName:@"ipad"];
+                }else{
+                    _shellBkImageView.image = [self changeIMGWithImageName:@"ipad横屏"];
                 }
             }else if ([str isEqualToString:@"iPhone 14Pro Max"]){
                 if (tag == 1){
@@ -2172,8 +2201,9 @@
 }
 -(void)changeShellViewWithType:(NSInteger )type{
     [_contentScrollView removeAllSubviews];
+    CGFloat top = [_originTopArr[0]floatValue];
     [_imageViewsArr removeAllObjects];
-    [_originzTopArr removeAllObjects];
+    [_originTopArr removeAllObjects];
     [_originWidthArr removeAllObjects];
     [_originHeightArr removeAllObjects];
     if (type == 1){
@@ -2191,7 +2221,7 @@
         }];
         CGFloat contentHeight = 0.0;
         UIImage *icon = _imgArr[0];
-        StitchingButton *firstImageView = [[StitchingButton alloc]initWithFrame:CGRectMake(3,0, width-6 , (CGFloat)(icon.size.height/icon.size.width) * width)];
+        StitchingButton *firstImageView = [[StitchingButton alloc]initWithFrame:CGRectMake(3,top, width-6 , (CGFloat)(icon.size.height/icon.size.width) * width)];
         firstImageView.image = icon;
         UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:firstImageView.bounds byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight cornerRadii:CGSizeMake(55, 55)];
         CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
@@ -2205,7 +2235,7 @@
         [self.imageViewsArr addObject:firstImageView];
         [self.originWidthArr addObject:[NSNumber numberWithFloat:width - 6]];
         [self.originHeightArr addObject:[NSNumber numberWithFloat:(CGFloat)(icon.size.height/icon.size.width) * VerViewWidth]];
-        [self.originzTopArr addObject:[NSNumber numberWithFloat:0]];
+        [self.originTopArr addObject:[NSNumber numberWithFloat:top]];
         for (NSInteger i = 1; i < _imgArr.count; i ++) {
             UIImage *icon = _imgArr[i];
             CGFloat imgHeight = (CGFloat)(icon.size.height/icon.size.width) * width;
@@ -2222,21 +2252,21 @@
             }
             [self.originWidthArr addObject:[NSNumber numberWithFloat:width-6]];
             [self.originHeightArr addObject:[NSNumber numberWithFloat:imgHeight]];
-            [self.originzTopArr addObject:[NSNumber numberWithFloat:firstImageView.bottom]];
+            [self.originTopArr addObject:[NSNumber numberWithFloat:firstImageView.bottom]];
             [_contentScrollView addSubview:imageView];
             firstImageView = imageView;
             [self.imageViewsArr addObject:imageView];
             
         }
         [_contentScrollView setContentSize:CGSizeMake(_contentScrollView.size.width, contentHeight)];
-        _shellBkImageView  = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0,width, _contentScrollView.contentSize.height)];
+        _shellBkImageView  = [[UIImageView alloc]initWithFrame:CGRectMake(0, top,width, _contentScrollView.contentSize.height)];
         if(contentHeight < 400){
             CGFloat newHeight = 0;
             StitchingButton *firstIMG;
             for (NSInteger i = 0 ; i < _imageViewsArr.count; i ++) {
                 StitchingButton *img = _imageViewsArr[i];
                 if (i == 0){
-                    img.frame = CGRectMake(3, 0, img.width - 6, img.height * 2);
+                    img.frame = CGRectMake(3, top, img.width - 6, img.height * 2);
                     img.imgView.height = img.height;
                     UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:img.bounds byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight cornerRadii:CGSizeMake(55, 55)];
                     CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
@@ -2253,14 +2283,14 @@
                         maskLayer.path = maskPath.CGPath;
                         img.layer.mask = maskLayer;
                     }
-                    _originzTopArr[i] = [NSNumber numberWithFloat:img.top];
+                    _originTopArr[i] = [NSNumber numberWithFloat:img.top];
                 }
                 _originHeightArr[i] = [NSNumber numberWithFloat:img.height];
                 newHeight += img.height;
                 firstIMG = img;
             }
             [_contentScrollView setContentSize:CGSizeMake(_contentScrollView.size.width, newHeight)];
-            [_shellBkImageView setFrame:CGRectMake(0, 0, _shellBkImageView.width,newHeight )];
+            [_shellBkImageView setFrame:CGRectMake(0, top, _shellBkImageView.width,newHeight )];
         }else{
             [_contentScrollView setContentSize:CGSizeMake(_contentScrollView.size.width, contentHeight + Nav_HEIGHT + 80)];
         }
@@ -2297,7 +2327,7 @@
         [_contentScrollView addSubview:firstImageView];
         [self.imageViewsArr addObject:firstImageView];
         [self.originWidthArr addObject:[NSNumber numberWithFloat:(CGFloat)(icon.size.width / icon.size.height) * height]];
-        [self.originzTopArr addObject:[NSNumber numberWithFloat:23]];
+        [self.originTopArr addObject:[NSNumber numberWithFloat:23]];
         [self.originHeightArr addObject:[NSNumber numberWithFloat:height - 6]];
         for (NSInteger i = 1; i < _imgArr.count; i ++) {
             UIImage *icon = _imgArr[i];
@@ -2317,7 +2347,7 @@
             [_contentScrollView addSubview:imageView];
             firstImageView = imageView;
             [self.originWidthArr addObject:[NSNumber numberWithFloat:imgWidth]];
-            [self.originzTopArr addObject:[NSNumber numberWithFloat:imageView.left]];
+            [self.originTopArr addObject:[NSNumber numberWithFloat:imageView.left]];
             [self.originHeightArr addObject:[NSNumber numberWithFloat:height - 6]];
             [self.imageViewsArr addObject:imageView];
         }
@@ -2347,7 +2377,7 @@
                         maskLayer.path = maskPath.CGPath;
                         img.layer.mask = maskLayer;
                     }
-                    _originzTopArr[i] = [NSNumber numberWithFloat:firtsIMG.right];
+                    _originTopArr[i] = [NSNumber numberWithFloat:firtsIMG.right];
                 }
                 newWidth += img.width;
                 _originWidthArr[i] = [NSNumber numberWithFloat:img.width];
@@ -2423,15 +2453,18 @@
     
     if (_editType == 1){
         //标注
-        _pathWidth = size * 3 ;
+        _pathWidth = size * 2 ;
+        if (_markType == LINE){
+            _pathWidth = size / 2;
+        }
         //改变大小
         if (_isStartPaint){
             NSInteger index = [_layers indexOfObject:_slayer];
             if (_markType == RECTANGLE || _markType == LINE){
                 //修改边框 //修改画笔
                 if (_slayer != nil){
-                    _path.lineWidth = size * 3;
-                    _slayer.lineWidth = size * 3;
+                    _path.lineWidth = size * 2;
+                    _slayer.lineWidth = size * 2;
                     //        [self rectDrawBy:size / 2 AndColor:_currentPath.color];
                     [self rectDrawBy:index];
                 }
@@ -3099,11 +3132,11 @@ static inline CGPoint XBPointOnPowerCurveLine(CGPoint p0, CGPoint p1, CGPoint p2
     }
     return _originHeightArr;
 }
--(NSMutableArray *)originzTopArr{
-    if (!_originzTopArr){
-        self.originzTopArr = [NSMutableArray array];
+-(NSMutableArray *)originTopArr{
+    if (!_originTopArr){
+        self.originTopArr = [NSMutableArray array];
     }
-    return _originzTopArr;
+    return _originTopArr;
 }
 -(NSMutableArray *)imageViewsArr{
     if (!_imageViewsArr){

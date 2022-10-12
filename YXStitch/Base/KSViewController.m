@@ -37,7 +37,6 @@
 //    textAttribute[NSForegroundColorAttributeName] = [UIColor whiteColor];
     textAttribute[NSForegroundColorAttributeName] = [UIColor blackColor];
     textAttribute[NSFontAttributeName] = Font18;
-    
     UINavigationBar *navigationBar = self.navigationController.navigationBar;
     if (@available(iOS 15.0, *)) {
         UINavigationBarAppearance *app = [UINavigationBarAppearance new];
@@ -63,7 +62,6 @@
         //viewController.hidesBottomBarWhenPushed = YES;
 
         UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
-        
         [backButton setBackgroundImage:[UIImage imageNamed:@"black_leftBack"] forState:UIControlStateNormal];
        // [backButton setImageEdgeInsets:UIEdgeInsetsMake(0, -12, 0, 12)];
         [backButton addTarget:self action:@selector(popView) forControlEvents:UIControlEventTouchUpInside];

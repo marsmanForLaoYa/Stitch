@@ -35,5 +35,6 @@
 #import "SDCycleScrollView.h"
 #import "TYSnapshotScroll.h"
 #import "Notifications.h"
+#import "HandlerVideo.h"
 
 #endif /* PrefixHeader_pch */
