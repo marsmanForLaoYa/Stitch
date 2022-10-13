@@ -163,10 +163,14 @@
     {
         if (![User current].isVipMember)
         {
-//            [self showLoading];
+            [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeClear];
+            [SVProgressHUD show];
+            [SVProgressHUD dismissWithDelay:30];
             [[IAPSubscribeTool sharedInstance] buy:setModel.subcriseProduct finishedBlock:^(NSString * _Nullable errorMsg, NSURL * _Nullable appStoreReceiptURL, BOOL isTest, BOOL isAutoRenewal) {
                 if (errorMsg) {
-//                    [self showToastWithMsg:errorMsg];
+                    [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeNone];
+                    [SVProgressHUD showInfoWithStatus:errorMsg];
+                    [SVProgressHUD dismissWithDelay:3];
                 }
                 else
                 {
@@ -176,7 +180,7 @@
                         [self getDataSources];
                         [self loadUserInformation];
                     }];
-//                    [self dimiss];
+                    [SVProgressHUD dismiss];
                 }
             }];
         }
