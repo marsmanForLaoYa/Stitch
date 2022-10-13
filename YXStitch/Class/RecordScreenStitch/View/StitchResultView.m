@@ -186,7 +186,6 @@
         [self.scrollView addSubview:ediView];
         lastImageView = imageView;
         [self.imageViews addObject:imageView];
-
         @weakify(self);
         imageView.touchEnd = ^(SZStichingImageView *stichingImageView) {
             @strongify(self);

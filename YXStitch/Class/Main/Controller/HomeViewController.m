@@ -759,8 +759,6 @@
         }else{
             if (btn.tag == 300){
                 //多图截长屏
-                CaptionViewController *vc = [CaptionViewController new];
-                vc.type = 4;
                 __block NSMutableArray *arr = [NSMutableArray array];
                 __block NSMutableArray *imgArr = [NSMutableArray array];
                 for (HXPhotoModel *photoModel in [self.manager selectedArray]) {
@@ -769,12 +767,33 @@
                         [imgArr addObject:image];
                     }];
                 }
-                vc.dataArr = arr;
-                vc.editImgArr = imgArr;
-                [[NSNotificationCenter defaultCenter]postNotificationName:@"dismiss" object:nil];
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [weakSelf.navigationController pushViewController:vc animated:YES];
-                });
+                //判断图片分辨率是否一样
+                BOOL isSimilarityImage = NO;
+                UIImage *firstIMG = imgArr[0];
+                CGFloat scale = firstIMG.size.width / firstIMG.size.height;
+                for (NSInteger i = 1 ; i < imgArr.count; i ++) {
+                    UIImage *secondIMG = imgArr[i];
+                    CGFloat secondScale = secondIMG.size.width / secondIMG.size.height;
+                    if (scale == secondScale){
+                        isSimilarityImage = YES;
+                    }else{
+                        isSimilarityImage = NO;
+                        break;
+                    }
+                }
+                //相同分辨率 才可进入长截图拼图
+                if (isSimilarityImage){
+                    CaptionViewController *vc = [CaptionViewController new];
+                    vc.type = 4;
+                    vc.dataArr = arr;
+                    vc.editImgArr = imgArr;
+                    [[NSNotificationCenter defaultCenter]postNotificationName:@"dismiss" object:nil];
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        [weakSelf.navigationController pushViewController:vc animated:YES];
+                    });
+                }else{
+                    [SVProgressHUD showInfoWithStatus:@"相同分辨率图片才能进行长截图拼接！"];
+                }
             }else if(btn.tag == 301){
                 //多图拼接
                 CaptionViewController *vc = [CaptionViewController new];

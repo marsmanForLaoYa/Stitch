@@ -20,6 +20,7 @@
 #import "StitchResultView.h"
 #import "ImageEditViewController.h"
 #import "CustomScrollView.h"
+#import "SZStichingImageView.h"
 
 #define MaxSCale 2.5  //最大缩放比例
 #define MinScale 0.5  //最小缩放比例
@@ -156,6 +157,8 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
             generator.error = error;
             [weakSelf stitchImgWith:generator];
         }];
+        
+        
     }
     _pinchRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinch:)];
     [_contentView addGestureRecognizer:_pinchRecognizer];
@@ -550,7 +553,6 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                     generator.stiching = NO;
                     completion(generator,error);
                     weakSelf.generator = generator;
-                    
                 }
             });
         });
@@ -586,26 +588,103 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
     return generator;
 }
 -(void)stitchImgWith:(SZImageGenerator *)generator{
-    _resultView = [StitchResultView new];
-    _resultView.generator = generator;
-    [_contentScrollView addSubview:_resultView];
-    [_resultView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.equalTo(@(VerViewWidth));
-        make.top.equalTo(@10);
-        make.centerX.equalTo(_contentView.mas_centerX);
-        make.height.equalTo(@(_contentScrollView.height - 100));
-    }];
-    [_contentScrollView setContentSize:CGSizeMake(_contentScrollView.width, _resultView.scrollView.contentSize.height + 80)];
-   // self.imageViews = _resultView.imageViews;
-    [SVProgressHUD showSuccessWithStatus:@"拼接完成"];
-    StitchingButton *imageView;
-    for (StitchingButton *img in _resultView.imageViews) {
-        imageView = img;
-        imageView.imgView = img.imageView;
-        [self.imageViews addObject:imageView];
-        [self.originTopArr addObject:[NSNumber numberWithFloat:img.top]];
-        [self.originBottomArr addObject:[NSNumber numberWithFloat:img.height]];
-    }
+    MJWeakSelf
+    __block CGFloat contentHeight = 0.0;
+    SZImageMergeInfo *firstInfo = generator.infos.firstObject;
+    CGFloat firstImagescale = VerViewWidth / firstInfo.firstImage.size.width;
+    __block StitchingButton *firstImageView = [[StitchingButton alloc] initWithFrame:CGRectMake(0, 0, VerViewWidth, firstInfo.firstImage.size.height * firstImagescale)];
+    firstImageView.image = firstInfo.firstImage;
+    firstImageView.centerX = self.view.centerX;
+    firstImageView.userInteractionEnabled = YES;
+    contentHeight += firstImageView.height;
+    firstImageView.tag = 100;
+    [_contentScrollView addSubview:firstImageView];
+    [self.originTopArr addObject:[NSNumber numberWithFloat:0]];
+    [self.originBottomArr addObject:[NSNumber numberWithFloat:firstImageView.height]];
+    [self.imageViews addObject:firstImageView];
+    __block NSInteger tagIndex = 2;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        for (SZImageMergeInfo *info in weakSelf.generator.infos) {
+            CGFloat scale = VerViewWidth / info.secondImage.size.width;
+            CGFloat secondImageH = info.secondImage.size.height * scale;
+            StitchingButton *imageView = [[StitchingButton alloc] initWithFrame:CGRectMake(0, firstImageView.bottom, VerViewWidth, secondImageH)];
+            imageView.image = info.secondImage;
+            imageView.centerX = firstImageView.centerX;
+            imageView.tag = tagIndex * 100;
+            [weakSelf.contentScrollView addSubview:imageView];
+            if (!info.error) {
+               // NSLog(@"firstOffset==%ld",info.firstOffset);
+                firstImageView.height = firstImageView.height - (info.firstOffset) * scale;
+                imageView.top = firstImageView.bottom;
+                imageView.height = (info.secondOffset) * scale;
+                imageView.imgView.top = - secondImageH + (info.secondOffset) * scale;
+                //NSLog(@"secondOffset==%ld",info.secondOffset);
+            }
+            contentHeight += imageView.height;
+            [weakSelf.originTopArr addObject:[NSNumber numberWithFloat:imageView.top]];
+            [weakSelf.originBottomArr addObject:[NSNumber numberWithFloat:contentHeight]];
+            [weakSelf.imageViews addObject:imageView];
+            firstImageView = imageView;
+            tagIndex ++;
+        }
+        weakSelf.contentScrollView.contentSize = CGSizeMake(weakSelf.contentScrollView.width,contentHeight);
+        if (contentHeight < SCREEN_HEIGHT){
+            //内容过小则重置imageView布局
+           // [weakSelf layoutContentView];
+        }else{
+            weakSelf.contentScrollView.contentSize = CGSizeMake(weakSelf.contentScrollView.width,contentHeight + Nav_HEIGHT + 80);
+        }
+        [SVProgressHUD showSuccessWithStatus:@"拼接完成"];
+    });
+    
+    
+    
+//    for (NSInteger i = 1; i < _dataArr.count; i ++) {
+//        UIImage *icon = _dataArr[i];
+//        CGFloat imgHeight = (CGFloat)(icon.size.height/icon.size.width) * VerViewWidth;
+//        StitchingButton *imageView = [[StitchingButton alloc]initWithFrame:CGRectMake(0, firstImageView.bottom, VerViewWidth, imgHeight)];
+//        imageView.image = icon;
+//        imageView.userInteractionEnabled = YES;
+//        imageView.centerX = firstImageView.centerX;
+//        imageView.tag = (i+1) * 100;
+//        contentHeight += imgHeight;
+//        [_contentScrollView addSubview:imageView];
+//        firstImageView = imageView;
+//        [self.originTopArr addObject:[NSNumber numberWithFloat:firstImageView.top]];
+//        [self.imageViews addObject:imageView];
+//        [self.originBottomArr addObject:[NSNumber numberWithFloat:contentHeight]];
+//
+//    }
+    
+    
+//
+//
+//    _resultView = [StitchResultView new];
+//    _resultView.generator = generator;
+//    [_contentScrollView addSubview:_resultView];
+//    [_resultView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.width.equalTo(@(VerViewWidth));
+//        make.top.equalTo(@10);
+//        make.centerX.equalTo(_contentView.mas_centerX);
+//        make.height.equalTo(@(_contentScrollView.height - 100));
+//    }];
+//    [_contentScrollView setContentSize:CGSizeMake(_contentScrollView.width, _resultView.scrollView.contentSize.height + 80)];
+
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        for (NSInteger i = 0 ; i < weakSelf.resultView.imageViews.count; i ++) {
+//            SZStichingImageView *img = weakSelf.resultView.imageViews[i];
+//            StitchingButton *imageView = [StitchingButton new];
+//            imageView = img;
+////            imageView.image = img.image;
+//            imageView.tag = (i + 1) * 100;
+//            [weakSelf.imageViews addObject:imageView];
+//            [weakSelf.originTopArr addObject:[NSNumber numberWithFloat:img.top]];
+//            [weakSelf.originBottomArr addObject:[NSNumber numberWithFloat:img.height]];
+//
+//        }
+//        weakSelf.title = [NSString stringWithFormat:@"%ld张图片",weakSelf.resultView.imageViews.count];
+//    });
+    
 }
 
 
@@ -1632,13 +1711,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
     if (btn.tag == 0){
         [_cutBtn removeFromSuperview];
         [SVProgressHUD showWithStatus:@"正在生成图片中.."];
-        UIView *view;
-        if (_type == 4){
-            view = _resultView.scrollView;
-        }else{
-            view = _contentScrollView;
-        }
-        [TYSnapshotScroll screenSnapshot:view finishBlock:^(UIImage *snapshotImage) {
+        [TYSnapshotScroll screenSnapshot:_contentScrollView finishBlock:^(UIImage *snapshotImage) {
             [SVProgressHUD showSuccessWithStatus:@"图片已保存至拼图相册中"];
             SaveViewController *saveVC = [SaveViewController new];
             saveVC.screenshotIMG = snapshotImage;

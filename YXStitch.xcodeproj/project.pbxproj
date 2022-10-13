@@ -1946,7 +1946,6 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = YXStitch/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "快捷截长图";
-
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "拼接图片需要打开相册获取图片";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
