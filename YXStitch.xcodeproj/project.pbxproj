@@ -1903,10 +1903,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = YXStitch/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "快捷截长图";
-<<<<<<< HEAD
-=======
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "拼接图片需要打开相册获取图片";
->>>>>>> 701a57e75e52c650a5faaf939fb35fc2a9973668
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -1949,10 +1946,8 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = YXStitch/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "快捷截长图";
-<<<<<<< HEAD
-=======
+
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "拼接图片需要打开相册获取图片";
->>>>>>> 701a57e75e52c650a5faaf939fb35fc2a9973668
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
