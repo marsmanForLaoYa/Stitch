@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		88A9881C3EEEB1AA517CAE1C /* libPods-YXStitch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1A9AF54F55FC18D9EDC22C /* libPods-YXStitch.a */; };
+		BBA4D56828F6CEF00099AD50 /* ss.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA4D56728F6CEF00099AD50 /* ss.m */; };
 		BBB4687728F57A2100F15765 /* XWOpenCVHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBB4687528F57A2100F15765 /* XWOpenCVHelper.mm */; };
 		BBB4687A28F57A9200F15765 /* SharePath.m in Sources */ = {isa = PBXBuildFile; fileRef = BBB4687928F57A9200F15765 /* SharePath.m */; };
 		BBB4688228F57C4B00F15765 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB687ED528A0DE65002D557B /* UIKit.framework */; };
@@ -231,6 +232,8 @@
 		113BB414313D98CCCD8D49AD /* Pods-YXStitch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YXStitch.debug.xcconfig"; path = "Target Support Files/Pods-YXStitch/Pods-YXStitch.debug.xcconfig"; sourceTree = "<group>"; };
 		3F1A9AF54F55FC18D9EDC22C /* libPods-YXStitch.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YXStitch.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B8C87E9AD95B7468BA24009E /* Pods-YXStitch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YXStitch.release.xcconfig"; path = "Target Support Files/Pods-YXStitch/Pods-YXStitch.release.xcconfig"; sourceTree = "<group>"; };
+		BBA4D56628F6CEF00099AD50 /* ss.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ss.h; sourceTree = "<group>"; };
+		BBA4D56728F6CEF00099AD50 /* ss.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ss.m; sourceTree = "<group>"; };
 		BBB4687528F57A2100F15765 /* XWOpenCVHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XWOpenCVHelper.mm; sourceTree = "<group>"; };
 		BBB4687628F57A2100F15765 /* XWOpenCVHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XWOpenCVHelper.h; sourceTree = "<group>"; };
 		BBB4687828F57A9200F15765 /* SharePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SharePath.h; sourceTree = "<group>"; };
@@ -675,6 +678,8 @@
 				BBC92B2E28F6A2B60023E80F /* Settings */,
 				BBC92AFE28F69A390023E80F /* IAPSubscribeTool.h */,
 				BBC92AFD28F69A390023E80F /* IAPSubscribeTool.m */,
+				BBA4D56628F6CEF00099AD50 /* ss.h */,
+				BBA4D56728F6CEF00099AD50 /* ss.m */,
 				BBC92AC328F670C80023E80F /* NetWork */,
 				BBC92AD728F6713F0023E80F /* NSString+Base64.h */,
 				BBC92AD828F671400023E80F /* NSString+Base64.m */,
@@ -1677,6 +1682,7 @@
 				FB3EFE4A28A3B828006C3889 /* SelectMainIconViewController.m in Sources */,
 				FB7E659B28A4A6110079C9F3 /* PrefenceTableViewCell.m in Sources */,
 				FB2D5A0D28A1F59C006085BC /* UIImage+Color.m in Sources */,
+				BBA4D56828F6CEF00099AD50 /* ss.m in Sources */,
 				FB2D5A2128A264C4006085BC /* WKWebView+LVShot.m in Sources */,
 				FB2D5A1B28A24743006085BC /* WebViewController.m in Sources */,
 				BBB4687A28F57A9200F15765 /* SharePath.m in Sources */,
