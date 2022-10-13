@@ -27,10 +27,10 @@
 
 - (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
-    if (self.pushing)
-    {
-        return;
-    }
+//    if (self.pushing)
+//    {
+//        return;
+//    }
     if ([self respondsToSelector:@selector(interactivePopGestureRecognizer)] && animated == YES)
     {
         self.interactivePopGestureRecognizer.enabled = NO;

@@ -7,12 +7,15 @@
 
 #import "GridShowView.h"
 
-#define kGridElementMinWidth 60
-#define kGridElementMinHeight 60
+#define kGridElementMinWidth 80
+#define kGridElementMinHeight 80
 #define kCompensatePrecision 0.1
 @interface GridShowView ()<GridShowImgViewDelegate>
 
-@property (nonatomic, strong) NSMutableArray *gridsImageViews;
+@property (nonatomic, strong) UIView *bgView;
+
+@property (nonatomic, strong) NSMutableArray <GridShowImgView *>*gridsImageViews;
+@property (nonatomic, strong) NSMutableArray *gridsImageViewFrame;
 @property (nonatomic, strong) NSMutableArray *bottomBelowImageViews;
 @property (nonatomic, strong) NSMutableArray *bottomAboveImageViews;
 @property (nonatomic, strong) NSMutableArray *topBelowImageViews;
@@ -32,6 +35,10 @@
     if(self = [super initWithFrame: frame]){
 
         self.backgroundColor = RGB(255, 255, 255);
+        UIView *bgView = [[UIView alloc] init];
+        bgView.backgroundColor = RGB(255, 255, 255);
+        [self addSubview:bgView];
+        _bgView = bgView;
     }
     return self;
 }
@@ -39,16 +46,44 @@
 - (void)setImagePadding:(CGFloat)imagePadding
 {
     _imagePadding = imagePadding;
-    [self createLayoutSubImageViewWithGridsDic:self.gridsDic];
+    self.bgView.frame = CGRectMake(0, 0, self.bounds.size.width - _imagePadding, self.bounds.size.height - _imagePadding);
+    CGFloat scaleWidth = self.bgView.bounds.size.width / self.bounds.size.width;
+    CGFloat scaleHeight = self.bgView.bounds.size.height / self.bounds.size.height;
+    
+    for (int i = 0; i < self.gridsImageViews.count; i++) {
+        GridShowImgView *showImgView = self.gridsImageViews[i];
+        NSString *frameString = self.gridsImageViewFrame[i];
+        CGRect frame = CGRectFromString(frameString);
+        showImgView.width = frame.size.width * scaleWidth;
+        showImgView.height = frame.size.height * scaleHeight;
+        showImgView.top = frame.origin.y * scaleHeight;
+        showImgView.left = frame.origin.x * scaleWidth;
+        showImgView.imagePadding = imagePadding;
+    }
+}
+
+//更新缓存的frame值
+- (void)updateGridsImageViewFrame {
+
+    [self.gridsImageViewFrame removeAllObjects];
+    CGFloat scaleWidth = self.bgView.bounds.size.width / self.bounds.size.width;
+    CGFloat scaleHeight = self.bgView.bounds.size.height / self.bounds.size.height;
+    for (GridShowImgView *showImgView in self.gridsImageViews) {
+        //记录padding为0的值
+        CGRect frame = CGRectMake(showImgView.left / scaleWidth, showImgView.top / scaleHeight, showImgView.width / scaleWidth, showImgView.height / scaleHeight);
+        [self.gridsImageViewFrame addObject:NSStringFromCGRect(frame)];
+    }
 }
 
 - (void)setShowViewBackgroundColorWithHex:(NSString *)hex {
     
+    self.bgView.backgroundColor = HexColor(hex);
     self.backgroundColor = HexColor(hex);
 }
 
 - (void)setGridsDic:(NSDictionary *)gridsDic
 {
+    self.bgView.frame = CGRectMake(0, 0, self.bounds.size.width - _imagePadding, self.bounds.size.height - _imagePadding);
     //清除上一个边框
     [self.lastShowImgView clearBorder];
     _gridsDic = gridsDic;
@@ -57,6 +92,7 @@
 
 - (void)createLayoutSubImageViewWithGridsDic:(NSDictionary *)gridsDic
 {
+    [self.gridsImageViewFrame removeAllObjects];
     NSInteger rowsCount = [gridsDic[@"rowsCount"] integerValue];
     NSArray *rows = gridsDic[@"rows"];
     
@@ -68,25 +104,25 @@
         NSArray *columns = dicRows[@"columns"];
         
         //矩形框在x轴分了columnsCount份，每份的宽度
-        CGFloat subImgViewWidth = (self.width - (columnsCount + 1) * _imagePadding) / columnsCount;
+        CGFloat subImgViewWidth = self.bgView.width / columnsCount;
         //矩形框在y轴分了rowsCount份，每份的高度
-        CGFloat subImgViewHeight = (self.height - (rowsCount + 1) * _imagePadding) / rowsCount;
-        
-        CGFloat left = start * subImgViewWidth + _imagePadding * (start + 1);
+        CGFloat subImgViewHeight = self.bgView.height / rowsCount;
+
+        CGFloat left = start * subImgViewWidth;
         for (int j = 0; j < columns.count; j++) {
             NSDictionary *dicColumn = columns[j];
             CGFloat width = [dicColumn[@"width"] floatValue];
             CGFloat height = [dicColumn[@"height"] floatValue];
-            CGFloat margin = [dicColumn[@"margin"] floatValue] * (subImgViewWidth + _imagePadding);
+            CGFloat margin = [dicColumn[@"margin"] floatValue] * subImgViewWidth;
             CGFloat top = [dicColumn[@"top"] floatValue];
 
             GridShowImgView *showImgView;
             // top * subImgViewHeight为前面所有视图所占高度 (top + 1) * padding为padding的高度
-            CGFloat imgViewTop = top * subImgViewHeight + (top + 1) * _imagePadding;
+            CGFloat imgViewTop = top * subImgViewHeight;
             //width * subImgViewWidth为前面所有视图所占宽度 (width - 1) * padding为padding的宽度
-            CGFloat imgViewWidth = width * subImgViewWidth + (width - 1) * _imagePadding;
+            CGFloat imgViewWidth = width * subImgViewWidth;
             //height * subImgViewHeight为当前视图所占高度 (height - 1) * padding为当前视图所占的padding高度
-            CGFloat imgViewHeight = height * subImgViewHeight + (height - 1) * _imagePadding;
+            CGFloat imgViewHeight = height * subImgViewHeight;
             
             if(self.gridsImageViews.count < self.pictures.count)
             {
@@ -97,15 +133,21 @@
                 showImgView = self.gridsImageViews[index];
                 showImgView.frame = CGRectMake(left + margin,imgViewTop, imgViewWidth, imgViewHeight);
             }
+            //记录imagepadding为0的frame值
+            CGFloat scaleWidth = self.bgView.bounds.size.width / self.bounds.size.width;
+            CGFloat scaleHeight = self.bgView.bounds.size.height / self.bounds.size.height;
+            CGRect frame = CGRectMake(showImgView.left / scaleWidth, showImgView.top / scaleHeight, showImgView.width / scaleWidth, showImgView.height / scaleHeight);
+            [self.gridsImageViewFrame addObject:NSStringFromCGRect(frame)];
+            
             showImgView.image = self.pictures[index];
             showImgView.index = index;
             //初始化view
             [showImgView initGestureView];
             //设置可编辑的边缘
             showImgView.gridPanEdge = [self getPanEdgeWithImageView:showImgView];
-            
+
             index ++;
-            left += width * subImgViewWidth + (width - 1) * _imagePadding + _imagePadding;
+            left += width * subImgViewWidth;
         }
     }
 }
@@ -122,13 +164,13 @@
         //记录当前选中的view
         self.lastShowImgView = showImgView;
         //把选中的view放在最上层
-        [self bringSubviewToFront:showImgView];
+        [self.bgView bringSubviewToFront:showImgView];
         if(self.gridShowViewSelecedImageBlock) {
             self.gridShowViewSelecedImageBlock(showImgView.image);
         }
     };
     subImgView.delegate = self;
-    [self addSubview:subImgView];
+    [self.bgView addSubview:subImgView];
     [self.gridsImageViews addObject:subImgView];
     return subImgView;
 }
@@ -140,7 +182,7 @@
     self.lastShowImgView = nil;
 }
 
-//清除选中的view上的样式
+//替换image
 - (void)changeSelectedShowImgViewWithImage:(UIImage *)image {
  
     self.lastShowImgView.image = image;
@@ -160,22 +202,21 @@
     self.pictures = [NSArray arrayWithArray:arrImages];
 }
 
-
 - (GridPanEdge)getPanEdgeWithImageView:(GridShowImgView *)imageView {
     GridPanEdge panEdge = GridPanEdgeNone;
-    if(fabs(imageView.left - _imagePadding) > kCompensatePrecision) {
+    if(imageView.left > kCompensatePrecision) {
         panEdge = panEdge | GridPanEdgeLeft;
     }
     
-    if(fabs(imageView.top - _imagePadding) > kCompensatePrecision ) {
+    if(imageView.top > kCompensatePrecision ) {
         panEdge = panEdge | GridPanEdgeTop;
     }
     
-    if(fabs(imageView.right + _imagePadding - self.width) > kCompensatePrecision) {
+    if(fabs(imageView.right - self.width) > kCompensatePrecision) {
         panEdge = panEdge | GridPanEdgeRight;
     }
     
-    if(fabs(imageView.bottom + _imagePadding - self.height) > kCompensatePrecision) {
+    if(fabs(imageView.bottom - self.height) > kCompensatePrecision) {
         panEdge = panEdge | GridPanEdgeBottom;
     }
     return panEdge;
@@ -192,7 +233,40 @@
     return _gridsImageViews;
 }
 
+- (NSMutableArray *)gridsImageViewFrame
+{
+    if(!_gridsImageViewFrame)
+    {
+        _gridsImageViewFrame = [[NSMutableArray alloc] init];
+        
+    }
+    return _gridsImageViewFrame;
+}
+
 #pragma mark - GridShowImgViewDelegate
+- (void)panGestureBeganWithGridElementView:(GridShowImgView *)gridElementView panViewEdge:(PanViewEdge)panViewEdge
+{
+    if(panViewEdge == PanViewEdgeBottom) {
+        
+        [self getBottomBelowAndAbovePanViewArray:gridElementView array:self.gridsImageViews];
+    } else if(panViewEdge == PanViewEdgeTop) {
+        
+        [self getTopBelowAndAbovePanViewArray:gridElementView array:self.gridsImageViews];
+    } else if(panViewEdge == PanViewEdgeLeft) {
+        
+        [self getLeftPanEdgeLeftAndRightPanViewArray:gridElementView array:self.gridsImageViews];
+    } else if(panViewEdge == PanViewEdgeRight) {
+        
+        [self getRightPanEdgeLeftAndRightPanViewArray:gridElementView array:self.gridsImageViews];
+    }
+}
+
+- (void)panGestureEndWithGridElementView:(GridShowImgView *)gridElementView
+{
+    //更新缓存的frame值
+    [self updateGridsImageViewFrame];
+}
+
 - (void)leftOrRightPanX:(CGFloat)x panViewEdge:(PanViewEdge)panViewEdge gridElementView:(GridShowImgView *)gridElementView {
     
     
@@ -375,7 +449,7 @@
             [self.rightToRightImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
 
                 if(changeX != 0) {
-                    obj.left = maxRight + _imagePadding;
+                    obj.left = maxRight;
                     obj.width -= x;
                     obj.width = obj.width - changeX;
                 }
@@ -451,23 +525,6 @@
                 }
             }];
         }
-    }
-}
-
-- (void)panGestureBeganWithGridElementView:(GridShowImgView *)gridElementView panViewEdge:(PanViewEdge)panViewEdge
-{
-    if(panViewEdge == PanViewEdgeBottom) {
-        
-        [self getBottomBelowAndAbovePanViewArray:gridElementView array:self.gridsImageViews];
-    } else if(panViewEdge == PanViewEdgeTop) {
-        
-        [self getTopBelowAndAbovePanViewArray:gridElementView array:self.gridsImageViews];
-    } else if(panViewEdge == PanViewEdgeLeft) {
-        
-        [self getLeftPanEdgeLeftAndRightPanViewArray:gridElementView array:self.gridsImageViews];
-    } else if(panViewEdge == PanViewEdgeRight) {
-        
-        [self getRightPanEdgeLeftAndRightPanViewArray:gridElementView array:self.gridsImageViews];
     }
 }
 
@@ -650,7 +707,7 @@
             [self.bottomBelowImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
 
                 if(changeY != 0) {
-                    obj.top = maxBottom + _imagePadding;
+                    obj.top = maxBottom;
                     obj.height -= y;
                     obj.height = obj.height - changeY;
                 }
@@ -741,7 +798,7 @@
     [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull subImgView, NSUInteger idx, BOOL * _Nonnull stop) {
         @strongify(self);
         if(![gridElementView isEqual:subImgView]) {
-            if(fabs(gridElementView.bottom + _imagePadding - subImgView.top) <= 1) {
+            if(fabs(gridElementView.bottom - subImgView.top) <= 1) {
                 
                 if(![self judgeBottomAndTopIsNoOverlapBetweenView1:subImgView secondView:gridElementView])
                 {//重叠
@@ -763,7 +820,7 @@
             [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 
                 if(![gridElementView isEqual:obj]) {
-                    if(fabs(subImgView.top - _imagePadding - obj.bottom) <= 1) {
+                    if(fabs(subImgView.top - obj.bottom) <= 1) {
                         if(![self judgeBottomAndTopIsNoOverlapBetweenView1:subImgView secondView:obj])
                         {//重叠
                             if(![self.bottomAboveImageViews containsObject:obj]) {
@@ -786,7 +843,7 @@
         [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             
             if(![gridElementView isEqual:obj]) {
-                if(fabs(subImgView.bottom + _imagePadding - obj.top) <= 1) {
+                if(fabs(subImgView.bottom - obj.top) <= 1) {
                     if(![self judgeBottomAndTopIsNoOverlapBetweenView1:obj secondView:subImgView])
                     {//重叠
                         if(![self.bottomBelowImageViews containsObject:obj]) {
@@ -809,7 +866,7 @@
             [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 
                 if(![gridElementView isEqual:obj]) {
-                    if(fabs(subImgView.top - _imagePadding - obj.bottom) <= 1) {
+                    if(fabs(subImgView.top - obj.bottom) <= 1) {
                         if(![self judgeBottomAndTopIsNoOverlapBetweenView1:subImgView secondView:obj])
                         {//重叠
                             if(![self.bottomAboveImageViews containsObject:obj]) {
@@ -831,7 +888,7 @@
         [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             
             if(![gridElementView isEqual:obj]) {
-                if(fabs(subImgView.bottom + _imagePadding - obj.top) <= 1) {
+                if(fabs(subImgView.bottom - obj.top) <= 1) {
                     if(![self judgeBottomAndTopIsNoOverlapBetweenView1:obj secondView:subImgView])
                     {//重叠
                         if(![self.bottomBelowImageViews containsObject:obj]) {
@@ -854,7 +911,7 @@
             [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 
                 if(![gridElementView isEqual:obj]) {
-                    if(fabs(subImgView.top - _imagePadding - obj.bottom) <= 1) {
+                    if(fabs(subImgView.top - obj.bottom) <= 1) {
                         if(![self judgeBottomAndTopIsNoOverlapBetweenView1:subImgView secondView:obj])
                         {//重叠
                             if(![self.bottomAboveImageViews containsObject:obj]) {
@@ -880,7 +937,7 @@
     [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull subImgView, NSUInteger idx, BOOL * _Nonnull stop) {
         @strongify(self);
         if(![gridElementView isEqual:subImgView]) {
-            if(fabs(gridElementView.top - _imagePadding - subImgView.bottom) <= 1) {
+            if(fabs(gridElementView.top - subImgView.bottom) <= 1) {
                 
                 if(![self judgeBottomAndTopIsNoOverlapBetweenView1:subImgView secondView:gridElementView])
                 {//重叠
@@ -901,7 +958,7 @@
             [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 
                 if(![gridElementView isEqual:obj]) {
-                    if(fabs(subImgView.bottom + _imagePadding - obj.top) <= 1) {
+                    if(fabs(subImgView.bottom - obj.top) <= 1) {
                         if(![self judgeBottomAndTopIsNoOverlapBetweenView1:subImgView secondView:obj])
                         {//重叠
                             if(![self.topBelowImageViews containsObject:obj]) {
@@ -924,7 +981,7 @@
         [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             
             if(![gridElementView isEqual:obj]) {
-                if(fabs(subImgView.top - _imagePadding - obj.bottom) <= 1) {
+                if(fabs(subImgView.top - obj.bottom) <= 1) {
                     if(![self judgeBottomAndTopIsNoOverlapBetweenView1:obj secondView:subImgView])
                     {//重叠
                         if(![self.topAboveImageViews containsObject:obj]) {
@@ -947,7 +1004,7 @@
             [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 
                 if(![gridElementView isEqual:obj]) {
-                    if(fabs(subImgView.bottom + _imagePadding - obj.top) <= 1) {
+                    if(fabs(subImgView.bottom - obj.top) <= 1) {
                         if(![self judgeBottomAndTopIsNoOverlapBetweenView1:subImgView secondView:obj])
                         {//重叠
                             if(![self.topBelowImageViews containsObject:obj]) {
@@ -969,7 +1026,7 @@
         [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             
             if(![gridElementView isEqual:obj]) {
-                if(fabs(subImgView.top - _imagePadding - obj.bottom) <= 1) {
+                if(fabs(subImgView.top - obj.bottom) <= 1) {
                     if(![self judgeBottomAndTopIsNoOverlapBetweenView1:obj secondView:subImgView])
                     {//重叠
                         if(![self.topAboveImageViews containsObject:obj]) {
@@ -992,7 +1049,7 @@
             [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 
                 if(![gridElementView isEqual:obj]) {
-                    if(fabs(subImgView.bottom + _imagePadding - obj.top) <= 1) {
+                    if(fabs(subImgView.bottom - obj.top) <= 1) {
                         if(![self judgeBottomAndTopIsNoOverlapBetweenView1:subImgView secondView:obj])
                         {//重叠
                             if(![self.topBelowImageViews containsObject:obj]) {
@@ -1018,7 +1075,7 @@
     [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull subImgView, NSUInteger idx, BOOL * _Nonnull stop) {
         @strongify(self);
         if(![gridElementView isEqual:subImgView]) {
-            if(fabs(gridElementView.left - _imagePadding - subImgView.right) <= 1) {
+            if(fabs(gridElementView.left - subImgView.right) <= 1) {
                 
                 if(![self judgeLeftAndRightIsNoOverlapBetweenView1:subImgView secondView:gridElementView])
                 {//重叠
@@ -1038,7 +1095,7 @@
             [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 
                 if(![gridElementView isEqual:obj]) {
-                    if(fabs(subImgView.right + _imagePadding - obj.left) <= 1) {
+                    if(fabs(subImgView.right - obj.left) <= 1) {
                         if(![self judgeLeftAndRightIsNoOverlapBetweenView1:subImgView secondView:obj])
                         {//重叠
                             if(![self.leftToRightImageViews containsObject:obj]) {
@@ -1061,7 +1118,7 @@
         [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             
             if(![gridElementView isEqual:obj]) {
-                if(fabs(subImgView.left - _imagePadding - obj.right) <= 1) {
+                if(fabs(subImgView.left - obj.right) <= 1) {
                     if(![self judgeLeftAndRightIsNoOverlapBetweenView1:obj secondView:subImgView])
                     {//重叠
                         if(![self.leftToLeftImageViews containsObject:obj]) {
@@ -1084,7 +1141,7 @@
             [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 
                 if(![gridElementView isEqual:obj]) {
-                    if(fabs(subImgView.right + _imagePadding - obj.left) <= 1) {
+                    if(fabs(subImgView.right - obj.left) <= 1) {
                         if(![self judgeLeftAndRightIsNoOverlapBetweenView1:subImgView secondView:obj])
                         {//重叠
                             if(![self.leftToRightImageViews containsObject:obj]) {
@@ -1107,7 +1164,7 @@
         [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             
             if(![gridElementView isEqual:obj]) {
-                if(fabs(subImgView.left - _imagePadding - obj.right) <= 1) {
+                if(fabs(subImgView.left - obj.right) <= 1) {
                     if(![self judgeLeftAndRightIsNoOverlapBetweenView1:obj secondView:subImgView])
                     {//重叠
                         if(![self.leftToLeftImageViews containsObject:obj]) {
@@ -1130,7 +1187,7 @@
             [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 
                 if(![gridElementView isEqual:obj]) {
-                    if(fabs(subImgView.right + _imagePadding - obj.left) <= 1) {
+                    if(fabs(subImgView.right - obj.left) <= 1) {
                         if(![self judgeLeftAndRightIsNoOverlapBetweenView1:subImgView secondView:obj])
                         {//重叠
                             if(![self.leftToRightImageViews containsObject:obj]) {
@@ -1159,7 +1216,7 @@
     [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull subImgView, NSUInteger idx, BOOL * _Nonnull stop) {
         @strongify(self);
         if(![gridElementView isEqual:subImgView]) {
-            if(fabs(gridElementView.right + _imagePadding - subImgView.left) <= 1) {
+            if(fabs(gridElementView.right - subImgView.left) <= 1) {
                 
                 if(![self judgeLeftAndRightIsNoOverlapBetweenView1:subImgView secondView:gridElementView])
                 {//重叠
@@ -1180,7 +1237,7 @@
             [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 
                 if(![gridElementView isEqual:obj]) {
-                    if(fabs(subImgView.left - _imagePadding - obj.right) <= 1) {
+                    if(fabs(subImgView.left - obj.right) <= 1) {
                         if(![self judgeLeftAndRightIsNoOverlapBetweenView1:subImgView secondView:obj])
                         {//重叠
                             if(![self.rightToLeftImageViews containsObject:obj]) {
@@ -1203,7 +1260,7 @@
         [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             
             if(![gridElementView isEqual:obj]) {
-                if(fabs(subImgView.right + _imagePadding - obj.left) <= 1) {
+                if(fabs(subImgView.right - obj.left) <= 1) {
                     if(![self judgeLeftAndRightIsNoOverlapBetweenView1:obj secondView:subImgView])
                     {//重叠
                         if(![self.rightToRightImageViews containsObject:obj]) {
@@ -1226,7 +1283,7 @@
             [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 
                 if(![gridElementView isEqual:obj]) {
-                    if(fabs(subImgView.left - _imagePadding - obj.right) <= 1) {
+                    if(fabs(subImgView.left - obj.right) <= 1) {
                         if(![self judgeLeftAndRightIsNoOverlapBetweenView1:subImgView secondView:obj])
                         {//重叠
                             if(![self.rightToLeftImageViews containsObject:obj]) {
@@ -1249,7 +1306,7 @@
         [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             
             if(![gridElementView isEqual:obj]) {
-                if(fabs(subImgView.right + _imagePadding - obj.left) <= 1) {
+                if(fabs(subImgView.right - obj.left) <= 1) {
                     if(![self judgeLeftAndRightIsNoOverlapBetweenView1:obj secondView:subImgView])
                     {//重叠
                         if(![self.rightToRightImageViews containsObject:obj]) {
@@ -1272,7 +1329,7 @@
             [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 
                 if(![gridElementView isEqual:obj]) {
-                    if(fabs(subImgView.left - _imagePadding - obj.right) <= 1) {
+                    if(fabs(subImgView.left - obj.right) <= 1) {
                         if(![self judgeLeftAndRightIsNoOverlapBetweenView1:subImgView secondView:obj])
                         {//重叠
                             if(![self.rightToLeftImageViews containsObject:obj]) {
@@ -1288,12 +1345,18 @@
     [self.rightToLeftImageViews addObjectsFromArray:thirdLeftArray];
 }
 
-//判断左右边距 是否重叠
+//判断左右边距 是否重叠 NO重叠 YES不重叠
 - (BOOL)judgeBottomAndTopIsNoOverlapBetweenView1:(GridShowImgView *)view1 secondView:(GridShowImgView *)view2 {
+    NSLog(@"view1 left:%f view2 left:%f view1 right:%f view2 right:%f", view1.left, view2.left, view1.right, view2.right);
+
+    NSLog(@"%d %d %d %d", view1.left <= view2.left && view1.right > view2.left && view1.right <= view2.right, view1.left >= view2.left && view1.right <= view2.right, view1.left >= view2.left && view1.left < view2.right && view1.right >= view2.right, view1.left <= view2.left && view1.right >= view2.right);
+
+    NSLog(@"%f", view1.right - view2.left);
+    NSLog(@"%d", view1.right > view2.left);
     if(
-        (view1.left <= view2.left && view1.right + _imagePadding > view2.left && view1.right <= view2.right) ||
+        (view1.left <= view2.left && view1.right - view2.left > kCompensatePrecision && view1.right <= view2.right) ||
         (view1.left >= view2.left && view1.right <= view2.right) ||
-        (view1.left >= view2.left && view1.left - _imagePadding < view2.right && view1.right >= view2.right) ||
+        (view1.left >= view2.left && view2.right - view1.left > kCompensatePrecision && view1.right >= view2.right) ||
         (view1.left <= view2.left && view1.right >= view2.right)
        ) {//重叠
 
@@ -1306,9 +1369,9 @@
 //判断上下边距 是否重叠
 - (BOOL)judgeLeftAndRightIsNoOverlapBetweenView1:(GridShowImgView *)view1 secondView:(GridShowImgView *)view2 {
     if(
-       (view1.top <= view2.top && view1.bottom + _imagePadding > view2.top && view1.bottom < view2.bottom) ||
+       (view1.top <= view2.top && view1.bottom - view2.top > kCompensatePrecision && view1.bottom < view2.bottom) ||
        (view1.top >= view2.top && view1.bottom < view2.bottom) ||
-       (view1.top > view2.top && view1.top - _imagePadding < view2.bottom && view1.bottom >= view2.bottom) ||
+       (view1.top > view2.top && view2.bottom - view1.top > kCompensatePrecision && view1.bottom >= view2.bottom) ||
        (view1.top <= view2.top && view1.bottom >= view2.bottom)
        ) {//重叠
 
@@ -1331,6 +1394,8 @@
 //捏合手势放大最大比例
 #define kPinchMaxScale 2
 @interface GridShowImgView ()
+
+@property (nonatomic, strong) UIView *subBgView;
 
 @property (nonatomic, strong) UIView *leftCanPanView;
 @property (nonatomic, strong) UIView *topCanPanView;
@@ -1356,7 +1421,7 @@
         self.contentMode = UIViewContentModeScaleAspectFill;
         self.clipsToBounds = NO;
         _pinchScale = 1.0;
-
+        self.backgroundColor = [UIColor clearColor];
         [self configViews];
     }
     return self;
@@ -1367,18 +1432,21 @@
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapSelectedViewAction)];
     [self addGestureRecognizer:tap];
     
-    self.scrollView.frame = self.bounds;
-    [self addSubview:self.scrollView];
+    [self addSubview:self.subBgView];
+    self.subBgView.frame = self.bounds;
     
-    [self addSubview:self.leftCanPanView];
-    [self addSubview:self.rightCanPanView];
-    [self addSubview:self.topCanPanView];
-    [self addSubview:self.bottomCanPanView];
+    self.scrollView.frame = self.subBgView.bounds;
+    [self.subBgView addSubview:self.scrollView];
     
-    [self addSubview:self.leftPanGestureView];
-    [self addSubview:self.topPanGestureView];
-    [self addSubview:self.rightPanGestureView];
-    [self addSubview:self.bottomPanGestureView];
+    [self.subBgView addSubview:self.leftCanPanView];
+    [self.subBgView addSubview:self.rightCanPanView];
+    [self.subBgView addSubview:self.topCanPanView];
+    [self.subBgView addSubview:self.bottomCanPanView];
+    
+    [self.subBgView addSubview:self.leftPanGestureView];
+    [self.subBgView addSubview:self.topPanGestureView];
+    [self.subBgView addSubview:self.rightPanGestureView];
+    [self.subBgView addSubview:self.bottomPanGestureView];
 
     [self addGestureWithView:self.leftPanGestureView action:@selector(leftPanGestureView:)];
     [self addGestureWithView:self.topPanGestureView action:@selector(topPanGestureView:)];
@@ -1420,8 +1488,8 @@
         imageHeight = imageMinHeight;
     }
     
-    if(imageHeight < self.height) {
-        imageHeight = self.height;
+    if(imageHeight < self.subBgView.height) {
+        imageHeight = self.subBgView.height;
     }
     imageWidth = scaleWH * imageHeight;
     
@@ -1450,60 +1518,67 @@
     if(gridPanEdge & GridPanEdgeTop) {
         self.topPanGestureView.hidden = NO;
     }
-    
+
     if(gridPanEdge & GridPanEdgeLeft) {
         self.leftPanGestureView.hidden = NO;
     }
-    
+
     if(gridPanEdge & GridPanEdgeRight) {
         self.rightPanGestureView.hidden = NO;
     }
-    
+
     if(gridPanEdge & GridPanEdgeBottom) {
         self.bottomPanGestureView.hidden = NO;
     }
 }
 
+- (void)setImagePadding:(CGFloat)imagePadding {
+    _imagePadding = imagePadding;
+    self.subBgView.frame = CGRectMake(_imagePadding, _imagePadding, self.bounds.size.width - _imagePadding, self.bounds.size.height - _imagePadding);
+}
+
 - (void)layoutSubviews
 {
+    self.subBgView.frame = CGRectMake(_imagePadding, _imagePadding, self.bounds.size.width - _imagePadding, self.bounds.size.height - _imagePadding);
+    self.scrollView.frame = self.subBgView.bounds;
+    
     CGFloat edge = 20;
-    self.leftPanGestureView.frame = CGRectMake(0, 0, edge, self.height);
-    self.rightPanGestureView.frame = CGRectMake(self.width - edge, 0, edge, self.height);
-    self.topPanGestureView.frame = CGRectMake(0, 0, self.width, edge);
-    self.bottomPanGestureView.frame = CGRectMake(0, self.height - edge, self.width, edge);
-    self.scrollView.frame = self.bounds;
+    self.leftPanGestureView.frame = CGRectMake(0, 0, edge, self.subBgView.height);
+    self.rightPanGestureView.frame = CGRectMake(self.subBgView.width - edge, 0, edge, self.subBgView.height);
+    self.topPanGestureView.frame = CGRectMake(0, 0, self.subBgView.width, edge);
+    self.bottomPanGestureView.frame = CGRectMake(0, self.subBgView.height - edge, self.subBgView.width, edge);
     
     CGFloat fixMarginYMin = 10;
     CGFloat leftCanPanViewHeight = 0;
     CGFloat leftCanPanViewTop = 0;
-    if(self.height >= fixMarginYMin * 2 + kCanPanViewMaxHeight) {
+    if(self.subBgView.height >= fixMarginYMin * 2 + kCanPanViewMaxHeight) {
         leftCanPanViewHeight = kCanPanViewMaxHeight;
-        leftCanPanViewTop = (self.height - leftCanPanViewHeight) / 2;
+        leftCanPanViewTop = (self.subBgView.height - leftCanPanViewHeight) / 2;
     }
     else
     {
         leftCanPanViewTop = fixMarginYMin;
-        leftCanPanViewHeight = self.height - 2 * leftCanPanViewTop;
+        leftCanPanViewHeight = self.subBgView.height - 2 * leftCanPanViewTop;
     }
     
     self.leftCanPanView.frame = CGRectMake(- kCanPanViewWidth / 2 + kViewBorderWidth / 2, leftCanPanViewTop, kCanPanViewWidth, leftCanPanViewHeight);
-    self.rightCanPanView.frame = CGRectMake(self.width - kCanPanViewWidth / 2 - kViewBorderWidth / 2, leftCanPanViewTop, kCanPanViewWidth, leftCanPanViewHeight);
+    self.rightCanPanView.frame = CGRectMake(self.subBgView.width - kCanPanViewWidth / 2 - kViewBorderWidth / 2, leftCanPanViewTop, kCanPanViewWidth, leftCanPanViewHeight);
     
     
     CGFloat fixMarginXMin = 10;
     CGFloat topCanPanViewWidth = 0;
     CGFloat topCanPanViewLeft = 0;
-    if(self.width >= fixMarginXMin * 2 + kCanPanViewMaxWidth) {
+    if(self.subBgView.width >= fixMarginXMin * 2 + kCanPanViewMaxWidth) {
         topCanPanViewWidth = kCanPanViewMaxWidth;
-        topCanPanViewLeft = (self.width - topCanPanViewWidth) / 2;
+        topCanPanViewLeft = (self.subBgView.width - topCanPanViewWidth) / 2;
     }
     else
     {
         topCanPanViewLeft = fixMarginXMin;
-        topCanPanViewWidth = self.width - 2 * topCanPanViewLeft;
+        topCanPanViewWidth = self.subBgView.width - 2 * topCanPanViewLeft;
     }
     self.topCanPanView.frame = CGRectMake(topCanPanViewLeft, - kCanPanViewWidth / 2+ kViewBorderWidth / 2, topCanPanViewWidth, kCanPanViewHeight);
-    self.bottomCanPanView.frame = CGRectMake(topCanPanViewLeft, self.height - kCanPanViewWidth / 2 - kViewBorderWidth / 2, topCanPanViewWidth, kCanPanViewHeight);
+    self.bottomCanPanView.frame = CGRectMake(topCanPanViewLeft, self.subBgView.height - kCanPanViewWidth / 2 - kViewBorderWidth / 2, topCanPanViewWidth, kCanPanViewHeight);
     //改变imageview的frame
     [self changeImageViewFrame];
 }
@@ -1533,8 +1608,8 @@
     if(self.gridPanEdge & GridPanEdgeBottom) {
         self.bottomCanPanView.hidden = NO;
     }
-    self.layer.borderColor = RGB(0, 74, 274).CGColor;
-    self.layer.borderWidth = kViewBorderWidth;
+    self.subBgView.layer.borderColor = RGB(0, 74, 274).CGColor;
+    self.subBgView.layer.borderWidth = kViewBorderWidth;
 }
 
 - (void)addGestureWithView:(UIView *)view action:(nullable SEL)action {
@@ -1543,8 +1618,8 @@
 }
 
 - (void)clearBorder {
-    self.layer.borderColor = [UIColor clearColor].CGColor;
-    self.layer.borderWidth = 0.0;
+    self.subBgView.layer.borderColor = [UIColor clearColor].CGColor;
+    self.subBgView.layer.borderWidth = 0.0;
     self.leftCanPanView.hidden = YES;
     self.rightCanPanView.hidden = YES;
     self.topCanPanView.hidden = YES;
@@ -1633,7 +1708,9 @@
         }
         
     }else if (panGesture.state == UIGestureRecognizerStateEnded){
-
+        if(self.delegate && [self.delegate respondsToSelector:@selector(panGestureEndWithGridElementView:)]){
+            [self.delegate panGestureEndWithGridElementView:self];
+        }
     }
 }
 
@@ -1701,6 +1778,16 @@
 }
 
 #pragma mark - lazy
+
+- (UIView *)subBgView
+{
+    if(!_subBgView) {
+        _subBgView = [[UIView alloc] initWithFrame:CGRectZero];
+        _subBgView.backgroundColor = [UIColor clearColor];
+    }
+    return _subBgView;
+}
+
 - (UIImageView *)imageView{
     if (!_imageView) {
         _imageView = [[UIImageView alloc] init];

@@ -41,7 +41,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *invitation_code;
 
 #pragma mark - share
+//分享描述
 @property (nonatomic, copy) NSString *shareDescription;
+//分享Url
 @property (nonatomic, copy) NSString *shareUrl;
 
 #pragma mark - keychain Property

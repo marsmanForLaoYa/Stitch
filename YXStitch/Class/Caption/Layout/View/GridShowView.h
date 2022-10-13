@@ -41,12 +41,15 @@ typedef NS_ENUM(NSUInteger, PanViewEdge) {
     PanViewEdgeRight,
 };
 
-typedef NS_ENUM(NSUInteger, PaddingEdge) {
-    PaddingEdgeTop    = 0,
-    PaddingEdgeLeft,
-    PaddingEdgeBottom,
-    PaddingEdgeRight,
-};
+//typedef NS_OPTIONS(NSUInteger, PaddingEdge) {
+//
+//    PaddingEdgeNone   = 0,
+//    PaddingEdgeTop    = 1 << 0,
+//    PaddingEdgeLeft   = 1 << 1,
+//    PaddingEdgeBottom = 1 << 2,
+//    PaddingEdgeRight  = 1 << 3,
+//    PaddingEdgeAll    = PaddingEdgeTop | PaddingEdgeLeft | PaddingEdgeBottom | PaddingEdgeRight
+//};
 
 @protocol GridShowImgViewDelegate <NSObject>
 
@@ -60,6 +63,7 @@ typedef NS_ENUM(NSUInteger, PaddingEdge) {
 
 - (void)panGestureBeganWithGridElementView:(GridShowImgView *)gridElementView
                                panViewEdge:(PanViewEdge)panViewEdge;
+- (void)panGestureEndWithGridElementView:(GridShowImgView *)gridElementView;
 
 @end
 
@@ -67,9 +71,8 @@ typedef NS_ENUM(NSUInteger, PaddingEdge) {
 
 @property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) UIImage *image;
-@property (nonatomic, assign) NSInteger row;
-@property (nonatomic, assign) NSInteger column;
 @property (nonatomic, assign) NSInteger index;
+@property (nonatomic, assign) CGFloat imagePadding;
 @property (nonatomic, copy) GridShowImgViewTapBlock gridShowImgViewTapBlock;
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UIView *leftPanGestureView;
@@ -77,7 +80,7 @@ typedef NS_ENUM(NSUInteger, PaddingEdge) {
 @property (nonatomic, strong) UIView *rightPanGestureView;
 @property (nonatomic, strong) UIView *bottomPanGestureView;
 @property (nonatomic, assign) GridPanEdge gridPanEdge;
-@property (nonatomic, assign) PaddingEdge paddingEdge;
+//@property (nonatomic, assign) PaddingEdge paddingEdge;
 @property (nonatomic, weak) id<GridShowImgViewDelegate> delegate;
 
 - (void)showBorder;
