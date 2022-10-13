@@ -7,8 +7,6 @@
 
 #import "XWNetTool.h"
 
-//#define BASEURL @"http://api.rocketbrowser.xyz/youtube"
-
 @implementation XWNetTool
 
 static XWNetTool *_XWNetTool;

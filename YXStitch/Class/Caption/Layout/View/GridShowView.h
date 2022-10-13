@@ -41,6 +41,13 @@ typedef NS_ENUM(NSUInteger, PanViewEdge) {
     PanViewEdgeRight,
 };
 
+typedef NS_ENUM(NSUInteger, PaddingEdge) {
+    PaddingEdgeTop    = 0,
+    PaddingEdgeLeft,
+    PaddingEdgeBottom,
+    PaddingEdgeRight,
+};
+
 @protocol GridShowImgViewDelegate <NSObject>
 
 - (void)leftOrRightPanX:(CGFloat)x
@@ -70,6 +77,7 @@ typedef NS_ENUM(NSUInteger, PanViewEdge) {
 @property (nonatomic, strong) UIView *rightPanGestureView;
 @property (nonatomic, strong) UIView *bottomPanGestureView;
 @property (nonatomic, assign) GridPanEdge gridPanEdge;
+@property (nonatomic, assign) PaddingEdge paddingEdge;
 @property (nonatomic, weak) id<GridShowImgViewDelegate> delegate;
 
 - (void)showBorder;

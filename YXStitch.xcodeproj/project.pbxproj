@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		88A9881C3EEEB1AA517CAE1C /* libPods-YXStitch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1A9AF54F55FC18D9EDC22C /* libPods-YXStitch.a */; };
-		BBA4D56828F6CEF00099AD50 /* ss.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA4D56728F6CEF00099AD50 /* ss.m */; };
 		BBB4687728F57A2100F15765 /* XWOpenCVHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBB4687528F57A2100F15765 /* XWOpenCVHelper.mm */; };
 		BBB4687A28F57A9200F15765 /* SharePath.m in Sources */ = {isa = PBXBuildFile; fileRef = BBB4687928F57A9200F15765 /* SharePath.m */; };
 		BBB4688228F57C4B00F15765 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB687ED528A0DE65002D557B /* UIKit.framework */; };
@@ -232,8 +231,6 @@
 		113BB414313D98CCCD8D49AD /* Pods-YXStitch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YXStitch.debug.xcconfig"; path = "Target Support Files/Pods-YXStitch/Pods-YXStitch.debug.xcconfig"; sourceTree = "<group>"; };
 		3F1A9AF54F55FC18D9EDC22C /* libPods-YXStitch.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YXStitch.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B8C87E9AD95B7468BA24009E /* Pods-YXStitch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YXStitch.release.xcconfig"; path = "Target Support Files/Pods-YXStitch/Pods-YXStitch.release.xcconfig"; sourceTree = "<group>"; };
-		BBA4D56628F6CEF00099AD50 /* ss.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ss.h; sourceTree = "<group>"; };
-		BBA4D56728F6CEF00099AD50 /* ss.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ss.m; sourceTree = "<group>"; };
 		BBB4687528F57A2100F15765 /* XWOpenCVHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XWOpenCVHelper.mm; sourceTree = "<group>"; };
 		BBB4687628F57A2100F15765 /* XWOpenCVHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XWOpenCVHelper.h; sourceTree = "<group>"; };
 		BBB4687828F57A9200F15765 /* SharePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SharePath.h; sourceTree = "<group>"; };
@@ -638,16 +635,16 @@
 			children = (
 				BBBBA3C528F1069000406C43 /* GridCell.h */,
 				BBBBA3C028F1069000406C43 /* GridCell.m */,
+				BBBBA3EE28F180D600406C43 /* GridEditView.h */,
+				BBBBA3EF28F180D600406C43 /* GridEditView.m */,
+				BBBBA3E928F10C9900406C43 /* GridScaleView.h */,
+				BBBBA3EA28F10C9900406C43 /* GridScaleView.m */,
 				BBBBA3C128F1069000406C43 /* GridSelectedView.h */,
 				BBBBA3C428F1069000406C43 /* GridSelectedView.m */,
 				BBBBA3E628F1076300406C43 /* GridShowView.h */,
 				BBBBA3E728F1076300406C43 /* GridShowView.m */,
-				BBBBA3E928F10C9900406C43 /* GridScaleView.h */,
-				BBBBA3EA28F10C9900406C43 /* GridScaleView.m */,
 				BBBBA3C328F1069000406C43 /* LayoutBottomView.h */,
 				BBBBA3C728F1069000406C43 /* LayoutBottomView.m */,
-				BBBBA3EE28F180D600406C43 /* GridEditView.h */,
-				BBBBA3EF28F180D600406C43 /* GridEditView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -668,40 +665,15 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		BBC92AC028F670C80023E80F /* Login */ = {
-			isa = PBXGroup;
-			children = (
-				BBC92B2928F6A2240023E80F /* XWNavigationController.h */,
-				BBC92B2A28F6A2240023E80F /* XWNavigationController.m */,
-				BBC92B2B28F6A2240023E80F /* XWNavigationController+BarStyle.h */,
-				BBC92B2828F6A2240023E80F /* XWNavigationController+BarStyle.m */,
-				BBC92B2E28F6A2B60023E80F /* Settings */,
-				BBC92AFE28F69A390023E80F /* IAPSubscribeTool.h */,
-				BBC92AFD28F69A390023E80F /* IAPSubscribeTool.m */,
-				BBA4D56628F6CEF00099AD50 /* ss.h */,
-				BBA4D56728F6CEF00099AD50 /* ss.m */,
-				BBC92AC328F670C80023E80F /* NetWork */,
-				BBC92AD728F6713F0023E80F /* NSString+Base64.h */,
-				BBC92AD828F671400023E80F /* NSString+Base64.m */,
-				BBC92AD028F670C80023E80F /* User.h */,
-				BBC92AC228F670C80023E80F /* User.m */,
-				BBC92AE128F673C10023E80F /* XWModel.h */,
-				BBC92AE228F673C10023E80F /* XWModel.m */,
-				BBC92ACF28F670C80023E80F /* YKeychain.h */,
-				BBC92AC128F670C80023E80F /* YKeychain.m */,
-			);
-			path = Login;
-			sourceTree = "<group>";
-		};
 		BBC92AC328F670C80023E80F /* NetWork */ = {
 			isa = PBXGroup;
 			children = (
 				BBC92AC428F670C80023E80F /* Categary */,
-				BBC92ACB28F670C80023E80F /* XWNetTool.m */,
-				BBC92ACC28F670C80023E80F /* XWNetTool.h */,
 				BBC92ACD28F670C80023E80F /* NetworkAPI.h */,
 				BBC92ACE28F670C80023E80F /* NetworkErrorCode.h */,
 				BBC92ADE28F6731D0023E80F /* NetWorkout.h */,
+				BBC92ACC28F670C80023E80F /* XWNetTool.h */,
+				BBC92ACB28F670C80023E80F /* XWNetTool.m */,
 			);
 			path = NetWork;
 			sourceTree = "<group>";
@@ -719,14 +691,14 @@
 			path = Categary;
 			sourceTree = "<group>";
 		};
-		BBC92B2E28F6A2B60023E80F /* Settings */ = {
+		BBC92B2E28F6A2B60023E80F /* Recommend */ = {
 			isa = PBXGroup;
 			children = (
 				BBC92B2F28F6A2B60023E80F /* Controller */,
 				BBC92B3428F6A2B60023E80F /* Model */,
 				BBC92B3728F6A2B60023E80F /* View */,
 			);
-			path = Settings;
+			path = Recommend;
 			sourceTree = "<group>";
 		};
 		BBC92B2F28F6A2B60023E80F /* Controller */ = {
@@ -760,6 +732,25 @@
 				BBC92B3D28F6A2B60023E80F /* RewardTextField.m */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		BBC9A8F728F7A93D00A8F299 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				BBC92AD028F670C80023E80F /* User.h */,
+				BBC92AC228F670C80023E80F /* User.m */,
+				BBC92AE128F673C10023E80F /* XWModel.h */,
+				BBC92AE228F673C10023E80F /* XWModel.m */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		BBC9A8F828F7AA0500A8F299 /* SubModules */ = {
+			isa = PBXGroup;
+			children = (
+				BBC92B2E28F6A2B60023E80F /* Recommend */,
+			);
+			path = SubModules;
 			sourceTree = "<group>";
 		};
 		FB26948328E590A000565F4B /* Cell */ = {
@@ -990,9 +981,9 @@
 				FB687F0128A0EA1C002D557B /* Appconfig.h */,
 				FB687F0028A0EA1C002D557B /* Color.h */,
 				FB687F0228A0EA1C002D557B /* CustomDefine.h */,
-				FB687EF628A0E0D2002D557B /* PrefixHeader.pch */,
 				FB3EFE8B28A3CB07006C3889 /* GVUserDefaults+Properties.h */,
 				FB3EFE8A28A3CB07006C3889 /* GVUserDefaults+Properties.m */,
+				FB687EF628A0E0D2002D557B /* PrefixHeader.pch */,
 			);
 			path = Global;
 			sourceTree = "<group>";
@@ -1000,22 +991,24 @@
 		FB4E535B28A34B990072E1AD /* Category */ = {
 			isa = PBXGroup;
 			children = (
+				BBC92AD728F6713F0023E80F /* NSString+Base64.h */,
+				BBC92AD828F671400023E80F /* NSString+Base64.m */,
+				FBD32A9828DDC303000A548F /* NSString+Extension.h */,
+				FBD32A9728DDC2F5000A548F /* NSString+Extension.m */,
 				FB2D5A0B28A1F59C006085BC /* UIImage+Color.h */,
 				FB2D5A0C28A1F59C006085BC /* UIImage+Color.m */,
-				FB2D5A2028A264C4006085BC /* WKWebView+LVShot.h */,
-				FB2D5A1F28A264C4006085BC /* WKWebView+LVShot.m */,
-				FB2D5A2328A26564006085BC /* UIView+LVShot.h */,
-				FB2D5A2228A26564006085BC /* UIView+LVShot.m */,
+				FB86DC2928D96C4B00EE8E4D /* UIImage+LF_Format.h */,
+				FB86DC2A28D96C5300EE8E4D /* UIImage+LF_Format.m */,
 				FB8B4E4228AB8BFF00313ECD /* UIScrollView+LVShot.h */,
 				FB8B4E4128AB8BFC00313ECD /* UIScrollView+LVShot.m */,
 				FB0D9E2628B4D1420057DC37 /* UIScrollView+UITouch.h */,
 				FB0D9E2728B4D1420057DC37 /* UIScrollView+UITouch.m */,
-				FB86DC2928D96C4B00EE8E4D /* UIImage+LF_Format.h */,
-				FB86DC2A28D96C5300EE8E4D /* UIImage+LF_Format.m */,
-				FBD32A9828DDC303000A548F /* NSString+Extension.h */,
-				FBD32A9728DDC2F5000A548F /* NSString+Extension.m */,
 				FBDA328F28E29A60003B7FA6 /* UIView+directionBorder.h */,
 				FBDA329028E29A60003B7FA6 /* UIView+directionBorder.m */,
+				FB2D5A2328A26564006085BC /* UIView+LVShot.h */,
+				FB2D5A2228A26564006085BC /* UIView+LVShot.m */,
+				FB2D5A2028A264C4006085BC /* WKWebView+LVShot.h */,
+				FB2D5A1F28A264C4006085BC /* WKWebView+LVShot.m */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -1120,24 +1113,24 @@
 		FB687EA828A0DE2E002D557B /* YXStitch */ = {
 			isa = PBXGroup;
 			children = (
-				FB1AB31C28F66938008C36FC /* opencv2.framework */,
-				FB3EFE8928A3CAE2006C3889 /* Global */,
-				FB3EFE4B28A3C201006C3889 /* AppIcon */,
-				FB687EEF28A0DEC3002D557B /* Base */,
-				FB687EEE28A0DEB1002D557B /* Expansion */,
-				FB687EED28A0DEAB002D557B /* Common */,
-				FB687EEC28A0DEA6002D557B /* Tools */,
-				FB687EEB28A0DEA1002D557B /* Class */,
-				FB687EE928A0DE76002D557B /* YXStitch.entitlements */,
 				FB687EA928A0DE2E002D557B /* AppDelegate.h */,
 				FB687EAA28A0DE2E002D557B /* AppDelegate.m */,
+				FB3EFE4B28A3C201006C3889 /* AppIcon */,
+				FB687EB528A0DE30002D557B /* Assets.xcassets */,
+				FB687EEF28A0DEC3002D557B /* Base */,
+				FB687EEB28A0DEA1002D557B /* Class */,
+				FB687EED28A0DEAB002D557B /* Common */,
+				FB687EEE28A0DEB1002D557B /* Expansion */,
+				FB3EFE8928A3CAE2006C3889 /* Global */,
+				FB687EBA28A0DE30002D557B /* Info.plist */,
+				FB687EB728A0DE30002D557B /* LaunchScreen.storyboard */,
+				FB687EBB28A0DE30002D557B /* main.m */,
+				FB687EB228A0DE2E002D557B /* Main.storyboard */,
+				FB1AB31C28F66938008C36FC /* opencv2.framework */,
+				FB687EEC28A0DEA6002D557B /* Tools */,
 				FB687EAF28A0DE2E002D557B /* ViewController.h */,
 				FB687EB028A0DE2E002D557B /* ViewController.m */,
-				FB687EB228A0DE2E002D557B /* Main.storyboard */,
-				FB687EB528A0DE30002D557B /* Assets.xcassets */,
-				FB687EB728A0DE30002D557B /* LaunchScreen.storyboard */,
-				FB687EBA28A0DE30002D557B /* Info.plist */,
-				FB687EBB28A0DE30002D557B /* main.m */,
+				FB687EE928A0DE76002D557B /* YXStitch.entitlements */,
 			);
 			path = YXStitch;
 			sourceTree = "<group>";
@@ -1188,16 +1181,16 @@
 		FB687EEB28A0DEA1002D557B /* Class */ = {
 			isa = PBXGroup;
 			children = (
-				BBC92AC028F670C80023E80F /* Login */,
-				BBB4688F28F57E8700F15765 /* Replay */,
-				FBA068F228DAA5D800AAB7E6 /* ImageEdit */,
 				FB2BBD1128AF6861001DDFAE /* Caption */,
-				FB687EF428A0DEF6002D557B /* Setting */,
-				FB687EF528A0DEFA002D557B /* WebviewStitch */,
-				FB687EF328A0DEEB002D557B /* WaterMark */,
 				FB687EF228A0DEE2002D557B /* CommonStitch */,
-				FB687EF128A0DED2002D557B /* RecordScreenStitch */,
+				FBA068F228DAA5D800AAB7E6 /* ImageEdit */,
 				FB687EF028A0DECA002D557B /* Main */,
+				BBC92AC328F670C80023E80F /* NetWork */,
+				FB687EF128A0DED2002D557B /* RecordScreenStitch */,
+				BBB4688F28F57E8700F15765 /* Replay */,
+				FB687EF428A0DEF6002D557B /* Setting */,
+				FB687EF328A0DEEB002D557B /* WaterMark */,
+				FB687EF528A0DEFA002D557B /* WebviewStitch */,
 			);
 			path = Class;
 			sourceTree = "<group>";
@@ -1205,12 +1198,16 @@
 		FB687EEC28A0DEA6002D557B /* Tools */ = {
 			isa = PBXGroup;
 			children = (
-				FB687F0428A0EA1C002D557B /* Tools.h */,
-				FB687F0528A0EA1C002D557B /* Tools.m */,
-				FB687F0728A0ECCC002D557B /* ToastShowView.h */,
-				FB687F0828A0ECCC002D557B /* ToastShowView.m */,
 				FB1AB31F28F66B2F008C36FC /* HandlerVideo.h */,
 				FB1AB32028F66B2F008C36FC /* HandlerVideo.m */,
+				BBC92AFE28F69A390023E80F /* IAPSubscribeTool.h */,
+				BBC92AFD28F69A390023E80F /* IAPSubscribeTool.m */,
+				FB687F0728A0ECCC002D557B /* ToastShowView.h */,
+				FB687F0828A0ECCC002D557B /* ToastShowView.m */,
+				FB687F0428A0EA1C002D557B /* Tools.h */,
+				FB687F0528A0EA1C002D557B /* Tools.m */,
+				BBC92ACF28F670C80023E80F /* YKeychain.h */,
+				BBC92AC128F670C80023E80F /* YKeychain.m */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -1218,17 +1215,18 @@
 		FB687EED28A0DEAB002D557B /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				FBE5467628C0B96600B40FD8 /* GuideView */,
-				FB2E286328AA1B62006BDAB0 /* Preview */,
-				FB2E285F28AA1A34006BDAB0 /* MergeResult */,
-				FB2E283B28AA1A21006BDAB0 /* Util */,
-				FB2E282E28AA1A13006BDAB0 /* SZAgorithm */,
 				FB687F0B28A0FF83002D557B /* AppGroupData.h */,
 				FB687F0C28A0FF83002D557B /* AppGroupData.m */,
 				FBF59EF928AC98BF00D9C6CF /* ColorPlateView.h */,
 				FBF59EFA28AC98BF00D9C6CF /* ColorPlateView.m */,
 				FB58D81228E14D5000EC831D /* CustomScrollView.h */,
 				FB58D81128E14D4400EC831D /* CustomScrollView.m */,
+				FBE5467628C0B96600B40FD8 /* GuideView */,
+				FB2E285F28AA1A34006BDAB0 /* MergeResult */,
+				BBC9A8F728F7A93D00A8F299 /* Models */,
+				FB2E286328AA1B62006BDAB0 /* Preview */,
+				FB2E282E28AA1A13006BDAB0 /* SZAgorithm */,
+				FB2E283B28AA1A21006BDAB0 /* Util */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -1244,12 +1242,16 @@
 		FB687EEF28A0DEC3002D557B /* Base */ = {
 			isa = PBXGroup;
 			children = (
-				BBC92B4428F6AD2D0023E80F /* KSViewController.h */,
-				BBC92B4528F6AD2D0023E80F /* KSViewController.m */,
 				FB687EFD28A0E9F1002D557B /* BaseView.h */,
 				FB687EFA28A0E9F1002D557B /* BaseView.m */,
 				FB2D5A0828A1F4AF006085BC /* BaseViewController.h */,
 				FB2D5A0928A1F4AF006085BC /* BaseViewController.m */,
+				BBC92B4428F6AD2D0023E80F /* KSViewController.h */,
+				BBC92B4528F6AD2D0023E80F /* KSViewController.m */,
+				BBC92B2928F6A2240023E80F /* XWNavigationController.h */,
+				BBC92B2A28F6A2240023E80F /* XWNavigationController.m */,
+				BBC92B2B28F6A2240023E80F /* XWNavigationController+BarStyle.h */,
+				BBC92B2828F6A2240023E80F /* XWNavigationController+BarStyle.m */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -1295,8 +1297,9 @@
 			isa = PBXGroup;
 			children = (
 				FB4E536928A355710072E1AD /* Cell */,
-				FB4E536528A354FB0072E1AD /* View */,
 				FB4E535C28A34C340072E1AD /* Controller */,
+				BBC9A8F828F7AA0500A8F299 /* SubModules */,
+				FB4E536528A354FB0072E1AD /* View */,
 			);
 			path = Setting;
 			sourceTree = "<group>";
@@ -1682,7 +1685,6 @@
 				FB3EFE4A28A3B828006C3889 /* SelectMainIconViewController.m in Sources */,
 				FB7E659B28A4A6110079C9F3 /* PrefenceTableViewCell.m in Sources */,
 				FB2D5A0D28A1F59C006085BC /* UIImage+Color.m in Sources */,
-				BBA4D56828F6CEF00099AD50 /* ss.m in Sources */,
 				FB2D5A2128A264C4006085BC /* WKWebView+LVShot.m in Sources */,
 				FB2D5A1B28A24743006085BC /* WebViewController.m in Sources */,
 				BBB4687A28F57A9200F15765 /* SharePath.m in Sources */,
@@ -1901,9 +1903,15 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = YXStitch/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "快捷截长图";
+<<<<<<< HEAD
+=======
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "拼接图片需要打开相册获取图片";
+>>>>>>> 701a57e75e52c650a5faaf939fb35fc2a9973668
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = armv7;
+				INFOPLIST_KEY_UIStatusBarHidden = NO;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
@@ -1941,9 +1949,15 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = YXStitch/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "快捷截长图";
+<<<<<<< HEAD
+=======
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "拼接图片需要打开相册获取图片";
+>>>>>>> 701a57e75e52c650a5faaf939fb35fc2a9973668
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = armv7;
+				INFOPLIST_KEY_UIStatusBarHidden = NO;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
@@ -2032,7 +2046,7 @@
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = StitchScreenShare/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "快捷拼图";
+				INFOPLIST_KEY_CFBundleDisplayName = "快捷截长图";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2061,7 +2075,7 @@
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = StitchScreenShare/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "快捷拼图";
+				INFOPLIST_KEY_CFBundleDisplayName = "快捷截长图";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

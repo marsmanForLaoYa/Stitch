@@ -400,8 +400,10 @@
 - (void)copyInviteCode
 {
     UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-    pasteboard.string = [User current].shareDescription;
-
+    if([User current].shareDescription) {
+        
+        pasteboard.string = [User current].shareDescription;
+    }
     [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeNone];
     [SVProgressHUD showInfoWithStatus:@"已复制，快去粘贴吧"];
     [SVProgressHUD dismissWithDelay:1.0];

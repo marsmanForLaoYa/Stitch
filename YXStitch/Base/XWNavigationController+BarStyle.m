@@ -152,5 +152,4 @@ static UIImage *navigationBarShadowImage;
     return navigationBarShadowImage;
 }
 
-
 @end
