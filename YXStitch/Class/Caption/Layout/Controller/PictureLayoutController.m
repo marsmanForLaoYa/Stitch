@@ -83,7 +83,7 @@
                                NSFontAttributeName:[UIFont systemFontOfSize:18]
                                };
     //设置导航栏标题字体颜色、分割线颜色
-    [nav addNavBarTitleTextAttributes:titleAttr barShadowHidden:NO shadowColor:RGB(233, 233, 233)];
+    [nav addNavBarTitleTextAttributes:titleAttr barShadowHidden:YES shadowColor:RGB(233, 233, 233)];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -95,7 +95,7 @@
                                NSFontAttributeName:[UIFont systemFontOfSize:18]
                                };
     //设置导航栏标题字体颜色、分割线颜色
-    [nav addNavBarTitleTextAttributes:titleAttr barShadowHidden:YES shadowColor:RGB(233, 233, 233)];
+    [nav addNavBarTitleTextAttributes:titleAttr barShadowHidden:NO shadowColor:RGB(233, 233, 233)];
 }
 
 -(void)setupNavItems{

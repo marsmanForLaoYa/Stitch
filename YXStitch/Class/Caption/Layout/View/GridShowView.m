@@ -1539,13 +1539,14 @@
 
 - (void)layoutSubviews
 {
+    self.subBgView.frame = CGRectMake(_imagePadding, _imagePadding, self.bounds.size.width - _imagePadding, self.bounds.size.height - _imagePadding);
+    self.scrollView.frame = self.subBgView.bounds;
+    
     CGFloat edge = 20;
     self.leftPanGestureView.frame = CGRectMake(0, 0, edge, self.subBgView.height);
     self.rightPanGestureView.frame = CGRectMake(self.subBgView.width - edge, 0, edge, self.subBgView.height);
     self.topPanGestureView.frame = CGRectMake(0, 0, self.subBgView.width, edge);
     self.bottomPanGestureView.frame = CGRectMake(0, self.subBgView.height - edge, self.subBgView.width, edge);
-    self.subBgView.frame = CGRectMake(_imagePadding, _imagePadding, self.bounds.size.width - _imagePadding, self.bounds.size.height - _imagePadding);
-    self.scrollView.frame = self.subBgView.bounds;
     
     CGFloat fixMarginYMin = 10;
     CGFloat leftCanPanViewHeight = 0;
