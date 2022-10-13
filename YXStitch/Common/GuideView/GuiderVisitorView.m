@@ -77,16 +77,15 @@
     [self addSubview:_tipLab];
     [_tipLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_titleLab);
-        make.top.equalTo(_titleLab.mas_bottom).offset(31);
+        make.top.equalTo(_titleLab.mas_bottom).offset(11);
         make.height.equalTo(@50);
         make.width.equalTo(@(scWidth));
     }];
     _scrollView = [UIScrollView new];
     _scrollView.delegate = self;
     [self addSubview:_scrollView];
-    
     [_scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(@186);
+        make.top.equalTo(@146);
         make.left.equalTo(@31);
         make.height.equalTo(@314);
         make.width.equalTo(@(scWidth));
@@ -114,13 +113,7 @@
     }
     self.scrollView.delegate = self;
     //设置页面
-    CGFloat pageHeight = 0;
-    if ([Tools isIPhoneNotchScreen]) {
-        pageHeight = 535;
-    }else{
-        pageHeight = 565;
-    }
-    self.pageC = [[UIPageControl alloc]initWithFrame:CGRectMake(-200, pageHeight , 100, 40)];
+    self.pageC = [[UIPageControl alloc]initWithFrame:CGRectMake(-200, 565 - 60 , 100, 40)];
     self.pageC.backgroundColor = [UIColor clearColor];
     //把页码添加到头视图上
     [self addSubview:self.pageC];

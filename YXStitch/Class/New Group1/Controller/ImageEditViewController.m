@@ -109,16 +109,10 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor blackColor];
     self.title = [NSString stringWithFormat:@"%@",_titleStr];
-    _isSelectPath = NO;
-    _isStartPaint = NO;
-    _isShellVer = _isVer;
-    _ishaveBkColor = YES;
-    _isHaveBang = NO;
-    _isAddShell = NO;
+    [self viewInitSetting];
     [self setupViews];
     [self setupNavItems];
     [self addBottomView];
-    
     [self addGestureRecognizer];
     
 }
@@ -337,6 +331,15 @@
     //    [_contentView addGestureRecognizer:_panRecognizer];
     _pinchRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinch:)];
     [_contentScrollView addGestureRecognizer:_pinchRecognizer];
+}
+
+-(void)viewInitSetting{
+    _isSelectPath = NO;
+    _isStartPaint = NO;
+    _isShellVer = _isVer;
+    _ishaveBkColor = YES;
+    _isHaveBang = NO;
+    _isAddShell = NO;
 }
 
 #pragma mark ---btnClick && viewDelegateClick

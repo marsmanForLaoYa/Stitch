@@ -424,8 +424,8 @@
     }
     if (_guiderView == nil){
         _guiderView = [GuiderVisitorView new];
-        _guiderView.frame = CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, RYRealAdaptWidthValue(565));
-       
+        _guiderView.frame = CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, 565);
+ 
         [self.view addSubview:_guiderView];
     }
     

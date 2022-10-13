@@ -14,18 +14,6 @@
 
 #define APP_TOKEN  @"5bb48865c0984c0cd6a684ce18aca6425b77dea312f8c3fd8427ef25cda284a1e50fec2757672344fc891509c30a7d698ffe98bb52fbf8c4c1d262b5d04b413d"
 
-#define ADMIN_ACCOUNT @"kangwenquan@skyworth.com"
-#define ADMIN_PWD  @"sky123456"
-
-
-
-//拼接前缀
-#define PRE_FIX  @"zhuchuncheng."
-
-//拼接后缀
-#define SUF_FIX  @"@skyworth.com"
-
-
 #pragma mark- 高度
 #define SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
 #define SCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
