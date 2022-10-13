@@ -1894,7 +1894,7 @@
 				GCC_PREFIX_HEADER = "$(SRCROOT)/YXStitch/Global/PrefixHeader.pch";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = YXStitch/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "快捷拼图";
+				INFOPLIST_KEY_CFBundleDisplayName = "快捷截长图";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -1934,7 +1934,7 @@
 				GCC_PREFIX_HEADER = "$(SRCROOT)/YXStitch/Global/PrefixHeader.pch";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = YXStitch/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "快捷拼图";
+				INFOPLIST_KEY_CFBundleDisplayName = "快捷截长图";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

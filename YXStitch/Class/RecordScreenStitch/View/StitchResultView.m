@@ -12,18 +12,16 @@
 
 
 #define MIN_HEIGHT 50
-#define EDITOR_BAR_HEIGHT 2
+#define EDITOR_BAR_HEIGHT 0
 
 @interface StitchResultView ()
 
-@property (nonatomic,strong)  UIImage         *image;
-@property (nonatomic,assign)  CGFloat          totoalHeight;
+@property (nonatomic,strong)  UIImage *image;
+@property (nonatomic,assign)  CGFloat totoalHeight;
 
 @property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) NSMutableArray *editViews;
-@property (nonatomic, strong) NSMutableArray *imageViews;
 @property (nonatomic, assign) BOOL isLoadView;
-
 @property (nonatomic, assign) BOOL scrollEnable;
 @end
 

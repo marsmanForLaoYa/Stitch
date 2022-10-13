@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,copy)  dispatch_block_t completion;
 @property (nonatomic, strong)SZImageGenerator *generator;
 @property (nonatomic,strong)NSMutableArray *dataImageViews;
-
+@property (nonatomic, strong) NSMutableArray *imageViews;
 //- (id)initWithFrame:(CGRect)frame andGenerator :(SZImageGenerator *)generator;
 
 - (instancetype)initWithImage:(UIImage *)image;

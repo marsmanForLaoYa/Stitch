@@ -172,6 +172,61 @@
     UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithCustomView:leftBtn];
     self.navigationItem.leftBarButtonItem = item;
 }
+-(void)setupBottomViewWithType:(NSInteger )type{
+    [_bottomView removeAllSubviews];
+    if(type == 1){
+        UILabel *tipLab = [UILabel new];
+        tipLab.text = @"点击或滑动来选择图片";
+        tipLab.font = FontBold(16);
+        tipLab.textAlignment = NSTextAlignmentCenter;
+        [_bottomView addSubview:tipLab];
+        [tipLab mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerX.centerY.equalTo(_bottomView);
+        }];
+    }else {
+        NSArray *iconArr ;
+        NSArray *textArr;
+        if (type == 2){
+            iconArr = @[@"裁切icon",@"黑编辑icon"];
+            textArr = @[@"裁切",@"编辑"];
+        }else{
+            iconArr = @[@"截长屏icon",@"拼接icon",@"布局icon",@"字幕icon"];
+            textArr = @[@"截长屏",@"拼接",@"布局",@"字幕"];
+        }
+        CGFloat btnWidth = _bottomView.width / iconArr.count;
+        for (NSInteger i = 0; i < iconArr.count; i ++) {
+            UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
+            btn.tag = type * 100 + i;
+            [btn addTarget:self action:@selector(imgEdit:) forControlEvents:UIControlEventTouchUpInside];
+            [_bottomView addSubview:btn];
+            [btn mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.width.equalTo(@(btnWidth));
+                make.height.top.equalTo(_bottomView);
+                make.left.equalTo(@( i * btnWidth));
+            }];
+            
+            UIImageView *icon = [UIImageView new];
+            icon.image = IMG(iconArr[i]);
+            [btn addSubview:icon];
+            [icon mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.width.height.equalTo(@22);
+                make.centerX.equalTo(btn);
+                make.top.equalTo(@8);
+            }];
+            
+            UILabel *textLab = [UILabel new];
+            textLab.textAlignment = NSTextAlignmentCenter;
+            textLab.text = textArr[i];
+            textLab.font = Font13;
+            textLab.textColor = [UIColor blackColor];
+            [btn addSubview:textLab];
+            [textLab mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.width.left.equalTo(btn);
+                make.top.equalTo(icon.mas_bottom).offset(4);
+            }];
+        }
+    }
+}
         
 #pragma mark -- CollectionDelegate
 
@@ -357,7 +412,7 @@
 }
 
 
-#pragma mark -- btn触发事件
+#pragma mark -- btnClick &  viewDelegate
 -(void)leftBtnClick:(UIButton *)btn{
     //滚动截图指引
     MJWeakSelf
@@ -387,8 +442,6 @@
     }];
 }
 
-
-#pragma mark -- viewDelegate
 -(void)stitchBtnClickWithTag:(NSInteger)tag{
     MJWeakSelf
     if (tag == 4){
@@ -460,6 +513,58 @@
         make.height.equalTo(@(_checkScreenStitchView.height - 128));
     }];
 }
+-(void)btnClickWithTag:(NSInteger)tag{
+    MJWeakSelf
+    if (tag == 1) {
+        [_funcView removeFromSuperview];
+//        [self.navigationController pushViewController:[BuyViewController new] animated:YES];
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"dismiss" object:nil];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [weakSelf.navigationController pushViewController:[BuyViewController new ] animated:YES];
+        });
+    }else{
+        MJWeakSelf
+        if (_bgView == nil){
+            _bgView = [Tools addBGViewWithFrame:self.view.frame];
+            [self.view addSubview:_bgView];
+        }else{
+            _bgView.hidden = NO;
+            [self.view bringSubviewToFront:_bgView];
+        }
+        if (_checkProView == nil){
+            _checkProView = [[CheckProView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, 550)];
+            _checkProView.delegate = self;
+            [self.view.window addSubview:_checkProView];
+        }
+        _checkProView.hidden = NO;
+        [self.view.window bringSubviewToFront:_checkProView];
+        [UIView animateWithDuration:0.3 animations:^{
+            weakSelf.checkProView.frame = CGRectMake(0, SCREEN_HEIGHT - weakSelf.checkProView.height, SCREEN_WIDTH , weakSelf.checkProView.height);
+        }];
+    }
+}
+
+-(void)cancelClickWithTag:(NSInteger)tag{
+    MJWeakSelf
+    if (tag == 1){
+        [UIView animateWithDuration:0.3 animations:^{
+            weakSelf.checkProView.frame = CGRectMake(0, SCREEN_HEIGHT + 100, SCREEN_WIDTH , weakSelf.checkProView.height);
+            weakSelf.bgView.hidden = YES;
+        }];
+    }else{
+        [UIView animateWithDuration:0.3 animations:^{
+            weakSelf.checkProView.frame = CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, 550);
+        } completion:^(BOOL finished) {
+            weakSelf.bgView.hidden = YES;
+            [weakSelf.checkProView removeFromSuperview];
+        }];
+        [_funcView removeFromSuperview];
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"dismiss" object:nil];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [weakSelf.navigationController pushViewController:[BuyViewController new] animated:YES];
+        });
+    }
+}
 #pragma mark 定时器检测图片选择器状态
 -(void)timerMethod{
     if (_isOpenAlbum){
@@ -523,58 +628,7 @@
     _clearBtn.hidden = YES;
 }
 
--(void)btnClickWithTag:(NSInteger)tag{
-    MJWeakSelf
-    if (tag == 1) {
-        [_funcView removeFromSuperview];
-//        [self.navigationController pushViewController:[BuyViewController new] animated:YES];
-        [[NSNotificationCenter defaultCenter]postNotificationName:@"dismiss" object:nil];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [weakSelf.navigationController pushViewController:[BuyViewController new ] animated:YES];
-        });
-    }else{
-        MJWeakSelf
-        if (_bgView == nil){
-            _bgView = [Tools addBGViewWithFrame:self.view.frame];
-            [self.view addSubview:_bgView];
-        }else{
-            _bgView.hidden = NO;
-            [self.view bringSubviewToFront:_bgView];
-        }
-        if (_checkProView == nil){
-            _checkProView = [[CheckProView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, 550)];
-            _checkProView.delegate = self;
-            [self.view.window addSubview:_checkProView];
-        }
-        _checkProView.hidden = NO;
-        [self.view.window bringSubviewToFront:_checkProView];
-        [UIView animateWithDuration:0.3 animations:^{
-            weakSelf.checkProView.frame = CGRectMake(0, SCREEN_HEIGHT - weakSelf.checkProView.height, SCREEN_WIDTH , weakSelf.checkProView.height);
-        }];
-    }
-}
 
--(void)cancelClickWithTag:(NSInteger)tag{
-    MJWeakSelf
-    if (tag == 1){
-        [UIView animateWithDuration:0.3 animations:^{
-            weakSelf.checkProView.frame = CGRectMake(0, SCREEN_HEIGHT + 100, SCREEN_WIDTH , weakSelf.checkProView.height);
-            weakSelf.bgView.hidden = YES;
-        }];
-    }else{
-        [UIView animateWithDuration:0.3 animations:^{
-            weakSelf.checkProView.frame = CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, 550);
-        } completion:^(BOOL finished) {
-            weakSelf.bgView.hidden = YES;
-            [weakSelf.checkProView removeFromSuperview];
-        }];
-        [_funcView removeFromSuperview];
-        [[NSNotificationCenter defaultCenter]postNotificationName:@"dismiss" object:nil];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [weakSelf.navigationController pushViewController:[BuyViewController new] animated:YES];
-        });
-    }
-}
 
 
 #pragma mark -- 清空选择图片
@@ -648,61 +702,7 @@
     [self.manager.selectedArray arrayByAddingObjectsFromArray:result.models];
 }
 
--(void)setupBottomViewWithType:(NSInteger )type{
-    [_bottomView removeAllSubviews];
-    if(type == 1){
-        UILabel *tipLab = [UILabel new];
-        tipLab.text = @"点击或滑动来选择图片";
-        tipLab.font = FontBold(16);
-        tipLab.textAlignment = NSTextAlignmentCenter;
-        [_bottomView addSubview:tipLab];
-        [tipLab mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.centerX.centerY.equalTo(_bottomView);
-        }];
-    }else {
-        NSArray *iconArr ;
-        NSArray *textArr;
-        if (type == 2){
-            iconArr = @[@"裁切icon",@"黑编辑icon"];
-            textArr = @[@"裁切",@"编辑"];
-        }else{
-            iconArr = @[@"截长屏icon",@"拼接icon",@"布局icon",@"字幕icon"];
-            textArr = @[@"截长屏",@"拼接",@"布局",@"字幕"];
-        }
-        CGFloat btnWidth = _bottomView.width / iconArr.count;
-        for (NSInteger i = 0; i < iconArr.count; i ++) {
-            UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
-            btn.tag = type * 100 + i;
-            [btn addTarget:self action:@selector(imgEdit:) forControlEvents:UIControlEventTouchUpInside];
-            [_bottomView addSubview:btn];
-            [btn mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.width.equalTo(@(btnWidth));
-                make.height.top.equalTo(_bottomView);
-                make.left.equalTo(@( i * btnWidth));
-            }];
-            
-            UIImageView *icon = [UIImageView new];
-            icon.image = IMG(iconArr[i]);
-            [btn addSubview:icon];
-            [icon mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.width.height.equalTo(@22);
-                make.centerX.equalTo(btn);
-                make.top.equalTo(@8);
-            }];
-            
-            UILabel *textLab = [UILabel new];
-            textLab.textAlignment = NSTextAlignmentCenter;
-            textLab.text = textArr[i];
-            textLab.font = Font13;
-            textLab.textColor = [UIColor blackColor];
-            [btn addSubview:textLab];
-            [textLab mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.width.left.equalTo(btn);
-                make.top.equalTo(icon.mas_bottom).offset(4);
-            }];
-        }
-    }
-}
+
 
 #pragma mark -- 图片编辑btn事件
 -(void)imgEdit:(UIButton *)btn{
@@ -762,10 +762,15 @@
                 CaptionViewController *vc = [CaptionViewController new];
                 vc.type = 4;
                 __block NSMutableArray *arr = [NSMutableArray array];
+                __block NSMutableArray *imgArr = [NSMutableArray array];
                 for (HXPhotoModel *photoModel in [self.manager selectedArray]) {
                     [arr addObject:photoModel.asset];
+                    [Tools getImageWithAsset:photoModel.asset withBlock:^(UIImage * _Nonnull image) {
+                        [imgArr addObject:image];
+                    }];
                 }
                 vc.dataArr = arr;
+                vc.editImgArr = imgArr;
                 [[NSNotificationCenter defaultCenter]postNotificationName:@"dismiss" object:nil];
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     [weakSelf.navigationController pushViewController:vc animated:YES];

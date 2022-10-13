@@ -34,7 +34,6 @@
 - (void)setupNavigationBar{
     //导航栏title格式
     NSMutableDictionary *textAttribute = [NSMutableDictionary dictionary];
-//    textAttribute[NSForegroundColorAttributeName] = [UIColor whiteColor];
     textAttribute[NSForegroundColorAttributeName] = [UIColor blackColor];
     textAttribute[NSFontAttributeName] = Font18;
     UINavigationBar *navigationBar = self.navigationController.navigationBar;
@@ -48,7 +47,6 @@
         navigationBar.standardAppearance = app;
     }else{
         //统一设置导航栏颜色，如果单个界面需要设置，可以在viewWillAppear里面设置，在viewWillDisappear设置回统一格式。
-    //    [appearance setBarTintColor:[UIColor whiteColor]];
         UINavigationBar *appearance = [UINavigationBar appearance];
         [appearance setBarTintColor:UIColor.whiteColor];
         [appearance setTitleTextAttributes:textAttribute];
@@ -59,8 +57,6 @@
 - (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
     if (self.viewControllers.count > 0) {
-        //viewController.hidesBottomBarWhenPushed = YES;
-
         UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
         [backButton setBackgroundImage:[UIImage imageNamed:@"black_leftBack"] forState:UIControlStateNormal];
        // [backButton setImageEdgeInsets:UIEdgeInsetsMake(0, -12, 0, 12)];
