@@ -42,5 +42,6 @@
 #import "IAPSubscribeTool.h"
 #import "XWNavigationController.h"
 #import "XWNavigationController+BarStyle.h"
+#import "ADDAlertView.h"
 
 #endif /* PrefixHeader_pch */

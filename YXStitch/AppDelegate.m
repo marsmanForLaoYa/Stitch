@@ -12,6 +12,7 @@
 #import <UMShare/UMShare.h>
 #import <UMCommon/UMCommon.h>
 #import "App.h"
+#import "XWTimerTool.h"
 @interface AppDelegate ()
 
 @end
@@ -37,6 +38,7 @@
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"firstLaunch"];
     }
 
+    [[XWTimerTool shareInstance] addAutoLoginTimer];
     [App sharedInstance];
     return YES;
 }

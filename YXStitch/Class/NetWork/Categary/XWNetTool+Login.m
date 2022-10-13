@@ -176,38 +176,65 @@
     }];
 }
 
+- (NSURLSessionDataTask *)queryApplicationListWithCallback:(void(^)(BOOL isSuccess, NSString * _Nullable errorMsg))callback
+{
+    NSDictionary *params = @{
+        @"appname":[[NSBundle mainBundle] bundleIdentifier],
+        @"version":[NSBundle mainBundle].infoDictionary[@"CFBundleShortVersionString"]
+    };
+    
+    return [self getRequestWithUrl:API_HOME_APPLICATION_LIST withParam:params success:^(id  _Nullable responseObject) {
+        
+        BOOL isProcessing = NO;
+        if ([[responseObject allKeys] containsObject:@"is_review"]) {
+            isProcessing = [responseObject[@"is_review"] boolValue];
+        }
+        
+        if ([[responseObject allKeys] containsObject:@"advertisements"]) {
+            NSArray *adverArr = responseObject[@"advertisements"];
+            if (adverArr.count>0) {
+                NSDictionary *alertDic =adverArr[0];
+                [User current].advertisingDic = [NSDictionary dictionaryWithDictionary:alertDic];
+            }
+        }
+        callback(YES, nil);
+        
+    } failure:^(NSError * _Nonnull error) {
+        callback(NO, error.description);
+    }];
+}
+
 - (void)showADAlertView {
 
-//    if ([videoChangeTool sharedInstance].AlertImgDic && [[[videoChangeTool sharedInstance].AlertImgDic allKeys] containsObject:@"image"] && [[[videoChangeTool sharedInstance].AlertImgDic allKeys] containsObject:@"url"]) {
-//        [self AddViewWithInfoDic:[videoChangeTool sharedInstance].AlertImgDic];
-//    }else {
-//        [[XWNetTool sharedInstance] queryApplicationListWithCallback:^(NSArray<HomeModel *> * _Nullable dataSources, BOOL isAppStore, NSString * _Nullable errorMsg) {
-//      
-//            if (!errorMsg) {
-//                [self AddViewWithInfoDic:[videoChangeTool sharedInstance].AlertImgDic];
-//            }
-//        }];
-//    }
+    if ([User current].advertisingDic && [[[User current].advertisingDic allKeys] containsObject:@"image"] && [[[User current].advertisingDic allKeys] containsObject:@"url"]) {
+        [self AddViewWithInfoDic:[User current].advertisingDic];
+    }else {
+        [self queryApplicationListWithCallback:^(BOOL isSuccess, NSString * _Nullable errorMsg) {
+            if (isSuccess) {
+                [self AddViewWithInfoDic:[User current].advertisingDic];
+            }
+        }];
+    }
 }
 
 // 添加view
 - (void)AddViewWithInfoDic:(NSDictionary *)infoDic{
     
-//    if([infoDic allKeys].count == 0)
-//    {
-//        return;
-//    }
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        ADDAlertView *view = [[ADDAlertView alloc] init];
-//        view.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight);
-//        if ([[infoDic allKeys] containsObject:@"image"]) {
-//            view.imgStr = infoDic[@"image"];
-//        }
-//        if ([[infoDic allKeys] containsObject:@"url"]) {
-//            view.urlStr = infoDic[@"url"];
-//        }
-//        [[UIApplication sharedApplication].keyWindow addSubview:view];
-//    });
+    if([infoDic allKeys].count == 0)
+    {
+        return;
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        ADDAlertView *view = [[ADDAlertView alloc] init];
+        view.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight);
+        if ([[infoDic allKeys] containsObject:@"image"]) {
+            view.imgStr = infoDic[@"image"];
+        }
+        if ([[infoDic allKeys] containsObject:@"url"]) {
+            view.urlStr = infoDic[@"url"];
+        }
+        [[UIApplication sharedApplication].keyWindow addSubview:view];
+    });
 }
 
 @end

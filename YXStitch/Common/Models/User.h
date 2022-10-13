@@ -40,6 +40,9 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - 邀请码，第一次从剪切板获取，上传服务器后从用户信息接口获取
 @property (nonatomic, copy) NSString *invitation_code;
 
+#pragma mark - 广告
+@property (nonatomic, copy) NSDictionary *advertisingDic;
+
 #pragma mark - share
 //分享描述
 @property (nonatomic, copy) NSString *shareDescription;

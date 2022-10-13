@@ -20,6 +20,8 @@
 		BBB4688D28F57CE200F15765 /* SharePath.m in Sources */ = {isa = PBXBuildFile; fileRef = BBB4687928F57A9200F15765 /* SharePath.m */; };
 		BBB4688E28F57CF100F15765 /* XWOpenCVHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBB4687528F57A2100F15765 /* XWOpenCVHelper.mm */; };
 		BBB4689228F580EA00F15765 /* App.m in Sources */ = {isa = PBXBuildFile; fileRef = BBB4689128F580EA00F15765 /* App.m */; };
+		BBB960C528F81E8400AD8B75 /* XWTimerTool.m in Sources */ = {isa = PBXBuildFile; fileRef = BBB960C428F81E8400AD8B75 /* XWTimerTool.m */; };
+		BBB960C828F824EC00AD8B75 /* ADDAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBB960C728F824EC00AD8B75 /* ADDAlertView.m */; };
 		BBBBA3D028F1069000406C43 /* PictureLayoutController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBBA3BE28F1069000406C43 /* PictureLayoutController.m */; };
 		BBBBA3D128F1069000406C43 /* GridCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBBA3C028F1069000406C43 /* GridCell.m */; };
 		BBBBA3D228F1069000406C43 /* GridSelectedView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBBA3C428F1069000406C43 /* GridSelectedView.m */; };
@@ -241,6 +243,10 @@
 		BBB4688928F57C8700F15765 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		BBB4689028F580EA00F15765 /* App.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = App.h; sourceTree = "<group>"; };
 		BBB4689128F580EA00F15765 /* App.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = App.m; sourceTree = "<group>"; };
+		BBB960C328F81E8400AD8B75 /* XWTimerTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XWTimerTool.h; sourceTree = "<group>"; };
+		BBB960C428F81E8400AD8B75 /* XWTimerTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XWTimerTool.m; sourceTree = "<group>"; };
+		BBB960C628F824EC00AD8B75 /* ADDAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADDAlertView.h; sourceTree = "<group>"; };
+		BBB960C728F824EC00AD8B75 /* ADDAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ADDAlertView.m; sourceTree = "<group>"; };
 		BBBBA3BD28F1069000406C43 /* PictureLayoutController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PictureLayoutController.h; sourceTree = "<group>"; };
 		BBBBA3BE28F1069000406C43 /* PictureLayoutController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PictureLayoutController.m; sourceTree = "<group>"; };
 		BBBBA3C028F1069000406C43 /* GridCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GridCell.m; sourceTree = "<group>"; };
@@ -1198,6 +1204,8 @@
 		FB687EEC28A0DEA6002D557B /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				BBB960C328F81E8400AD8B75 /* XWTimerTool.h */,
+				BBB960C428F81E8400AD8B75 /* XWTimerTool.m */,
 				FB1AB31F28F66B2F008C36FC /* HandlerVideo.h */,
 				FB1AB32028F66B2F008C36FC /* HandlerVideo.m */,
 				BBC92AFE28F69A390023E80F /* IAPSubscribeTool.h */,
@@ -1242,6 +1250,8 @@
 		FB687EEF28A0DEC3002D557B /* Base */ = {
 			isa = PBXGroup;
 			children = (
+				BBB960C628F824EC00AD8B75 /* ADDAlertView.h */,
+				BBB960C728F824EC00AD8B75 /* ADDAlertView.m */,
 				FB687EFD28A0E9F1002D557B /* BaseView.h */,
 				FB687EFA28A0E9F1002D557B /* BaseView.m */,
 				FB2D5A0828A1F4AF006085BC /* BaseViewController.h */,
@@ -1606,6 +1616,7 @@
 				FB2E283928AA1A13006BDAB0 /* SZImageGenerator.m in Sources */,
 				FB3EFE8C28A3CB07006C3889 /* GVUserDefaults+Properties.m in Sources */,
 				FB2E283728AA1A13006BDAB0 /* SZImageMergeInfo.m in Sources */,
+				BBB960C828F824EC00AD8B75 /* ADDAlertView.m in Sources */,
 				FB1AB32128F66B2F008C36FC /* HandlerVideo.m in Sources */,
 				FB687F0D28A0FF83002D557B /* AppGroupData.m in Sources */,
 				FB687EB128A0DE2E002D557B /* ViewController.m in Sources */,
@@ -1614,6 +1625,7 @@
 				BBC92B2C28F6A2240023E80F /* XWNavigationController+BarStyle.m in Sources */,
 				BBBBA3EB28F10C9900406C43 /* GridScaleView.m in Sources */,
 				FB2D5A0A28A1F4AF006085BC /* BaseViewController.m in Sources */,
+				BBB960C528F81E8400AD8B75 /* XWTimerTool.m in Sources */,
 				BBC92AD628F670C80023E80F /* XWNetTool.m in Sources */,
 				FB2E283828AA1A13006BDAB0 /* SZConstraint.m in Sources */,
 				FB3EFE4728A3A423006C3889 /* BuyDetailView.m in Sources */,

@@ -137,6 +137,11 @@
 		<string>public.text</string>
 		<string>public.data</string>
 	</array>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 	<key>PHPhotoLibraryPreventAutomaticLimitedAccessAlert</key>
 	<false/>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
