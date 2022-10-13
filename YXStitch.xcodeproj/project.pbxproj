@@ -635,16 +635,16 @@
 			children = (
 				BBBBA3C528F1069000406C43 /* GridCell.h */,
 				BBBBA3C028F1069000406C43 /* GridCell.m */,
+				BBBBA3EE28F180D600406C43 /* GridEditView.h */,
+				BBBBA3EF28F180D600406C43 /* GridEditView.m */,
+				BBBBA3E928F10C9900406C43 /* GridScaleView.h */,
+				BBBBA3EA28F10C9900406C43 /* GridScaleView.m */,
 				BBBBA3C128F1069000406C43 /* GridSelectedView.h */,
 				BBBBA3C428F1069000406C43 /* GridSelectedView.m */,
 				BBBBA3E628F1076300406C43 /* GridShowView.h */,
 				BBBBA3E728F1076300406C43 /* GridShowView.m */,
-				BBBBA3E928F10C9900406C43 /* GridScaleView.h */,
-				BBBBA3EA28F10C9900406C43 /* GridScaleView.m */,
 				BBBBA3C328F1069000406C43 /* LayoutBottomView.h */,
 				BBBBA3C728F1069000406C43 /* LayoutBottomView.m */,
-				BBBBA3EE28F180D600406C43 /* GridEditView.h */,
-				BBBBA3EF28F180D600406C43 /* GridEditView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -669,11 +669,11 @@
 			isa = PBXGroup;
 			children = (
 				BBC92AC428F670C80023E80F /* Categary */,
-				BBC92ACB28F670C80023E80F /* XWNetTool.m */,
-				BBC92ACC28F670C80023E80F /* XWNetTool.h */,
 				BBC92ACD28F670C80023E80F /* NetworkAPI.h */,
 				BBC92ACE28F670C80023E80F /* NetworkErrorCode.h */,
 				BBC92ADE28F6731D0023E80F /* NetWorkout.h */,
+				BBC92ACC28F670C80023E80F /* XWNetTool.h */,
+				BBC92ACB28F670C80023E80F /* XWNetTool.m */,
 			);
 			path = NetWork;
 			sourceTree = "<group>";
@@ -981,9 +981,9 @@
 				FB687F0128A0EA1C002D557B /* Appconfig.h */,
 				FB687F0028A0EA1C002D557B /* Color.h */,
 				FB687F0228A0EA1C002D557B /* CustomDefine.h */,
-				FB687EF628A0E0D2002D557B /* PrefixHeader.pch */,
 				FB3EFE8B28A3CB07006C3889 /* GVUserDefaults+Properties.h */,
 				FB3EFE8A28A3CB07006C3889 /* GVUserDefaults+Properties.m */,
+				FB687EF628A0E0D2002D557B /* PrefixHeader.pch */,
 			);
 			path = Global;
 			sourceTree = "<group>";
