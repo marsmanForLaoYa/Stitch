@@ -109,16 +109,10 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor blackColor];
     self.title = [NSString stringWithFormat:@"%@",_titleStr];
-    _isSelectPath = NO;
-    _isStartPaint = NO;
-    _isShellVer = _isVer;
-    _ishaveBkColor = YES;
-    _isHaveBang = NO;
-    _isAddShell = NO;
+    [self viewInitSetting];
     [self setupViews];
     [self setupNavItems];
     [self addBottomView];
-    
     [self addGestureRecognizer];
     
 }
@@ -274,7 +268,7 @@
     UIButton *saveBtn = [UIButton buttonWithType:UIButtonTypeSystem];
     saveBtn.tag = 0;
     [saveBtn setBackgroundImage:IMG(@"水印保存") forState:UIControlStateNormal];
-    [saveBtn addTarget:self action:@selector(checkBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    [saveBtn addTarget:self action:@selector(topBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *saveItem = [[UIBarButtonItem alloc]initWithCustomView:saveBtn];
     self.navigationItem.rightBarButtonItem = saveItem;
     
@@ -282,7 +276,7 @@
     leftBtn.tag = 1;
     [leftBtn setBackgroundImage:IMG(@"stitch_white_back") forState:UIControlStateNormal];
     [leftBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [leftBtn addTarget:self action:@selector(checkBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    [leftBtn addTarget:self action:@selector(topBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithCustomView:leftBtn];
     self.navigationItem.leftBarButtonItem = item;
 }
@@ -339,8 +333,17 @@
     [_contentScrollView addGestureRecognizer:_pinchRecognizer];
 }
 
+-(void)viewInitSetting{
+    _isSelectPath = NO;
+    _isStartPaint = NO;
+    _isShellVer = _isVer;
+    _ishaveBkColor = YES;
+    _isHaveBang = NO;
+    _isAddShell = NO;
+}
+
 #pragma mark ---btnClick && viewDelegateClick
--(void)checkBtnClick:(UIButton *)btn{
+-(void)topBtnClick:(UIButton *)btn{
     MJWeakSelf
     if (btn.tag == 0){
         [SVProgressHUD showWithStatus:@"正在生成图片中.."];
