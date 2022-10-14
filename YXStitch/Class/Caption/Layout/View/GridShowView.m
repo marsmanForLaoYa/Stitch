@@ -1435,12 +1435,12 @@
 
 //判断左右边距 是否重叠 NO重叠 YES不重叠
 - (BOOL)judgeBottomAndTopIsNoOverlapBetweenView1:(GridShowImgView *)view1 secondView:(GridShowImgView *)view2 {
-    NSLog(@"view1 left:%f view2 left:%f view1 right:%f view2 right:%f", view1.left, view2.left, view1.right, view2.right);
-
-    NSLog(@"%d %d %d %d", view1.left <= view2.left && view1.right > view2.left && view1.right <= view2.right, view1.left >= view2.left && view1.right <= view2.right, view1.left >= view2.left && view1.left < view2.right && view1.right >= view2.right, view1.left <= view2.left && view1.right >= view2.right);
-
-    NSLog(@"%f", view1.right - view2.left);
-    NSLog(@"%d", view1.right > view2.left);
+//    NSLog(@"view1 left:%f view2 left:%f view1 right:%f view2 right:%f", view1.left, view2.left, view1.right, view2.right);
+//
+//    NSLog(@"%d %d %d %d", view1.left <= view2.left && view1.right > view2.left && view1.right <= view2.right, view1.left >= view2.left && view1.right <= view2.right, view1.left >= view2.left && view1.left < view2.right && view1.right >= view2.right, view1.left <= view2.left && view1.right >= view2.right);
+//
+//    NSLog(@"%f", view1.right - view2.left);
+//    NSLog(@"%d", view1.right > view2.left);
     if(
         (view1.left <= view2.left && view1.right - view2.left > kCompensatePrecision && view1.right <= view2.right) ||
         (view1.left >= view2.left && view1.right <= view2.right) ||

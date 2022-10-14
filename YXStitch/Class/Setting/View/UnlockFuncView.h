@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 @interface UnlockFuncView : BaseView
 @property (nonatomic, assign) id<UnlockFuncViewDelegate> delegate;
-@property (nonatomic, assign) NSInteger type;//1=一键删除原图 2=自定义水印设置 =3 图片数量限制 =4带壳截图
+@property (nonatomic, assign) NSInteger type;//1=一键删除原图 2=自定义水印设置 =3 图片数量限制 =4带壳截图 =5布局
 @end
 
 NS_ASSUME_NONNULL_END
