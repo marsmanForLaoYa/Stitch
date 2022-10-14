@@ -77,10 +77,8 @@
 }
 
 -(void)btnClickWithTag:(NSInteger)tag{
-    MJWeakSelf
     if (tag == 1) {
         [_funcView removeFromSuperview];
-
         UIViewController *vc = [self viewController];
         [vc.navigationController pushViewController:[BuyViewController new] animated:YES];
     }else{
@@ -90,7 +88,6 @@
             [[UIApplication sharedApplication].keyWindow addSubview:_bgView];
         }else{
             _bgView.hidden = NO;
-            [[UIApplication sharedApplication].keyWindow bringSubviewToFront:_bgView];
         }
         if (_checkProView == nil){
             _checkProView = [[CheckProView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, 550)];
@@ -117,10 +114,9 @@
             weakSelf.checkProView.frame = CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, 550);
         } completion:^(BOOL finished) {
             weakSelf.bgView.hidden = YES;
-            [weakSelf.checkProView removeFromSuperview];
+            weakSelf.checkProView.hidden = YES;
         }];
         [_funcView removeFromSuperview];
-        
         UIViewController *vc = [self viewController];
         [vc.navigationController pushViewController:[BuyViewController new] animated:YES];
     }
