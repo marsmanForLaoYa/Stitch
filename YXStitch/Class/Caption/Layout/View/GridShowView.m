@@ -148,7 +148,8 @@
             
             showImgView.image = self.pictures[index];
             showImgView.index = index;
-
+            //初始化可拖动view
+            [showImgView initGestureView];
             //设置可编辑的边缘
             showImgView.gridPanEdge = [self getPanEdgeWithImageView:showImgView];
 
@@ -845,6 +846,8 @@
     }
     else
     {
+        self.lastShowImgView.gridEditing = self.lastShowImgView.gridEditing;
+        gridElementView.gridEditing = gridElementView.gridEditing;
         gridElementView.center = _originCenter;
     }
 }
@@ -1616,6 +1619,7 @@
 
 - (void)setGridPanEdge:(GridPanEdge)gridPanEdge
 {
+    [self initGestureView];
     _gridPanEdge = gridPanEdge;
     if(gridPanEdge & GridPanEdgeTop) {
         self.topPanGestureView.hidden = NO;
@@ -1696,7 +1700,6 @@
 
 - (void)showEditBorder
 {
-    [self initGestureView];
     if(self.gridPanEdge & GridPanEdgeTop) {
         self.topCanPanView.hidden = NO;
     }
