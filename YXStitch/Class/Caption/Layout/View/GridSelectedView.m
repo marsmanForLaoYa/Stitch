@@ -64,23 +64,12 @@
     [self collectionView:self.collectionView didSelectItemAtIndexPath:indexPath];
 }
 
-- (UIViewController *)viewController {
-    // 遍历响应者链。返回第一个找到视图控制器
-    UIResponder *responder = self;
-    while ((responder = [responder nextResponder])){
-        if ([responder isKindOfClass: [UIViewController class]]){
-            return (UIViewController *)responder;
-        }
-    }
-    // 如果没有找到则返回nil
-    return nil;
-}
-
+#pragma mark - UnlockFuncViewDelegate
 -(void)btnClickWithTag:(NSInteger)tag{
     if (tag == 1) {
         [_funcView removeFromSuperview];
-        UIViewController *vc = [self viewController];
-        [vc.navigationController pushViewController:[BuyViewController new] animated:YES];
+
+        [self.viewController.navigationController pushViewController:[BuyViewController new] animated:YES];
     }else{
         MJWeakSelf
         if (_bgView == nil){
@@ -102,6 +91,7 @@
     }
 }
 
+#pragma mark - CheckProViewDelegate
 -(void)cancelClickWithTag:(NSInteger)tag{
     MJWeakSelf
     if (tag == 1){
@@ -117,8 +107,8 @@
             weakSelf.checkProView.hidden = YES;
         }];
         [_funcView removeFromSuperview];
-        UIViewController *vc = [self viewController];
-        [vc.navigationController pushViewController:[BuyViewController new] animated:YES];
+
+        [self.viewController.navigationController pushViewController:[BuyViewController new] animated:YES];
     }
 }
 
