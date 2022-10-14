@@ -854,9 +854,14 @@
 
 - (GridShowImgView *)getGridShowImgViewWithPoint:(CGPoint)point gridElementView:(GridShowImgView *)gridElementView {
     GridShowImgView *imgView = nil;
+    
     for (GridShowImgView *showImgView in self.gridsImageViews) {
        
         [showImgView clearBorderOnly];
+    }
+    
+    for (GridShowImgView *showImgView in self.gridsImageViews) {
+       
         if(![gridElementView isEqual:showImgView]) {
             if(gridElementView) {
                 if(CGRectContainsPoint(showImgView.frame, point)) {
