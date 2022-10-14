@@ -1514,7 +1514,7 @@
         self.backgroundColor = [UIColor clearColor];
         [self configViews];
     }
-    return self;    
+    return self;
 }
 
 - (void)configViews{
@@ -1551,11 +1551,6 @@
     //添加缩放手势
     UIPinchGestureRecognizer *pinch = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchSelectedViewAction:)];
     [self.imageView addGestureRecognizer:pinch];
-    
-//    UIPanGestureRecognizer *subBgViewPanGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panActionAfterLongPress:)];
-    
-//    self.scrollView.scrollEnabled = NO;
-//    [self addGestureRecognizer:subBgViewPanGesture];
 }
 
 #pragma mark - setter

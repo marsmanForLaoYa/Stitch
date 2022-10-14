@@ -9,7 +9,7 @@
 #define NetworkAPI_h
 
 #pragma mark - 服务器接口地址
-#define BASEURL_DOMAIN @"http://api.rocketbrowser.xyz/jigsaw/"
+#define BASEURL_DOMAIN @"http://api.pintu365app.com/jigsaw/"
 
 //HOME
 #define API_HOME_APPLICATION_LIST @"v1/application/list"

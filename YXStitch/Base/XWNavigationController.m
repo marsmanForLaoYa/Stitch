@@ -39,16 +39,16 @@
     if (self.viewControllers.count > 0) {
         //viewController.hidesBottomBarWhenPushed = YES;
 
-        UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
+        UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 25, 30)];
         
-        [backButton setBackgroundImage:[UIImage imageNamed:@"black_leftBack"] forState:UIControlStateNormal];
+        [backButton setImage:[UIImage imageNamed:@"stitch_black_back"] forState:UIControlStateNormal];
        // [backButton setImageEdgeInsets:UIEdgeInsetsMake(0, -12, 0, 12)];
         [backButton addTarget:self action:@selector(popView) forControlEvents:UIControlEventTouchUpInside];
         
         UIBarButtonItem *backItem = [[UIBarButtonItem alloc]initWithCustomView:backButton];
         //  再创建一个空白的UIBarButtonItem，通过设置他的宽度可以偏移其右侧的返回按钮的位置
         
-        UIBarButtonItem *spaceItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+        UIBarButtonItem *spaceItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:self action:@selector(popView)];
         
         spaceItem.width = 5;
         //  将两个UIBarButtonItem设置给当前的VC
