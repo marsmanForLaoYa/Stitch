@@ -209,6 +209,7 @@
     self.pictures = [NSArray arrayWithArray:arrImages];
 }
 
+#pragma mark - 判断可以拖动的方向
 - (GridPanEdge)getPanEdgeWithImageView:(GridShowImgView *)imageView {
     GridPanEdge panEdge = GridPanEdgeNone;
     if(imageView.left > kCompensatePrecision) {
@@ -219,11 +220,11 @@
         panEdge = panEdge | GridPanEdgeTop;
     }
     
-    if(fabs(imageView.right - self.width) > kCompensatePrecision) {
+    if(fabs(imageView.right - self.bgView.width) > kCompensatePrecision) {
         panEdge = panEdge | GridPanEdgeRight;
     }
     
-    if(fabs(imageView.bottom - self.height) > kCompensatePrecision) {
+    if(fabs(imageView.bottom - self.bgView.height) > kCompensatePrecision) {
         panEdge = panEdge | GridPanEdgeBottom;
     }
     return panEdge;
@@ -250,7 +251,7 @@
     return _gridsImageViewFrame;
 }
 
-#pragma mark - GridShowImgViewDelegate
+#pragma mark - GridShowImgViewDelegate panGesture
 - (void)panGestureBeganWithGridElementView:(GridShowImgView *)gridElementView panViewEdge:(PanViewEdge)panViewEdge
 {
     if(panViewEdge == PanViewEdgeBottom) {
@@ -1513,7 +1514,7 @@
         self.backgroundColor = [UIColor clearColor];
         [self configViews];
     }
-    return self;
+    return self;    
 }
 
 - (void)configViews{
