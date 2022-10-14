@@ -38,7 +38,9 @@
         case 4:
             imgStr = @"带壳截图";
             break;
-            
+        case 5:
+            imgStr = @"layout_view_vip";
+            break;
         default:
             break;
     }
