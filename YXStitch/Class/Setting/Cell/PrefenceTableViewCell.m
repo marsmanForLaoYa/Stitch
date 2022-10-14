@@ -34,15 +34,13 @@
     _funcswitch.tag = self.tag;
     _funcswitch.onTintColor = HexColor(@"#166BFF");
     _funcswitch.tintColor = HexColor(@"#999999");
-    
-    
+  
     [_funcswitch addTarget:self action:@selector(switchAction:) forControlEvents:UIControlEventValueChanged];
     [self.contentView addSubview:_funcswitch];
     [_funcswitch mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self);
         make.right.equalTo(self).offset(-15);
     }];
-//    [self addSubview:[Tools getLineWithFrame:CGRectMake(16, 39, SCREEN_WIDTH-16, 1)]];
 }
 
 - (void)configModel:(NSString *)str andTag:(NSInteger)tag{
@@ -51,7 +49,7 @@
     _funcswitch.tag = tag;
     if (tag == 1){
         //判断是否是会员 不是显示弹窗
-        if(GVUserDe.isMember){
+        if(User.checkIsVipMember){
             _funcswitch.userInteractionEnabled = YES;
         }else{
             _funcswitch.userInteractionEnabled = NO;

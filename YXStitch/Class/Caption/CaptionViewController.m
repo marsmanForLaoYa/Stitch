@@ -1063,7 +1063,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
         changeImageView.top = lastStichimageView.bottom;
         lastStichimageView = changeImageView;
     }
-
+    
 }
 
 
@@ -1109,7 +1109,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                 return;
             }else{
                 imageView.imgView.left = imageView.imgView.left + offsetP;
-               // imageView.width = imageView.width + offsetP;
+                // imageView.width = imageView.width + offsetP;
             }
         }else{
             if (tmpF > imageView.imgView.width){
@@ -1128,7 +1128,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
             changeImageView.left = lastStichimageView.right;
             lastStichimageView = changeImageView;
         }
-       
+        
     }else if(_moveIndex == _imageViews.count + 1){
         //移动最后一张右边 只能
         StitchingButton *imageView = _imageViews[_moveIndex - 1];
@@ -1229,6 +1229,20 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
     }else{
         self.contentScrollView.contentSize = CGSizeMake(imageView.right, _contentScrollView.height);
     }
+}
+- (void)leftFollow:(StitchingButton *)stichingImageView isIndex:(NSInteger) index{
+    /*
+     * 左边跟随
+     * stichingImageView 需要跟随谁的顶部
+     * index 从哪一张开始跟随
+     */
+}
+- (void)rightFollow:(StitchingButton *)stichingImageView isIndex:(NSInteger) index{
+    /*
+     * 右边跟随
+     * stichingImageView 需要跟随谁的顶部
+     * index 从哪一张开始跟随
+     */
 }
 
 #pragma mark --图片切割
@@ -1840,8 +1854,6 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
             [_originTopArr removeAllObjects];
             [_originBottomArr removeAllObjects];
             [_originRightArr removeAllObjects];
-            _isSlicing = NO;
-            _isCut = NO;
             if ([_bottomView.typeLab.text isEqualToString:@"竖拼"]){
                 //竖拼切换成横拼
                 _isVerticalCut = NO;
@@ -1856,6 +1868,22 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                 if (_isCut){
                     [self addVerticalCutView];
                 }
+            }
+            if (_isSlicing){
+                CGFloat top = [_originTopArr[0]floatValue];
+                [_cutBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+                    if (_isVerticalCut == YES){
+                        make.centerX.centerY.equalTo(self.view);
+                        make.width.equalTo(@(VerViewWidth));
+                        make.height.equalTo(@30);
+                    }else{
+                        make.height.equalTo(@(HorViewHeight));
+                        make.width.equalTo(@30);
+                        make.top.equalTo(@(top));
+                        make.centerX.equalTo(self.view);
+                        [_cutBtn setBackgroundImage:IMG(@"横切裁切分界线") forState:UIControlStateNormal];
+                    }
+                }];
             }
         }else if (_type == 3 || _type == 4) {
             if ([_bottomView.typeLab.text isEqualToString:@"擦除滚动条"]){
@@ -1949,12 +1977,13 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                 _cutBtn.hidden = NO;
                 [_cutBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
                     if (_isVerticalCut == YES){
-                        make.width.centerX.centerY.equalTo(self.view);
+                        make.centerX.centerY.equalTo(self.view);
+                        make.width.equalTo(@(VerViewWidth));
                         make.height.equalTo(@30);
                     }else{
-                        make.centerX.centerY.equalTo(self.view);
                         make.height.equalTo(@(HorViewHeight));
                         make.width.equalTo(@30);
+                        make.centerX.centerY.equalTo(self.view);
                         [_cutBtn setBackgroundImage:IMG(@"横切裁切分界线") forState:UIControlStateNormal];
                     }
                 }];

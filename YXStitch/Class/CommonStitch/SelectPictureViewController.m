@@ -318,7 +318,7 @@ static const CGFloat kPhotoViewMargin = 12.0;
         _isOpenAlbum = NO;
         [_clearBtn removeFromSuperview];
         _clearBtn = nil;
-        if (!GVUserDe.isMember && self.manager.selectedCount > 9){
+        if (!User.checkIsVipMember && self.manager.selectedCount > 9){
             //非会员弹出提示
             _funcView = [UnlockFuncView new];
             _funcView.delegate = weakSelf;

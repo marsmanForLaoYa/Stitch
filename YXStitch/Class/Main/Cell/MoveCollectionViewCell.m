@@ -58,7 +58,7 @@
     }else{
         nameLab.textColor = [UIColor blackColor];
     }
-    [_iconIMG mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_iconIMG mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self);
         if ([cellName isEqualToString:@"截长屏"]){
             make.width.equalTo(@45);
@@ -82,7 +82,7 @@
         }
         make.top.equalTo(@34);
     }];
-    [nameLab mas_makeConstraints:^(MASConstraintMaker *make) {
+    [nameLab mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.width.equalTo(self);
         make.centerX.equalTo(_iconIMG);
         make.top.equalTo(_iconIMG.mas_bottom).offset(24);
