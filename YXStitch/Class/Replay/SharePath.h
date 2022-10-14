@@ -9,7 +9,7 @@
 
 
 NS_ASSUME_NONNULL_BEGIN
-static NSString *ScreenExtension = @"com.lkk.demos.screen";
+static NSString *ScreenExtension = @"com.xwan.jigsaw.StitchScreenShare";
 static NSString *GroupIDKey = @"group.yxiOSSdk.yxStitch";
 #warning 以上均需改成自用的id
 
