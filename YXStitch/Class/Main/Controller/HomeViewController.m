@@ -747,98 +747,79 @@
         _isOpenAlbum = NO;
         [_clearBtn removeFromSuperview];
         _clearBtn = nil;
-        if (!GVUserDe.isMember && self.manager.selectedCount > 9){
-            //非会员弹出提示
-            _funcView = [UnlockFuncView new];
-            _funcView.delegate = weakSelf;
-            _funcView.type = 3;
-            [self.view.window addSubview:_funcView];
-            [_funcView mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.edges.equalTo(self.view);
-            }];
+        if (btn.tag == 302){
+            //多图布局
+            if (self.manager.selectedArray.count > 9){
+                [SVProgressHUD showInfoWithStatus:@"布局最多只支持9张图片!"];
+                return;
+            }
+            PictureLayoutController *layoutVC = [[PictureLayoutController alloc] init];
+            
+            __block NSMutableArray *arr = [NSMutableArray array];
+            for (HXPhotoModel *photoModel in [self.manager selectedArray]) {
+                [Tools getImageWithAsset:photoModel.asset withBlock:^(UIImage * _Nonnull image) {
+                    [arr addObject:image];
+                }];
+            }
+            
+            layoutVC.pictures = arr;
+            
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"dismiss" object:nil];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [weakSelf.navigationController pushViewController:layoutVC animated:YES];
+            });
         }else{
-            if (btn.tag == 300){
-                //多图截长屏
-                __block NSMutableArray *arr = [NSMutableArray array];
-                __block NSMutableArray *imgArr = [NSMutableArray array];
-                for (HXPhotoModel *photoModel in [self.manager selectedArray]) {
-                    [arr addObject:photoModel.asset];
-                    [Tools getImageWithAsset:photoModel.asset withBlock:^(UIImage * _Nonnull image) {
-                        [imgArr addObject:image];
-                    }];
-                }
-                //判断图片分辨率是否一样
-                BOOL isSimilarityImage = NO;
-                UIImage *firstIMG = imgArr[0];
-                CGFloat scale = firstIMG.size.width / firstIMG.size.height;
-                for (NSInteger i = 1 ; i < imgArr.count; i ++) {
-                    UIImage *secondIMG = imgArr[i];
-                    CGFloat secondScale = secondIMG.size.width / secondIMG.size.height;
-                    if (scale == secondScale){
-                        isSimilarityImage = YES;
-                    }else{
-                        isSimilarityImage = NO;
-                        break;
-                    }
-                }
-                //相同分辨率 才可进入长截图拼图
-                if (isSimilarityImage){
-                    CaptionViewController *vc = [CaptionViewController new];
-                    vc.type = 4;
-                    vc.dataArr = arr;
-                    vc.editImgArr = imgArr;
-                    [[NSNotificationCenter defaultCenter]postNotificationName:@"dismiss" object:nil];
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                        [weakSelf.navigationController pushViewController:vc animated:YES];
-                    });
-                }else{
-                    [SVProgressHUD showInfoWithStatus:@"相同分辨率图片才能进行长截图拼接！"];
-                }
-            }else if(btn.tag == 301){
-                //多图拼接
-                CaptionViewController *vc = [CaptionViewController new];
-                vc.type = 2;
-                __block NSMutableArray *arr = [NSMutableArray array];
-                for (HXPhotoModel *photoModel in [self.manager selectedArray]) {
-                    [Tools getImageWithAsset:photoModel.asset withBlock:^(UIImage * _Nonnull image) {
-                        [arr addObject:image];
-                    }];
-                }
-                
-                vc.dataArr = arr;
-                [[NSNotificationCenter defaultCenter]postNotificationName:@"dismiss" object:nil];
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [weakSelf.navigationController pushViewController:vc animated:YES];
-                });
-                
-            }else if(btn.tag == 302){
-                //多图布局
-                if (self.manager.selectedArray.count > 9){
-                    [SVProgressHUD showInfoWithStatus:@"布局最做只支持9张图片"];
-                    return;
-                }
-                PictureLayoutController *layoutVC = [[PictureLayoutController alloc] init];
-                
-                __block NSMutableArray *arr = [NSMutableArray array];
-                for (HXPhotoModel *photoModel in [self.manager selectedArray]) {
-                    [Tools getImageWithAsset:photoModel.asset withBlock:^(UIImage * _Nonnull image) {
-                        [arr addObject:image];
-                    }];
-                }
-                
-                layoutVC.pictures = arr;
-                
-                [[NSNotificationCenter defaultCenter]postNotificationName:@"dismiss" object:nil];
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [weakSelf.navigationController pushViewController:layoutVC animated:YES];
-                });
-
+            if (!User.checkIsVipMember && self.manager.selectedCount > 9){
+                //非会员弹出提示
+                _funcView = [UnlockFuncView new];
+                _funcView.delegate = weakSelf;
+                _funcView.type = 3;
+                [self.view.window addSubview:_funcView];
+                [_funcView mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.edges.equalTo(self.view);
+                }];
             }else{
-                //多图字幕
-                if ([self.manager selectedArray].count > 1){
-                    
+                if (btn.tag == 300){
+                    //多图截长屏
+                    __block NSMutableArray *arr = [NSMutableArray array];
+                    __block NSMutableArray *imgArr = [NSMutableArray array];
+                    for (HXPhotoModel *photoModel in [self.manager selectedArray]) {
+                        [arr addObject:photoModel.asset];
+                        [Tools getImageWithAsset:photoModel.asset withBlock:^(UIImage * _Nonnull image) {
+                            [imgArr addObject:image];
+                        }];
+                    }
+                    //判断图片分辨率是否一样
+                    BOOL isSimilarityImage = NO;
+                    UIImage *firstIMG = imgArr[0];
+                    CGFloat scale = firstIMG.size.width / firstIMG.size.height;
+                    for (NSInteger i = 1 ; i < imgArr.count; i ++) {
+                        UIImage *secondIMG = imgArr[i];
+                        CGFloat secondScale = secondIMG.size.width / secondIMG.size.height;
+                        if (scale == secondScale){
+                            isSimilarityImage = YES;
+                        }else{
+                            isSimilarityImage = NO;
+                            break;
+                        }
+                    }
+                    //相同分辨率 才可进入长截图拼图
+                    if (isSimilarityImage){
+                        CaptionViewController *vc = [CaptionViewController new];
+                        vc.type = 4;
+                        vc.dataArr = arr;
+                        vc.editImgArr = imgArr;
+                        [[NSNotificationCenter defaultCenter]postNotificationName:@"dismiss" object:nil];
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                            [weakSelf.navigationController pushViewController:vc animated:YES];
+                        });
+                    }else{
+                        [SVProgressHUD showInfoWithStatus:@"相同分辨率图片才能进行长截图拼接！"];
+                    }
+                }else if(btn.tag == 301){
+                    //多图拼接
                     CaptionViewController *vc = [CaptionViewController new];
-                    vc.type = 1;
+                    vc.type = 2;
                     __block NSMutableArray *arr = [NSMutableArray array];
                     for (HXPhotoModel *photoModel in [self.manager selectedArray]) {
                         [Tools getImageWithAsset:photoModel.asset withBlock:^(UIImage * _Nonnull image) {
@@ -851,12 +832,33 @@
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                         [weakSelf.navigationController pushViewController:vc animated:YES];
                     });
+                    
                 }else{
-                    [SVProgressHUD showInfoWithStatus:@"电影截图拼接至少2张图片"];
+                    //多图字幕
+                    if ([self.manager selectedArray].count > 1){
+                        
+                        CaptionViewController *vc = [CaptionViewController new];
+                        vc.type = 1;
+                        __block NSMutableArray *arr = [NSMutableArray array];
+                        for (HXPhotoModel *photoModel in [self.manager selectedArray]) {
+                            [Tools getImageWithAsset:photoModel.asset withBlock:^(UIImage * _Nonnull image) {
+                                [arr addObject:image];
+                            }];
+                        }
+                        
+                        vc.dataArr = arr;
+                        [[NSNotificationCenter defaultCenter]postNotificationName:@"dismiss" object:nil];
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                            [weakSelf.navigationController pushViewController:vc animated:YES];
+                        });
+                    }else{
+                        [SVProgressHUD showInfoWithStatus:@"电影截图拼接至少2张图片"];
+                    }
+                    
                 }
-                
             }
         }
+        
         
     }
 }

@@ -90,11 +90,9 @@
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     PrefenceTableViewCell * cell = (PrefenceTableViewCell *)[self tableView:tableView cellForRowAtIndexPath:indexPath];
-    if (indexPath.section == 1 && !GVUserDe.isMember) {
+    if (indexPath.section == 1 && !User.checkIsVipMember) {
         [self.delegate autoDeleteSwtichWithTag:1];
-    }
-    
-    
+    } 
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{

@@ -164,8 +164,9 @@
         _titleView.btnClick = ^(NSInteger tag) {
             weakSelf.titleView.hidden = YES;
             if (tag == 1){
-                [weakSelf.titleBtn setTitle:weakSelf.titleView.titleTV.text forState:UIControlStateNormal];
-                [weakSelf.delegate changeWaterText:weakSelf.titleView.titleTV.text];
+                GVUserDe.waterTitle = [NSString stringWithFormat:@"@%@",weakSelf.titleView.titleTV.text];
+                [weakSelf.titleBtn setTitle:GVUserDe.waterTitle forState:UIControlStateNormal];
+                [weakSelf.delegate changeWaterText:GVUserDe.waterTitle];
                 
             }
         };

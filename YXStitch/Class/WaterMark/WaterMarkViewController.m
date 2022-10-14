@@ -66,11 +66,6 @@
     _BKIMG = [UIImageView new];
     _BKIMG.image = IMG(@"水印默认图片");
     _BKIMG.layer.masksToBounds = YES;
-    if (_waterIMG){
-        
-    }else{
-        
-    }
     [self.view addSubview:_BKIMG];
     [_BKIMG mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.height.equalTo(@300);
@@ -88,6 +83,16 @@
         make.width.left.bottom.equalTo(self.view);
         make.height.equalTo(@80);
     }];
+    if (GVUserDe.waterPosition > 0){
+        if (GVUserDe.waterPosition == 5){
+            //全屏
+            [self addFullView];
+        }else{
+            if (GVUserDe.waterPosition != 1){
+                [self addWaterLab];
+            }
+        }
+    }
 }
 
 -(void)setupNavItems{
@@ -122,39 +127,12 @@
     [_BKIMG removeAllSubviews];
     if (tag == 5){
         //全屏
-        [_BKIMG addSubview:[FullWaterMarkView addWaterMarkView:GVUserDe.waterTitle.length > 0 ? GVUserDe.waterTitle : @"@拼图" andSize:GVUserDe.waterTitleFontSize > 10 ?GVUserDe.waterTitleFontSize : 14 andColor:GVUserDe.waterTitleColor.length >0?GVUserDe.waterTitleColor: @"ffffff"]];
+        [self addFullView];
     }else{
-        _waterLab = [UILabel new];
-        if (GVUserDe.waterTitleColor.length >0){
-            _waterLab.textColor = HexColor(GVUserDe.waterTitleColor);
-        }else{
-            _waterLab.textColor = [UIColor whiteColor];
+        [_BKIMG removeAllSubviews];
+        if (tag != 1){
+            [self addWaterLab];
         }
-        
-        if (GVUserDe.waterTitle.length > 0){
-            _waterLab.text = GVUserDe.waterTitle;
-        }else{
-            _waterLab.text = @"@拼图";
-        }
-        if (GVUserDe.waterTitleFontSize > 10){
-            _waterLab.font = [UIFont systemFontOfSize:GVUserDe.waterTitleFontSize];
-        }else{
-            _waterLab.font = Font13;
-        }
-        [_BKIMG addSubview:_waterLab];
-        [_waterLab mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.bottom.equalTo(_BKIMG.mas_bottom).offset(-8);
-            if (tag == 2){
-                //水印在左
-                make.left.equalTo(@10);
-            }else if (tag == 3){
-                //居中
-                make.centerX.equalTo(_BKIMG);
-            }else{
-                //右
-                make.right.equalTo(_BKIMG.mas_right).offset(-8);
-            }
-        }];
     }
    
 }
@@ -221,8 +199,7 @@
 -(void)changeWaterFontSize:(NSInteger)size{
     if (GVUserDe.waterPosition == 5){
         //全屏
-        [_BKIMG removeAllSubviews];
-        [_BKIMG addSubview:[FullWaterMarkView addWaterMarkView:GVUserDe.waterTitle.length > 0 ? GVUserDe.waterTitle : @"@拼图" andSize:GVUserDe.waterTitleFontSize > 10 ?GVUserDe.waterTitleFontSize : 14 andColor:GVUserDe.waterTitleColor.length >0?GVUserDe.waterTitleColor: @"ffffff"]];
+        [self addFullView];
   
     }else{
         _waterLab.font = [UIFont systemFontOfSize:size];
@@ -232,8 +209,7 @@
 -(void)changeWaterFontColor:(NSString *)color{
     if (GVUserDe.waterPosition == 5){
         //全屏
-        [_BKIMG removeAllSubviews];
-        [_BKIMG addSubview:[FullWaterMarkView addWaterMarkView:GVUserDe.waterTitle.length > 0 ? GVUserDe.waterTitle : @"@拼图" andSize:GVUserDe.waterTitleFontSize > 10 ?GVUserDe.waterTitleFontSize : 14 andColor:GVUserDe.waterTitleColor.length >0?GVUserDe.waterTitleColor: @"ffffff"]];
+        [self addFullView];
     }else{
         _waterLab.textColor = HexColor(color);
     }
@@ -242,15 +218,52 @@
 -(void)changeWaterText:(NSString *)text{
     if (GVUserDe.waterPosition == 5){
         //全屏
-        [_BKIMG removeAllSubviews];
-        NSLog(@"GVUserDe.waterTitle==%@",GVUserDe.waterTitle);
-        [_BKIMG addSubview:[FullWaterMarkView addWaterMarkView:GVUserDe.waterTitle.length > 0 ? GVUserDe.waterTitle : @"@拼图" andSize:GVUserDe.waterTitleFontSize > 10 ?GVUserDe.waterTitleFontSize : 14 andColor:GVUserDe.waterTitleColor.length >0?GVUserDe.waterTitleColor: @"ffffff"]];
+        [self addFullView];
     }else{
         _waterLab.text = text;
     }
 }
 -(void)hintUser{
     [self addFuncView];
+}
+
+-(void)addFullView{
+    [_BKIMG removeAllSubviews];
+    [_BKIMG addSubview:[FullWaterMarkView addWaterMarkView:GVUserDe.waterTitle.length > 0 ? GVUserDe.waterTitle : @"@拼图" andSize:GVUserDe.waterTitleFontSize > 10 ?GVUserDe.waterTitleFontSize : 14 andColor:GVUserDe.waterTitleColor.length >0?GVUserDe.waterTitleColor: @"ffffff"]];
+}
+
+-(void)addWaterLab{
+    _waterLab = [UILabel new];
+    if (GVUserDe.waterTitleColor.length >0){
+        _waterLab.textColor = HexColor(GVUserDe.waterTitleColor);
+    }else{
+        _waterLab.textColor = [UIColor whiteColor];
+    }
+    
+    if (GVUserDe.waterTitle.length > 0){
+        _waterLab.text = GVUserDe.waterTitle;
+    }else{
+        _waterLab.text = @"@拼图";
+    }
+    if (GVUserDe.waterTitleFontSize > 10){
+        _waterLab.font = [UIFont systemFontOfSize:GVUserDe.waterTitleFontSize];
+    }else{
+        _waterLab.font = Font13;
+    }
+    [_BKIMG addSubview:_waterLab];
+    [_waterLab mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(_BKIMG.mas_bottom).offset(-8);
+        if (GVUserDe.waterPosition == 2){
+            //水印在左
+            make.left.equalTo(@10);
+        }else if (GVUserDe.waterPosition == 3){
+            //居中
+            make.centerX.equalTo(_BKIMG);
+        }else{
+            //右
+            make.right.equalTo(_BKIMG.mas_right).offset(-8);
+        }
+    }];
 }
 
 

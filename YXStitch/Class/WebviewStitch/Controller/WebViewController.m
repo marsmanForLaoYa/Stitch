@@ -470,7 +470,7 @@
             
             NSData *data = [NSData dataWithContentsOfURL:[NSURL  URLWithString:[weakSelf.dataDic objectForKey:@"imgURL"]]];
             UIImage *image = [UIImage imageWithData:data]; // 取得图片
-            UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
+//            UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
             [weakSelf injectionJS];
         }]];
     }

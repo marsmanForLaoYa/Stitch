@@ -154,6 +154,8 @@
     
     _contentScrollView = [CustomScrollView new];
     _contentScrollView.delegate = self;
+    _contentScrollView.showsVerticalScrollIndicator =  NO;
+    _contentScrollView.showsHorizontalScrollIndicator = NO;
     _contentScrollView.backgroundColor = [UIColor clearColor];
     [_contentView addSubview:_contentScrollView];
     
@@ -166,18 +168,17 @@
         imageFakeHeight = (CGFloat)_screenshotIMG.size.height *imageFakewidth / _screenshotIMG.size.width;
         scrollWidth  = 260;
         scrollHeight = SCREEN_HEIGHT - Nav_HEIGHT - 80;
-        _contentScrollView.contentSize = CGSizeMake(0, imageFakeHeight);
     }else{
         imageFakeHeight= 300;
         imageFakewidth= _screenshotIMG.size.width;
         scrollHeight = 300;
         scrollWidth = (CGFloat)(_screenshotIMG.size.width/_screenshotIMG.size.height) * 300;;
-        _contentScrollView.contentSize = CGSizeMake(imageFakewidth, 0);
     }
     [_contentScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
         if (_isVer){
             make.top.equalTo(@(Nav_H));
-            make.centerX.height.equalTo(_contentView);
+            make.centerX.equalTo(_contentView);
+            make.height.equalTo(@(SCREEN_HEIGHT - Nav_HEIGHT - 80));
             make.width.equalTo(@(imageFakewidth));
         }else{
             make.width.equalTo(@(SCREEN_WIDTH));
@@ -223,9 +224,10 @@
         [self.imageViewsArr addObject:imageView];
         
     }
-    _contentScrollView.contentSize = CGSizeMake(_contentScrollView.width,contentHeight);
-    if (contentHeight < SCREEN_HEIGHT){
+    if (contentHeight < 400){
         [self layoutContentView];
+    }else{
+        _contentScrollView.contentSize = CGSizeMake(_contentScrollView.width,contentHeight + 60);
     }
 }
 
@@ -341,6 +343,12 @@
     _isHaveBang = NO;
     _isAddShell = NO;
 }
+-(void)addContentScrollViewPangesture{
+    _panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureAction:)];
+    _contentScrollView.delaysContentTouches = NO;
+    //        _panRecognizer.delegate = self;
+    [_contentScrollView addGestureRecognizer:_panRecognizer];
+}
 
 #pragma mark ---btnClick && viewDelegateClick
 -(void)topBtnClick:(UIButton *)btn{
@@ -361,22 +369,11 @@
                     saveVC.identify = identify;
                 }];
             }else{
-                UIImageWriteToSavedPhotosAlbum(snapshotImage, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
+                if (!GVUserDe.isAutoDeleteOriginIMG){
+                    UIImageWriteToSavedPhotosAlbum(snapshotImage, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
+                }
             }     
         }];
-        //判断是否是高级会员
-        //    if(GVUserDe.isMember){
-        //        GVUserDe.waterPosition = _toolView.selectIndex;
-        //        _funcView = [UnlockFuncView new];
-        //        _funcView.delegate = self;
-        //        _funcView.type = 2;
-        //        [self.view addSubview:_funcView];
-        //        [_funcView mas_makeConstraints:^(MASConstraintMaker *make) {
-        //            make.edges.equalTo(self.view);
-        //        }];
-        //    }else{
-        //
-        //    }
     }else{
         [self.navigationController popViewControllerAnimated:YES];
     }
@@ -480,12 +477,7 @@
     }
 }
 
--(void)addContentScrollViewPangesture{
-    _panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureAction:)];
-    _contentScrollView.delaysContentTouches = NO;
-    //        _panRecognizer.delegate = self;
-    [_contentScrollView addGestureRecognizer:_panRecognizer];
-}
+
 
 -(void)waterSettingWithTag:(NSInteger )tag{
     MJWeakSelf
@@ -511,37 +503,6 @@
                 [self addWaterLaber];
             }
         }
-//        _waterLab = [UILabel new];
-//        if (GVUserDe.waterTitleColor.length >0){
-//            _waterLab.textColor = HexColor(GVUserDe.waterTitleColor);
-//        }else{
-//            _waterLab.textColor = [UIColor whiteColor];
-//        }
-//
-//        if (GVUserDe.waterTitle.length > 0){
-//            _waterLab.text = GVUserDe.waterTitle;
-//        }else{
-//            _waterLab.text = @"@拼图";
-//        }
-//        if (GVUserDe.waterTitleFontSize > 10){
-//            _waterLab.font = [UIFont systemFontOfSize:GVUserDe.waterTitleFontSize];
-//        }else{
-//            _waterLab.font = Font13;
-//        }
-//        [_BKIMG addSubview:_waterLab];
-//        [_waterLab mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.bottom.equalTo(_BKIMG.mas_bottom).offset(-8);
-//            if (tag == 2){
-//                //水印在左
-//                make.left.equalTo(@10);
-//            }else if (tag == 3){
-//                //居中
-//                make.centerX.equalTo(_BKIMG);
-//            }else{
-//                //右
-//                make.right.equalTo(_BKIMG.mas_right).offset(-8);
-//            }
-//        }];
     }
    
 }
@@ -2102,7 +2063,6 @@
     [self addTipsViewWithType:2];
 }
 -(void)changeWaterText:(NSString *)text{
-    GVUserDe.waterTitle = text;
     if (GVUserDe.waterPosition == 5){
         //全屏
         [self addFullWaterView];
@@ -2460,7 +2420,7 @@
     _fullWaterView  = [[UIView alloc]initWithFrame:CGRectMake(0, top,_contentScrollView.width, _contentScrollView.contentSize.height)];
     _fullWaterView.layer.masksToBounds = YES;
     [_contentScrollView addSubview:_fullWaterView];
-    [_fullWaterView addSubview:[FullWaterMarkView addWaterMarkView:GVUserDe.waterTitle.length > 0 ? GVUserDe.waterTitle : @"@拼图" andSize:GVUserDe.waterTitleFontSize > 10 ?GVUserDe.waterTitleFontSize : 14 andColor:GVUserDe.waterTitleColor.length >0?GVUserDe.waterTitleColor: @"ffffff"]];   
+    [_fullWaterView addSubview:[FullWaterMarkView addWaterMarkView:GVUserDe.waterTitle.length > 0 ? GVUserDe.waterTitle : @"@拼图" andSize:GVUserDe.waterTitleFontSize > 10 ?GVUserDe.waterTitleFontSize : 14 andColor:GVUserDe.waterTitleColor.length >0?GVUserDe.waterTitleColor: @"ffffff"]];
 }
 
 #pragma mark --ColorSelectViewDelegate

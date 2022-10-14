@@ -144,7 +144,9 @@
                 saveVC.identify = identify;
             }];
         }else{
-            UIImageWriteToSavedPhotosAlbum(snapshotImage, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
+            if (!GVUserDe.isAutoDeleteOriginIMG){
+                UIImageWriteToSavedPhotosAlbum(snapshotImage, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
+            } 
         }
         
         saveVC.isVer = YES;

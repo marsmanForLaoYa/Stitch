@@ -10,8 +10,6 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface WaterMarkViewController : UIViewController
-@property (nonatomic ,strong)UIImage *waterIMG;
-
 @end
 
 NS_ASSUME_NONNULL_END
