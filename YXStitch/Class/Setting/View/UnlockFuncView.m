@@ -109,7 +109,7 @@
 
 -(void)btnClick:(UIButton *)btn{
     if (btn.tag == 3) {
-        [self removeFromSuperview];
+        self.hidden = YES;
     }else{
         [self.delegate btnClickWithTag:btn.tag];
     }

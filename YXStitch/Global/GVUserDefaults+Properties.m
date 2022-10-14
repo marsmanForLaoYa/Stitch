@@ -10,8 +10,5 @@
 
 @implementation GVUserDefaults (Properties)
 
-@dynamic logoType;
-@dynamic isMember;
-@dynamic waterPosition;
 
 @end

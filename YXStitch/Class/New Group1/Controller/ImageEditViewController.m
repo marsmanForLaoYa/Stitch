@@ -26,6 +26,7 @@
 #import "ImageShellSettingView.h"
 #import "imageShellSelectView.h"
 #import "WaterMarkToolBarView.h"
+#import "FullWaterMarkView.h"
 
 #define HEAD_LENGTH 100
 #define HEAD_WIDTH 30
@@ -57,10 +58,10 @@
 @property (nonatomic ,strong)CustomScrollView *contentScrollView;
 
 @property (nonatomic ,strong)UIView *bgView;
-@property (nonatomic, strong)UIView *selectView;//选中path的边框
-@property (nonatomic, strong)UIView *borderView;//方框view
-@property (nonatomic ,strong)UIScrollView *shellBkView;//套壳背景view
+@property (nonatomic ,strong)UIView *selectView;//选中path的边框
 @property (nonatomic ,strong)UIImageView *shellBkImageView;//套壳背景imageview
+@property (nonatomic ,strong)UILabel *waterLabel;//水印lab
+@property (nonatomic ,strong)UIView *fullWaterView;//全屏水印view
 
 @property (nonatomic ,assign)NSInteger editType;//编辑类型
 @property (nonatomic ,assign)NSInteger markType;//标注类型
@@ -118,27 +119,27 @@
 }
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    if (@available(iOS 15.0, *)) {
-        [Tools setNaviBarBKColorWith:self.navigationController andBKColor:[UIColor blackColor] andFontColor:[UIColor whiteColor]];
-    }else{
-        UIColor *color = [UIColor whiteColor];
-        NSDictionary *dict = [NSDictionary dictionaryWithObject:color forKey:NSForegroundColorAttributeName];
-        self.navigationController.navigationBar.titleTextAttributes = dict;
-    }
-    self.navigationController.navigationBar.barTintColor = [UIColor blackColor];
     XWNavigationController *nav = (XWNavigationController *)self.navigationController;
     [nav addNavBarShadowImageWithColor:[UIColor blackColor]];
+    NSDictionary *titleAttr= @{
+                                   NSForegroundColorAttributeName:RGB(255, 255, 255),
+                                   NSFontAttributeName:[UIFont systemFontOfSize:18]
+                                   };
+        //设置导航栏标题字体颜色、分割线颜色
+    [nav addNavBarTitleTextAttributes:titleAttr barShadowHidden:NO shadowColor:[UIColor blackColor]];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    UIColor *color = [UIColor blackColor];
-    NSDictionary *dict = [NSDictionary dictionaryWithObject:color forKey:NSForegroundColorAttributeName];
-    self.navigationController.navigationBar.titleTextAttributes = dict;
-    self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
-    [Tools setNaviBarBKColorWith:self.navigationController andBKColor:[UIColor whiteColor] andFontColor:[UIColor blackColor]];
     XWNavigationController *nav = (XWNavigationController *)self.navigationController;
         [nav addNavBarShadowImageWithColor:RGB(255, 255, 255)];
+    NSDictionary *titleAttr= @{
+                                   NSForegroundColorAttributeName:RGB(0, 0, 0),
+                                   NSFontAttributeName:[UIFont systemFontOfSize:18]
+                                   };
+        //设置导航栏标题字体颜色、分割线颜色
+    [nav addNavBarTitleTextAttributes:titleAttr barShadowHidden:NO shadowColor:RGB(233, 233, 233)];
+
 }
 
 #pragma mark --initUI
@@ -222,8 +223,7 @@
         [self.imageViewsArr addObject:imageView];
         
     }
-    _contentScrollView.contentSize = CGSizeMake(_contentScrollView.width,contentHeight + 80);
-    
+    _contentScrollView.contentSize = CGSizeMake(_contentScrollView.width,contentHeight);
     if (contentHeight < SCREEN_HEIGHT){
         [self layoutContentView];
     }
@@ -433,31 +433,32 @@
     }else if (tag == 3){
         //套壳
         [_contentScrollView removeGestureRecognizer:_panRecognizer];
-        _isAddShell = YES;
-        if (_isVer){
-            [self changeShellViewWithType:1];
+        if (User.checkIsVipMember){
+            _isAddShell = YES;
+            if (_isVer){
+                [self changeShellViewWithType:1];
+            }else{
+                [self changeShellViewWithType:2];
+            }
+            _shellSettingView.hidden = NO;
+            if (_shellSettingView == nil){
+                _shellSettingView = [[ImageShellSettingView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH,100)];
+                _shellSettingView.isVer = _isVer;
+                [self.view addSubview:_shellSettingView];
+            }
+            [UIView animateWithDuration:0.3 animations:^{
+                weakSelf.shellSettingView.frame = CGRectMake(0, SCREEN_HEIGHT - weakSelf.shellSettingView.height, SCREEN_WIDTH, weakSelf.shellSettingView.height);
+            }];
+            _shellSettingView.btnClick = ^(NSInteger tag, BOOL isSelected) {
+                [weakSelf changeImageShellWithType:tag AndSelected:isSelected];
+            };
         }else{
-            [self changeShellViewWithType:2];
+            [self addTipsViewWithType:4];
         }
-        _shellSettingView.hidden = NO;
-        if (_shellSettingView == nil){
-            _shellSettingView = [[ImageShellSettingView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH,100)];
-            _shellSettingView.isVer = _isVer;
-            [self.view addSubview:_shellSettingView];
-        }
-        [UIView animateWithDuration:0.3 animations:^{
-            weakSelf.shellSettingView.frame = CGRectMake(0, SCREEN_HEIGHT - weakSelf.shellSettingView.height, SCREEN_WIDTH, weakSelf.shellSettingView.height);
-        }];
-        _shellSettingView.btnClick = ^(NSInteger tag, BOOL isSelected) {
-            [weakSelf changeImageShellWithType:tag AndSelected:isSelected];
-        };
-        //        if (GVUserDe.isMember){
-        //
-        //        }else{
-        //            [self addTipsViewWithType:4];
-        //        }
     }else{
         //水印
+        _contentScrollView.scrollEnabled = YES;
+        [_contentScrollView removeGestureRecognizer:_panRecognizer];
         if (_waterToolView == nil){
             _waterToolView = [[WaterMarkToolBarView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH,100)];
             _waterToolView.delegate = self;
@@ -471,13 +472,11 @@
         [UIView animateWithDuration:0.3 animations:^{
             weakSelf.waterToolView.frame = CGRectMake(0, SCREEN_HEIGHT - weakSelf.waterToolView.height, SCREEN_WIDTH, weakSelf.waterToolView.height);
         }];
-        
-        
-//        if (GVUserDe.isMember){
-//
-//        }else{
-//            [self addTipsViewWithType:2];
-//        }
+        if (GVUserDe.waterPosition == 5){
+            [self addFullWaterView];
+        }else{
+            [self addWaterLaber];
+        }
     }
 }
 
@@ -492,16 +491,25 @@
     MJWeakSelf
     if (tag == 5){
         //全屏
-//        [_contentScrollView addSubview:[FullWaterMarkView addWaterMarkView:GVUserDe.waterTitle.length > 0 ? GVUserDe.waterTitle : @"@拼图" andSize:GVUserDe.waterTitleFontSize > 10 ?GVUserDe.waterTitleFontSize : 14 andColor:GVUserDe.waterTitleColor.length >0?GVUserDe.waterTitleColor: @"ffffff"]];
+        [self addFullWaterView];
     }else{
         if (tag == 0){
             [UIView animateWithDuration:0.3 animations:^{
                 weakSelf.waterToolView.frame = CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, weakSelf.waterToolView.height);
             } completion:^(BOOL finished) {
                 weakSelf.waterToolView.hidden = YES;
+                [weakSelf.waterToolView removeFromSuperview];
+                weakSelf.waterToolView = nil;
             }];
         }else{
-            
+            GVUserDe.waterPosition = tag;
+            if (tag == 1){
+                //无水印
+                [_fullWaterView removeFromSuperview];
+                [_waterLabel removeFromSuperview];
+            }else{
+                [self addWaterLaber];
+            }
         }
 //        _waterLab = [UILabel new];
 //        if (GVUserDe.waterTitleColor.length >0){
@@ -2088,7 +2096,19 @@
         [_imgEditMarkView.deleteBtn setBackgroundImage:IMG(@"删除垃圾桶_unSelected") forState:UIControlStateNormal];
         [_imgEditMarkView.backBtn setBackgroundImage:IMG(@"撤销_unSelected") forState:UIControlStateNormal];
     }
-    
+}
+
+-(void)hintUser{
+    [self addTipsViewWithType:2];
+}
+-(void)changeWaterText:(NSString *)text{
+    GVUserDe.waterTitle = text;
+    if (GVUserDe.waterPosition == 5){
+        //全屏
+        [self addFullWaterView];
+    }else{
+        _waterLabel.text = text;
+    }
 }
 
 #pragma mark --Create View
@@ -2387,7 +2407,60 @@
     _selectView.frame =  CGRectMake(_currentPath.boundRect.origin.x - 5, _currentPath.boundRect.origin.y - 5, _currentPath.boundRect.size.width + 10, _currentPath.boundRect.size.height + 10);
     _originRect = _selectView.frame;
     _selectView.hidden = NO;
+}
+
+-(void)addWaterLaber{
+    [_fullWaterView removeFromSuperview];
+    [_waterLabel removeFromSuperview];
+    _waterLabel = [UILabel new];
+    if (GVUserDe.waterTitleColor.length >0){
+        _waterLabel.textColor = HexColor(GVUserDe.waterTitleColor);
+    }else{
+        _waterLabel.textColor = [UIColor whiteColor];
+    }
+    _waterLabel.backgroundColor = [UIColor clearColor];
+    if (GVUserDe.waterTitle.length > 0){
+        _waterLabel.text = GVUserDe.waterTitle;
+    }else{
+        _waterLabel.text = @"@拼图";
+    }
+    if (GVUserDe.waterTitleFontSize > 10){
+        _waterLabel.font = [UIFont systemFontOfSize:GVUserDe.waterTitleFontSize];
+    }else{
+        _waterLabel.font = Font13;
+    }
+    [_contentScrollView addSubview:_waterLabel];
+    [_contentScrollView bringSubviewToFront:_waterLabel];
+    if (GVUserDe.waterPosition == 2){
+        //水印在左
+        _waterLabel.textAlignment = NSTextAlignmentLeft;
+    }else if (GVUserDe.waterPosition == 3){
+        //居中
+        _waterLabel.textAlignment = NSTextAlignmentCenter;
+    }else{
+        //右
+        _waterLabel.textAlignment = NSTextAlignmentRight;
+    }
+    StitchingButton *lastIMG = _imageViewsArr.lastObject;
+    [_waterLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
+        if(_contentScrollView.contentSize.height < SCREEN_HEIGHT){
+            make.bottom.equalTo(@(lastIMG.bottom - 8));
+        }else{
+            make.bottom.equalTo(@(_contentScrollView.contentSize.height - 8));
+        }
         
+        make.width.left.equalTo(_contentScrollView);
+    }];
+    [self colorViewDismiss];
+}
+-(void)addFullWaterView{
+    [_fullWaterView removeFromSuperview];
+    [_waterLabel  removeFromSuperview];
+    CGFloat top = [_originTopArr[0]floatValue];
+    _fullWaterView  = [[UIView alloc]initWithFrame:CGRectMake(0, top,_contentScrollView.width, _contentScrollView.contentSize.height)];
+    _fullWaterView.layer.masksToBounds = YES;
+    [_contentScrollView addSubview:_fullWaterView];
+    [_fullWaterView addSubview:[FullWaterMarkView addWaterMarkView:GVUserDe.waterTitle.length > 0 ? GVUserDe.waterTitle : @"@拼图" andSize:GVUserDe.waterTitleFontSize > 10 ?GVUserDe.waterTitleFontSize : 14 andColor:GVUserDe.waterTitleColor.length >0?GVUserDe.waterTitleColor: @"ffffff"]];   
 }
 
 #pragma mark --ColorSelectViewDelegate
@@ -2434,6 +2507,16 @@
     }else if (_editType == 2){
         _pathWidth = size ;
         [self changeImageBorderWithType:_borderType AndBorderWidth:_pathWidth AndColor:_pathLineColor];
+    }else if (_editType == 4){
+        //水印文字大小
+        //水印文字颜色
+        if (GVUserDe.waterPosition == 5){
+            //全屏
+            GVUserDe.waterTitleFontSize = size;
+            [self addFullWaterView];
+        }else{
+            _waterLabel.font = [UIFont systemFontOfSize:size];
+        }
     }
     
     
@@ -2493,6 +2576,15 @@
             _contentScrollView.backgroundColor = HexColor(color);
         }
         
+    }else{
+        //水印文字颜色
+        if (GVUserDe.waterPosition == 5){
+            //全屏
+            GVUserDe.waterTitleColor = color;
+            [self addFullWaterView];
+        }else{
+            _waterLabel.textColor = HexColor(color);
+        }
     }
     
 }
@@ -2558,7 +2650,6 @@
         if (gesture.state == UIGestureRecognizerStateBegan){
             _stratPoint = point;
             _isStartPaint = YES;
-            
             if (_markType != 0 && _markType != UNDO && _markType != DELETELAYER){
                 //
                 [_contentScrollView removeGestureRecognizer:_pinchRecognizer];

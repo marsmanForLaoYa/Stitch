@@ -13,7 +13,6 @@
 @interface WaterMarkToolBarView()<WaterColorSelectViewDelegate>
 
 @property (nonatomic ,strong)UIView *toolView;
-@property (nonatomic ,strong)UIButton *titleBtn;
 @property (nonatomic ,strong)WaterTitleView *titleView;
 @property (nonatomic ,strong)WaterColorSelectView *colorSelectView;
 @property (nonatomic ,strong)ColorPlateView *colorPlateView;
@@ -25,13 +24,13 @@
 - (id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = HexColor(@"#1A1A1A");
-        _selectIndex = GVUserDe.waterPosition;
-       // NSLog(@"GVUserDe.waterPosition==%ld",GVUserDe.waterPosition);
+        self.backgroundColor = [UIColor clearColor];
     }
     return self;
 }
 -(void)layoutSubviews{
+    NSLog(@"GVUserDe.waterPosition==%ld",GVUserDe.waterPosition);
+    _selectIndex = GVUserDe.waterPosition;
     [self setupViews];
     [self setupLayout];
     
@@ -39,7 +38,7 @@
 - (void)setupViews {    
     if (_type == 2){
         UIView *cancelView = [UIView new];
-        cancelView.backgroundColor = HexColor(@"#1A1A1A");
+        cancelView.backgroundColor = [UIColor clearColor];
         [self addSubview:cancelView];
         [cancelView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.left.width.equalTo(self);
@@ -47,7 +46,7 @@
         }];
         
         UIButton *cancelBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-        [cancelBtn addTarget:self action:@selector(iconBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+        [cancelBtn addTarget:self action:@selector(cancelBtnClick) forControlEvents:UIControlEventTouchUpInside];
         cancelBtn.tag = 0;
         [cancelBtn setBackgroundColor:HexColor(@"#0D0D0D")];
         cancelBtn.layer.cornerRadius = 4;
@@ -59,6 +58,7 @@
             make.right.equalTo(cancelView.mas_right).offset(-37);
             make.top.equalTo(@2);
         }];
+        
         UIImageView *cancelIMG = [UIImageView new];
         cancelIMG.image = IMG(@"set关闭");
         [cancelBtn addSubview:cancelIMG];
@@ -68,32 +68,40 @@
         }];
     }
     
-    
-    
-    
+    UIView *contentView = [UIView new];
+    contentView.backgroundColor = HexColor(@"#1A1A1A");
+    [self addSubview:contentView];
+    [contentView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.width.equalTo(self);
+        if(_type == 2){
+            make.top.equalTo(@26);
+        }else{
+            make.top.equalTo(self);
+        }
+        make.height.equalTo(@80);
+    }];
+
     NSMutableArray *arr = [NSMutableArray arrayWithObjects:@"未选中无水印",@"未选中水印左",@"未选中水印居中",@"未选中水印右",@"未选中水印全屏", nil];
-    NSString *str;
-    switch (GVUserDe.waterPosition) {
-        case 1:
-            str = @"选中无水印";
-            break;
-        case 2:
-            str = @"选中水印左";
-            break;
-        case 3:
-            str = @"选中水印居中";
-            break;
-        case 4:
-            str = @"选中水印右";
-            break;
-        case 5:
-            str = @"选中水印全屏";
-            break;
-        default:
-            break;
+    NSString *str = @"";
+    if (_selectIndex == 1){
+        str = @"选中无水印";
+    }else if (_selectIndex == 2){
+        str = @"选中水印左";
+    }else if (_selectIndex == 3){
+        str = @"选中水印居中";
+    }else if (_selectIndex == 4){
+        str = @"选中水印右";
+    }else{
+        str = @"选中水印全屏";
     }
-    arr[GVUserDe.waterPosition - 1] = str;
+    arr[_selectIndex - 1] = str;
     _toolView = [UIView new];
+    [contentView addSubview:_toolView];
+    [_toolView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.top.equalTo(contentView);
+        make.width.equalTo(@(SCREEN_WIDTH - 100));
+        make.height.equalTo(@50);
+    }];
     for (NSInteger i = 0 ; i < arr.count ; i ++) {
         UIButton *iconBtn = [UIButton buttonWithType:UIButtonTypeSystem];
         iconBtn.tag = i + 1;
@@ -102,11 +110,7 @@
         [iconBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.width.height.equalTo(@40);
             make.left.equalTo(@(15 + (50 * i)));
-            if (_type == 2){
-                make.top.equalTo(@26);
-            }else{
-                make.top.equalTo(@6);
-            }
+            make.top.equalTo(@6);
             
         }];
         
@@ -133,17 +137,8 @@
     _titleBtn.layer.masksToBounds = YES;
     _titleBtn.layer.cornerRadius = 15;
     _titleBtn.titleLabel.font = Font13;
-    [self addSubview:_toolView];
+   
     [self addSubview:_titleBtn];
-}
-- (void)setupLayout {
-    [_toolView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.left.equalTo(self);
-        make.width.equalTo(@(SCREEN_WIDTH - 100));
-        make.height.equalTo(@50);
-    }];
-    
-//    CGFloat btnWidth = [Tools WidthWithLabelFont:Font13 withLabelHeight:30 AndStr:_titleBtn.titleLabel.text] + 20;
     [_titleBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.equalTo(@(75));
         make.height.equalTo(@30);
@@ -151,24 +146,18 @@
         make.right.equalTo(self.mas_right).offset(-14);
     }];
 }
-
--(UIButton *)titleBtn{
-    if (!_titleBtn){
-        
-    }
-    return _titleBtn;
+- (void)setupLayout {    
+//    CGFloat btnWidth = [Tools WidthWithLabelFont:Font13 withLabelHeight:30 AndStr:_titleBtn.titleLabel.text] + 20;
 }
-
--(UIView *)toolView{
-    if (!_toolView){
-        
-    }
-    return _toolView;
-}
-
-
 -(void)changeWaterTitle{
     MJWeakSelf
+    if (GVUserDe.waterPosition != 3){
+        if (!User.checkIsVipMember){
+            //弹出会员提示
+            [self.delegate hintUser];
+            return;
+        }
+    }
     if (!_titleView){
         _titleView = [WaterTitleView new];
         _titleView.type = 1;
@@ -187,8 +176,12 @@
     }else{
         _titleView.hidden = NO;
     }
+    
 }
 
+-(void)cancelBtnClick{
+    self.btnClick(0);
+}
 -(void)iconBtnClick:(UIButton *)btn{
     MJWeakSelf
     if (btn.tag == 1 && btn.tag == 0){
@@ -241,8 +234,6 @@
             self.btnClick(btn.tag);
         }
     }
-    
-    
     if (btn.tag != 1 && btn.tag != 0){
         if (_colorSelectView == nil){
             _colorSelectView = [WaterColorSelectView new];

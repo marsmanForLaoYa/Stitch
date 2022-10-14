@@ -101,28 +101,29 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
 }
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    if (@available(iOS 15.0, *)) {
-        [Tools setNaviBarBKColorWith:self.navigationController andBKColor:[UIColor blackColor] andFontColor:[UIColor whiteColor]];
-    }else{
-        UIColor *color = [UIColor whiteColor];
-        NSDictionary *dict = [NSDictionary dictionaryWithObject:color forKey:NSForegroundColorAttributeName];
-        self.navigationController.navigationBar.titleTextAttributes = dict;
-    }
     self.navigationController.navigationBar.barTintColor = [UIColor blackColor];
     XWNavigationController *nav = (XWNavigationController *)self.navigationController;
     [nav addNavBarShadowImageWithColor:[UIColor blackColor]];
+    NSDictionary *titleAttr= @{
+                                   NSForegroundColorAttributeName:RGB(255, 255, 255),
+                                   NSFontAttributeName:[UIFont systemFontOfSize:18]
+                                   };
+        //设置导航栏标题字体颜色、分割线颜色
+    [nav addNavBarTitleTextAttributes:titleAttr barShadowHidden:NO shadowColor:[UIColor blackColor]];
     
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    UIColor *color = [UIColor blackColor];
-    NSDictionary *dict = [NSDictionary dictionaryWithObject:color forKey:NSForegroundColorAttributeName];
-    self.navigationController.navigationBar.titleTextAttributes = dict;
-    self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
-    [Tools setNaviBarBKColorWith:self.navigationController andBKColor:[UIColor whiteColor] andFontColor:[UIColor blackColor]];
     XWNavigationController *nav = (XWNavigationController *)self.navigationController;
         [nav addNavBarShadowImageWithColor:RGB(255, 255, 255)];
+    NSDictionary *titleAttr= @{
+                                   NSForegroundColorAttributeName:RGB(0, 0, 0),
+                                   NSFontAttributeName:[UIFont systemFontOfSize:18]
+                                   };
+        //设置导航栏标题字体颜色、分割线颜色
+    [nav addNavBarTitleTextAttributes:titleAttr barShadowHidden:NO shadowColor:RGB(233, 233, 233)];
+
 }
 #pragma mark --initUI
 -(void)setupViews{
@@ -628,62 +629,15 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
             tagIndex ++;
         }
         weakSelf.contentScrollView.contentSize = CGSizeMake(weakSelf.contentScrollView.width,contentHeight);
+        weakSelf.title = [NSString stringWithFormat:@"%ld张图片",generator.infos.count];
         if (contentHeight < SCREEN_HEIGHT){
             //内容过小则重置imageView布局
-           // [weakSelf layoutContentView];
+            [weakSelf layoutContentView];
         }else{
             weakSelf.contentScrollView.contentSize = CGSizeMake(weakSelf.contentScrollView.width,contentHeight + Nav_HEIGHT + 80);
         }
         [SVProgressHUD showSuccessWithStatus:@"拼接完成"];
     });
-    
-    
-    
-//    for (NSInteger i = 1; i < _dataArr.count; i ++) {
-//        UIImage *icon = _dataArr[i];
-//        CGFloat imgHeight = (CGFloat)(icon.size.height/icon.size.width) * VerViewWidth;
-//        StitchingButton *imageView = [[StitchingButton alloc]initWithFrame:CGRectMake(0, firstImageView.bottom, VerViewWidth, imgHeight)];
-//        imageView.image = icon;
-//        imageView.userInteractionEnabled = YES;
-//        imageView.centerX = firstImageView.centerX;
-//        imageView.tag = (i+1) * 100;
-//        contentHeight += imgHeight;
-//        [_contentScrollView addSubview:imageView];
-//        firstImageView = imageView;
-//        [self.originTopArr addObject:[NSNumber numberWithFloat:firstImageView.top]];
-//        [self.imageViews addObject:imageView];
-//        [self.originBottomArr addObject:[NSNumber numberWithFloat:contentHeight]];
-//
-//    }
-    
-    
-//
-//
-//    _resultView = [StitchResultView new];
-//    _resultView.generator = generator;
-//    [_contentScrollView addSubview:_resultView];
-//    [_resultView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.width.equalTo(@(VerViewWidth));
-//        make.top.equalTo(@10);
-//        make.centerX.equalTo(_contentView.mas_centerX);
-//        make.height.equalTo(@(_contentScrollView.height - 100));
-//    }];
-//    [_contentScrollView setContentSize:CGSizeMake(_contentScrollView.width, _resultView.scrollView.contentSize.height + 80)];
-
-//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//        for (NSInteger i = 0 ; i < weakSelf.resultView.imageViews.count; i ++) {
-//            SZStichingImageView *img = weakSelf.resultView.imageViews[i];
-//            StitchingButton *imageView = [StitchingButton new];
-//            imageView = img;
-////            imageView.image = img.image;
-//            imageView.tag = (i + 1) * 100;
-//            [weakSelf.imageViews addObject:imageView];
-//            [weakSelf.originTopArr addObject:[NSNumber numberWithFloat:img.top]];
-//            [weakSelf.originBottomArr addObject:[NSNumber numberWithFloat:img.height]];
-//
-//        }
-//        weakSelf.title = [NSString stringWithFormat:@"%ld张图片",weakSelf.resultView.imageViews.count];
-//    });
     
 }
 
@@ -1252,22 +1206,12 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
 }
 
 -(void)updateContentScrollViewContentSize{
-    CGFloat totalHeight = 0;
-    CGFloat totalWidth = 0;
-    StitchingButton *lastImageView;
-    for (StitchingButton *imageView in self.imageViews) {
-        totalHeight += imageView.height;
-        totalWidth = imageView.width;
-//        if (imageView.tag == 100){
-//            imageView.top = 0;
-//        }else{
-//            imageView.top = lastImageView.bottom;
-//        }
-//        lastImageView = imageView;
+    StitchingButton *imageView = self.imageViews.lastObject;
+    if (_isVerticalCut){
+        self.contentScrollView.contentSize = CGSizeMake(_contentScrollView.width, imageView.bottom + 120);
+    }else{
+        self.contentScrollView.contentSize = CGSizeMake(imageView.right, _contentScrollView.height);
     }
-    //self.contentScrollView.contentSize = CGSizeMake(totalWidth, totalHeight);
-    self.contentScrollView.center = self.view.center;    [self.contentScrollView setScrollEnabled:YES];
-    //[self.contentScrollView setScrollsToTop:YES];
 }
 
 #pragma mark --图片切割
@@ -1301,16 +1245,15 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                 [topArr addObject:_dataArr[i]];
             }
         }
-        CGFloat top = [_originTopArr[0]floatValue];
-        [_imageViews removeAllObjects];
         [_originTopArr removeAllObjects];
         [_originBottomArr removeAllObjects];
         [_originRightArr removeAllObjects];
         if (_isVerticalCut){
+            CGFloat top = [_originTopArr[0]floatValue];
+            [_imageViews removeAllObjects];
             CGFloat contentHeight = 0.0;
             UIImage *icon = topArr[0];
-            
-           StitchingButton *firstImageView = [[StitchingButton alloc]initWithFrame:CGRectMake(0, top, VerViewWidth, (CGFloat)(icon.size.height/icon.size.width) * VerViewWidth)];
+            StitchingButton *firstImageView = [[StitchingButton alloc]initWithFrame:CGRectMake(0, top, VerViewWidth, (CGFloat)(icon.size.height/icon.size.width) * VerViewWidth)];
             
             firstImageView.image = icon;
             firstImageView.centerX = self.view.centerX;
@@ -1362,6 +1305,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
             }
             _contentScrollView.contentSize = CGSizeMake(_contentScrollView.width,contentHeight);
         }else{
+            [_imageViews removeAllObjects];
             CGFloat contentWidth = 0.0;
             UIImage *icon = topArr[0];
             StitchingButton *firstImageView = [[StitchingButton alloc]initWithFrame:CGRectMake(0,(SCREEN_HEIGHT - 450)/2, (CGFloat)(icon.size.width / icon.size.height) * HorViewHeight, HorViewHeight)];

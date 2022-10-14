@@ -32,5 +32,53 @@
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "969E1AA5-D2C0-4245-B42E-77754748338B"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "YXStitch/Class/New Group1/Controller/ImageEditViewController.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "2673"
+            endingLineNumber = "2673"
+            landmarkName = "-panGestureAction:"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "969E1AA5-D2C0-4245-B42E-77754748338B - da64bc06572680d8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[ImageEditViewController panGestureAction:]"
+                  moduleName = "YXStitch"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/xwan-iossdk/Desktop/Work/YXStitch/YXStitch/Class/New%20Group1/Controller/ImageEditViewController.m"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "2673"
+                  endingLineNumber = "2673"
+                  offsetFromSymbolStart = "1016">
+               </Location>
+               <Location
+                  uuid = "969E1AA5-D2C0-4245-B42E-77754748338B - da64bc06572680d8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[ImageEditViewController panGestureAction:]"
+                  moduleName = "YXStitch"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/xwan-iossdk/Desktop/Work/YXStitch/YXStitch/Class/New%20Group1/Controller/ImageEditViewController.m"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "2673"
+                  endingLineNumber = "2673"
+                  offsetFromSymbolStart = "1020">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface GVUserDefaults (Properties)
 #pragma mark--记录全局保存信息
 @property (nonatomic ,assign)NSInteger logoType;//logo类型，1=2drakIcon，2=lightIcon
-@property (nonatomic ,assign)NSInteger waterPosition;//水印位置 //1=无水印 2=左 3=居中 4=右 5=全屏
+@property (nonatomic ,assign)NSInteger waterPosition;//水印位置 //1=无水印 2=左 3=居中 4=右 5=全屏  默认居中
 @property (nonatomic ,strong)NSString *waterTitle;//水印文字
 @property (nonatomic ,assign)NSInteger waterTitleFontSize;//水印文字大小
 @property (nonatomic ,strong)NSString *waterTitleColor;//水印文字颜色

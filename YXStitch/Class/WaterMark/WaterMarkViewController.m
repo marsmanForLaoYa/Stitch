@@ -34,28 +34,30 @@
 }
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    if (@available(iOS 15.0, *)) {
-        [Tools setNaviBarBKColorWith:self.navigationController andBKColor:[UIColor blackColor] andFontColor:[UIColor whiteColor]];
-    }else{
-        UIColor *color = [UIColor whiteColor];
-        NSDictionary *dict = [NSDictionary dictionaryWithObject:color forKey:NSForegroundColorAttributeName];
-        self.navigationController.navigationBar.titleTextAttributes = dict;
-    }
     self.navigationController.navigationBar.barTintColor = [UIColor blackColor];
     XWNavigationController *nav = (XWNavigationController *)self.navigationController;
     [nav addNavBarShadowImageWithColor:[UIColor blackColor]];
+    NSDictionary *titleAttr= @{
+                                   NSForegroundColorAttributeName:RGB(255, 255, 255),
+                                   NSFontAttributeName:[UIFont systemFontOfSize:18]
+                                   };
+        //设置导航栏标题字体颜色、分割线颜色
+    [nav addNavBarTitleTextAttributes:titleAttr barShadowHidden:NO shadowColor:[UIColor blackColor]];
+
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [_BKIMG removeAllSubviews];
-    UIColor *color = [UIColor blackColor];
-    NSDictionary *dict = [NSDictionary dictionaryWithObject:color forKey:NSForegroundColorAttributeName];
-    self.navigationController.navigationBar.titleTextAttributes = dict;
-    self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
-    [Tools setNaviBarBKColorWith:self.navigationController andBKColor:[UIColor whiteColor] andFontColor:[UIColor blackColor]];
     XWNavigationController *nav = (XWNavigationController *)self.navigationController;
         [nav addNavBarShadowImageWithColor:RGB(255, 255, 255)];
+    NSDictionary *titleAttr= @{
+                                   NSForegroundColorAttributeName:RGB(0, 0, 0),
+                                   NSFontAttributeName:[UIFont systemFontOfSize:18]
+                                   };
+        //设置导航栏标题字体颜色、分割线颜色
+    [nav addNavBarTitleTextAttributes:titleAttr barShadowHidden:NO shadowColor:RGB(233, 233, 233)];
+
 
 }
 -(void)setupViews{
@@ -104,58 +106,55 @@
     self.navigationItem.leftBarButtonItem = item;
 }
 
+-(void)addFuncView{
+    if (_funcView == nil){
+        _funcView = [UnlockFuncView new];
+        _funcView.delegate = self;
+        _funcView.type = 2;
+        [self.view addSubview:_funcView];
+        [_funcView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.edges.equalTo(self.view);
+        }];
+    }
+    _funcView.hidden = NO;
+}
 -(void)waterSettingWithTag:(NSInteger )tag{
     [_BKIMG removeAllSubviews];
     if (tag == 5){
         //全屏
         [_BKIMG addSubview:[FullWaterMarkView addWaterMarkView:GVUserDe.waterTitle.length > 0 ? GVUserDe.waterTitle : @"@拼图" andSize:GVUserDe.waterTitleFontSize > 10 ?GVUserDe.waterTitleFontSize : 14 andColor:GVUserDe.waterTitleColor.length >0?GVUserDe.waterTitleColor: @"ffffff"]];
     }else{
-        if (tag != 1){
-            _waterLab = [UILabel new];
-            if (GVUserDe.waterTitleColor.length >0){
-                _waterLab.textColor = HexColor(GVUserDe.waterTitleColor);
-            }else{
-                _waterLab.textColor = [UIColor whiteColor];
-            }
-            
-            if (GVUserDe.waterTitle.length > 0){
-                _waterLab.text = GVUserDe.waterTitle;
-            }else{
-                _waterLab.text = @"@拼图";
-            }
-            if (GVUserDe.waterTitleFontSize > 10){
-                _waterLab.font = [UIFont systemFontOfSize:GVUserDe.waterTitleFontSize];
-            }else{
-                _waterLab.font = Font13;
-            }
-            [_BKIMG addSubview:_waterLab];
-            [_waterLab mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.bottom.equalTo(_BKIMG.mas_bottom).offset(-8);
-                if (tag == 2){
-                    //水印在左
-                    make.left.equalTo(@10);
-                }else if (tag == 3){
-                    //居中
-                    make.centerX.equalTo(_BKIMG);
-                }else{
-                    //右
-                    make.right.equalTo(_BKIMG.mas_right).offset(-8);
-                }
-            }];
+        _waterLab = [UILabel new];
+        if (GVUserDe.waterTitleColor.length >0){
+            _waterLab.textColor = HexColor(GVUserDe.waterTitleColor);
         }else{
-            //判断是否是会员
-            if (GVUserDe.isMember){
-                
-            }else{
-                _funcView = [UnlockFuncView new];
-                _funcView.delegate = self;
-                _funcView.type = 2;
-                [self.view addSubview:_funcView];
-                [_funcView mas_makeConstraints:^(MASConstraintMaker *make) {
-                    make.edges.equalTo(self.view);
-                }];
-            }
+            _waterLab.textColor = [UIColor whiteColor];
         }
+        
+        if (GVUserDe.waterTitle.length > 0){
+            _waterLab.text = GVUserDe.waterTitle;
+        }else{
+            _waterLab.text = @"@拼图";
+        }
+        if (GVUserDe.waterTitleFontSize > 10){
+            _waterLab.font = [UIFont systemFontOfSize:GVUserDe.waterTitleFontSize];
+        }else{
+            _waterLab.font = Font13;
+        }
+        [_BKIMG addSubview:_waterLab];
+        [_waterLab mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.bottom.equalTo(_BKIMG.mas_bottom).offset(-8);
+            if (tag == 2){
+                //水印在左
+                make.left.equalTo(@10);
+            }else if (tag == 3){
+                //居中
+                make.centerX.equalTo(_BKIMG);
+            }else{
+                //右
+                make.right.equalTo(_BKIMG.mas_right).offset(-8);
+            }
+        }];
     }
    
 }
@@ -164,19 +163,12 @@
 -(void)btnClick:(UIButton *)btn{
     if (btn.tag == 0){
         //判断是否是高级会员
-        _funcView = [UnlockFuncView new];
-        _funcView.delegate = self;
-        _funcView.type = 2;
-        [self.view addSubview:_funcView];
-        [_funcView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.edges.equalTo(self.view);
-        }];
-        
-    //    if(GVUserDe.isMember){
-    //        GVUserDe.waterPosition = _toolView.selectIndex;
-    //    }else{
-    //
-    //    }
+        if(User.checkIsVipMember){
+            GVUserDe.waterPosition = _toolView.selectIndex;
+            GVUserDe.waterTitle = _toolView.titleBtn.titleLabel.text;
+        }else{
+            [self addFuncView];
+        }
     }else{
         [self.navigationController popViewControllerAnimated:YES];
     }
@@ -185,8 +177,8 @@
 }
 
 -(void)btnClickWithTag:(NSInteger)tag{
+    _funcView.hidden = YES;
     if (tag == 1) {
-        [_funcView removeFromSuperview];
         [self.navigationController pushViewController:[BuyViewController new] animated:YES];
     }else{
         //触发购买
@@ -257,7 +249,9 @@
         _waterLab.text = text;
     }
 }
-
+-(void)hintUser{
+    [self addFuncView];
+}
 
 
 

@@ -813,6 +813,10 @@
                 
             }else if(btn.tag == 302){
                 //多图布局
+                if (self.manager.selectedArray.count > 9){
+                    [SVProgressHUD showInfoWithStatus:@"布局最做只支持9张图片"];
+                    return;
+                }
                 PictureLayoutController *layoutVC = [[PictureLayoutController alloc] init];
                 
                 __block NSMutableArray *arr = [NSMutableArray array];
