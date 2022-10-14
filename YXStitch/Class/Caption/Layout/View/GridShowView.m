@@ -1560,7 +1560,6 @@
 - (void)setGridEditing:(BOOL)gridEditing {
     _gridEditing = gridEditing;
     if(gridEditing) {
-//        [self showEditBorder];
         if(_gridShowImgViewTapBlock) {
             _gridShowImgViewTapBlock(self);
         }
