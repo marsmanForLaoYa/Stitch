@@ -11,6 +11,11 @@
 #define kGridElementMinHeight 80
 #define kCompensatePrecision 0.1
 @interface GridShowView ()<GridShowImgViewDelegate>
+{
+    CGPoint _startPoint;    //手势滑动的起始点
+    CGPoint _originCenter;
+    CGRect _originBounds;
+}
 
 @property (nonatomic, strong) UIView *bgView;
 
@@ -25,6 +30,8 @@
 @property (nonatomic, strong) NSMutableArray *leftToRightImageViews;
 @property (nonatomic, strong) NSMutableArray *rightToLeftImageViews;
 @property (nonatomic, strong) NSMutableArray *rightToRightImageViews;
+
+@property (nonatomic, strong) GridShowImgView *overlapImgView;
 
 @end
 
@@ -85,7 +92,7 @@
 {
     self.bgView.frame = CGRectMake(0, 0, self.bounds.size.width - _imagePadding, self.bounds.size.height - _imagePadding);
     //清除上一个边框
-    [self.lastShowImgView clearBorder];
+    [self.lastShowImgView clearEditBorder];
     _gridsDic = gridsDic;
     [self createLayoutSubImageViewWithGridsDic:gridsDic];
 }
@@ -141,8 +148,7 @@
             
             showImgView.image = self.pictures[index];
             showImgView.index = index;
-            //初始化view
-            [showImgView initGestureView];
+
             //设置可编辑的边缘
             showImgView.gridPanEdge = [self getPanEdgeWithImageView:showImgView];
 
@@ -158,9 +164,9 @@
     subImgView.gridShowImgViewTapBlock = ^(GridShowImgView * _Nonnull showImgView) {
         @strongify(self);
         //清除上一个边框
-        [self.lastShowImgView clearBorder];
+        [self.lastShowImgView clearEditBorder];
         //显示当前选中view的边框
-        [showImgView showBorder];
+        [showImgView showEditBorder];
         //记录当前选中的view
         self.lastShowImgView = showImgView;
         //把选中的view放在最上层
@@ -178,7 +184,7 @@
 //清除选中的view上的样式
 - (void)clearSelectedShowImgView {
     //清除上一个边框
-    [self.lastShowImgView clearBorder];
+    [self.lastShowImgView clearEditBorder];
     self.lastShowImgView = nil;
 }
 
@@ -784,6 +790,80 @@
             }];
         }
     }
+}
+
+#pragma mark - longPress
+
+- (void)longPressBeganWithGridElementView:(GridShowImgView *)gridElementView gesture:(UILongPressGestureRecognizer *)longPressGesture {
+    UIView *view = longPressGesture.view;
+    _startPoint = [longPressGesture locationInView:view];
+    _originCenter = gridElementView.center;
+    _originBounds = gridElementView.bounds;
+    
+    for (GridShowImgView *showImgView in self.gridsImageViews) {
+       
+        [showImgView clearBorderOnly];
+    }
+}
+
+- (void)longPressChangedWithGridElementView:(GridShowImgView *)gridElementView withPoint:(CGPoint)viewPoint {
+
+    //应用移动后的X坐标
+    CGFloat deltaX = viewPoint.x - _startPoint.x;
+    //应用移动后的Y坐标
+    CGFloat deltaY = viewPoint.y - _startPoint.y;
+    //拖动的应用跟随手势移动
+    gridElementView.center = CGPointMake(gridElementView.center.x + deltaX, gridElementView.center.y + deltaY);
+    CGPoint newPoint = CGPointMake(gridElementView.left + viewPoint.x,gridElementView.top + viewPoint.y);
+    self.overlapImgView = [self getGridShowImgViewWithPoint:newPoint gridElementView:gridElementView];
+    [self.overlapImgView showBorderOnly];
+}
+
+- (void)longPressEndWithGridElementView:(GridShowImgView *)gridElementView {
+    //清除掉所有的laryer border
+    for (GridShowImgView *showImgView in self.gridsImageViews) {
+       
+        [showImgView clearBorderOnly];
+    }
+    
+    if(self.overlapImgView) {
+        //交换位置
+        gridElementView.center = self.overlapImgView.center;
+        gridElementView.bounds = self.overlapImgView.bounds;
+        self.overlapImgView.center = _originCenter;
+        self.overlapImgView.bounds = _originBounds;
+        //交换上下左右可拖动的view
+        GridPanEdge tempPanEdge = self.overlapImgView.gridPanEdge;
+        self.overlapImgView.gridPanEdge = gridElementView.gridPanEdge;
+        gridElementView.gridPanEdge = tempPanEdge;
+        //交换选中状态
+        BOOL tempGridEditing = self.overlapImgView.gridEditing;
+        self.overlapImgView.gridEditing = gridElementView.gridEditing;
+        gridElementView.gridEditing = tempGridEditing;
+        //更新frame的记录
+        [self updateGridsImageViewFrame];
+    }
+    else
+    {
+        gridElementView.center = _originCenter;
+    }
+}
+
+- (GridShowImgView *)getGridShowImgViewWithPoint:(CGPoint)point gridElementView:(GridShowImgView *)gridElementView {
+    GridShowImgView *imgView = nil;
+    for (GridShowImgView *showImgView in self.gridsImageViews) {
+       
+        [showImgView clearBorderOnly];
+        if(![gridElementView isEqual:showImgView]) {
+            if(gridElementView) {
+                if(CGRectContainsPoint(showImgView.frame, point)) {
+                    imgView = showImgView;
+                    break;
+                }
+            }
+        }
+    }
+    return imgView;
 }
 
 #pragma mark - analysis
@@ -1406,6 +1486,7 @@
 
 @property(nonatomic, assign) CGFloat originImgViewWidth;
 @property(nonatomic, assign) CGFloat originImgViewHeight;
+@property(nonatomic, assign) BOOL isMoving;
 
 @end
 @implementation GridShowImgView
@@ -1431,6 +1512,9 @@
     //添加点击手势
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapSelectedViewAction)];
     [self addGestureRecognizer:tap];
+    
+    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressMoving:)];
+    [self addGestureRecognizer:longPress];
     
     [self addSubview:self.subBgView];
     self.subBgView.frame = self.bounds;
@@ -1458,6 +1542,11 @@
     //添加缩放手势
     UIPinchGestureRecognizer *pinch = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchSelectedViewAction:)];
     [self.imageView addGestureRecognizer:pinch];
+    
+//    UIPanGestureRecognizer *subBgViewPanGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panActionAfterLongPress:)];
+    
+//    self.scrollView.scrollEnabled = NO;
+//    [self addGestureRecognizer:subBgViewPanGesture];
 }
 
 #pragma mark - setter
@@ -1466,6 +1555,20 @@
     _imageView.image = image;
     //改变imageview的frame
     [self changeImageViewFrame];
+}
+
+- (void)setGridEditing:(BOOL)gridEditing {
+    _gridEditing = gridEditing;
+    if(gridEditing) {
+//        [self showEditBorder];
+        if(_gridShowImgViewTapBlock) {
+            _gridShowImgViewTapBlock(self);
+        }
+    }
+    else
+    {
+        [self clearEditBorder];
+    }
 }
 
 - (void)changeImageViewFrame {
@@ -1539,6 +1642,7 @@
 
 - (void)layoutSubviews
 {
+    if(_isMoving) return;
     self.subBgView.frame = CGRectMake(_imagePadding, _imagePadding, self.bounds.size.width - _imagePadding, self.bounds.size.height - _imagePadding);
     self.scrollView.frame = self.subBgView.bounds;
     
@@ -1591,8 +1695,9 @@
     self.bottomPanGestureView.hidden = YES;
 }
 
-- (void)showBorder
+- (void)showEditBorder
 {
+    [self initGestureView];
     if(self.gridPanEdge & GridPanEdgeTop) {
         self.topCanPanView.hidden = NO;
     }
@@ -1608,6 +1713,12 @@
     if(self.gridPanEdge & GridPanEdgeBottom) {
         self.bottomCanPanView.hidden = NO;
     }
+
+    _gridEditing = YES;
+    [self showBorderOnly];
+}
+
+- (void)showBorderOnly {
     self.subBgView.layer.borderColor = RGB(0, 74, 274).CGColor;
     self.subBgView.layer.borderWidth = kViewBorderWidth;
 }
@@ -1617,7 +1728,18 @@
     [view addGestureRecognizer:pan];
 }
 
-- (void)clearBorder {
+- (void)clearEditBorder {
+    self.subBgView.layer.borderColor = [UIColor clearColor].CGColor;
+    self.subBgView.layer.borderWidth = 0.0;
+    self.leftCanPanView.hidden = YES;
+    self.rightCanPanView.hidden = YES;
+    self.topCanPanView.hidden = YES;
+    self.bottomCanPanView.hidden = YES;
+    
+    _gridEditing = NO;
+}
+
+- (void)clearBorderOnly {
     self.subBgView.layer.borderColor = [UIColor clearColor].CGColor;
     self.subBgView.layer.borderWidth = 0.0;
     self.leftCanPanView.hidden = YES;
@@ -1633,6 +1755,42 @@
     }
 }
 
+- (void)longPressMoving:(UILongPressGestureRecognizer *)longGesture {
+    
+    UIView *view = longGesture.view;
+    CGPoint touPoint = [longGesture locationInView:view];
+
+    CGFloat scale = 1.1;
+    switch (longGesture.state) {
+          case UIGestureRecognizerStateBegan: {
+              _isMoving = YES;
+              [self.superview bringSubviewToFront:self];
+              self.transform = CGAffineTransformMakeScale(scale, scale);
+              if(self.delegate && [self.delegate respondsToSelector:@selector(longPressBeganWithGridElementView:gesture:)]) {
+                  [self.delegate longPressBeganWithGridElementView:self gesture:longGesture];
+              }
+          }
+              break;
+          case UIGestureRecognizerStateChanged: {
+              if(self.delegate && [self.delegate respondsToSelector:@selector(longPressChangedWithGridElementView:withPoint:)]) {
+                  [self.delegate longPressChangedWithGridElementView:self withPoint:touPoint];
+              }
+          }
+              break;
+          case UIGestureRecognizerStateEnded: {
+              ///手势结束(比如手离开了屏幕)
+              self.transform = CGAffineTransformIdentity;
+              _isMoving = NO;
+              if(self.delegate && [self.delegate respondsToSelector:@selector(longPressEndWithGridElementView:)]) {
+                  [self.delegate longPressEndWithGridElementView:self];
+              }
+          }
+          default:
+              break;
+      }
+}
+
+#pragma mark - 边缘拖动手势
 - (void)leftPanGestureView:(UIPanGestureRecognizer *)panGesture{
     [self panAction:panGesture edge:PanViewEdgeLeft];
 }

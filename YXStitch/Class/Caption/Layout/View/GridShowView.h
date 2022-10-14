@@ -53,6 +53,7 @@ typedef NS_ENUM(NSUInteger, PanViewEdge) {
 
 @protocol GridShowImgViewDelegate <NSObject>
 
+#pragma mark - 上下左右拖动
 - (void)leftOrRightPanX:(CGFloat)x
             panViewEdge:(PanViewEdge)panViewEdge
         gridElementView:(GridShowImgView *)gridElementView;
@@ -64,6 +65,11 @@ typedef NS_ENUM(NSUInteger, PanViewEdge) {
 - (void)panGestureBeganWithGridElementView:(GridShowImgView *)gridElementView
                                panViewEdge:(PanViewEdge)panViewEdge;
 - (void)panGestureEndWithGridElementView:(GridShowImgView *)gridElementView;
+
+#pragma mark - 长按
+- (void)longPressBeganWithGridElementView:(GridShowImgView *)gridElementView gesture:(UILongPressGestureRecognizer *)longPressGesture;
+- (void)longPressChangedWithGridElementView:(GridShowImgView *)gridElementView withPoint:(CGPoint)viewPoint;
+- (void)longPressEndWithGridElementView:(GridShowImgView *)gridElementView;
 
 @end
 
@@ -83,8 +89,12 @@ typedef NS_ENUM(NSUInteger, PanViewEdge) {
 //@property (nonatomic, assign) PaddingEdge paddingEdge;
 @property (nonatomic, weak) id<GridShowImgViewDelegate> delegate;
 
-- (void)showBorder;
-- (void)clearBorder;
+@property (nonatomic, assign) BOOL gridEditing;
+
+- (void)showEditBorder;
+- (void)showBorderOnly;
+- (void)clearEditBorder;
+- (void)clearBorderOnly;
 - (void)initGestureView;
 
 @end
