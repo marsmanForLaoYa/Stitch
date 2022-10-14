@@ -13,3 +13,4 @@
 #import "XWNetTool+Login.h"
 #import "XWNetTool+AppStore.h"
 #import "XWNetTool+Bind.h"
+#import "XWNetTool+Home.h"

@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		88A9881C3EEEB1AA517CAE1C /* libPods-YXStitch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1A9AF54F55FC18D9EDC22C /* libPods-YXStitch.a */; };
+		BBADBFD128F9621D00082F9C /* HomeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BBADBFCF28F9621D00082F9C /* HomeModel.m */; };
+		BBADBFD428F9624C00082F9C /* XWNetTool+Home.m in Sources */ = {isa = PBXBuildFile; fileRef = BBADBFD328F9624C00082F9C /* XWNetTool+Home.m */; };
 		BBB4687728F57A2100F15765 /* XWOpenCVHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBB4687528F57A2100F15765 /* XWOpenCVHelper.mm */; };
 		BBB4687A28F57A9200F15765 /* SharePath.m in Sources */ = {isa = PBXBuildFile; fileRef = BBB4687928F57A9200F15765 /* SharePath.m */; };
 		BBB4688228F57C4B00F15765 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB687ED528A0DE65002D557B /* UIKit.framework */; };
@@ -233,6 +235,10 @@
 		113BB414313D98CCCD8D49AD /* Pods-YXStitch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YXStitch.debug.xcconfig"; path = "Target Support Files/Pods-YXStitch/Pods-YXStitch.debug.xcconfig"; sourceTree = "<group>"; };
 		3F1A9AF54F55FC18D9EDC22C /* libPods-YXStitch.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YXStitch.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B8C87E9AD95B7468BA24009E /* Pods-YXStitch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YXStitch.release.xcconfig"; path = "Target Support Files/Pods-YXStitch/Pods-YXStitch.release.xcconfig"; sourceTree = "<group>"; };
+		BBADBFCF28F9621D00082F9C /* HomeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeModel.m; sourceTree = "<group>"; };
+		BBADBFD028F9621D00082F9C /* HomeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeModel.h; sourceTree = "<group>"; };
+		BBADBFD228F9624C00082F9C /* XWNetTool+Home.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "XWNetTool+Home.h"; sourceTree = "<group>"; };
+		BBADBFD328F9624C00082F9C /* XWNetTool+Home.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "XWNetTool+Home.m"; sourceTree = "<group>"; };
 		BBB4687528F57A2100F15765 /* XWOpenCVHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XWOpenCVHelper.mm; sourceTree = "<group>"; };
 		BBB4687628F57A2100F15765 /* XWOpenCVHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XWOpenCVHelper.h; sourceTree = "<group>"; };
 		BBB4687828F57A9200F15765 /* SharePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SharePath.h; sourceTree = "<group>"; };
@@ -691,6 +697,8 @@
 				BBC92AC928F670C80023E80F /* XWNetTool+AppStore.m */,
 				BBC92AC828F670C80023E80F /* XWNetTool+Bind.h */,
 				BBC92AC528F670C80023E80F /* XWNetTool+Bind.m */,
+				BBADBFD228F9624C00082F9C /* XWNetTool+Home.h */,
+				BBADBFD328F9624C00082F9C /* XWNetTool+Home.m */,
 				BBC92AC728F670C80023E80F /* XWNetTool+Login.h */,
 				BBC92ACA28F670C80023E80F /* XWNetTool+Login.m */,
 			);
@@ -743,6 +751,8 @@
 		BBC9A8F728F7A93D00A8F299 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				BBADBFD028F9621D00082F9C /* HomeModel.h */,
+				BBADBFCF28F9621D00082F9C /* HomeModel.m */,
 				BBC92AD028F670C80023E80F /* User.h */,
 				BBC92AC228F670C80023E80F /* User.m */,
 				BBC92AE128F673C10023E80F /* XWModel.h */,
@@ -1630,6 +1640,7 @@
 				FB2E283828AA1A13006BDAB0 /* SZConstraint.m in Sources */,
 				FB3EFE4728A3A423006C3889 /* BuyDetailView.m in Sources */,
 				FB2E287328AA1B62006BDAB0 /* SZStichingImageView.m in Sources */,
+				BBADBFD128F9621D00082F9C /* HomeModel.m in Sources */,
 				FBDA329128E29A60003B7FA6 /* UIView+directionBorder.m in Sources */,
 				FB63FC1128AB9B8900F62085 /* WaterMarkViewController.m in Sources */,
 				FB2E285B28AA1A21006BDAB0 /* ZWMGuideView.m in Sources */,
@@ -1714,6 +1725,7 @@
 				BBC92B4628F6AD2D0023E80F /* KSViewController.m in Sources */,
 				FB2D5A1428A234C2006085BC /* EnterURLViewController.m in Sources */,
 				FBDA328E28E28E92003B7FA6 /* ImageBorderSettingView.m in Sources */,
+				BBADBFD428F9624C00082F9C /* XWNetTool+Home.m in Sources */,
 				FB2D5A1128A20DE4006085BC /* MoveCollectionViewCell.m in Sources */,
 				FB4E536228A34D230072E1AD /* SettingViewController.m in Sources */,
 				FB2D5A0728A1EE2A006085BC /* HomeSettingViewController.m in Sources */,

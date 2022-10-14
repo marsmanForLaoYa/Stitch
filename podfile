@@ -18,7 +18,7 @@ target 'YXStitch' do
   pod 'SDCycleScrollView','>= 1.82'
   pod 'TYSnapshotScroll'
   #pod 'LFFilterSuite'
-  
+  pod 'MJExtension'
   #友盟分享
   pod 'UMCommon'
   pod 'UMDevice'

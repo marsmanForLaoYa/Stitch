@@ -176,41 +176,42 @@
     }];
 }
 
-- (NSURLSessionDataTask *)queryApplicationListWithCallback:(void(^)(BOOL isSuccess, NSString * _Nullable errorMsg))callback
-{
-    NSDictionary *params = @{
-        @"appname":[[NSBundle mainBundle] bundleIdentifier],
-        @"version":[NSBundle mainBundle].infoDictionary[@"CFBundleShortVersionString"]
-    };
-    
-    return [self getRequestWithUrl:API_HOME_APPLICATION_LIST withParam:params success:^(id  _Nullable responseObject) {
-        
-        BOOL isProcessing = NO;
-        if ([[responseObject allKeys] containsObject:@"is_review"]) {
-            isProcessing = [responseObject[@"is_review"] boolValue];
-        }
-        
-        if ([[responseObject allKeys] containsObject:@"advertisements"]) {
-            NSArray *adverArr = responseObject[@"advertisements"];
-            if (adverArr.count>0) {
-                NSDictionary *alertDic =adverArr[0];
-                [User current].advertisingDic = [NSDictionary dictionaryWithDictionary:alertDic];
-            }
-        }
-        callback(YES, nil);
-        
-    } failure:^(NSError * _Nonnull error) {
-        callback(NO, error.description);
-    }];
-}
+//- (NSURLSessionDataTask *)queryApplicationListWithCallback:(void(^)(BOOL isSuccess, NSString * _Nullable errorMsg))callback
+//{
+//    NSDictionary *params = @{
+//        @"appname":[[NSBundle mainBundle] bundleIdentifier],
+//        @"version":[NSBundle mainBundle].infoDictionary[@"CFBundleShortVersionString"]
+//    };
+//
+//    return [self getRequestWithUrl:API_HOME_APPLICATION_LIST withParam:params success:^(id  _Nullable responseObject) {
+//
+//        BOOL isProcessing = NO;
+//        if ([[responseObject allKeys] containsObject:@"is_review"]) {
+//            isProcessing = [responseObject[@"is_review"] boolValue];
+//        }
+//
+//        if ([[responseObject allKeys] containsObject:@"advertisements"]) {
+//            NSArray *adverArr = responseObject[@"advertisements"];
+//            if (adverArr.count>0) {
+//                NSDictionary *alertDic =adverArr[0];
+//                [User current].advertisingDic = [NSDictionary dictionaryWithDictionary:alertDic];
+//            }
+//        }
+//        callback(YES, nil);
+//
+//    } failure:^(NSError * _Nonnull error) {
+//        callback(NO, error.description);
+//    }];
+//}
 
 - (void)showADAlertView {
 
     if ([User current].advertisingDic && [[[User current].advertisingDic allKeys] containsObject:@"image"] && [[[User current].advertisingDic allKeys] containsObject:@"url"]) {
         [self AddViewWithInfoDic:[User current].advertisingDic];
     }else {
-        [self queryApplicationListWithCallback:^(BOOL isSuccess, NSString * _Nullable errorMsg) {
-            if (isSuccess) {
+        [[XWNetTool sharedInstance] queryApplicationListWithCallback:^(NSArray<HomeModel *> * _Nullable dataSources, BOOL isProcessing, NSString * _Nullable errorMsg) {
+            
+            if (!errorMsg) {
                 [self AddViewWithInfoDic:[User current].advertisingDic];
             }
         }];
