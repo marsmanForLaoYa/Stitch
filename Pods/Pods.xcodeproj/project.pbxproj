@@ -16,6 +16,7 @@
 				F6C214AEB50B29A5D0B403137EBE7ADC /* PBXTargetDependency */,
 			);
 			name = UMCommon;
+			productName = UMCommon;
 		};
 		76CE6FDA7554B437965BADCED6281CAB /* UMShare */ = {
 			isa = PBXAggregateTarget;
@@ -26,6 +27,7 @@
 				3E7C346C35F373D3FA0D2F28C98CE539 /* PBXTargetDependency */,
 			);
 			name = UMShare;
+			productName = UMShare;
 		};
 		CEB9AD2C3CFC208BFBE1F22F5EC3E1FC /* UMDevice */ = {
 			isa = PBXAggregateTarget;
@@ -35,6 +37,7 @@
 			dependencies = (
 			);
 			name = UMDevice;
+			productName = UMDevice;
 		};
 /* End PBXAggregateTarget section */
 
@@ -1358,7 +1361,7 @@
 		9D3DD311D39F4208FE7EFBA07E96154D /* UIFont+HXExtension.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIFont+HXExtension.m"; path = "HXPhotoPicker/Category/UIFont+HXExtension.m"; sourceTree = "<group>"; };
 		9D4CECCC804377408D1A028A960E7E8E /* NSObject+YYModel.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSObject+YYModel.h"; path = "YYKit/Model/NSObject+YYModel.h"; sourceTree = "<group>"; };
 		9D5933D2938F948F9A2AF8819195693E /* IQToolbar.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = IQToolbar.h; path = IQKeyboardManager/IQToolbar/IQToolbar.h; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9DBF9DA51E3A3C7DFBA168881FFD4C33 /* HX_PhotoEditViewController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = HX_PhotoEditViewController.h; path = HXPhotoPicker/HXPhotoEdit/Controller/HX_PhotoEditViewController.h; sourceTree = "<group>"; };
 		9E3AB3C4C07F11535DC5503CDF4092D9 /* NSObject+YYModel.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSObject+YYModel.m"; path = "YYKit/Model/NSObject+YYModel.m"; sourceTree = "<group>"; };
 		9E66585248A505AC8CBB223B33900C28 /* HXPhotoEdit.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = HXPhotoEdit.h; path = HXPhotoPicker/HXPhotoEdit/HXPhotoEdit.h; sourceTree = "<group>"; };
@@ -1806,7 +1809,6 @@
 				19794118EB55C6B1597DB160A496E78D /* Support Files */,
 				56F32211F2412A3AC4EA68014831AEF9 /* UIKit */,
 			);
-			name = AFNetworking;
 			path = AFNetworking;
 			sourceTree = "<group>";
 		};
@@ -1830,7 +1832,6 @@
 				82A926F2CE949C49EDD4760D7755888E /* UIView+Toast.m */,
 				88F76FE2822CAE64ECD471423AC03A62 /* Support Files */,
 			);
-			name = Toast;
 			path = Toast;
 			sourceTree = "<group>";
 		};
@@ -2013,7 +2014,6 @@
 				F07EA3E37B9CA201A9962FB4437AE339 /* ViewController+MASAdditions.m */,
 				05D252473667729B56E2F2A27AE19FDC /* Support Files */,
 			);
-			name = Masonry;
 			path = Masonry;
 			sourceTree = "<group>";
 		};
@@ -2083,7 +2083,6 @@
 				801A8E20B40E5BA1760219B8CFDE1EF6 /* RGBColorSliderDelegate.m */,
 				FF5037F172185DF76DB0C011A55E0042 /* Support Files */,
 			);
-			name = RGBColorSlider;
 			path = RGBColorSlider;
 			sourceTree = "<group>";
 		};
@@ -2321,7 +2320,6 @@
 				270D809B0F7B04DD92420A96B4B60812 /* IQUIViewController+Additions.m */,
 				AAB493E2817082E982A3209B2F222778 /* Support Files */,
 			);
-			name = IQKeyboardManager;
 			path = IQKeyboardManager;
 			sourceTree = "<group>";
 		};
@@ -2442,7 +2440,6 @@
 				DBC7FEDD5671984EED8843F86EC86826 /* Core */,
 				AC5B5AAA7BF94A85C253BC386DFB251B /* Support Files */,
 			);
-			name = CocoaLumberjack;
 			path = CocoaLumberjack;
 			sourceTree = "<group>";
 		};
@@ -2475,7 +2472,6 @@
 				9ACCC73615CBE02D7D2AD8D183F3C783 /* Frameworks */,
 				CEE9C770998E1BC3BF9B5A35256B3A2E /* Support Files */,
 			);
-			name = TYSnapshotScroll;
 			path = TYSnapshotScroll;
 			sourceTree = "<group>";
 		};
@@ -2528,7 +2524,6 @@
 				0191FDD0DF2B34963CCC4A00B73526B6 /* Frameworks */,
 				48DFD97510A0CBD2FA11A7C186ABDF6E /* Support Files */,
 			);
-			name = UMCommon;
 			path = UMCommon;
 			sourceTree = "<group>";
 		};
@@ -2539,7 +2534,6 @@
 				FAEEF42235FA1ECACC920184A830261D /* Social */,
 				A4F29F304793F089FA5D402D523FCFF7 /* Support Files */,
 			);
-			name = UMShare;
 			path = UMShare;
 			sourceTree = "<group>";
 		};
@@ -2567,7 +2561,6 @@
 				DA89E7E065AA3FB1FBE7CCF05BA7EF2B /* GVUserDefaults.m */,
 				17DB56983B2518CADA0DE60A8235561C /* Support Files */,
 			);
-			name = GVUserDefaults;
 			path = GVUserDefaults;
 			sourceTree = "<group>";
 		};
@@ -2585,7 +2578,6 @@
 				265EE242201F18F6FF2EC7DBA8637466 /* Frameworks */,
 				3AB08027310D0BA43CD3F78128F2C1F6 /* Support Files */,
 			);
-			name = UMDevice;
 			path = UMDevice;
 			sourceTree = "<group>";
 		};
@@ -2615,7 +2607,6 @@
 				2F0A2F08C78AFC8CA3CBAAAFDF45BF14 /* NSString+MJExtension.m */,
 				797D434D13B04614356B46FF4C930051 /* Support Files */,
 			);
-			name = MJExtension;
 			path = MJExtension;
 			sourceTree = "<group>";
 		};
@@ -2831,7 +2822,6 @@
 				B73C810D7610E1054EBB4C50D592555D /* no-arc */,
 				49D45C9ECB2371E01C198C27A2894FF0 /* Support Files */,
 			);
-			name = YYKit;
 			path = YYKit;
 			sourceTree = "<group>";
 		};
@@ -2853,7 +2843,6 @@
 				1F4A07054D4142720CD727434F063FDB /* Default */,
 				9EA18767D9B711385D00D2E7B3FB3CB1 /* Support Files */,
 			);
-			name = HXPhotoPicker;
 			path = HXPhotoPicker;
 			sourceTree = "<group>";
 		};
@@ -2923,7 +2912,6 @@
 				D48493E28F98D8BFF0A6546BF44435DF /* Resources */,
 				656A08E056FC95F3BDF5BA8D840ECFB1 /* Support Files */,
 			);
-			name = SVProgressHUD;
 			path = SVProgressHUD;
 			sourceTree = "<group>";
 		};
@@ -2991,7 +2979,6 @@
 				C20BDC45C016977BC49FA8810E0DB521 /* UIView+SDExtension.m */,
 				FD6DB269C14E6D8C2BBFD5280B744837 /* Support Files */,
 			);
-			name = SDCycleScrollView;
 			path = SDCycleScrollView;
 			sourceTree = "<group>";
 		};
@@ -3098,7 +3085,6 @@
 				12862BAF87245B7FD5B09C211D4604BF /* Core */,
 				D73904B42BF5333B563980638DADBC4A /* Support Files */,
 			);
-			name = SDWebImage;
 			path = SDWebImage;
 			sourceTree = "<group>";
 		};
