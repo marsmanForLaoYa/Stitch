@@ -1100,4 +1100,24 @@ void rgbToHSV(float *rgb, float *hsv) {
     
 }
 
++(void)getAssetWithImage:(UIImage *)image getAssetSuccess:(void(^)(PHAsset *asset))getSuccess{
+
+    __block NSString *assetId = nil;
+
+       [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+
+        // 保存相片到相机胶卷，并返回标识
+           assetId= [PHAssetCreationRequest creationRequestForAssetFromImage:image].placeholderForCreatedAsset.localIdentifier;
+
+    } completionHandler:^(BOOL success, NSError * _Nullable error) {
+
+  // 根据标识获得相片对象
+
+        PHAsset *asset = [PHAsset fetchAssetsWithLocalIdentifiers:@[assetId] options:nil].lastObject;
+
+        getSuccess(asset);
+
+    }];
+}
+
 @end

@@ -30,7 +30,7 @@
     _titleTV = [UITextView new];
     _titleTV.backgroundColor = [UIColor blackColor];
     if (_type != 2){
-        _titleTV.text = GVUserDe.waterTitle.length > 0? GVUserDe.waterTitle:@"@拼图";
+        _titleTV.text = GVUserDe.waterTitle.length > 0? GVUserDe.waterTitle:@"@快捷截长图";
     }
     _titleTV.delegate = self;
 //    if (GVUserDe.waterTitleColor.length > 0){

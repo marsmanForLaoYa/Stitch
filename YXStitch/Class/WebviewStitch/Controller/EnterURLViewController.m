@@ -40,7 +40,7 @@
     _enterUrlTV.backgroundColor = [UIColor colorWithHexString:@"#f2f2f2"];
     _enterUrlTV.layer.masksToBounds = YES;
     _enterUrlTV.layer.cornerRadius = 10;
-    //_enterUrlTV.text = @"https://www.baidu.com";
+    _enterUrlTV.text = @"https://www.baidu.com";
     _enterUrlTV.font = [UIFont systemFontOfSize:16];
     [self.view addSubview:_enterUrlTV];
     [_enterUrlTV mas_makeConstraints:^(MASConstraintMaker *make) {

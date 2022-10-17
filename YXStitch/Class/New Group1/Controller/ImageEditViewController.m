@@ -2382,7 +2382,7 @@
     if (GVUserDe.waterTitle.length > 0){
         _waterLabel.text = GVUserDe.waterTitle;
     }else{
-        _waterLabel.text = @"@拼图";
+        _waterLabel.text = @"@快捷截长图";
     }
     if (GVUserDe.waterTitleFontSize > 10){
         _waterLabel.font = [UIFont systemFontOfSize:GVUserDe.waterTitleFontSize];
@@ -2420,7 +2420,7 @@
     _fullWaterView  = [[UIView alloc]initWithFrame:CGRectMake(0, top,_contentScrollView.width, _contentScrollView.contentSize.height)];
     _fullWaterView.layer.masksToBounds = YES;
     [_contentScrollView addSubview:_fullWaterView];
-    [_fullWaterView addSubview:[FullWaterMarkView addWaterMarkView:GVUserDe.waterTitle.length > 0 ? GVUserDe.waterTitle : @"@拼图" andSize:GVUserDe.waterTitleFontSize > 10 ?GVUserDe.waterTitleFontSize : 14 andColor:GVUserDe.waterTitleColor.length >0?GVUserDe.waterTitleColor: @"ffffff"]];
+    [_fullWaterView addSubview:[FullWaterMarkView addWaterMarkView:GVUserDe.waterTitle.length > 0 ? GVUserDe.waterTitle : @"@快捷截长图" andSize:GVUserDe.waterTitleFontSize > 10 ?GVUserDe.waterTitleFontSize : 14 andColor:GVUserDe.waterTitleColor.length >0?GVUserDe.waterTitleColor: @"ffffff"]];
 }
 
 #pragma mark --ColorSelectViewDelegate

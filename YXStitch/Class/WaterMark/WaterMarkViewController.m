@@ -229,7 +229,7 @@
 
 -(void)addFullView{
     [_BKIMG removeAllSubviews];
-    [_BKIMG addSubview:[FullWaterMarkView addWaterMarkView:GVUserDe.waterTitle.length > 0 ? GVUserDe.waterTitle : @"@拼图" andSize:GVUserDe.waterTitleFontSize > 10 ?GVUserDe.waterTitleFontSize : 14 andColor:GVUserDe.waterTitleColor.length >0?GVUserDe.waterTitleColor: @"ffffff"]];
+    [_BKIMG addSubview:[FullWaterMarkView addWaterMarkView:GVUserDe.waterTitle.length > 0 ? GVUserDe.waterTitle : @"@快捷截长图" andSize:GVUserDe.waterTitleFontSize > 10 ?GVUserDe.waterTitleFontSize : 14 andColor:GVUserDe.waterTitleColor.length >0?GVUserDe.waterTitleColor: @"ffffff"]];
 }
 
 -(void)addWaterLab{
@@ -243,7 +243,7 @@
     if (GVUserDe.waterTitle.length > 0){
         _waterLab.text = GVUserDe.waterTitle;
     }else{
-        _waterLab.text = @"@拼图";
+        _waterLab.text = @"@快捷截长图";
     }
     if (GVUserDe.waterTitleFontSize > 10){
         _waterLab.font = [UIFont systemFontOfSize:GVUserDe.waterTitleFontSize];

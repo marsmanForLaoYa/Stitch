@@ -163,6 +163,8 @@ NS_ASSUME_NONNULL_BEGIN
 ///翻转图片
 + (UIImage *)image:(UIImage *)image rotation:(UIImageOrientation)orientation;
 
+///UIImage 转phasset
++(void)getAssetWithImage:(UIImage *)image getAssetSuccess:(void(^)(PHAsset *asset))getSuccess;
 @end
 
 NS_ASSUME_NONNULL_END

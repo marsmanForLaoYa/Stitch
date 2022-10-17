@@ -237,11 +237,16 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
  */
 - (SZImageGenerator *)imageGeneratorBy:(NSArray *)assets{
     NSMutableArray *images = [NSMutableArray array];
-    for (PHAsset *asset in assets) {
-      [Tools getImageWithAsset:asset withBlock:^(UIImage * _Nonnull image) {
-          [images addObject:image];
-      }];
+    if (_type == 3){
+        [images addObjectsFromArray:assets];
+    }else{
+        for (PHAsset *asset in assets) {
+          [Tools getImageWithAsset:asset withBlock:^(UIImage * _Nonnull image) {
+              [images addObject:image];
+          }];
+        }
     }
+    
     if (!images.count) {
         return nil;
     }

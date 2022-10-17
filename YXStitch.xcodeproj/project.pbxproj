@@ -164,7 +164,7 @@
 		FB687EDA28A0DE65002D557B /* BroadcastSetupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB687ED928A0DE65002D557B /* BroadcastSetupViewController.m */; };
 		FB687EDE28A0DE65002D557B /* StitchScreenShareSetupUI.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = FB687ED328A0DE65002D557B /* StitchScreenShareSetupUI.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		FB687EE128A0DE65002D557B /* StitchScreenShare.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = FB687EC628A0DE64002D557B /* StitchScreenShare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		FB687EF928A0E23F002D557B /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB687EF828A0E23F002D557B /* HomeViewController.m */; };
+		FB687EF928A0E23F002D557B /* HomeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = FB687EF828A0E23F002D557B /* HomeViewController.mm */; };
 		FB687EFE28A0E9F1002D557B /* BaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = FB687EFA28A0E9F1002D557B /* BaseView.m */; };
 		FB687F0628A0EA1C002D557B /* Tools.m in Sources */ = {isa = PBXBuildFile; fileRef = FB687F0528A0EA1C002D557B /* Tools.m */; };
 		FB687F0928A0ECCC002D557B /* ToastShowView.m in Sources */ = {isa = PBXBuildFile; fileRef = FB687F0828A0ECCC002D557B /* ToastShowView.m */; };
@@ -482,7 +482,7 @@
 		FB687EEA28A0DE85002D557B /* StitchScreenShare.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StitchScreenShare.entitlements; sourceTree = "<group>"; };
 		FB687EF628A0E0D2002D557B /* PrefixHeader.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 		FB687EF728A0E23F002D557B /* HomeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
-		FB687EF828A0E23F002D557B /* HomeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
+		FB687EF828A0E23F002D557B /* HomeViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = HomeViewController.mm; sourceTree = "<group>"; };
 		FB687EFA28A0E9F1002D557B /* BaseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseView.m; sourceTree = "<group>"; };
 		FB687EFD28A0E9F1002D557B /* BaseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseView.h; sourceTree = "<group>"; };
 		FB687F0028A0EA1C002D557B /* Color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Color.h; sourceTree = "<group>"; };
@@ -1050,7 +1050,7 @@
 			isa = PBXGroup;
 			children = (
 				FB687EF728A0E23F002D557B /* HomeViewController.h */,
-				FB687EF828A0E23F002D557B /* HomeViewController.m */,
+				FB687EF828A0E23F002D557B /* HomeViewController.mm */,
 				FB2D5A0528A1EE2A006085BC /* HomeSettingViewController.h */,
 				FB2D5A0628A1EE2A006085BC /* HomeSettingViewController.m */,
 			);
@@ -1687,7 +1687,7 @@
 				BBC92AD328F670C80023E80F /* XWNetTool+Bind.m in Sources */,
 				FB86DC2E28D9A80700EE8E4D /* ImageEditMarkView.m in Sources */,
 				BBB4687728F57A2100F15765 /* XWOpenCVHelper.mm in Sources */,
-				FB687EF928A0E23F002D557B /* HomeViewController.m in Sources */,
+				FB687EF928A0E23F002D557B /* HomeViewController.mm in Sources */,
 				FB2E285728AA1A21006BDAB0 /* UIImage+Category.m in Sources */,
 				FB2E287128AA1B62006BDAB0 /* SZImagePreVewController.m in Sources */,
 				FB2E285628AA1A21006BDAB0 /* CAGradientLayer+Gradient.m in Sources */,

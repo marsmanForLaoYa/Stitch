@@ -130,7 +130,7 @@
     if (GVUserDe.waterTitle.length > 0){
         [_titleBtn setTitle:GVUserDe.waterTitle forState:UIControlStateNormal];
     }else{
-        [_titleBtn setTitle:@"@拼图" forState:UIControlStateNormal];
+        [_titleBtn setTitle:@"@快捷截长图" forState:UIControlStateNormal];
     }
     
     [_titleBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -164,7 +164,7 @@
         _titleView.btnClick = ^(NSInteger tag) {
             weakSelf.titleView.hidden = YES;
             if (tag == 1){
-                GVUserDe.waterTitle = [NSString stringWithFormat:@"@%@",weakSelf.titleView.titleTV.text];
+                GVUserDe.waterTitle = weakSelf.titleView.titleTV.text;
                 [weakSelf.titleBtn setTitle:GVUserDe.waterTitle forState:UIControlStateNormal];
                 [weakSelf.delegate changeWaterText:GVUserDe.waterTitle];
                 
