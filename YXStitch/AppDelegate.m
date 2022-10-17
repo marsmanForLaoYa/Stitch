@@ -13,6 +13,7 @@
 #import <UMCommon/UMCommon.h>
 #import "App.h"
 #import "XWTimerTool.h"
+
 @interface AppDelegate ()
 
 @property (nonatomic, assign) NSInteger pasteboardChangeCount;
@@ -43,6 +44,9 @@
     [[XWTimerTool shareInstance] addAutoLoginTimer];
     [App sharedInstance];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlePasteboardNotification:) name:UIPasteboardChangedNotification object:nil];
+    
+
+    [LYLogger instance];
     
     return YES;
 }

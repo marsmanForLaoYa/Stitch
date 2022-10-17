@@ -14,6 +14,9 @@ PODS:
   - AFNetworking/Serialization (4.0.1)
   - AFNetworking/UIKit (4.0.1):
     - AFNetworking/NSURLSession
+  - CocoaLumberjack (3.7.4):
+    - CocoaLumberjack/Core (= 3.7.4)
+  - CocoaLumberjack/Core (3.7.4)
   - GVUserDefaults (1.0.2)
   - HXPhotoPicker (3.3.1):
     - HXPhotoPicker/Default (= 3.3.1)
@@ -55,6 +58,7 @@ PODS:
 
 DEPENDENCIES:
   - AFNetworking
+  - CocoaLumberjack
   - GVUserDefaults
   - HXPhotoPicker (~> 3.3.1)
   - IQKeyboardManager
@@ -75,6 +79,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - AFNetworking
+    - CocoaLumberjack
     - GVUserDefaults
     - HXPhotoPicker
     - IQKeyboardManager
@@ -93,6 +98,7 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
+  CocoaLumberjack: 543c79c114dadc3b1aba95641d8738b06b05b646
   GVUserDefaults: 52d48cf8ba578b40a1a76312b196dfc9134ba36a
   HXPhotoPicker: f1274d0c931ad8564e0f23f33fe8b6110b639bd7
   IQKeyboardManager: 45a1fa55c1a5b02c61ac0fd7fd5b62bb4ad20d97
@@ -109,6 +115,6 @@ SPEC CHECKSUMS:
   UMShare: b66d969a5cc7bd9eeffad6ad2ccd8f860d6216dd
   YYKit: 7cda43304a8dc3696c449041e2cb3107b4e236e7
 
-PODFILE CHECKSUM: 5b994b1f1748cbb97d24bf669ad19e1bbb419163
+PODFILE CHECKSUM: b12edea2038215e91f5cf4bff1d15b3af5e3d3e0
 
 COCOAPODS: 1.11.3

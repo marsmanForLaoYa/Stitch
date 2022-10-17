@@ -58,6 +58,7 @@
 		BBC92B4228F6A2B60023E80F /* RecommendCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BBC92B3B28F6A2B60023E80F /* RecommendCell.m */; };
 		BBC92B4328F6A2B60023E80F /* RewardTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = BBC92B3D28F6A2B60023E80F /* RewardTextField.m */; };
 		BBC92B4628F6AD2D0023E80F /* KSViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBC92B4528F6AD2D0023E80F /* KSViewController.m */; };
+		BBDB2BD628FCFC4600568D5D /* LYLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = BBDB2BD528FCFC4600568D5D /* LYLogger.m */; };
 		FB00324928B8AB910028BC61 /* MyCustomSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = FB00324828B8AB910028BC61 /* MyCustomSlider.m */; };
 		FB086F6628A662CB0062EBA5 /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB687EC828A0DE65002D557B /* ReplayKit.framework */; };
 		FB086F6828A662D30062EBA5 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB086F6728A662D30062EBA5 /* AudioToolbox.framework */; };
@@ -316,6 +317,8 @@
 		BBC92B3D28F6A2B60023E80F /* RewardTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RewardTextField.m; sourceTree = "<group>"; };
 		BBC92B4428F6AD2D0023E80F /* KSViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KSViewController.h; sourceTree = "<group>"; };
 		BBC92B4528F6AD2D0023E80F /* KSViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KSViewController.m; sourceTree = "<group>"; };
+		BBDB2BD428FCFC4500568D5D /* LYLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LYLogger.h; sourceTree = "<group>"; };
+		BBDB2BD528FCFC4600568D5D /* LYLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LYLogger.m; sourceTree = "<group>"; };
 		FB00324728B8AB880028BC61 /* MyCustomSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyCustomSlider.h; sourceTree = "<group>"; };
 		FB00324828B8AB910028BC61 /* MyCustomSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyCustomSlider.m; sourceTree = "<group>"; };
 		FB086F6728A662D30062EBA5 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -1214,6 +1217,8 @@
 		FB687EEC28A0DEA6002D557B /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				BBDB2BD428FCFC4500568D5D /* LYLogger.h */,
+				BBDB2BD528FCFC4600568D5D /* LYLogger.m */,
 				BBB960C328F81E8400AD8B75 /* XWTimerTool.h */,
 				BBB960C428F81E8400AD8B75 /* XWTimerTool.m */,
 				FB1AB31F28F66B2F008C36FC /* HandlerVideo.h */,
@@ -1718,6 +1723,7 @@
 				BBC92AD128F670C80023E80F /* YKeychain.m in Sources */,
 				FB26948628E590BB00565F4B /* ShellTableViewCell.m in Sources */,
 				FBD32A9628DDC2D2000A548F /* UIBezierPath+Arrow.m in Sources */,
+				BBDB2BD628FCFC4600568D5D /* LYLogger.m in Sources */,
 				BBBBA3D428F1069000406C43 /* LayoutBottomView.m in Sources */,
 				FB687EFE28A0E9F1002D557B /* BaseView.m in Sources */,
 				FB6FC66E28B60CB500BE4AA1 /* StichingImageView.m in Sources */,

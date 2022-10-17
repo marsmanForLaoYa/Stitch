@@ -113,6 +113,7 @@
     // 必须要提供url 才会显示分享标签否则只显示图片
     NSArray *activityItems = nil;
     if ([User current].shareDescription && [User current].shareUrl) {
+
         activityItems = @[[User current].shareDescription, [UIImage imageNamed:@"share_icon"], [NSURL URLWithString:[User current].shareUrl]];
     }
 
