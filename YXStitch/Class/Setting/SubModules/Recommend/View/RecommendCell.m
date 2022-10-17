@@ -274,10 +274,6 @@
     }];
 }
 
-//- (void)textFieldDidChange:(UITextField *)textField {
-//    NSLog(@"%@", textField.text);
-//}
-
 #pragma mark - Method
 - (CAShapeLayer *)getCornerWithRoundedRect:(CGRect)rect byRoundingCorners:(UIRectCorner)corners isStroke:(BOOL)isStroke
 {
@@ -403,10 +399,10 @@
     if([User current].shareDescription) {
         
         pasteboard.string = [User current].shareDescription;
+        [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeNone];
+        [SVProgressHUD showInfoWithStatus:@"已复制，快去粘贴吧"];
+        [SVProgressHUD dismissWithDelay:1.0];
     }
-    [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeNone];
-    [SVProgressHUD showInfoWithStatus:@"已复制，快去粘贴吧"];
-    [SVProgressHUD dismissWithDelay:1.0];
 }
 
 @end
