@@ -489,7 +489,7 @@
 - (void)changeSliderValue:(CGFloat)value {
 
     //vale 0-1;
-    self.gridsShowView.imagePadding = value * 20;
+    self.gridsShowView.imagePadding = value * 15;
 }
 
 - (void)changeWaterFontColor:(NSString *)color{

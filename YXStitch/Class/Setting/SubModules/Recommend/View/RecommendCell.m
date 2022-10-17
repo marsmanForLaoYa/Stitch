@@ -121,6 +121,7 @@
     _getRewardsBtn = getRewardsBtn;
     
     RewardTextField *textField = [[RewardTextField alloc] init];
+    textField.textColor = RGB(0, 0, 0);
     textField.returnKeyType = UIReturnKeyDone;
 //    textField.keyboardType = UIKeyboardTypeNumberPad;
     textField.maxLength = 20;
