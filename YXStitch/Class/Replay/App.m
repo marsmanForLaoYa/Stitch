@@ -68,10 +68,13 @@ static void onDarwinReplayKit2PushStart(CFNotificationCenterRef center,
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleScreenRecordStartNotification:) name:ScreenRecordStartNotif object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleScreenRecordEndNotification:) name:ScreenRecordFinishNotif object:nil];
     
+    LYLog(@"检测文件1");
     if(![UIScreen mainScreen].isCaptured){//正在录屏
         NSUserDefaults *sharedDefaults = [[NSUserDefaults alloc] initWithSuiteName:GroupIDKey];
         NSString *fileName = [sharedDefaults objectForKey:FileKey];
+        LYLog(@"检测文件2");
         if (fileName.length>0) {//录屏时app挂掉重启后也可找到mp4
+            LYLog(@"检测文件3");
             NSURL *oldUrl = [SharePath filePathUrlWithFileName:fileName];
             [self moveFromGroupUrl:oldUrl];
         }
@@ -112,6 +115,7 @@ static void onDarwinReplayKit2PushStart(CFNotificationCenterRef center,
         videoURL = newUrl;
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:kScreenRecordFinishNotification object:nil userInfo:@{@"videoURL":videoURL}];
+    LYLog(@"发送通知");
 }
 
 @end

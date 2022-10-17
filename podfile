@@ -19,6 +19,8 @@ target 'YXStitch' do
   pod 'TYSnapshotScroll'
   #pod 'LFFilterSuite'
   pod 'MJExtension'
+  pod 'CocoaLumberjack'
+  
   #友盟分享
   pod 'UMCommon'
   pod 'UMDevice'

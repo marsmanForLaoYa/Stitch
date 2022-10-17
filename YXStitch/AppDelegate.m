@@ -13,7 +13,10 @@
 #import <UMCommon/UMCommon.h>
 #import "App.h"
 #import "XWTimerTool.h"
+
 @interface AppDelegate ()
+
+@property (nonatomic, assign) NSInteger pasteboardChangeCount;
 
 @end
 
@@ -40,6 +43,11 @@
 
     [[XWTimerTool shareInstance] addAutoLoginTimer];
     [App sharedInstance];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlePasteboardNotification:) name:UIPasteboardChangedNotification object:nil];
+    
+
+    [LYLogger instance];
+    
     return YES;
 }
 
@@ -59,6 +67,10 @@
 
     /* 设置sina */
 //    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_Sina appKey:@"3921700954"  appSecret:@"04b48b094faeb16683c32669824ebdad" redirectURL:@"https://sns.whalecloud.com/sina2/callback"];
+}
+
+- (void)handlePasteboardNotification:(NSNotification *)notify {
+    self.pasteboardChangeCount = [UIPasteboard generalPasteboard].changeCount;
 }
 
 #pragma mark-设置rootView
@@ -92,8 +104,39 @@
 }
 
 -(void)applicationDidBecomeActive:(UIApplication *)application{
+    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
     
+    if (self.pasteboardChangeCount != pasteboard.changeCount) {
+        self.pasteboardChangeCount = pasteboard.changeCount;
+       
+        if (pasteboard.string == nil) {
+            return;
+        }
+        NSData *jsonData = [pasteboard.string dataUsingEncoding:NSUTF8StringEncoding];
+        NSError *error;
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData
+                                                            options:NSJSONReadingMutableContainers
+                                                              error:&error];
+        if (dic) {
+            NSString *code = dic[@"code"];
+            if ([User current].isLogin) {
+                [[XWNetTool sharedInstance] uploadInvataionCodelWithCode:code callback:^(NSString * _Nonnull errorMsg, NSInteger code) {
+                    if (code == CodeSuccess) {
+                        //输入了邀请码会得到7天VIP有必要重新获取一下用户信息
+                        [[XWNetTool sharedInstance] queryUserInformationShowAdAlert:NO callback:nil];
+                    }
+                    else if (code == CodeBindInviteCodeNoExist ||
+                             code == CodeBindHadBindUser ||
+                             code == CodeBindError)
+                    {
+//                        pasteboard.string = nil;
+                    }
+                }];
+            }
+        }
+    }
 }
+
 -(void)applicationWillEnterForeground:(UIApplication *)application{
     
 }
