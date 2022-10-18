@@ -31,6 +31,8 @@
 //    {
 //        return;
 //    }
+    
+
     if ([self respondsToSelector:@selector(interactivePopGestureRecognizer)] && animated == YES)
     {
         self.interactivePopGestureRecognizer.enabled = NO;
@@ -54,9 +56,12 @@
         //  将两个UIBarButtonItem设置给当前的VC
         viewController.navigationItem.leftBarButtonItems = @[backItem];
     }
+    if (![[super topViewController] isKindOfClass:[viewController class]]) {
+        // 如果和上一个控制器一样，隔绝此操作
+        [super pushViewController:viewController animated:animated];
+     }
     
-    [super pushViewController:viewController animated:animated];
-    self.pushing = YES;
+//    self.pushing = YES;
 }
 
 - (NSArray *)popToRootViewControllerAnimated:(BOOL)animated

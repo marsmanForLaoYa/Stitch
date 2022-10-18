@@ -323,7 +323,10 @@
     _colorSelectView.type = 6;
     _colorSelectView.delegate = self;
     _colorSelectView.moreColorClick = ^{
-        [weakSelf addColorPlateView];
+        //父视图上没有_colorPlateView再添加
+        if(![weakSelf.colorPlateView isDescendantOfView:weakSelf.view]) {
+            [weakSelf addColorPlateView];
+        }
     };
     [self.view addSubview:_colorSelectView];
     

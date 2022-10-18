@@ -888,7 +888,6 @@
 - (void)getBottomPanEdgeArrayWithGridElementView:(GridShowImgView *)gridElementView originArray:(NSArray *)originArray {
     
     if(originArray.count == 0) {
-
         return;
     }
     
@@ -947,7 +946,6 @@
     self.topBelowImageViews = [NSMutableArray array];
     self.topAboveImageViews = [NSMutableArray array];
     
-    
     [self.topBelowImageViews addObjectsFromArray:@[gridElementView]];
     [self getTopPanEdgeArrayWithGridElementView:gridElementView originArray:@[gridElementView]];
 }
@@ -955,7 +953,6 @@
 - (void)getTopPanEdgeArrayWithGridElementView:(GridShowImgView *)gridElementView originArray:(NSArray *)originArray {
     
     if(originArray.count == 0) {
-
         return;
     }
     
@@ -1027,14 +1024,12 @@
     self.leftToRightImageViews = [NSMutableArray array];
 
     [self.leftToRightImageViews addObjectsFromArray:@[gridElementView]];
-    
     [self getLeftPanEdgeArrayWithGridElementView:gridElementView originArray:@[gridElementView]];
 }
 
 - (void)getLeftPanEdgeArrayWithGridElementView:(GridShowImgView *)gridElementView originArray:(NSArray *)originArray {
     
     if(originArray.count == 0) {
-
         return;
     }
     
@@ -1094,14 +1089,12 @@
     self.rightToRightImageViews = [NSMutableArray array];
     
     [self.rightToLeftImageViews addObjectsFromArray:@[gridElementView]];
-    
     [self getRightPanEdgeArrayWithGridElementView:gridElementView originArray:@[gridElementView]];
 }
 
 - (void)getRightPanEdgeArrayWithGridElementView:(GridShowImgView *)gridElementView originArray:(NSArray *)originArray {
     
     if(originArray.count == 0) {
-
         return;
     }
         
@@ -1204,7 +1197,7 @@
 #define kCanPanViewHeight 10
 #define kViewBorderWidth 3
 //捏合手势放大最大比例
-#define kPinchMaxScale 2
+#define kPinchMaxScale 3
 @interface GridShowImgView ()
 
 @property (nonatomic, strong) UIView *subBgView;
