@@ -41,16 +41,6 @@ typedef NS_ENUM(NSUInteger, PanViewEdge) {
     PanViewEdgeRight,
 };
 
-//typedef NS_OPTIONS(NSUInteger, PaddingEdge) {
-//
-//    PaddingEdgeNone   = 0,
-//    PaddingEdgeTop    = 1 << 0,
-//    PaddingEdgeLeft   = 1 << 1,
-//    PaddingEdgeBottom = 1 << 2,
-//    PaddingEdgeRight  = 1 << 3,
-//    PaddingEdgeAll    = PaddingEdgeTop | PaddingEdgeLeft | PaddingEdgeBottom | PaddingEdgeRight
-//};
-
 @protocol GridShowImgViewDelegate <NSObject>
 
 #pragma mark - 上下左右拖动
@@ -86,7 +76,6 @@ typedef NS_ENUM(NSUInteger, PanViewEdge) {
 @property (nonatomic, strong) UIView *rightPanGestureView;
 @property (nonatomic, strong) UIView *bottomPanGestureView;
 @property (nonatomic, assign) GridPanEdge gridPanEdge;
-//@property (nonatomic, assign) PaddingEdge paddingEdge;
 @property (nonatomic, weak) id<GridShowImgViewDelegate> delegate;
 
 @property (nonatomic, assign) BOOL gridEditing;

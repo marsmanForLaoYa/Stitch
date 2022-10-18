@@ -7,8 +7,8 @@
 
 #import "GridShowView.h"
 
-#define kGridElementMinWidth 80
-#define kGridElementMinHeight 80
+#define kGridElementMinWidth 55
+#define kGridElementMinHeight 55
 #define kCompensatePrecision 0.1
 @interface GridShowView ()<GridShowImgViewDelegate>
 {
@@ -382,10 +382,10 @@
 
                 if(changeX != 0 && maxRight != obj.right) {
 
-                    obj.right = obj.right + changeX;
-                    //解决加起来要大于maxbottom的bug
+                    obj.width = obj.width + changeX;
+                    //解决加起来要大于maxRight的bug
                     if(obj.right > maxRight) {
-                        obj.right = obj.right - (obj.right - maxRight);
+                        obj.width = obj.width - (obj.right - maxRight);
                     }
                 }
             }];
