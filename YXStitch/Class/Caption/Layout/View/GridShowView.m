@@ -876,26 +876,41 @@
 }
 
 #pragma mark - analysis
+//下部移动手势
 - (void)getBottomBelowAndAbovePanViewArray:(GridShowImgView *)gridElementView array:(NSArray *)gridsArray {
     self.bottomBelowImageViews = [NSMutableArray array];
     self.bottomAboveImageViews = [NSMutableArray array];
+    
+    [self.bottomAboveImageViews addObjectsFromArray:@[gridElementView]];
+    [self getBottomPanEdgeArrayWithGridElementView:gridElementView originArray:@[gridElementView]];
+}
+
+- (void)getBottomPanEdgeArrayWithGridElementView:(GridShowImgView *)gridElementView originArray:(NSArray *)originArray {
+    
+    if(originArray.count == 0) {
+
+        return;
+    }
+    
     NSMutableArray *belowArray = [NSMutableArray array];
     @weakify(self);
-    
-    [self.bottomAboveImageViews addObject:gridElementView];
     //检测下方交叉的view
-    [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull subImgView, NSUInteger idx, BOOL * _Nonnull stop) {
+    [originArray enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull subImgView, NSUInteger idx, BOOL * _Nonnull stop) {
         @strongify(self);
-        if(![gridElementView isEqual:subImgView]) {
-            if(fabs(gridElementView.bottom - subImgView.top) <= 1) {
-                
-                if(![self judgeBottomAndTopIsNoOverlapBetweenView1:subImgView secondView:gridElementView])
-                {//重叠
-                    [belowArray addObject:subImgView];
+
+        [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            
+            if(![gridElementView isEqual:obj]) {
+                if(fabs(subImgView.bottom - obj.top) <= 1) {
+                    if(![self judgeBottomAndTopIsNoOverlapBetweenView1:obj secondView:subImgView])
+                    {//重叠
+                        if(![self.bottomBelowImageViews containsObject:obj]) {
+                            [belowArray addObject:obj];
+                        }
+                    }
                 }
-                
             }
-        }
+        }];
     }];
     
     [self.bottomBelowImageViews addObjectsFromArray:belowArray];
@@ -923,117 +938,46 @@
     }];
     
     [self.bottomAboveImageViews addObjectsFromArray:aboveArray];
-    
-    NSMutableArray *secondBelowArray = [NSMutableArray array];
-    //检测下方交叉的view
-    [aboveArray enumerateObjectsUsingBlock:^(GridShowImgView *  _Nonnull subImgView, NSUInteger idx, BOOL * _Nonnull stop) {
-        @strongify(self);
-        
-        [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            
-            if(![gridElementView isEqual:obj]) {
-                if(fabs(subImgView.bottom - obj.top) <= 1) {
-                    if(![self judgeBottomAndTopIsNoOverlapBetweenView1:obj secondView:subImgView])
-                    {//重叠
-                        if(![self.bottomBelowImageViews containsObject:obj]) {
-                            [secondBelowArray addObject:obj];
-                        }
-                    }
-                }
-            }
-        }];
-    }];
-    
-    [self.bottomBelowImageViews addObjectsFromArray:secondBelowArray];
-    
-    NSMutableArray *secondAboveArray = [NSMutableArray array];
-    //检测上方交叉的view
-    [secondBelowArray enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull subImgView, NSUInteger idx, BOOL * _Nonnull stop) {
-        @strongify(self);
-        if(![gridElementView isEqual:subImgView]) {
-
-            [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                
-                if(![gridElementView isEqual:obj]) {
-                    if(fabs(subImgView.top - obj.bottom) <= 1) {
-                        if(![self judgeBottomAndTopIsNoOverlapBetweenView1:subImgView secondView:obj])
-                        {//重叠
-                            if(![self.bottomAboveImageViews containsObject:obj]) {
-                                [secondAboveArray addObject:obj];
-                            }
-                        }
-                    }
-                }
-            }];
-        }
-    }];
-    [self.bottomAboveImageViews addObjectsFromArray:secondAboveArray];
-    
-    NSMutableArray *thirdBelowArray = [NSMutableArray array];
-    //检测下方交叉的view
-    [secondAboveArray enumerateObjectsUsingBlock:^(GridShowImgView *  _Nonnull subImgView, NSUInteger idx, BOOL * _Nonnull stop) {
-        @strongify(self);
-        
-        [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            
-            if(![gridElementView isEqual:obj]) {
-                if(fabs(subImgView.bottom - obj.top) <= 1) {
-                    if(![self judgeBottomAndTopIsNoOverlapBetweenView1:obj secondView:subImgView])
-                    {//重叠
-                        if(![self.bottomBelowImageViews containsObject:obj]) {
-                            [thirdBelowArray addObject:obj];
-                        }
-                    }
-                }
-            }
-        }];
-    }];
-    
-    [self.bottomBelowImageViews addObjectsFromArray:thirdBelowArray];
-    
-    NSMutableArray *thirdAboveArray = [NSMutableArray array];
-    //检测上方交叉的view
-    [thirdBelowArray enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull subImgView, NSUInteger idx, BOOL * _Nonnull stop) {
-        @strongify(self);
-        if(![gridElementView isEqual:subImgView]) {
-
-            [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                
-                if(![gridElementView isEqual:obj]) {
-                    if(fabs(subImgView.top - obj.bottom) <= 1) {
-                        if(![self judgeBottomAndTopIsNoOverlapBetweenView1:subImgView secondView:obj])
-                        {//重叠
-                            if(![self.bottomAboveImageViews containsObject:obj]) {
-                                [thirdAboveArray addObject:obj];
-                            }
-                        }
-                    }
-                }
-            }];
-        }
-    }];
-    [self.bottomAboveImageViews addObjectsFromArray:thirdAboveArray];
+    //递归调用
+    [self getBottomPanEdgeArrayWithGridElementView:gridElementView originArray:aboveArray];
 }
 
+//上部移动手势
 - (void)getTopBelowAndAbovePanViewArray:(GridShowImgView *)gridElementView array:(NSArray *)gridsArray {
     self.topBelowImageViews = [NSMutableArray array];
     self.topAboveImageViews = [NSMutableArray array];
-    NSMutableArray *aboveArray = [NSMutableArray array];
     
-    [self.topBelowImageViews addObject:gridElementView];
+    
+    [self.topBelowImageViews addObjectsFromArray:@[gridElementView]];
+    [self getTopPanEdgeArrayWithGridElementView:gridElementView originArray:@[gridElementView]];
+}
+
+- (void)getTopPanEdgeArrayWithGridElementView:(GridShowImgView *)gridElementView originArray:(NSArray *)originArray {
+    
+    if(originArray.count == 0) {
+
+        return;
+    }
+    
+    NSMutableArray *aboveArray = [NSMutableArray array];
     @weakify(self);
     //检测上方的view
-    [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull subImgView, NSUInteger idx, BOOL * _Nonnull stop) {
+    [originArray enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull subImgView, NSUInteger idx, BOOL * _Nonnull stop) {
         @strongify(self);
-        if(![gridElementView isEqual:subImgView]) {
-            if(fabs(gridElementView.top - subImgView.bottom) <= 1) {
-                
-                if(![self judgeBottomAndTopIsNoOverlapBetweenView1:subImgView secondView:gridElementView])
-                {//重叠
-                    [aboveArray addObject:subImgView];
+        
+        [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            
+            if(![gridElementView isEqual:obj]) {
+                if(fabs(subImgView.top - obj.bottom) <= 1) {
+                    if(![self judgeBottomAndTopIsNoOverlapBetweenView1:obj secondView:subImgView])
+                    {//重叠
+                        if(![self.topAboveImageViews containsObject:obj]) {
+                            [aboveArray addObject:obj];
+                        }
+                    }
                 }
             }
-        }
+        }];
     }];
     
     [self.topAboveImageViews addObjectsFromArray:aboveArray];
@@ -1053,7 +997,19 @@
                             if(![self.topBelowImageViews containsObject:obj]) {
                                 [belowArray addObject:obj];
                             }
+                            else
+                            {
+                                NSLog(@"1");
+                            }
                         }
+                        else
+                        {
+                            NSLog(@"2");
+                        }
+                    }
+                    else
+                    {
+                        NSLog(@"3");
                     }
                 }
             }];
@@ -1061,117 +1017,46 @@
     }];
     
     [self.topBelowImageViews addObjectsFromArray:belowArray];
-    
-    NSMutableArray *secondAboveArray = [NSMutableArray array];
-    //检测上方的view
-    [belowArray enumerateObjectsUsingBlock:^(GridShowImgView *  _Nonnull subImgView, NSUInteger idx, BOOL * _Nonnull stop) {
-        @strongify(self);
-        
-        [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            
-            if(![gridElementView isEqual:obj]) {
-                if(fabs(subImgView.top - obj.bottom) <= 1) {
-                    if(![self judgeBottomAndTopIsNoOverlapBetweenView1:obj secondView:subImgView])
-                    {//重叠
-                        if(![self.topAboveImageViews containsObject:obj]) {
-                            [secondAboveArray addObject:obj];
-                        }
-                    }
-                }
-            }
-        }];
-    }];
-    
-    [self.topAboveImageViews addObjectsFromArray:secondAboveArray];
-    
-    NSMutableArray *secondBelowArray = [NSMutableArray array];
-    //检测下方的view
-    [secondAboveArray enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull subImgView, NSUInteger idx, BOOL * _Nonnull stop) {
-        @strongify(self);
-        if(![gridElementView isEqual:subImgView]) {
-
-            [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                
-                if(![gridElementView isEqual:obj]) {
-                    if(fabs(subImgView.bottom - obj.top) <= 1) {
-                        if(![self judgeBottomAndTopIsNoOverlapBetweenView1:subImgView secondView:obj])
-                        {//重叠
-                            if(![self.topBelowImageViews containsObject:obj]) {
-                                [secondBelowArray addObject:obj];
-                            }
-                        }
-                    }
-                }
-            }];
-        }
-    }];
-    [self.topBelowImageViews addObjectsFromArray:secondBelowArray];
-    
-    NSMutableArray *thirdAboveArray = [NSMutableArray array];
-    //检测上方的view
-    [secondBelowArray enumerateObjectsUsingBlock:^(GridShowImgView *  _Nonnull subImgView, NSUInteger idx, BOOL * _Nonnull stop) {
-        @strongify(self);
-        
-        [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            
-            if(![gridElementView isEqual:obj]) {
-                if(fabs(subImgView.top - obj.bottom) <= 1) {
-                    if(![self judgeBottomAndTopIsNoOverlapBetweenView1:obj secondView:subImgView])
-                    {//重叠
-                        if(![self.topAboveImageViews containsObject:obj]) {
-                            [thirdAboveArray addObject:obj];
-                        }
-                    }
-                }
-            }
-        }];
-    }];
-    
-    [self.topAboveImageViews addObjectsFromArray:thirdAboveArray];
-    
-    NSMutableArray *thirdBelowArray = [NSMutableArray array];
-    //检测下方的view
-    [thirdAboveArray enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull subImgView, NSUInteger idx, BOOL * _Nonnull stop) {
-        @strongify(self);
-        if(![gridElementView isEqual:subImgView]) {
-
-            [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                
-                if(![gridElementView isEqual:obj]) {
-                    if(fabs(subImgView.bottom - obj.top) <= 1) {
-                        if(![self judgeBottomAndTopIsNoOverlapBetweenView1:subImgView secondView:obj])
-                        {//重叠
-                            if(![self.topBelowImageViews containsObject:obj]) {
-                                [thirdBelowArray addObject:obj];
-                            }
-                        }
-                    }
-                }
-            }];
-        }
-    }];
-    [self.topBelowImageViews addObjectsFromArray:thirdBelowArray];
+    //递归调用
+    [self getTopPanEdgeArrayWithGridElementView:gridElementView originArray:belowArray];
 }
 
+//左部移动手势
 - (void)getLeftPanEdgeLeftAndRightPanViewArray:(GridShowImgView *)gridElementView array:(NSArray *)gridsArray {
     self.leftToLeftImageViews = [NSMutableArray array];
     self.leftToRightImageViews = [NSMutableArray array];
+
+    [self.leftToRightImageViews addObjectsFromArray:@[gridElementView]];
+    
+    [self getLeftPanEdgeArrayWithGridElementView:gridElementView originArray:@[gridElementView]];
+}
+
+- (void)getLeftPanEdgeArrayWithGridElementView:(GridShowImgView *)gridElementView originArray:(NSArray *)originArray {
+    
+    if(originArray.count == 0) {
+
+        return;
+    }
     
     NSMutableArray *leftArray = [NSMutableArray array];
-    [self.leftToRightImageViews addObject:gridElementView];
     @weakify(self);
     //向左检测交叉的view
-    [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull subImgView, NSUInteger idx, BOOL * _Nonnull stop) {
+    [originArray enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull subImgView, NSUInteger idx, BOOL * _Nonnull stop) {
         @strongify(self);
-        if(![gridElementView isEqual:subImgView]) {
-            if(fabs(gridElementView.left - subImgView.right) <= 1) {
-                
-                if(![self judgeLeftAndRightIsNoOverlapBetweenView1:subImgView secondView:gridElementView])
-                {//重叠
-                    [leftArray addObject:subImgView];
+        
+        [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            
+            if(![gridElementView isEqual:obj]) {
+                if(fabs(subImgView.left - obj.right) <= 1) {
+                    if(![self judgeLeftAndRightIsNoOverlapBetweenView1:obj secondView:subImgView])
+                    {//重叠
+                        if(![self.leftToLeftImageViews containsObject:obj]) {
+                            [leftArray addObject:obj];
+                        }
+                    }
                 }
             }
-        }
+        }];
     }];
     [self.leftToLeftImageViews addObjectsFromArray:leftArray];
     
@@ -1198,121 +1083,47 @@
     }];
     
     [self.leftToRightImageViews addObjectsFromArray:rightArray];
-    
-    NSMutableArray *secondLeftArray = [NSMutableArray array];
-    //向左检测交叉的view
-    [rightArray enumerateObjectsUsingBlock:^(GridShowImgView *  _Nonnull subImgView, NSUInteger idx, BOOL * _Nonnull stop) {
-        @strongify(self);
-        
-        [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            
-            if(![gridElementView isEqual:obj]) {
-                if(fabs(subImgView.left - obj.right) <= 1) {
-                    if(![self judgeLeftAndRightIsNoOverlapBetweenView1:obj secondView:subImgView])
-                    {//重叠
-                        if(![self.leftToLeftImageViews containsObject:obj]) {
-                            [secondLeftArray addObject:obj];
-                        }
-                    }
-                }
-            }
-        }];
-    }];
-    
-    [self.leftToLeftImageViews addObjectsFromArray:secondLeftArray];
-    
-    NSMutableArray *secondRightArray = [NSMutableArray array];
-    //向右检测交叉的view
-    [secondLeftArray enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull subImgView, NSUInteger idx, BOOL * _Nonnull stop) {
-        @strongify(self);
-        if(![gridElementView isEqual:subImgView]) {
-
-            [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                
-                if(![gridElementView isEqual:obj]) {
-                    if(fabs(subImgView.right - obj.left) <= 1) {
-                        if(![self judgeLeftAndRightIsNoOverlapBetweenView1:subImgView secondView:obj])
-                        {//重叠
-                            if(![self.leftToRightImageViews containsObject:obj]) {
-                                [secondRightArray addObject:obj];
-                            }
-                        }
-                    }
-                }
-            }];
-        }
-    }];
-    
-    [self.leftToRightImageViews addObjectsFromArray:secondRightArray];
-    
-    NSMutableArray *thirdLeftArray = [NSMutableArray array];
-    //向左检测交叉的view
-    [secondRightArray enumerateObjectsUsingBlock:^(GridShowImgView *  _Nonnull subImgView, NSUInteger idx, BOOL * _Nonnull stop) {
-        @strongify(self);
-        
-        [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            
-            if(![gridElementView isEqual:obj]) {
-                if(fabs(subImgView.left - obj.right) <= 1) {
-                    if(![self judgeLeftAndRightIsNoOverlapBetweenView1:obj secondView:subImgView])
-                    {//重叠
-                        if(![self.leftToLeftImageViews containsObject:obj]) {
-                            [thirdLeftArray addObject:obj];
-                        }
-                    }
-                }
-            }
-        }];
-    }];
-    
-    [self.leftToLeftImageViews addObjectsFromArray:thirdLeftArray];
-    
-    NSMutableArray *thirdRightArray = [NSMutableArray array];
-    //向右检测交叉的view
-    [thirdLeftArray enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull subImgView, NSUInteger idx, BOOL * _Nonnull stop) {
-        @strongify(self);
-        if(![gridElementView isEqual:subImgView]) {
-
-            [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                
-                if(![gridElementView isEqual:obj]) {
-                    if(fabs(subImgView.right - obj.left) <= 1) {
-                        if(![self judgeLeftAndRightIsNoOverlapBetweenView1:subImgView secondView:obj])
-                        {//重叠
-                            if(![self.leftToRightImageViews containsObject:obj]) {
-                                [thirdRightArray addObject:obj];
-                            }
-                        }
-                    }
-                }
-            }];
-        }
-    }];
-    
-    [self.leftToRightImageViews addObjectsFromArray:thirdRightArray];
+    //递归调用
+    [self getLeftPanEdgeArrayWithGridElementView:gridElementView originArray:rightArray];
 }
 
+//右部移动手势
 - (void)getRightPanEdgeLeftAndRightPanViewArray:(GridShowImgView *)gridElementView array:(NSArray *)gridsArray {
     
     self.rightToLeftImageViews = [NSMutableArray array];
     self.rightToRightImageViews = [NSMutableArray array];
     
-    [self.rightToLeftImageViews addObject:gridElementView];
+    [self.rightToLeftImageViews addObjectsFromArray:@[gridElementView]];
     
+    [self getRightPanEdgeArrayWithGridElementView:gridElementView originArray:@[gridElementView]];
+}
+
+- (void)getRightPanEdgeArrayWithGridElementView:(GridShowImgView *)gridElementView originArray:(NSArray *)originArray {
+    
+    if(originArray.count == 0) {
+
+        return;
+    }
+        
     NSMutableArray *rightArray = [NSMutableArray array];
     @weakify(self);
     //向右检测view
-    [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull subImgView, NSUInteger idx, BOOL * _Nonnull stop) {
+    [originArray enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull subImgView, NSUInteger idx, BOOL * _Nonnull stop) {
         @strongify(self);
-        if(![gridElementView isEqual:subImgView]) {
-            if(fabs(gridElementView.right - subImgView.left) <= 1) {
-                
-                if(![self judgeLeftAndRightIsNoOverlapBetweenView1:subImgView secondView:gridElementView])
-                {//重叠
-                    [rightArray addObject:subImgView];
+        
+        [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            
+            if(![gridElementView isEqual:obj]) {
+                if(fabs(subImgView.right - obj.left) <= 1) {
+                    if(![self judgeLeftAndRightIsNoOverlapBetweenView1:obj secondView:subImgView])
+                    {//重叠
+                        if(![self.rightToRightImageViews containsObject:obj]) {
+                            [rightArray addObject:obj];
+                        }
+                    }
                 }
             }
-        }
+        }];
     }];
     
     [self.rightToRightImageViews addObjectsFromArray:rightArray];
@@ -1341,98 +1152,10 @@
     
     [self.rightToLeftImageViews addObjectsFromArray:leftArray];
     
-    NSMutableArray *secondRightArray = [NSMutableArray array];
-    //向右检测交叉的view
-    [leftArray enumerateObjectsUsingBlock:^(GridShowImgView *  _Nonnull subImgView, NSUInteger idx, BOOL * _Nonnull stop) {
-        @strongify(self);
-        
-        [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            
-            if(![gridElementView isEqual:obj]) {
-                if(fabs(subImgView.right - obj.left) <= 1) {
-                    if(![self judgeLeftAndRightIsNoOverlapBetweenView1:obj secondView:subImgView])
-                    {//重叠
-                        if(![self.rightToRightImageViews containsObject:obj]) {
-                            [secondRightArray addObject:obj];
-                        }
-                    }
-                }
-            }
-        }];
-    }];
-    
-    [self.rightToRightImageViews addObjectsFromArray:secondRightArray];
-    
-    NSMutableArray *secondLeftArray = [NSMutableArray array];
-    //向左检测交叉的view
-    [secondRightArray enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull subImgView, NSUInteger idx, BOOL * _Nonnull stop) {
-        @strongify(self);
-        if(![gridElementView isEqual:subImgView]) {
-
-            [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                
-                if(![gridElementView isEqual:obj]) {
-                    if(fabs(subImgView.left - obj.right) <= 1) {
-                        if(![self judgeLeftAndRightIsNoOverlapBetweenView1:subImgView secondView:obj])
-                        {//重叠
-                            if(![self.rightToLeftImageViews containsObject:obj]) {
-                                [secondLeftArray addObject:obj];
-                            }
-                        }
-                    }
-                }
-            }];
-        }
-    }];
-    
-    [self.rightToLeftImageViews addObjectsFromArray:secondLeftArray];
-    
-    NSMutableArray *thirdRightArray = [NSMutableArray array];
-    //向右检测交叉的view
-    [secondLeftArray enumerateObjectsUsingBlock:^(GridShowImgView *  _Nonnull subImgView, NSUInteger idx, BOOL * _Nonnull stop) {
-        @strongify(self);
-        
-        [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            
-            if(![gridElementView isEqual:obj]) {
-                if(fabs(subImgView.right - obj.left) <= 1) {
-                    if(![self judgeLeftAndRightIsNoOverlapBetweenView1:obj secondView:subImgView])
-                    {//重叠
-                        if(![self.rightToRightImageViews containsObject:obj]) {
-                            [thirdRightArray addObject:obj];
-                        }
-                    }
-                }
-            }
-        }];
-    }];
-    
-    [self.rightToRightImageViews addObjectsFromArray:thirdRightArray];
-    
-    NSMutableArray *thirdLeftArray = [NSMutableArray array];
-    //向左检测交叉的view
-    [thirdRightArray enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull subImgView, NSUInteger idx, BOOL * _Nonnull stop) {
-        @strongify(self);
-        if(![gridElementView isEqual:subImgView]) {
-
-            [self.gridsImageViews enumerateObjectsUsingBlock:^(GridShowImgView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                
-                if(![gridElementView isEqual:obj]) {
-                    if(fabs(subImgView.left - obj.right) <= 1) {
-                        if(![self judgeLeftAndRightIsNoOverlapBetweenView1:subImgView secondView:obj])
-                        {//重叠
-                            if(![self.rightToLeftImageViews containsObject:obj]) {
-                                [thirdLeftArray addObject:obj];
-                            }
-                        }
-                    }
-                }
-            }];
-        }
-    }];
-    
-    [self.rightToLeftImageViews addObjectsFromArray:thirdLeftArray];
+    //递归调用
+    [self getRightPanEdgeArrayWithGridElementView:gridElementView originArray:leftArray];
 }
+
 
 //判断左右边距 是否重叠 NO重叠 YES不重叠
 - (BOOL)judgeBottomAndTopIsNoOverlapBetweenView1:(GridShowImgView *)view1 secondView:(GridShowImgView *)view2 {
