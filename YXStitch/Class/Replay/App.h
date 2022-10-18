@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface App : NSObject
 
 + (instancetype)sharedInstance;
-
+@property (nonatomic ,strong)NSURL *videoURL;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -25,6 +25,11 @@
 #define MaxSCale 2.5  //最大缩放比例
 #define MinScale 0.5  //最小缩放比例
 
+#define MinWidth 80 //图片裁切最小宽度
+#define MinHeight 80 //图片裁切最小高度
+
+#define LayoutHeight 500 //临界重新布局调整高度
+
 #define VerViewWidth 260
 #define HorViewHeight 300
 
@@ -41,9 +46,11 @@
 
 @property (nonatomic ,strong)UIView *contentView;
 @property (nonatomic ,strong)UIView *bgView;
-@property (nonatomic ,strong)UIImageView *adjustView;
-@property (nonatomic ,strong)UIImageView *guideIMG;
-@property (nonatomic ,strong)UIButton *cutBtn;
+@property (nonatomic ,strong)UIImageView *adjustView;//字幕调整按钮view
+@property (nonatomic ,strong)UIButton *guideBtn;//裁切指引Btn
+@property (nonatomic ,strong)UIButton *slicingBtn; //切割btn
+@property (nonatomic ,strong)UIButton *leftCutBtn;//左边裁切btn
+@property (nonatomic ,strong)UIButton *rightCutBtn;//右边裁切btn
 
 
 @property (nonatomic ,strong)NSMutableArray *originTopArr;
@@ -57,6 +64,7 @@
 @property (nonatomic ,assign)CGFloat offsetY;
 @property (nonatomic ,assign)CGFloat topCurrentValue;
 @property (nonatomic ,assign)CGFloat bottomCurrentValue;
+@property (nonatomic ,strong)StitchingButton *centenIMG;
 
 @property (nonatomic ,strong)UIPanGestureRecognizer *panGesture;
 
@@ -65,8 +73,9 @@
 @property (nonatomic ,assign)BOOL isMove;//是否在移动
 @property (nonatomic ,assign)BOOL isSlicing;//是否正在切割
 @property (nonatomic ,assign)BOOL isVerticalCut;//是否竖切，默认竖切
-@property (nonatomic ,assign)BOOL isTurn;
+@property (nonatomic ,assign)BOOL isTurn;//图片是否翻转
 @property (nonatomic ,assign)BOOL isStartCut;//是否开始剪切
+@property (nonatomic ,assign)BOOL isScrollViewScroll;
 
 
 @property (nonatomic ,assign)NSInteger posizition;
@@ -196,12 +205,11 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
         [self.originBottomArr addObject:[NSNumber numberWithFloat:contentHeight]];
         
     }
-    if (contentHeight < 400){
+    if (contentHeight < LayoutHeight){
         //内容过小则重置imageView布局
         [self layoutContentView];
-    }else{
-        _contentScrollView.contentSize = CGSizeMake(_contentScrollView.width,contentHeight);
     }
+    _contentScrollView.contentSize = CGSizeMake(_contentScrollView.width,contentHeight);
 }
 
 //横拼
@@ -231,16 +239,14 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
     }
     if (contentWidth < SCREEN_WIDTH){
         [self layoutContentView];
-    }else{
-        _contentScrollView.contentSize = CGSizeMake(contentWidth,_contentScrollView.height);
     }
+    _contentScrollView.contentSize = CGSizeMake(contentWidth,_contentScrollView.height);
     
 }
 
 -(void)layoutContentView{
     NSInteger centenIndex = _imageViews.count / 2;
     CGFloat alignPointY = 0.0;
-    CGFloat alignPointX = 0.0;
     StitchingButton *lastIMG;
     if (_imageViews.count < 5){
         centenIndex += 1;
@@ -251,6 +257,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
             if (i == centenIndex - 1){
                 img.bottom = self.view.centerY;
                 alignPointY = img.bottom;
+                _centenIMG = img;
             }else{
                 img.bottom = lastIMG.top;
             }
@@ -270,11 +277,20 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
             _imageViews[i] = img;
         }
     }else{
+        if (_imageViews.count == 2){
+            centenIndex = 1;
+        }
         for (NSInteger i = centenIndex - 1; i >= 0; i --) {
             StitchingButton *img = _imageViews[i];
             if (i == centenIndex - 1){
-                img.right = self.view.centerX;
-                alignPointY = img.right;
+                if (_imageViews.count == 1){
+                    img.centerX = self.view.centerX;
+                    alignPointY = img.centerX;
+                }else{
+                    img.right = self.view.centerX;
+                    alignPointY = img.right;
+                }
+                _centenIMG = img;
             }else{
                 img.left = lastIMG.right;
             }
@@ -293,6 +309,8 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
             _originRightArr[i] = [NSNumber numberWithFloat:img.left];
             _imageViews[i] = img;
         }
+        
+        
     }
     
 }
@@ -382,46 +400,222 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
 }
 
 -(void)addVerticalCutView{
-    for (NSInteger i = 0; i < _imageViews.count ; i ++) {
-        StitchingButton *img = _imageViews[i];
+    NSInteger count = _imageViews.count;
+    if (count == 1){
+        count ++;
+    }
+    for (NSInteger i = 0; i < count ; i ++) {
+        StitchingButton *img;
+        if (_imageViews.count == 1){
+            img = _imageViews.firstObject;
+        }else{
+            img = _imageViews[i];
+        }    
         img.userInteractionEnabled = YES;
         if (img == nil){
             break;
         }
-        NSArray *btnArr = @[@"上裁切线",@"左裁切线",@"下裁切线",@"右裁切线"];
-        for (NSInteger j = 0 ; j < btnArr.count; j ++ ) {
-            UIButton *cutBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-            [cutBtn addTarget:self action:@selector(cutBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-            [_cutArr addObject:cutBtn];
-            cutBtn.tag = j + (i + 1) * 100;
-            [img addSubview:cutBtn];
+        img.layer.borderWidth = 3;
+        img.layer.borderColor = HexColor(@"#0A58F6").CGColor;
+        if (_imageViews.count == 1){
+            _imageViews[0] = img;
+        }else{
+            _imageViews[i] = img;
+        }
+        UIButton *cutBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [cutBtn addTarget:self action:@selector(cutBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+        cutBtn.tag = (i + 1) * 10000;
+        [_contentScrollView addSubview:cutBtn];
+        if (i == 0){
+            [cutBtn setBackgroundImage:IMG(@"topCutIcon") forState:UIControlStateNormal];
             [cutBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-                if (j == 0){
-                    make.centerX.width.top.equalTo(img);
-                    make.height.equalTo(@20);
-                }else if (j == 1){
-                    make.height.left.top.equalTo(img);
-                    make.width.equalTo(@20);
-                }else if (j == 2){
-                    make.width.left.bottom.equalTo(img);
-                    make.height.equalTo(@20);
-                }else{
-                    make.top.height.right.equalTo(img);
-                    make.width.equalTo(@20);
-                }
+                make.centerX.top.equalTo(img);
+                make.height.equalTo(@22);
+                make.width.equalTo(@60);
             }];
-            UIImageView *line = [UIImageView new];
-            if (j == 0 && i != 0){
-                line.image = IMG(@"");
-            }else{
-                line.image = IMG(btnArr[j]);
+        }else if (i == _imageViews.count - 1 || _imageViews.count == 1){
+            [cutBtn setBackgroundImage:IMG(@"bottomCutIcon") forState:UIControlStateNormal];
+            cutBtn.tag = (i + 2 ) * 10000;
+            [cutBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.centerX.bottom.equalTo(img);
+                make.height.equalTo(@22);
+                make.width.equalTo(@60);
+            }];
+            if (_imageViews.count != 1){
+                UIButton *topBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+                [topBtn addTarget:self action:@selector(cutBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+                topBtn.tag = (i + 1) * 10000;
+                [topBtn setBackgroundImage:IMG(@"centerCutIcon") forState:UIControlStateNormal];
+                [_contentScrollView addSubview:topBtn];
+                [topBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.centerX.equalTo(img);
+                    make.top.equalTo(img.mas_top).offset(-14);
+                    make.height.equalTo(@28);
+                    make.width.equalTo(@60);
+                }];
             }
-            [cutBtn addSubview:line];
-            [line mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.edges.equalTo(cutBtn);
+        }else{
+            [cutBtn setBackgroundImage:IMG(@"centerCutIcon") forState:UIControlStateNormal];
+            [cutBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.centerX.equalTo(img);
+                make.top.equalTo(img.mas_top).offset(-14);
+                make.height.equalTo(@28);
+                make.width.equalTo(@60);
             }];
         }
     }
+    StitchingButton *firstIMG = _imageViews.firstObject;
+    _leftCutBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    _leftCutBtn.tag = 1 ;
+    [_leftCutBtn addTarget:self action:@selector(cutBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    [_leftCutBtn setBackgroundImage:IMG(@"leftCutIcon") forState:UIControlStateNormal];
+    [_contentScrollView addSubview:_leftCutBtn];
+    [_contentScrollView bringSubviewToFront:_leftCutBtn];
+    _rightCutBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    _rightCutBtn.tag = 3;
+    [_rightCutBtn addTarget:self action:@selector(cutBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    [_rightCutBtn setBackgroundImage:IMG(@"rightCutIcon") forState:UIControlStateNormal];
+    [_contentScrollView addSubview:_rightCutBtn];
+    [_contentScrollView bringSubviewToFront:_rightCutBtn];
+    if (_imageViews.count == 1){
+        [_leftCutBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.width.equalTo(@22);
+            make.height.equalTo(@60);
+            make.left.equalTo(firstIMG.mas_left);
+            make.centerY.equalTo(firstIMG.mas_centerY);
+        }];
+        
+    }else{
+        [_leftCutBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.width.equalTo(@22);
+            make.height.equalTo(@60);
+            make.left.equalTo(firstIMG.mas_left);
+            if (_contentScrollView.contentSize.height < LayoutHeight){
+                make.centerY.equalTo(_centenIMG.mas_top);
+            }else{
+                make.centerY.equalTo(self.view.mas_centerY);
+            }
+            
+        }];
+    }
+    [_rightCutBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(firstIMG.mas_right);
+        make.centerY.width.height.equalTo(_leftCutBtn);
+    }];
+    
+    
+}
+-(void)addHorizontalCutView{
+    NSInteger count = _imageViews.count;
+    if (count == 1){
+        count ++;
+    }
+    for (NSInteger i = 0; i < count ; i ++) {
+        StitchingButton *img;
+        if (_imageViews.count == 1){
+            img = _imageViews.firstObject;
+        }else{
+            img = _imageViews[i];
+        }
+        img.userInteractionEnabled = YES;
+        if (img == nil){
+            break;
+        }
+        img.layer.borderWidth = 3;
+        img.layer.borderColor = HexColor(@"#0A58F6").CGColor;
+        if (_imageViews.count == 1){
+            _imageViews[0] = img;
+        }else{
+            _imageViews[i] = img;
+        }
+        UIButton *cutBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [cutBtn addTarget:self action:@selector(horizontalCutBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+        cutBtn.tag = (i + 1) * 10000;
+        [_contentScrollView addSubview:cutBtn];
+        if (i == 0){
+            [cutBtn setBackgroundImage:IMG(@"leftCutIcon") forState:UIControlStateNormal];
+            [cutBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.centerY.left.equalTo(img);
+                make.width.equalTo(@22);
+                make.height.equalTo(@60);
+            }];
+        }else if (i == _imageViews.count - 1 || _imageViews.count == 1){
+            [cutBtn setBackgroundImage:IMG(@"rightCutIcon") forState:UIControlStateNormal];
+            cutBtn.tag = (i + 2 ) * 10000;
+            [cutBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.centerY.right.equalTo(img);
+                make.width.equalTo(@22);
+                make.height.equalTo(@60);
+            }];
+            if (_imageViews.count != 1){
+                UIButton *topBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+                [topBtn addTarget:self action:@selector(horizontalCutBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+                topBtn.tag = (i + 1) * 10000;
+                [topBtn setBackgroundImage:IMG(@"horCenterCutIcon") forState:UIControlStateNormal];
+                [_contentScrollView addSubview:topBtn];
+                [topBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.centerY.equalTo(img);
+                    make.left.equalTo(img.mas_left).offset(-14);
+                    make.width.equalTo(@28);
+                    make.height.equalTo(@60);
+                }];
+            }
+        }else{
+            [cutBtn setBackgroundImage:IMG(@"horCenterCutIcon") forState:UIControlStateNormal];
+            [cutBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.centerY.equalTo(img);
+                make.left.equalTo(img.mas_left).offset(-14);
+                make.width.equalTo(@28);
+                make.height.equalTo(@60);
+            }];
+        }
+        
+    }
+    
+    StitchingButton *firstIMG = _imageViews.firstObject;
+    _leftCutBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    _leftCutBtn.tag = 1 ;
+    [_leftCutBtn addTarget:self action:@selector(horizontalCutBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    [_leftCutBtn setBackgroundImage:IMG(@"topCutIcon") forState:UIControlStateNormal];
+    [_contentScrollView addSubview:_leftCutBtn];
+    [_contentScrollView bringSubviewToFront:_leftCutBtn];
+    _rightCutBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    _rightCutBtn.tag = 3;
+    [_rightCutBtn addTarget:self action:@selector(horizontalCutBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    [_rightCutBtn setBackgroundImage:IMG(@"bottomCutIcon") forState:UIControlStateNormal];
+    [_contentScrollView addSubview:_rightCutBtn];
+    [_contentScrollView bringSubviewToFront:_rightCutBtn];
+    if (_imageViews.count == 1){
+        [_leftCutBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.height.equalTo(@22);
+            make.width.equalTo(@60);
+            make.top.equalTo(firstIMG.mas_top);
+            make.centerX.equalTo(firstIMG.mas_centerX);
+        }];
+        
+    }else{
+        [_leftCutBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.height.equalTo(@22);
+            make.width.equalTo(@60);
+            make.top.equalTo(firstIMG.mas_top);
+            if (_contentScrollView.contentSize.height < LayoutHeight){
+                make.centerX.equalTo(_centenIMG.mas_centerX);
+            }else{
+                make.centerX.equalTo(self.view.mas_centerX);
+            }
+            
+        }];
+    }
+    [_rightCutBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(firstIMG.mas_bottom);
+        make.centerX.width.height.equalTo(_leftCutBtn);
+    }];
+}
+-(void)addGuideBtn{
+    _guideBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_guideBtn addTarget:self action:@selector(guideBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    [_contentScrollView addSubview:_guideBtn];
+    [_contentScrollView bringSubviewToFront:_guideBtn];
 }
 
 -(void)viewInitSetting{
@@ -434,38 +628,8 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
     _isTurn = NO;
     _imgSelectIndex = MAXFLOAT;
     _isStartCut = NO;
+    _isScrollViewScroll = NO;
 }
-
--(void)addHorizontalCutView{
-    for (NSInteger i = 0; i < _imageViews.count ; i ++) {
-        StitchingButton *img = _imageViews[i];
-        img.userInteractionEnabled = YES;
-        NSArray *btnArr = @[@"左裁切线",@"右裁切线"];
-        for (NSInteger j = 0 ; j < btnArr.count; j ++ ) {
-            if (i == 0 && j == 1){
-                break;
-            }
-            UIButton *cutBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-            cutBtn.tag = i + (j + 1) * 100;
-            [cutBtn setBackgroundImage:IMG(btnArr[j]) forState:UIControlStateNormal];
-            [cutBtn addTarget:self action:@selector(horizontalCutBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-            [_cutArr addObject:cutBtn];
-            [img addSubview:cutBtn];
-            [img bringSubviewToFront:cutBtn];
-            [cutBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-                if (j == 0){
-                    make.height.left.top.equalTo(img);
-                    make.width.equalTo(@20);
-                }else{
-                    make.top.height.right.equalTo(img);
-                    make.width.equalTo(@20);
-                }
-            }];
-        }
-    }
-}
-
-
 
 #pragma mark --Touches
 - (CGPoint)pointWithTouches:(NSSet *)touches{
@@ -473,9 +637,15 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
     return [touch locationInView:_contentScrollView];
 }
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-    CGPoint moveP = [self pointWithTouches:touches];
     MJWeakSelf
-    if (_isCut){
+    CGPoint moveP = [self pointWithTouches:touches];
+    if (_isScrollViewScroll){
+        return;
+    }
+   
+    if (_isCut && !_isStartCut){
+        [self deleteContentScorllViewSubViews];
+        _guideBtn.hidden = YES;
         NSInteger index = 0;
         for (StitchingButton *image in _imageViews) {
             if (CGRectContainsPoint(image.frame, moveP)){
@@ -493,15 +663,9 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
             }];
         }
         _imgFunctionView.btnClick = ^(NSInteger tag) {
-            [weakSelf imgFuntionWithTag:tag andIMG:imgView];
+            [weakSelf imgFuntionWithTag:tag andIMG:imgView andIMGIndex:index];
         };
-        for (StitchingButton *img in _imageViews) {
-            for (UIView *vc in img.subviews) {
-                if ([vc isMemberOfClass:[UIButton class]]){
-                    [vc removeAllSubviews];
-                }
-            }
-        }
+ 
         if (_imgSelectIndex != index && _imgSelectIndex != MAXFLOAT){
             for (UIView *vc in _selectIMG.subviews) {
                 if (vc.tag >= 1000){
@@ -509,7 +673,9 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                 }
             }
         }
-        NSArray *btnArr = @[@"上裁切线",@"左裁切线",@"下裁切线",@"右裁切线"];
+        imgView.layer.borderWidth = 3;
+        imgView.layer.borderColor = HexColor(@"#0A58F6").CGColor;
+        NSArray *btnArr = @[@"topCutIcon",@"leftCutIcon",@"bottomCutIcon",@"rightCutIcon"];
         for (NSInteger i = 0 ;i < btnArr.count; i ++) {
             UIImageView *line = [UIImageView new];
             line.tag = (i + 1) * 1000;
@@ -517,17 +683,21 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
             [imgView addSubview:line];
             [line mas_makeConstraints:^(MASConstraintMaker *make) {
                 if (i == 0){
-                    make.centerX.width.top.equalTo(imgView);
-                    make.height.equalTo(@20);
+                    make.centerX.top.equalTo(imgView);
+                    make.height.equalTo(@22);
+                    make.width.equalTo(@60);
                 }else if (i == 1){
-                    make.height.left.top.equalTo(imgView);
-                    make.width.equalTo(@20);
+                    make.left.centerY.equalTo(imgView);
+                    make.width.equalTo(@22);
+                    make.height.equalTo(@60);
                 }else if (i == 2){
-                    make.width.left.bottom.equalTo(imgView);
-                    make.height.equalTo(@20);
+                    make.centerX.bottom.equalTo(imgView);
+                    make.height.equalTo(@22);
+                    make.width.equalTo(@60);
                 }else{
-                    make.top.height.right.equalTo(imgView);
-                    make.width.equalTo(@20);
+                    make.centerY.right.equalTo(imgView);
+                    make.width.equalTo(@22);
+                    make.height.equalTo(@60);
                 }
             }];
         }
@@ -578,6 +748,8 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
     }
 }
 
+
+
 #pragma mark --------- Method------------
 #pragma mark --合并图片
 - (void)mergeImages:(NSArray *)assets
@@ -608,11 +780,16 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
  */
 - (SZImageGenerator *)imageGeneratorBy:(NSArray *)assets{
     NSMutableArray *images = [NSMutableArray array];
-    for (PHAsset *asset in assets) {
-        [Tools getImageWithAsset:asset withBlock:^(UIImage * _Nonnull image) {
-            [images addObject:image];
-        }];
+    if (!GVUserDe.isScorllScreen){
+        for (PHAsset *asset in assets) {
+            [Tools getImageWithAsset:asset withBlock:^(UIImage * _Nonnull image) {
+                [images addObject:image];
+            }];
+        }
+    }else{
+        [images addObjectsFromArray:assets];
     }
+
     if (!images.count) {
         return nil;
     }
@@ -689,189 +866,109 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
 #pragma mark -- 图片竖屏裁切
 -(void)cutBtnClick:(UIButton *)btn{
     //判断了哪一边 0==上 1==左 2=下 3=右
-    NSInteger posizition = btn.tag % 100;
-    NSLog(@"posizition==%ld",posizition);
     //判断了点击第几行
-    NSInteger index = btn.tag / 100 ;
-        NSLog(@"index==%ld",index);
+    NSInteger index = btn.tag / 10000 ;
+    NSLog(@"index==%ld",index);
+    NSLog(@"btn.tag==%ld",btn.tag);
+    _isCut = YES;
+    if (btn.tag < 10000 ){
+        _posizition = btn.tag;
+        index = 1;
+    }
     if (_imageViews.count == 1){
         //单张图裁切
-        _posizition = posizition;
+        _posizition = btn.tag;
         _panGesture = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(panMoveGesture:)];
         _panGesture.delegate = self;
         [_contentScrollView addGestureRecognizer:_panGesture];
     }else{
+        [self deleteContentScorllViewSubViews];
         if (_isStartCut){
-            _guideIMG.hidden = YES;
+            _guideBtn.hidden = YES;
+            if (_isVerticalCut){
+                [self addVerticalCutView];
+            }else{
+                [self addHorizontalCutView];
+            }
         }
         if (!_isStartCut){
-            for (StitchingButton *img in _imageViews) {
-                for (UIView *vc in img.subviews) {
-                    if ([vc isMemberOfClass:[UIButton class]]){
-                        [vc removeAllSubviews];
-                    }
-                }
-            }
-            _guideIMG.hidden = NO;
+            _guideBtn.hidden = NO;
             //点击了左右则全部一起移动 ，点击了中间按钮则上下都可移动
-            _posizition = posizition;
-            if (posizition == 1 || posizition == 3){
-                //点击了左右
-                [self moveIMGWithIndex:index andPosizion:posizition];
-            }else{
-                if (posizition == 0){
-                    //点击了第一个则只能移动第一张
-                    if (index == 1){
-                        //第一张整体偏移往上
-                        [self moveIMGWithIndex:index andPosizion:posizition];
-                    }
-                }else{
-                    if (index == 1){
-                        //点击了第一张的下部分编辑开关
-                        _moveIndex = 2;
-                    }
-                    [self moveIMGWithIndex:index andPosizion:posizition];
-                    
-                }
-            }
+            _moveIndex = index;
+            [self moveIMGWithIndex:index andPosizion:_posizition];
             _isStartCut = YES;
         }else{
             //取消
             _isStartCut = NO;
-            for (StitchingButton *img in _imageViews) {
-                for (UIView *vc in img.subviews) {
-                    if ([vc isMemberOfClass:[UIButton class]]){
-                        [vc removeAllSubviews];
-                    }
-                }
-            }
+            [self deleteContentScorllViewSubViews];
         }
     }
-    
-    
-    
 }
 
--(void)horizontalCutBtnClick:(UIButton *)btn{
-    //判断了哪一边
-    NSInteger posizition = btn.tag % 100;
-    //判断了点击第几行
-    NSInteger index = btn.tag / 100 ;
-    NSLog(@"posizition==%ld",posizition);
-    NSLog(@"index==%ld",index);
-    NSLog(@"btn.tag==%ld",btn.tag);
-    for (StitchingButton *img in _imageViews) {
-        for (UIView *vc in img.subviews) {
-            if ([vc isMemberOfClass:[UIButton class]]){
-                [vc removeAllSubviews];
-            }
-        }
-    }
-    if (posizition == 0 && index == 1){
-        index = 1;
-    }else if (posizition == 1 && index == 1){
-        index = 2;
-    }else{
-        if (_imageViews.count == 2){
-            if(posizition == 0){
-                index = 1;
-            }else{
-                index = 2;
-            }
 
-        }else{
-            index = index + 1;
-        }
-
-    }
-    [self moveHorizontalImgWithIndex:index];
-    
-    
-}
 -(void)moveIMGWithIndex:(NSInteger )index andPosizion:(NSInteger )posizion{
-    if (posizion == 2 && index == 1){
-        _moveIndex = 2;
-    }else{
-        _moveIndex = index;
-    }
     _panGesture = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(panMoveGesture:)];
     _panGesture.delegate = self;
     [_contentScrollView addGestureRecognizer:_panGesture];
     if (_type == 4){
         _resultView.scrollView.scrollEnabled = NO;
     }
-    if (_guideIMG == nil){
-        _guideIMG = [UIImageView new];
-        _guideIMG.layer.zPosition = MAXFLOAT;
-        [_contentScrollView addSubview:_guideIMG];
-        [_contentScrollView bringSubviewToFront:_guideIMG];
+    if (_guideBtn == nil){
+        [self addGuideBtn];
     }
-    _guideIMG.hidden = NO;
-    [self.view bringSubviewToFront:_guideIMG];
-    StitchingButton *img = [StitchingButton new];
-    CGFloat top = 0.0;
-    if ((index == 1 && posizion == 0)){
-        img = _imageViews[0];
-        _moveIndex = 0;
-    }else if((index == 1 && posizion == 2)){
-        img = _imageViews[index];
-        _moveIndex = 1;
-        top = img.top - 20;
+    _guideBtn.selected = YES;
+    _guideBtn.hidden = NO;
+    [_contentScrollView bringSubviewToFront:_guideBtn];
+    StitchingButton *img;
+    if (_moveIndex - 1 >= _imageViews.count){
+        img = _imageViews.lastObject;
     }else{
-        if (index == _imageViews.count){
-            img = _imageViews[index - 1];
-            top = img.bottom - 20;
-        }else{
-            img = _imageViews[index];
-            top = img.top - 20;
-        }
+        img = _imageViews[_moveIndex - 1];
     }
-    [_guideIMG mas_remakeConstraints:^(MASConstraintMaker *make) {
-        switch (posizion) {
-            case 0:
-                _guideIMG.image = IMG(@"顶部裁切分界线");
+    
+    if (_posizition == 1 || _posizition == 3){
+        [_guideBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(img.mas_top);
+            make.width.equalTo(@30);
+            if (_contentScrollView.contentSize.height < LayoutHeight){
+                make.height.equalTo(@(_contentScrollView.contentSize.height));
+            }else{
+                make.height.equalTo(@(_contentScrollView.height));
+            }
+            if (_posizition == 1){
+                //左边
+                [_guideBtn setBackgroundImage:IMG(@"左裁切分界线") forState:UIControlStateNormal];
+                make.left.equalTo(img.mas_left);
+            }else{
+                //右边
+                [_guideBtn setBackgroundImage:IMG(@"右裁切分界线") forState:UIControlStateNormal];
+                make.right.equalTo(img.mas_right);
+            }
+        }];
+    }else{
+        if (index == 1){
+            //顶部
+            [_guideBtn setBackgroundImage:IMG(@"顶部裁切分界线") forState:UIControlStateNormal];
+            [_guideBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
                 make.width.top.equalTo(img);
                 make.left.equalTo(img);
                 make.height.equalTo(@20);
-                break;
-            case 1:
-                _guideIMG.image = IMG(@"左裁切分界线");
-                if (_contentScrollView.contentSize.height > _contentScrollView.height){
-                    make.height.equalTo(@(_contentScrollView.height));
-                }else{
-                    make.height.equalTo(@(_contentScrollView.contentSize.height));
-                }
-                make.top.equalTo(_contentScrollView);
-                make.left.equalTo(img);
-                make.width.equalTo(@30);
-                break;
-            case 2:
-                _guideIMG.image = IMG(@"下裁切分界线");
+            }];
+            
+        }else{
+            [_guideBtn setBackgroundImage:IMG(@"下裁切分界线") forState:UIControlStateNormal];
+            [_guideBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
                 make.width.equalTo(img.mas_width);
-                make.left.equalTo(img);
-                if (_moveIndex == _imageViews.count){
-                    make.bottom.equalTo(@(_contentScrollView.contentSize.height));
+                make.left.equalTo(img.mas_left);
+                if (_moveIndex == _imageViews.count + 1){
+                    make.bottom.equalTo(img.mas_bottom);
                 }else{
-                    make.top.equalTo(@(top));
+                    make.top.equalTo(img.mas_top).offset(-20);
                 }
                 make.height.equalTo(@20);
-                break;
-            case 3:
-                _guideIMG.image = IMG(@"右裁切分界线");
-                if (_contentScrollView.contentSize.height > _contentScrollView.height){
-                    make.height.equalTo(@(_contentScrollView.height));
-                }else{
-                    make.height.equalTo(@(_contentScrollView.contentSize.height));
-                }
-                
-                make.right.equalTo(img);
-                make.width.equalTo(@30);
-                make.top.equalTo(_contentScrollView);
-                break;
-            default:
-                break;
+            }];
         }
-    }];
+    }
 }
 
 
@@ -883,16 +980,28 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
         for (StitchingButton *imageView in _imageViews) {
             if (CGRectContainsPoint(imageView.frame,locationPoint)){
                 if (_isVerticalCut == YES){
-                    if (imageView.tag / 100 <= _moveIndex){
+                    if (imageView.tag / 100 < _moveIndex){
                         _isTopPart = YES;
                     }else{
                         _isTopPart = NO;
                     }
                 }else{
-                    if (imageView.tag / 100 < _moveIndex){
-                        _isTopPart = YES;
+                    if (imageView.tag / 100 <= _moveIndex){
+                        //左边
+                        if (_posizition == 1 || _posizition == 3){
+                            _isTopPart = NO;
+                        }else{
+                            _isTopPart = YES;
+                        }
+                        
                     }else{
-                        _isTopPart = NO;
+                        //右边
+                        if (_posizition == 1 || _posizition == 3){
+                            _isTopPart = YES;
+                        }else{
+                            _isTopPart = NO;
+                        }
+                        
                     }
                 }
                 
@@ -900,15 +1009,13 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
         }
     }
     if (recognizer.state == UIGestureRecognizerStateChanged){
-        _guideIMG.hidden = YES;
+        _guideBtn.hidden = YES;
         _isMove = YES;
         if (_isCut){
             [self.contentScrollView setScrollEnabled:NO];
             if (_imageViews.count == 1){
-                
                 StitchingButton *imageView = _imageViews[0];
                 CGFloat top = [_originTopArr[0]floatValue];
-                CGFloat width = imageView.imgView.width;
                 CGFloat height = [_originBottomArr[0]floatValue];
                 if (_posizition == 0){
                     //点击了顶部
@@ -994,7 +1101,12 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                         [self moveWithoffsetP:translatedPoint.y];
                     }
                 }else{
-                    [self horizontalMoveWithoffsetP:translatedPoint.x];
+                    if (_posizition == 1 || _posizition == 3){
+                        [self horizontalMoveWithoffsetP:translatedPoint.y];
+                    }else{
+                        [self horizontalMoveWithoffsetP:translatedPoint.x];
+                    }
+                    
                 }
             }
             
@@ -1009,7 +1121,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
         [self.contentScrollView setScrollEnabled:YES];
         if (_isCut){
             _isMove = NO;
-            _guideIMG.hidden = NO;
+            _guideBtn.hidden = NO;
         }
         
     }
@@ -1059,9 +1171,9 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                     }
                 }else{
                     if (tmpF <= 0){
-                        imageView.width = 0;
+                        imageView.width = imageView.imgView.width;
                         imageView.centerX = _contentView.centerX;
-                        // return;
+                         return;
                     }else{
                         imageView.width = tmpF;
                     }
@@ -1071,80 +1183,62 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
             
         }
     }else{
-        if (_moveIndex == 0){
+        if (_moveIndex == 1){
             //移动第一张顶部
             //点击了顶部 整体偏移往上
-            StitchingButton *imageView = self.imageViews[_moveIndex];
+            StitchingButton *imageView = self.imageViews[0];
             CGFloat top = [_originTopArr[0]floatValue];
             CGFloat height = [_originTopArr[1]floatValue];
             CGFloat tmpF = imageView.height + offsetP;
             if (offsetP < 0){
-                if (imageView.imgView.bottom < 0){
+                if (tmpF <= 0){
                     imageView.height = 0;
-                    return;
+//                    return;
+                }else{
+                    imageView.height = tmpF  ;
+                    imageView.imgView.top = offsetP+ imageView.imgView.top;
                 }
             }else{
                 if (tmpF >= height){
                     imageView.top = top;
                     imageView.height = height;
+                  //  return;
+                }else{
+                    imageView.height = tmpF  ;
+                    imageView.imgView.top = offsetP+ imageView.imgView.top;
+                }
+            }    
+            //底部跟随
+            [self bottomFollow:imageView isIndex:_moveIndex];
+        }else if (_moveIndex == _imageViews.count + 1){
+            //编辑最后一个不能超过他原先的top
+            StitchingButton *imageView = self.imageViews[_moveIndex - 2];
+            CGFloat tmpF = imageView.height - offsetP;
+            if (offsetP > 0){
+                if (tmpF < 0){
+                    imageView.height = 0;
                     return;
+                }else{
+                    imageView.height = tmpF;
+                }
+            }else{
+                if (tmpF >= imageView.imgView.height){
+                    imageView.height = imageView.imgView.height;
+                    imageView.top = [_originTopArr[_moveIndex - 2] floatValue];
+                    return;
+                }else{
+                    imageView.height = tmpF;
                 }
             }
-            imageView.height = tmpF  ;
-            imageView.imgView.top = offsetP+ imageView.imgView.top;
-            //底部跟随
-            [self bottomFollow:imageView isIndex:1];
-        }else if (_moveIndex == 1){
-            //移动第一张下部分编辑
-            if(_isTopPart){
-                StitchingButton *imageView = self.imageViews[_moveIndex - 1];
-                CGFloat tmpF = imageView.height - offsetP;
-                if (offsetP > 0){
-                    if (tmpF <= 0){
-                        imageView.height = 0;
-                    }else{
-                        imageView.height = tmpF;
-                    }
-                }else{
-                    if (tmpF >= imageView.imgView.height) {
-                        imageView.height = imageView.imgView.height;
-                        imageView.top = [_originTopArr[0]floatValue];
-                        return;
-                    }else{
-                        imageView.height = tmpF;
-                    }
-                }
-                imageView.top = imageView.top + offsetP;
-                
-            }else{
-                StitchingButton *imageView = self.imageViews[_moveIndex];
-                if ((imageView.imgView.bottom <= 0 && offsetP < 0)|| (offsetP > 0 && imageView.imgView.top >= 0)){
-                    return;
-                }
-                imageView.height = imageView.height + offsetP ;
-                imageView.imgView.top = offsetP+ imageView.imgView.top;
-                //底部跟随
-                [self bottomFollow:imageView isIndex:_moveIndex + 1];
+            imageView.top = imageView.top + offsetP;
+            //顶部跟随
+            if (_moveIndex - 3 >= 0){
+                [self topFollow:imageView offsetY:offsetP AndIndex:_moveIndex - 3];
             }
             
-        }else if (_moveIndex == _imageViews.count){
-            //编辑最后一个不能超过他原先的top
-            StitchingButton *imageView = self.imageViews[_moveIndex - 1];
-            imageView.height = imageView.height - offsetP;
-            if (imageView.height <= 0){
-                imageView.height = 0;
-                return;
-            }
-            if(offsetP < 0 && imageView.height >= imageView.imgView.height){
-                imageView.height = imageView.imgView.height;
-                return;
-            }
-            imageView.top = offsetP+ imageView.top;
-            //顶部跟随
-            [self topFollow:imageView offsetY:offsetP AndIndex:_moveIndex - 2];
         }else{
             if(_isTopPart){
-                StitchingButton *imageView = self.imageViews[_moveIndex - 1];
+                StitchingButton *imageView = self.imageViews[_moveIndex - 2];
                 CGFloat tmpF = imageView.height - offsetP;
                 if (offsetP > 0){
                     if (tmpF < 0){
@@ -1156,7 +1250,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                 }else{
                     if (tmpF >= imageView.imgView.height){
                         imageView.height = imageView.imgView.height;
-                        imageView.top = [_originTopArr[_moveIndex - 1] floatValue];
+                        imageView.top = [_originTopArr[_moveIndex - 2] floatValue];
                         return;
                     }else{
                         imageView.height = tmpF;
@@ -1164,16 +1258,36 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                 }
                 imageView.top = imageView.top + offsetP;
                 //顶部跟随
-                [self topFollow:imageView offsetY:offsetP AndIndex:_moveIndex - 2];
-            }else{
-                StitchingButton *imageView = self.imageViews[_moveIndex];
-                if ((imageView.imgView.bottom <= 0 && offsetP < 0)|| (offsetP > 0 && imageView.imgView.top >= 0)){
-                    return;
+                if (_moveIndex - 3 >= 0){
+                    [self topFollow:imageView offsetY:offsetP AndIndex:_moveIndex - 3];
                 }
-                imageView.height = imageView.height + offsetP ;
-                imageView.imgView.top = offsetP+ imageView.imgView.top;
+                
+            }else{
+                StitchingButton *imageView = self.imageViews[_moveIndex - 1];
+                CGFloat top = [_originTopArr[_moveIndex -1]floatValue];
+                CGFloat tmp = imageView.height + offsetP;
+                if (offsetP < 0){
+                    if (tmp <= 0){
+                        imageView.top = top;
+                        imageView.height = 0;
+                    }else{
+                        imageView.height = tmp ;
+                        imageView.imgView.top = offsetP+ imageView.imgView.top;
+                    }
+                }else{
+                    if (tmp >= imageView.imgView.height){
+                        imageView.top = top;
+                        imageView.height = imageView.imgView.height;
+                        imageView.imgView.top = 0;
+                    }else{
+                        imageView.height = tmp ;
+                        imageView.imgView.top = offsetP+ imageView.imgView.top;
+                    }
+                }
                 //底部跟随
-                [self bottomFollow:imageView isIndex:_moveIndex + 1];
+                if (_moveIndex <= _imageViews.count - 1){
+                    [self bottomFollow:imageView isIndex:_moveIndex];
+                }
             }
         }
     }
@@ -1190,7 +1304,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
         StitchingButton *changeImageView = self.imageViews[i];
         changeImageView.bottom = lastStichimageView.top;
         changeImageView.height = changeImageView.imgView.height;
-        changeImageView = lastStichimageView;
+        lastStichimageView = changeImageView;
     }
 }
 
@@ -1212,88 +1326,164 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
 
 
 #pragma mark --图片横拼裁切
--(void)moveHorizontalImgWithIndex:(NSInteger )index{
-    _moveIndex = index;
+-(void)horizontalCutBtnClick:(UIButton *)btn{
+    //判断了点击第几个
+    NSInteger index = btn.tag / 10000 ;
+    NSLog(@"tag==%ld",btn.tag);
+    if (btn.tag < 10000){
+        _posizition = btn.tag;
+        _moveIndex = 1;
+    }else{
+        _moveIndex = index;
+        _posizition = 0;
+    }
+    [self moveHorizontalImgWithPosizition:_posizition andTag:btn.tag];
+    [self deleteContentScorllViewSubViews];
+}
+-(void)moveHorizontalImgWithPosizition:(NSInteger )posizition andTag:(NSInteger)tag{
     _panGesture = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(panMoveGesture:)];
     _panGesture.delegate = self;
     [_contentScrollView addGestureRecognizer:_panGesture];
-    if (_guideIMG == nil){
-        _guideIMG = [UIImageView new];
-        _guideIMG.image = IMG(@"左裁切分界线");
-        _guideIMG.layer.zPosition = MAXFLOAT;
-        [_contentScrollView addSubview:_guideIMG];
-        [_contentScrollView bringSubviewToFront:_guideIMG];
+    if (_type == 4){
+        _resultView.scrollView.scrollEnabled = NO;
     }
-    _guideIMG.hidden = NO;
-    [self.view bringSubviewToFront:_guideIMG];
-    StitchingButton *img = _imageViews[_moveIndex - 1];
-    if (index == 2){
-        img = _imageViews[0];
+    if (_guideBtn == nil){
+        [self addGuideBtn];
     }
-    [_guideIMG mas_remakeConstraints:^(MASConstraintMaker *make) {
-        if (index == 2){
-            make.right.top.height.equalTo(img);
-            _guideIMG.image = IMG(@"右裁切分界线");
+    _guideBtn.selected = YES;
+    _guideBtn.hidden = NO;
+    [_contentScrollView bringSubviewToFront:_guideBtn];
+    StitchingButton *img;
+    if (_moveIndex - 1 >= _imageViews.count){
+        img = _imageViews.lastObject;
+    }else{
+        img = _imageViews[_moveIndex - 1];
+    }
+    if (_posizition == 1 || _posizition == 3){
+        [_guideBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(img.mas_left);
+            make.height.equalTo(@22);
+            if (_contentScrollView.contentSize.width < SCREEN_WIDTH){
+                make.width.equalTo(@(_contentScrollView.contentSize.width));
+            }else{
+                make.width.equalTo(@(_contentScrollView.width));
+            }
+            if (_posizition == 1){
+                //上边
+                [_guideBtn setBackgroundImage:IMG(@"上裁切分界线") forState:UIControlStateNormal];
+                make.top.equalTo(img.mas_top);
+            }else{
+                //下
+                [_guideBtn setBackgroundImage:IMG(@"下裁切分界线") forState:UIControlStateNormal];
+                make.bottom.equalTo(img.mas_bottom);
+            }
+        }];
+    }else{
+        if (_moveIndex == 1){
+            //最左边
+            [_guideBtn setBackgroundImage:IMG(@"左裁切分界线") forState:UIControlStateNormal];
+            [_guideBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+                make.height.top.equalTo(img);
+                make.left.equalTo(img);
+                make.width.equalTo(@22);
+            }];
+            
         }else{
-            make.left.top.height.equalTo(img);
-            _guideIMG.image = IMG(@"左裁切分界线");
+            [_guideBtn setBackgroundImage:IMG(@"右裁切分界线") forState:UIControlStateNormal];
+            [_guideBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+                make.height.top.equalTo(img);
+                if (_moveIndex == _imageViews.count + 1){
+                    make.right.equalTo(img.mas_right);
+                }else{
+                    make.left.equalTo(img.mas_left).offset(-22);
+                }
+                make.width.equalTo(@22);
+            }];
         }
-        make.width.equalTo(@20);
-    }];
+    }
 }
 -(void)horizontalMoveWithoffsetP:(CGFloat)offsetP{
-    if (_moveIndex == 1){
-        //移动最左边
-        StitchingButton *imageView = _imageViews[_moveIndex - 1];
-        CGFloat left = [_originRightArr[0]floatValue];
-        CGFloat tmpF = imageView.width + offsetP;
-        if (offsetP < 0){
-            if (tmpF <= 0){
-                imageView.width = 0;
-                return;
+    if (_posizition == 1 || _posizition == 3){
+        /*
+         移动顶部或者地步 整体向该边进行偏移
+         imageView.height改变，imageView.imgView.top改变
+         */
+        for (StitchingButton *imageView in _imageViews) {
+            if (_posizition == 1){
+                //移动顶部
+                CGFloat tmpF = imageView.imgView.top + offsetP;
+                if (offsetP < 0){
+                    if (imageView.bottom <= 0){
+                        imageView.bottom = 0;
+                        imageView.height = imageView.height - offsetP;
+                        //return;
+                    }else{
+                        imageView.imgView.top = tmpF;
+                    }
+                }else{
+                    if (imageView.height >= HorViewHeight){
+                        imageView.height = HorViewHeight;
+                        imageView.centerY = self.view.centerY;
+                        imageView.imgView.top = 0;
+                        //return;
+                    }else{
+                        imageView.imgView.top = tmpF;
+                    }
+                }
+                imageView.height = imageView.height + offsetP;
             }else{
-                imageView.imgView.left = imageView.imgView.left + offsetP;
-            }
-        }else{
-            if (tmpF > imageView.imgView.width){
-                imageView.width = imageView.imgView.width;
-                imageView.left = left;
-                return;
-            }else{
-                imageView.imgView.left = imageView.imgView.left + offsetP;
-            }
-        }
-        imageView.width = tmpF;
-        //右边跟随
-        [self rightFollow:imageView isIndex:_moveIndex];
-    }else if(_moveIndex == _imageViews.count + 1){
-        //移动最后一张右边 只能
-        StitchingButton *imageView = _imageViews[_moveIndex - 1];
-        CGFloat tmpF = imageView.width - offsetP;
-        if (offsetP > 0 ){
-            if (tmpF <= 0){
-                imageView.width = 0;
-                return;
-            }else{
+                //移动底部
+                CGFloat tmpF = imageView.width - offsetP;
+                if (offsetP < 0){
+                    if (tmpF >= VerViewWidth){
+                        imageView.width = VerViewWidth;
+                        imageView.centerX = _contentView.centerX;
+                        // return;
+                    }else{
+                        imageView.width = tmpF;
+                    }
+                }else{
+                    if (tmpF <= 0){
+                        imageView.width = imageView.imgView.width;
+                        imageView.centerX = _contentView.centerX;
+                         return;
+                    }else{
+                        imageView.width = tmpF;
+                    }
+                }
                 imageView.left = imageView.left + offsetP;
-                imageView.width = tmpF;
             }
-        }else{
-            if (tmpF >= imageView.imgView.width){
-                imageView.width = imageView.imgView.width;
-                return;
-            }else{
-                imageView.left = imageView.left + offsetP;
-                imageView.width = tmpF;
-            }
+            
         }
-        //左边跟随
-        [self leftFollow:imageView isIndex:_imageViews.count - 2];
     }else{
-        //中间部分
-        if (_isTopPart){
-            //左边移动
+        if (_moveIndex == 1){
+            //移动最左边
+            StitchingButton *imageView = _imageViews[0];
+            CGFloat left = [_originRightArr[0]floatValue];
+            CGFloat tmpF = imageView.width + offsetP;
+            if (offsetP < 0){
+                if (tmpF <= 0){
+                    imageView.width = 0;
+                    return;
+                }else{
+                    imageView.imgView.left = imageView.imgView.left + offsetP;
+                }
+            }else{
+                if (tmpF > imageView.imgView.width){
+                    imageView.width = imageView.imgView.width;
+                    imageView.left = left;
+                    return;
+                }else{
+                    imageView.imgView.left = imageView.imgView.left + offsetP;
+                }
+            }
+            imageView.width = tmpF;
+            //右边跟随
+            [self rightFollow:imageView isIndex:_moveIndex ];
+        }else if (_moveIndex == _imageViews.count + 1){
+            //移动最右边
             StitchingButton *imageView = _imageViews[_moveIndex - 2];
+            CGFloat left = [_originRightArr[_moveIndex - 2]floatValue];
             CGFloat tmpF = imageView.width - offsetP;
             if (offsetP > 0 ){
                 if (tmpF <= 0){
@@ -1306,7 +1496,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
             }else{
                 if (tmpF >= imageView.imgView.width){
                     imageView.width = imageView.imgView.width;
-                    imageView.left = [_originRightArr[_moveIndex - 2] floatValue];
+                    imageView.left = left;
                     return;
                 }else{
                     imageView.left = imageView.left + offsetP;
@@ -1316,33 +1506,76 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
             //左边跟随
             [self leftFollow:imageView isIndex:_moveIndex - 3];
         }else{
-            StitchingButton *imageView = _imageViews[_moveIndex - 1];
-            CGFloat tmpF = imageView.width + offsetP;
-            
-            if (offsetP > 0){
-                if (tmpF > imageView.imgView.width){
-                    imageView.width = imageView.imgView.width;
-                    imageView.imgView.left = 0;
-                    return;
+            //中间部分移动 和 移动第一张右边
+            if (_isTopPart){
+                //左边移动
+                StitchingButton *imageView;
+                if(_moveIndex == 1){
+                    //移动第一张右边
+                    imageView = _imageViews[0];
                 }else{
-                    imageView.imgView.left = imageView.imgView.left + offsetP;
-                    imageView.width = tmpF;
+                    imageView  = _imageViews[_moveIndex - 1];
+                }
+                CGFloat left = imageView.left;
+                CGFloat tmpF = imageView.width + offsetP;
+                if (offsetP > 0 ){
+                    if (tmpF <= 0){
+                        imageView.width = 0;
+                        imageView.left = [_originRightArr[_moveIndex - 2]floatValue];
+                        return;
+                    }else{
+                        imageView.left = imageView.left + offsetP;
+                        imageView.width = tmpF;
+                    }
+                }else{
+                    if (tmpF >= imageView.imgView.width){
+                        imageView.width = imageView.imgView.width;
+                        imageView.left = left;
+                        return;
+                    }else{
+                        imageView.left = imageView.left + offsetP;
+                       // imageView.width = tmpF;
+                    }
+                }
+                //左边跟随
+                if (_moveIndex - 2 >= 0){
+                    [self leftFollow:imageView isIndex:_moveIndex - 2];
                 }
             }else{
-                if (tmpF < 0){
-                    imageView.width = 0;
-                    return;
+                StitchingButton *imageView;
+                if(_moveIndex == 1){
+                    //移动第一张右边
+                    imageView = _imageViews[0];
                 }else{
+                    imageView  = _imageViews[_moveIndex - 1];
+                }
+                CGFloat tmpF = imageView.width - offsetP;
+                if (offsetP > 0){
+                    if (tmpF > imageView.imgView.width){
+                        imageView.width = imageView.imgView.width;
+                        imageView.imgView.left = 0;
+                        return;
+                    }else{
+                        imageView.imgView.left = imageView.imgView.left + offsetP;
+                       
+                    }
+                }else{
+                    if (tmpF < 0){
+                        imageView.width = 0;
+                        return;
+                    }else{
+                        imageView.left = imageView.left + offsetP;
+                    }
+                }
                     imageView.width = tmpF;
-                    imageView.imgView.left = imageView.imgView.left + offsetP;
+                //右边跟随
+                if (_moveIndex <= _imageViews.count - 1){
+                    [self rightFollow:imageView isIndex:_moveIndex];
                 }
             }
-            //右边跟随
-            
-            [self rightFollow:imageView isIndex:_moveIndex];
         }
-        
     }
+    
 }
 
 -(void)updateContentScrollViewContentSize{
@@ -1382,12 +1615,12 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
 
 #pragma mark --图片切割
 -(void)userCutBtnClick{
-    if (!_cutBtn.selected){
+    if (!_slicingBtn.selected){
         NSInteger index = 0;
         if (_imageViews.count > 1){
             for (StitchingButton *imageView in _imageViews) {
                 //找到btn所在位置
-                if (CGRectContainsPoint(imageView.frame,_cutBtn.center)){
+                if (CGRectContainsPoint(imageView.frame,_slicingBtn.center)){
                     _moveIndex = imageView.tag / 100;
                     index = _moveIndex - 1;
                 }
@@ -1432,7 +1665,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                 [_imageViews addObject:firstImageView];
                 if (_moveIndex == 1){
                     //如果是从第一张开始切割
-                    firstImageView.height = _cutBtn.top;
+                    firstImageView.height = _slicingBtn.top;
                 }
                 for (NSInteger i = 1; i < topArr.count; i ++) {
                     UIImage *icon = topArr[i];
@@ -1444,8 +1677,8 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                     contentHeight += imgHeight;
                     [_contentScrollView addSubview:imageView];
                     if (i == index){
-                        imageView.height = _cutBtn.top -  firstImageView.bottom;
-                        //imageView.imgView.top = - (_cutBtn.top -  firstImageView.bottom);
+                        imageView.height = _slicingBtn.top -  firstImageView.bottom;
+                        //imageView.imgView.top = - (_slicingBtn.top -  firstImageView.bottom);
                     }
                     firstImageView = imageView;
                     [_originTopArr addObject:[NSNumber numberWithFloat:firstImageView.top]];
@@ -1455,15 +1688,15 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                 for (NSInteger i = 0; i < bottomArr.count; i ++) {
                     UIImage *icon = bottomArr[i];
                     CGFloat imgHeight = (CGFloat)(icon.size.height/icon.size.width) * VerViewWidth;
-                    StitchingButton *imageView = [[StitchingButton alloc]initWithFrame:CGRectMake(0,i==0?_cutBtn.top: firstImageView.bottom, VerViewWidth, imgHeight)];
+                    StitchingButton *imageView = [[StitchingButton alloc]initWithFrame:CGRectMake(0,i==0?_slicingBtn.top: firstImageView.bottom, VerViewWidth, imgHeight)];
                     imageView.image = icon;
                     imageView.centerX = firstImageView.centerX;
                     imageView.tag = (index + 1 + i) * 100;
                     contentHeight += imgHeight;
                     [_contentScrollView addSubview:imageView];
                     if (i == 0){
-                        imageView.imgView.top = - (_cutBtn.bottom - firstImageView.bottom);
-                        imageView.height = imageView.bottom - _cutBtn.bottom;
+                        imageView.imgView.top = - (_slicingBtn.bottom - firstImageView.bottom);
+                        imageView.height = imageView.bottom - _slicingBtn.bottom;
                     }
                     firstImageView = imageView;
                     [_originTopArr addObject:[NSNumber numberWithFloat:firstImageView.top]];
@@ -1484,7 +1717,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                 [_imageViews addObject:firstImageView];
                 if (_moveIndex == 1){
                     //如果是从第一张开始切割
-                    firstImageView.width = _cutBtn.right;
+                    firstImageView.width = _slicingBtn.right;
                 }
                 
                 for (NSInteger i = 1; i < topArr.count; i ++) {
@@ -1495,7 +1728,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                     imageView.tag = (i+1) * 100;
                     contentWidth += imgWidth;
                     if (i == index){
-                        imageView.width = _cutBtn.centerX - firstImageView.right;
+                        imageView.width = _slicingBtn.centerX - firstImageView.right;
                     }
                     [_contentScrollView addSubview:imageView];
                     [_originRightArr addObject:[NSNumber numberWithFloat:firstImageView.right]];
@@ -1505,14 +1738,14 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                 for (NSInteger i = 0; i < bottomArr.count; i ++) {
                     UIImage *icon = bottomArr[i];
                     CGFloat imgWidth = (CGFloat)(icon.size.width/icon.size.height) * HorViewHeight;
-                    StitchingButton *imageView = [[StitchingButton alloc]initWithFrame:CGRectMake(i==0?_cutBtn.left:firstImageView.right, firstImageView.top, imgWidth, HorViewHeight)];
+                    StitchingButton *imageView = [[StitchingButton alloc]initWithFrame:CGRectMake(i==0?_slicingBtn.left:firstImageView.right, firstImageView.top, imgWidth, HorViewHeight)];
                     imageView.image = icon;
                     imageView.tag = (i+1) * 100;
                     contentWidth += imgWidth;
                    
                     if (i == 0){
-                        imageView.width = imageView.right - _cutBtn.right ;
-                        imageView.imgView.left = -(_cutBtn.right - firstImageView.right);
+                        imageView.width = imageView.right - _slicingBtn.right ;
+                        imageView.imgView.left = -(_slicingBtn.right - firstImageView.right);
                     }
                     firstImageView = imageView;
                     [_contentScrollView addSubview:imageView];
@@ -1525,7 +1758,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
             _panGesture = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(cutPanMoveGesture:)];
             _panGesture.delegate = self;
             [_contentScrollView addGestureRecognizer:_panGesture];
-            [_contentScrollView bringSubviewToFront:_cutBtn];
+            [_contentScrollView bringSubviewToFront:_slicingBtn];
             self.title = [NSString stringWithFormat:@"%ld张图片",_imageViews.count];
         }else{
             //单张图片切割
@@ -1533,9 +1766,9 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
         
         
     }else{
-        _cutBtn.hidden = YES;
+        _slicingBtn.hidden = YES;
     }
-    _cutBtn.selected = !_cutBtn.selected;
+    _slicingBtn.selected = !_slicingBtn.selected;
 
 }
 -(void)cutImgMoveGesture:(UIPanGestureRecognizer *)gesture{
@@ -1545,16 +1778,16 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
             [_contentScrollView setScrollEnabled:NO];
         }
         if (gesture.state == UIGestureRecognizerStateChanged){
-//            if (_cutBtn.top + translatedPoint.y <= Nav_H + 10 || _cutBtn.top + translatedPoint.y >= SCREEN_HEIGHT - 100){
+//            if (_slicingBtn.top + translatedPoint.y <= Nav_H + 10 || _slicingBtn.top + translatedPoint.y >= SCREEN_HEIGHT - 100){
 //                return;
 //            }
             if (_isVerticalCut){
                 if (gesture.view.left + translatedPoint.x <= 0 || gesture.view.right + translatedPoint.x >= SCREEN_WIDTH){
                     gesture.view.left = 0;
                 }
-                [_cutBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+                [_slicingBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
                     make.width.centerX.equalTo(self.contentScrollView);
-                    make.top.equalTo(@(_cutBtn.top + translatedPoint.y));
+                    make.top.equalTo(@(_slicingBtn.top + translatedPoint.y));
                     make.height.equalTo(@30);
                 }];
             }else{
@@ -1566,9 +1799,9 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                     gesture.view.left = 10;
                     return;
                 }
-                [_cutBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+                [_slicingBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
                     make.height.top.equalTo(self.contentScrollView);
-                    make.left.equalTo(@(_cutBtn.left + translatedPoint.x));
+                    make.left.equalTo(@(_slicingBtn.left + translatedPoint.x));
                     make.width.equalTo(@30);
                 }];
             }
@@ -1596,13 +1829,13 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
     CGPoint locationPoint = [recognizer locationInView:_contentScrollView];
     if (!_isMove){
         if (_isVerticalCut){
-            if (locationPoint.y <= _cutBtn.top){
+            if (locationPoint.y <= _slicingBtn.top){
                 _isTopPart = YES;
             }else{
                 _isTopPart = NO;
             }
         }else{
-            if (locationPoint.x <= _cutBtn.left){
+            if (locationPoint.x <= _slicingBtn.left){
                 _isTopPart = YES;
             }else{
                 _isTopPart = NO;
@@ -1613,7 +1846,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
     if (recognizer.state == UIGestureRecognizerStateChanged){
         _isMove = YES;
         if (_isCut){
-            _cutBtn.hidden = YES;
+            _slicingBtn.hidden = YES;
         }
         if (_isVerticalCut){
             if(_isTopPart){
@@ -1628,7 +1861,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                     }
                 }else{
                     if (tmpF >= imageView.imgView.height){
-                        imageView.bottom = _cutBtn.top;
+                        imageView.bottom = _slicingBtn.top;
                         StitchingButton *lastStichimageView = imageView;
                         for (NSInteger i = _moveIndex - 2; i >= 0; i --) {
                             StitchingButton *changeImageView = self.imageViews[i];
@@ -1723,7 +1956,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
         
     }else if (recognizer.state == UIGestureRecognizerStateEnded){
         _isMove = NO;
-        _cutBtn.hidden = NO;
+        _slicingBtn.hidden = NO;
     }
     if (self.contentScrollView.isDragging && _isCut) {
         return;
@@ -1785,9 +2018,9 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
             }else{
                 tmpF = scrollView.contentOffset.y - _offsetY;
             }
-            [_cutBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+            [_slicingBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
                 make.width.centerX.equalTo(self.contentScrollView);
-                make.top.equalTo(@(_cutBtn.top + tmpF));
+                make.top.equalTo(@(_slicingBtn.top + tmpF));
                 make.height.equalTo(@30);
             }];
             _offsetY = scrollView.contentOffset.y;
@@ -1800,9 +2033,9 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
             }else{
                 tmpF = scrollView.contentOffset.x - _offsetY;
             }
-            [_cutBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+            [_slicingBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
                 make.height.top.equalTo(self.contentScrollView);
-                make.left.equalTo(@(_cutBtn.left + tmpF));
+                make.left.equalTo(@(_slicingBtn.left + tmpF));
                 make.width.equalTo(@30);
             }];
             _offsetY = scrollView.contentOffset.x;
@@ -1815,7 +2048,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
 -(void)topBtnClick:(UIButton *)btn{
     MJWeakSelf
     if (btn.tag == 0){
-        [_cutBtn removeFromSuperview];
+        [_slicingBtn removeFromSuperview];
         [SVProgressHUD showWithStatus:@"正在生成图片中.."];
         [TYSnapshotScroll screenSnapshot:_contentScrollView finishBlock:^(UIImage *snapshotImage) {
             [SVProgressHUD showSuccessWithStatus:@"图片已保存至拼图相册中"];
@@ -1903,7 +2136,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
         [self.navigationController pushViewController:[BuyViewController new] animated:YES];
     }
 }
--(void)imgFuntionWithTag:(NSInteger)tag andIMG:(StitchingButton* )imgView{
+-(void)imgFuntionWithTag:(NSInteger)tag andIMG:(StitchingButton* )imgView andIMGIndex:(NSInteger)index{
     /*
         UIImageOrientationUp,            // 默认方向
         UIImageOrientationDown,          // 180°旋转
@@ -1936,6 +2169,10 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
         [self.view.viewController presentViewController:nav animated:YES completion:nil];
     }else if (tag == 4){
         //删除图片
+        if (_imageViews.count <= 1){
+            [SVProgressHUD showInfoWithStatus:@"最后一张图片无法删除！"];
+            return;
+        }
         if (_imgSelectIndex <= _imageViews.count){
             StitchingButton *lastImg = _imageViews[_imgSelectIndex - 1];
             [_imageViews removeObjectAtIndex:_imgSelectIndex];
@@ -1952,7 +2189,6 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                 }
                 lastImg = imageView;
             }
-            
             self.title = [NSString stringWithFormat:@"%ld张图片",_imageViews.count];
             [_cutArr removeAllObjects];
             _funcView.hidden = YES;
@@ -1965,30 +2201,25 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                 [vc removeFromSuperview];
             }
         }
+        imgView.layer.borderWidth = 0;
+        _imageViews[index] = imgView;
+        _imgFunctionView.hidden = YES;
+        _bottomView.hidden = NO;
         if (_isVerticalCut == YES) {
             [self addVerticalCutView];
         }else{
             [self addHorizontalCutView];
-        }
-        _imgFunctionView.hidden = YES;
-        _bottomView.hidden = NO;
-        
+        }  
     }
     
 }
 
 -(void)bottomBtnClick:(NSInteger )tag{
-    _guideIMG.hidden = YES;
+    _guideBtn.hidden = YES;
     if (tag == 1){
         if (_type == 2){
             [_contentScrollView removeAllSubviews];
-            for (StitchingButton *img in _imageViews) {
-                for (UIView *vc in img.subviews) {
-                    if ([vc isMemberOfClass:[UIButton class]]){
-                        [vc removeAllSubviews];
-                    }
-                }
-            }
+            [self deleteContentScorllViewSubViews];
             [_imageViews removeAllObjects];
             [_originTopArr removeAllObjects];
             [_originBottomArr removeAllObjects];
@@ -2010,7 +2241,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
             }
             if (_isSlicing){
                 CGFloat top = [_originTopArr[0]floatValue];
-                [_cutBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+                [_slicingBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
                     if (_isVerticalCut == YES){
                         make.centerX.centerY.equalTo(self.view);
                         make.width.equalTo(@(VerViewWidth));
@@ -2020,7 +2251,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                         make.width.equalTo(@30);
                         make.top.equalTo(@(top));
                         make.centerX.equalTo(self.view);
-                        [_cutBtn setBackgroundImage:IMG(@"横切裁切分界线") forState:UIControlStateNormal];
+                        [_slicingBtn setBackgroundImage:IMG(@"横切裁切分界线") forState:UIControlStateNormal];
                     }
                 }];
             }
@@ -2052,18 +2283,18 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                 
             }
             _adjustView.hidden = !_adjustView.hidden;
-            _cutBtn.hidden = YES;
+            _slicingBtn.hidden = YES;
         }
         
     }else{
         _adjustView.hidden = YES;
-        _cutBtn.hidden = YES;
+        _slicingBtn.hidden = YES;
         if (tag == 2){
             //裁切
             _isSlicing = NO;
             if ([_bottomView.preLab.text isEqualToString:@"预览"]){
                 _isCut = YES;
-                _cutBtn.hidden = YES;
+                _slicingBtn.hidden = YES;
                 if (_type != 4){
                     if (_isVerticalCut){
                         [self addVerticalCutView];
@@ -2077,44 +2308,34 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                 
                 
             }else{
-                _guideIMG.hidden = YES;
+                _guideBtn.hidden = YES;
                 _isCut = NO;
+                _isStartCut = NO;
                 [_contentScrollView removeGestureRecognizer:_panGesture];
-                for (StitchingButton *img in _imageViews) {
-                    for (UIView *vc in img.subviews) {
-                        if ([vc isMemberOfClass:[UIButton class]]){
-                            [vc removeAllSubviews];
-                        }
-                    }
-                }
+                [self deleteContentScorllViewSubViews];
+                
             }
             
         }else if (tag == 3){
-            _guideIMG.hidden = YES;
+            _guideBtn.hidden = YES;
             _isCut = NO;
             [_contentScrollView removeGestureRecognizer:_panGesture];
-            for (StitchingButton *img in _imageViews) {
-                for (UIView *vc in img.subviews) {
-                    if ([vc isMemberOfClass:[UIButton class]]){
-                        [vc removeAllSubviews];
-                    }
-                }
-            }
+            [self deleteContentScorllViewSubViews];
             if (!_isSlicing){
-                if (_cutBtn == nil){
-                    _cutBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-                    [_cutBtn setBackgroundImage:IMG(@"裁切分界线") forState:UIControlStateNormal];
-                    _cutBtn.selected = NO;
-                    [_cutBtn addTarget:self action:@selector(userCutBtnClick) forControlEvents:UIControlEventTouchUpInside];
+                if (_slicingBtn == nil){
+                    _slicingBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+                    [_slicingBtn setBackgroundImage:IMG(@"裁切分界线") forState:UIControlStateNormal];
+                    _slicingBtn.selected = NO;
+                    [_slicingBtn addTarget:self action:@selector(userCutBtnClick) forControlEvents:UIControlEventTouchUpInside];
                     UIPanGestureRecognizer *panGes = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(cutImgMoveGesture:)];
                     panGes.delegate = self;
-                    [_cutBtn addGestureRecognizer:panGes];
-                    [self.contentScrollView addSubview:_cutBtn];
+                    [_slicingBtn addGestureRecognizer:panGes];
+                    [self.contentScrollView addSubview:_slicingBtn];
                     
                 }
-                [self.contentScrollView bringSubviewToFront:_cutBtn];
-                _cutBtn.hidden = NO;
-                [_cutBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+                [self.contentScrollView bringSubviewToFront:_slicingBtn];
+                _slicingBtn.hidden = NO;
+                [_slicingBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
                     if (_isVerticalCut == YES){
                         make.centerX.centerY.equalTo(self.view);
                         make.width.equalTo(@(VerViewWidth));
@@ -2123,11 +2344,11 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                         make.height.equalTo(@(HorViewHeight));
                         make.width.equalTo(@30);
                         make.centerX.centerY.equalTo(self.view);
-                        [_cutBtn setBackgroundImage:IMG(@"横切裁切分界线") forState:UIControlStateNormal];
+                        [_slicingBtn setBackgroundImage:IMG(@"横切裁切分界线") forState:UIControlStateNormal];
                     }
                 }];
             }else{
-                _cutBtn.hidden = YES;
+                _slicingBtn.hidden = YES;
             }
             _isSlicing = !_isSlicing;
         }else{
@@ -2153,6 +2374,29 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
     UIImage *newImage = IMG(name);
     newImage = [newImage stretchableImageWithLeftCapWidth:10 topCapHeight:5];
     return newImage;
+}
+
+-(void)deleteContentScorllViewSubViews{
+    for (UIView *vc in _contentScrollView.subviews) {
+        if (vc.tag >= 10000){
+            [vc removeFromSuperview];
+        }
+    }
+    for (StitchingButton *img in _imageViews) {
+        img.layer.borderWidth = 0;
+    }
+    [_leftCutBtn removeFromSuperview];
+    [_rightCutBtn removeFromSuperview];
+}
+-(void)guideBtnClick:(UIButton *)btn{
+    _guideBtn.hidden = YES;
+    if (_isVerticalCut){
+        [self addVerticalCutView];
+    }else{
+        [self addHorizontalCutView];
+    }
+    _isCut = NO;
+    _isStartCut = NO;
 }
 
 
@@ -2202,6 +2446,13 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
     }
 }
 
+#pragma mark -- scrollviewDelegate
+-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+    _isScrollViewScroll = YES;
+}
+-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
+    _isScrollViewScroll = NO;
+}
 #pragma mark --lazy
 -(NSMutableArray *)editLabArr{
     if (!_editLabArr){

@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic ,strong)NSString *waterTitle;//水印文字
 @property (nonatomic ,assign)NSInteger waterTitleFontSize;//水印文字大小
 @property (nonatomic ,strong)NSString *waterTitleColor;//水印文字颜色
-
+@property (nonatomic ,strong)NSDictionary *screenVideoDic;//录屏地址
 
 @property (nonatomic ,assign)NSInteger deleteIMGType;//删除原图类型 1=所有图片 2=只删原图
 
@@ -28,10 +28,14 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic ,assign)BOOL isAutoDeleteOriginIMG;//是否删除原图
 @property (nonatomic ,assign)BOOL isAutoCheckRecentlyIMG;//是否检测最新长截图
 @property (nonatomic ,assign)BOOL isAutoHiddenScrollStrip;//是否自动隐藏滚动条
-
+@property (nonatomic ,assign)BOOL isHaveScreenData;//有录屏数据
+@property (nonatomic ,assign)BOOL isScorllScreen;
 
 @property (nonatomic ,strong)NSMutableArray *homeIconArr;//主页icon
 @property (nonatomic ,strong)NSMutableArray *selectColorArr;//选中的6个颜色
+
+
+
 
 @end
 

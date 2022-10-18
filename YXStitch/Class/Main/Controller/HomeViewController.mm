@@ -30,6 +30,7 @@
 #import "PictureLayoutController.h"
 #import "ImageEditViewController.h"
 #import "XWOpenCVHelper.h"
+#import "App.h"
 
 @interface HomeViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,MoveCollectionViewCellDelegate,ScrrenStitchHintViewDelegate,HXPhotoViewDelegate,UIImagePickerControllerDelegate, HXPhotoViewCellCustomProtocol,HXCustomNavigationControllerDelegate,UnlockFuncViewDelegate,CheckProViewDelegate>
 
@@ -62,6 +63,7 @@
 
 @property (nonatomic ,strong)NSMutableArray *stitchArr;
 @property (nonatomic ,strong)NSURL *videoURL;
+@property (nonatomic ,assign)BOOL isScrollScreen;
 
 @end
 
@@ -71,7 +73,8 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     self.title = @"首页";
-    
+    _isScrollScreen = NO;
+    GVUserDe.isScorllScreen = _isScrollScreen;
     if (GVUserDe.waterPosition <= 1){
         GVUserDe.waterPosition = 1;
     }
@@ -95,6 +98,14 @@
     }
     
     [self addObserver];
+    if (GVUserDe.isHaveScreenData){
+        App *app = [App sharedInstance];
+        _videoURL = app.videoURL;
+        _isScrollScreen = YES;
+        GVUserDe.isScorllScreen = _isScrollScreen;
+        GVUserDe.isHaveScreenData = NO;
+        [self addScrrenData];
+    }
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
@@ -145,8 +156,7 @@
 -(void)addObserver{
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openAlbum:) name:@"openAlbum" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(closeAlbum:) name:@"closeAlbum" object:nil];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(screenRecordFinish:) name:kScreenRecordFinishNotification object:nil];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(screenRecordStart:) name:kScreenRecordStartNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(screenRecordFinish:) name:kScreenRecordFinishNotification object:nil];
 }
 
 - (void)noty:(NSNotification *)noty {
@@ -162,35 +172,51 @@
 
 - (void)screenRecordFinish:(NSNotification *)noty{
     //录屏结束通知 拼接图片
-    MJWeakSelf
     NSDictionary *dict = noty.userInfo;
     _videoURL = dict[@"videoURL"];
     NSLog(@"_videorul==%@",_videoURL);
+    GVUserDe.isHaveScreenData = NO;
+    _isScrollScreen = YES;
+    GVUserDe.isScorllScreen = _isScrollScreen;
+    [self addScrrenData];
+    
+}
+
+-(void)addScrrenData{
+    MJWeakSelf
     [self.stitchArr removeAllObjects];
-//    NSMutableArray *tempArr = [NSMutableArray array];
+    NSMutableArray *tempArr = [NSMutableArray array];
+    __block NSInteger allSameCount = 1;
     if (_videoURL){
         [[HandlerVideo sharedInstance]splitVideo:_videoURL fps:1 progressImageBlock:^(CGFloat progress) {
             if (progress >= 1) {
-//                for (NSInteger i = 0 ; i < tempArr.count; i ++) {
-//                    if ( i < tempArr.count - 1){
-//                        cv::Mat matImage = [XWOpenCVHelper cvMatFromUIImage:tempArr[i]];
-//                        cv::Mat matNextImage = [XWOpenCVHelper cvMatFromUIImage:tempArr[i + 1]];
-//                        int hashValue = aHash(matImage, matNextImage);
-//                        if (hashValue >= 5){
-//                            [weakSelf.stitchArr addObject:tempArr[i]];
-//                        }
-//                    }
-//                }
+                for (NSInteger i = 0 ; i < tempArr.count; i ++) {
+                    if ( i < tempArr.count - 1){
+                        cv::Mat matImage = [XWOpenCVHelper cvMatFromUIImage:tempArr[i]];
+                        cv::Mat matNextImage = [XWOpenCVHelper cvMatFromUIImage:tempArr[i + 1]];
+                        int hashValue = aHash(matImage, matNextImage);
+                        NSLog(@"hashValue==%d",hashValue);
+                        if (hashValue >= 5){
+                            [weakSelf.stitchArr addObject:tempArr[i]];
+                            
+                        }
+                        if (hashValue == 0){
+                            allSameCount ++;
+                        }
+                    }
+                }
+                if (allSameCount == tempArr.count){
+                    [weakSelf.stitchArr addObject:tempArr.firstObject];
+                }
                 [weakSelf screenStitchWithType:3];
+                NSLog(@"stitchArr.count==%ld",weakSelf.stitchArr.count);
             }
         } splitCompleteBlock:^(BOOL success, UIImage *splitimg) {
             if (success && splitimg) {
-                [weakSelf.stitchArr addObject:splitimg];
+                [tempArr addObject:splitimg];
             }
         }];
     }
-    
-    
 }
 #pragma mark - UI
 -(void)setupViews{
@@ -296,6 +322,8 @@
     //跳转
     UIViewController *vc;
     if ([cellName isEqualToString:@"截长屏"]){
+        _isScrollScreen = NO;
+        GVUserDe.isScorllScreen = _isScrollScreen;
         [self screenStitchWithType:2];
     }else if ([cellName isEqualToString:@"网页滚动截图"]){
         vc = [EnterURLViewController new];
@@ -441,14 +469,18 @@
         weakSelf.checkScreenStitchView = [ScrrenStitchHintView new];
         weakSelf.checkScreenStitchView.frame = CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, RYRealAdaptWidthValue(550));
         weakSelf.checkScreenStitchView.delegate = self;
-        if (weakSelf.stitchArr.count > 1){
-            //连续截图数量大于2才能去拼接
+        weakSelf.checkScreenStitchView.type = type;
+        if (type == 3){
             [SVProgressHUD showWithStatus:@"滚动截图正在拼接中..."];
-            weakSelf.checkScreenStitchView.type = type;
-            weakSelf.checkScreenStitchView.arr = weakSelf.stitchArr;
         }else{
-            weakSelf.checkScreenStitchView.type = 1;
+            if (weakSelf.stitchArr.count > 1){
+                //连续截图数量大于2才能去拼接
+                [SVProgressHUD showWithStatus:@"滚动截图正在拼接中..."];
+            }else{
+                weakSelf.checkScreenStitchView.type = 1;
+            }
         }
+        weakSelf.checkScreenStitchView.arr = weakSelf.stitchArr;
         weakSelf.checkScreenStitchView.delegate = self;
         [weakSelf.view addSubview:weakSelf.checkScreenStitchView];
         [UIView animateWithDuration:0.3 animations:^{
@@ -509,20 +541,24 @@
         //字幕//拼接//裁切
         CaptionViewController *vc = [CaptionViewController new];  
         __block NSMutableArray *tmpArr = [NSMutableArray array];
-        for (PHAsset *asset in _stitchArr) {
-            [Tools getImageWithAsset:asset withBlock:^(UIImage * _Nonnull image) {
-                [tmpArr addObject:image];
-            }];
-        }
-        vc.dataArr = tmpArr;
-        if (tag == 1){
-            vc.type = 2;
-        }else if (tag == 2){
-            vc.type = 1;
+        if (!_isScrollScreen){
+            for (PHAsset *asset in _stitchArr) {
+                [Tools getImageWithAsset:asset withBlock:^(UIImage * _Nonnull image) {
+                    [tmpArr addObject:image];
+                }];
+            }
+            vc.dataArr = tmpArr;
+            if (tag == 1){
+                vc.type = 2;
+            }else if (tag == 2){
+                vc.type = 1;
+            }else{
+                vc.type = 3;
+            }
         }else{
-            vc.type = 3;
+            vc.dataArr = _stitchArr;
+            vc.type = 4;
         }
-        
         [weakSelf checkScreenStitchViewDiss];
         [self.navigationController pushViewController:vc animated:YES];
         

@@ -68,6 +68,7 @@ static void onDarwinReplayKit2PushStart(CFNotificationCenterRef center,
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleScreenRecordStartNotification:) name:ScreenRecordStartNotif object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleScreenRecordEndNotification:) name:ScreenRecordFinishNotif object:nil];
     
+    
     LYLog(@"检测文件1");
     if(![UIScreen mainScreen].isCaptured){//正在录屏
         NSUserDefaults *sharedDefaults = [[NSUserDefaults alloc] initWithSuiteName:GroupIDKey];
@@ -115,6 +116,11 @@ static void onDarwinReplayKit2PushStart(CFNotificationCenterRef center,
         videoURL = newUrl;
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:kScreenRecordFinishNotification object:nil userInfo:@{@"videoURL":videoURL}];
+    _videoURL = videoURL;
+    GVUserDe.isHaveScreenData = YES;
+//    NSDictionary *dic = @{@"videoURL":videoURL};
+//    GVUserDe.screenVideoDic = dic;
+    
     LYLog(@"发送通知");
 }
 

@@ -179,6 +179,7 @@
 		FB86DC2B28D96C5300EE8E4D /* UIImage+LF_Format.m in Sources */ = {isa = PBXBuildFile; fileRef = FB86DC2A28D96C5300EE8E4D /* UIImage+LF_Format.m */; };
 		FB86DC2E28D9A80700EE8E4D /* ImageEditMarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = FB86DC2D28D9A80700EE8E4D /* ImageEditMarkView.m */; };
 		FB8B4E4328AB8BFF00313ECD /* UIScrollView+LVShot.m in Sources */ = {isa = PBXBuildFile; fileRef = FB8B4E4128AB8BFC00313ECD /* UIScrollView+LVShot.m */; };
+		FB8B720D28FD69C200515024 /* surroundSelectPathView.m in Sources */ = {isa = PBXBuildFile; fileRef = FB8B720C28FD69C200515024 /* surroundSelectPathView.m */; };
 		FB8BAEA028E2F78900A9978A /* ImageShellSettingView.m in Sources */ = {isa = PBXBuildFile; fileRef = FB8BAE9F28E2F78900A9978A /* ImageShellSettingView.m */; };
 		FB9B943428DC455C009D55FB /* UIBezierPath+GetAllPoints.m in Sources */ = {isa = PBXBuildFile; fileRef = FB9B943228DC4556009D55FB /* UIBezierPath+GetAllPoints.m */; };
 		FBA068F728DAA61500AAB7E6 /* ImageEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FBA068F628DAA61500AAB7E6 /* ImageEditViewController.m */; };
@@ -516,6 +517,8 @@
 		FB86DC2D28D9A80700EE8E4D /* ImageEditMarkView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ImageEditMarkView.m; path = "../New Group1/ImageEditMarkView.m"; sourceTree = "<group>"; };
 		FB8B4E4128AB8BFC00313ECD /* UIScrollView+LVShot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+LVShot.m"; sourceTree = "<group>"; };
 		FB8B4E4228AB8BFF00313ECD /* UIScrollView+LVShot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+LVShot.h"; sourceTree = "<group>"; };
+		FB8B720B28FD69C200515024 /* surroundSelectPathView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = surroundSelectPathView.h; sourceTree = "<group>"; };
+		FB8B720C28FD69C200515024 /* surroundSelectPathView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = surroundSelectPathView.m; sourceTree = "<group>"; };
 		FB8BAE9E28E2F78900A9978A /* ImageShellSettingView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageShellSettingView.h; sourceTree = "<group>"; };
 		FB8BAE9F28E2F78900A9978A /* ImageShellSettingView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImageShellSettingView.m; sourceTree = "<group>"; };
 		FB9B943228DC4556009D55FB /* UIBezierPath+GetAllPoints.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBezierPath+GetAllPoints.m"; sourceTree = "<group>"; };
@@ -1374,6 +1377,8 @@
 				FB8BAE9F28E2F78900A9978A /* ImageShellSettingView.m */,
 				FB26948028E57E5200565F4B /* imageShellSelectView.h */,
 				FB26948128E57E5200565F4B /* imageShellSelectView.m */,
+				FB8B720B28FD69C200515024 /* surroundSelectPathView.h */,
+				FB8B720C28FD69C200515024 /* surroundSelectPathView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1690,6 +1695,7 @@
 				FBF59EF528AC796100D9C6CF /* WaterTitleView.m in Sources */,
 				FB687F0928A0ECCC002D557B /* ToastShowView.m in Sources */,
 				BBC92AD328F670C80023E80F /* XWNetTool+Bind.m in Sources */,
+				FB8B720D28FD69C200515024 /* surroundSelectPathView.m in Sources */,
 				FB86DC2E28D9A80700EE8E4D /* ImageEditMarkView.m in Sources */,
 				BBB4687728F57A2100F15765 /* XWOpenCVHelper.mm in Sources */,
 				FB687EF928A0E23F002D557B /* HomeViewController.mm in Sources */,

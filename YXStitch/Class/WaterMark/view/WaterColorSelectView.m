@@ -69,9 +69,11 @@
     if (_type!= 6){
         _paintSlider.minimumValue = 1;
         _paintSlider.maximumValue = 10;
+        _paintSlider.value = 5;
         if(_type == 5 || _type == 2){
             _paintSlider.minimumValue = 10;
             _paintSlider.maximumValue = 30;
+            _paintSlider.value = 15;
         }
     }else{
         if (_type == 6) {
@@ -82,6 +84,7 @@
         {
             _paintSlider.minimumValue = 10;
             _paintSlider.maximumValue = 30;
+            _paintSlider.value = 15;
         }
     }
     

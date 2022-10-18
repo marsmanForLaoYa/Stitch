@@ -174,7 +174,7 @@
         _endBtn.hidden = YES;
     }else if (index == 2){
         _titleLab.text = @"开始滚动截图";
-        _tipLab.text = @"勾选『快捷拼图』，点击『开始直播』， 等待状态栏出现 录屏标志后开始滚动屏幕";
+        _tipLab.text = @"勾选『快捷截长图』，点击『开始直播』， 等待状态栏出现 录屏标志后开始滚动屏幕";
         _pageImage.hidden = NO;
         _pageImage.image = IMG(@"03");
         _endBtn.hidden = YES;
