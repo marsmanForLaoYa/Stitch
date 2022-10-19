@@ -2227,6 +2227,11 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
             if ([_bottomView.typeLab.text isEqualToString:@"竖拼"]){
                 //竖拼切换成横拼
                 _isVerticalCut = NO;
+//                [_contentScrollView mas_remakeConstraints:^(MASConstraintMaker *make) {
+//                    make.width.equalTo(@(SCREEN_WIDTH));
+//                    make.centerY.equalTo(self.view);
+//                    make.height.equalTo(@(HorViewHeight));
+//                }];
                 [self addHorizontalContentView];
                 if (_isCut){
                     [self addHorizontalCutView];
@@ -2234,6 +2239,11 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
             }else{
                 //横拼切换成竖屏
                 _isVerticalCut = YES;
+                [_contentScrollView mas_remakeConstraints:^(MASConstraintMaker *make) {
+                    make.top.equalTo(@(Nav_H));
+                    make.centerX.width.equalTo(_contentView);
+                    make.height.equalTo(@(SCREEN_HEIGHT - Nav_H - 80));
+                }];
                 [self addVerticalContentView];
                 if (_isCut){
                     [self addVerticalCutView];
