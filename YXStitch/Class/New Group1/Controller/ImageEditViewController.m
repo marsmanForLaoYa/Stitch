@@ -420,7 +420,7 @@
         [UIView animateWithDuration:0.3 animations:^{
             weakSelf.imgEditMarkView.frame = CGRectMake(0, SCREEN_HEIGHT - weakSelf.imgEditMarkView.height, SCREEN_WIDTH, weakSelf.imgEditMarkView.height);
         }];
-        _imgEditMarkView.btnClick = ^(NSInteger tag) {
+        _imgEditMarkView.btnClick = ^(NSInteger tag, BOOL isSelected) {
             [weakSelf imgMarkEditViewBtnClickWithTag:tag];
         };
     }else if (tag ==2){
