@@ -7,6 +7,10 @@
 
 #import "MosaicStyleSelectView.h"
 
+@interface MosaicStyleSelectView ()
+@property (nonatomic ,assign)UIButton *styleBtn;
+@end
+
 @implementation MosaicStyleSelectView
 - (id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
@@ -18,7 +22,7 @@
 }
 
 -(void)setupViews{
-    NSArray *shapeArr = @[@"样式_01_unSelected",@"样式_02_unSelected",@"样式_03_unSelected"];
+    NSArray *shapeArr = @[@"样式_01_selected",@"样式_02_unSelected",@"样式_03_unSelected"];
     NSArray *styleArr = @[@"马赛克样式_03",@"马赛克样式_02",@"马赛克样式_01"];
     [self addBtnViewWithType:1 andData:shapeArr];
     [self addBtnViewWithType:2 andData:styleArr];
@@ -32,6 +36,18 @@
         [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
         [btn setBackgroundImage:IMG(arr[i]) forState:UIControlStateNormal];
         [self addSubview:btn];
+        if (type == 2){
+            btn.layer.cornerRadius = 13;
+            btn.layer.masksToBounds = YES;
+            btn.layer.borderWidth = 2;
+            btn.layer.borderColor = [UIColor whiteColor].CGColor;
+            if (i == 2){
+                _styleBtn = btn;
+            }
+        }
+        if (i == 0 && type == 0){
+            _selectBtn = btn;
+        }
         [btn mas_makeConstraints:^(MASConstraintMaker *make) {
             if (type == 1){
                 make.left.equalTo(@(i * 40 + 30));
@@ -47,7 +63,15 @@
 
 -(void)btnClick:(UIButton *)btn{
     if (btn.tag >= 200){
-        self.styleBtnClick(btn.tag);
+        if (_styleBtn != btn){
+            _styleBtn.layer.borderWidth = 0;
+            _styleBtn.layer.borderColor = [UIColor clearColor].CGColor;
+            btn.layer.borderWidth = 2;
+            btn.layer.borderColor = [UIColor whiteColor].CGColor;
+            _styleBtn = btn;
+            self.styleBtnClick(btn.tag);
+        }
+        
     }else{
         if (_selectBtn != btn){
             switch (btn.tag) {

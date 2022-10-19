@@ -226,7 +226,15 @@
 }
 
 -(void)fillBtnClick:(UIButton *)btn{
-    [self.delegate changeFillBKImageWith:btn.tag];
+    if (btn != _selectBtn){
+        _selectBtn.layer.borderWidth = 0;
+        _selectBtn.layer.borderColor = [UIColor clearColor].CGColor;
+        btn.layer.borderWidth = 2;
+        btn.layer.borderColor = [UIColor whiteColor].CGColor;
+        _selectBtn = btn;
+        [self.delegate changeFillBKImageWith:btn.tag];
+    }
+   
 }
 
 #pragma mark - Getters

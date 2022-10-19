@@ -69,6 +69,7 @@
     for (NSInteger i = 0; i < imgIconArr.count ; i ++) {
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
         btn.tag = i + 1;
+        btn.selected = NO;
         [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
         [btn setImage:IMG(imgIconArr[i]) forState:UIControlStateNormal];
         [contentView addSubview:btn];
@@ -100,11 +101,12 @@
 }
 
 -(void)funcClick:(UIButton *)btn{
-    self.btnClick(btn.tag);
+    self.btnClick(btn.tag,btn.selected);
 }
 
 -(void)btnClick:(UIButton *)btn{
     if (_selectBtn != btn){
+        btn.selected = YES;
         switch (btn.tag) {
             case 1:
                 [btn setImage:IMG(@"空心填充框_selected") forState:UIControlStateNormal];
@@ -150,9 +152,11 @@
                 break;
         }
         _selectBtn = btn;
-        self.btnClick(btn.tag);
+        
+    }else{
+        btn.selected  = !btn.selected;
     }
-    
+    self.btnClick(btn.tag,btn.selected);
 }
 
 

@@ -557,6 +557,7 @@
             }
         }else{
             vc.dataArr = _stitchArr;
+            vc.editImgArr = _stitchArr;
             vc.type = 4;
         }
         [weakSelf checkScreenStitchViewDiss];

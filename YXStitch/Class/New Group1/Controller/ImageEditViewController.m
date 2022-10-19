@@ -328,6 +328,17 @@
         _originTopArr[i] = [NSNumber numberWithFloat:img.top];
         _imageViewsArr[i] = img;
     }
+    StitchingButton *firstimg = _imageViewsArr.firstObject;
+    StitchingButton *lastimg = _imageViewsArr.lastObject;
+//    if (lastimg.bottom <= SCREEN_HEIGHT){
+////        [_contentView addSubview:_contentScrollView];
+//        [_contentScrollView mas_remakeConstraints:^(MASConstraintMaker *make) {
+//            make.height.equalTo(@(lastimg.bottom));
+//            make.width.equalTo(@(VerViewWidth));
+//            make.centerX.equalTo(_contentView);
+//            make.top.equalTo(@(firstimg.top));
+//        }];
+//    }
 }
 -(void)addGestureRecognizer{
     //    _panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(selectonPanGesture:)];
@@ -415,7 +426,7 @@
     }else if (tag ==2){
         //边框
         [_contentScrollView removeGestureRecognizer:_panRecognizer];
-        _borderType = 0;
+        _borderType = 1;
         if (_borderSettingView == nil){
             _borderSettingView = [[ImageBorderSettingView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH,100)];
             _borderSettingView.isVer = _isVer;
@@ -425,9 +436,8 @@
         [UIView animateWithDuration:0.3 animations:^{
             weakSelf.borderSettingView.frame = CGRectMake(0, SCREEN_HEIGHT - weakSelf.borderSettingView.height, SCREEN_WIDTH, weakSelf.borderSettingView.height);
         }];
-        
-        _borderSettingView.btnClick = ^(NSInteger tag) {
-            [weakSelf imageBorderSettingWithTag:tag];
+        _borderSettingView.btnClick = ^(NSInteger tag, BOOL isSelect) {
+            [weakSelf imageBorderSettingWithTag:tag AndSelect:isSelect];
         };
     }else if (tag == 3){
         //套壳
@@ -575,6 +585,9 @@
         _contentScrollView.scrollEnabled = YES;
     }else{
         [self addContentScrollViewPangesture];
+        if (_mosaicView != nil && tag != 3){
+            [self removeMosaicView];
+        }
         _path = nil;
         _currentPath = nil;
         _slayer = nil;
@@ -599,12 +612,15 @@
             }
         }else if(tag == 3){
             //马赛克
-            [_contentScrollView removeFromSuperview];
             _markType = MOSAIC;
-            _mosaicView = [[MosaicStyleSelectView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, 80)];
-            _mosaicShape = 100;
-            _mosaicStyle = 200;
-            [self.view addSubview:_mosaicView];
+            [_colorSelectView removeFromSuperview];
+            if (_mosaicView == nil){
+               
+                _mosaicView = [[MosaicStyleSelectView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, 80)];
+                _mosaicShape = 100;
+                _mosaicStyle = 200;
+                [self.view addSubview:_mosaicView];
+            }
             _pathWidth = 15;
             _pathLineColor = [UIColor orangeColor];
             //选择样式
@@ -653,7 +669,7 @@
         }
     }
 }
--(void)imageBorderSettingWithTag:(NSInteger )tag{
+-(void)imageBorderSettingWithTag:(NSInteger )tag AndSelect:(BOOL)isSelected{
     MJWeakSelf
     if (tag == 0){
         //取消
@@ -667,11 +683,12 @@
         [_contentScrollView removeGestureRecognizer:_panRecognizer];
         _contentScrollView.scrollEnabled = YES;
     }else{
-        _borderType = tag;
+        
         if (tag == 1){
             //无边框
             _pathWidth = 0;
             _pathLineColor = [UIColor clearColor];
+            [_contentScrollView setBackgroundColor:[UIColor clearColor]];
             [UIView animateWithDuration:0.3 animations:^{
                 weakSelf.colorSelectView.frame = CGRectMake(0, SCREEN_HEIGHT - 80, SCREEN_WIDTH, weakSelf.colorSelectView.height);
             } completion:^(BOOL finished) {
@@ -682,12 +699,31 @@
         }else{
             if (_colorSelectView == nil){
                 [self addColoeSelectedViewWithType:4];
+            }else{
+                _colorSelectView.hidden = NO;
+                [self colorViewShow];
             }
             _pathWidth = 2;
         }
-        
         _pathLineColor = [UIColor orangeColor];
-        [self changeImageBorderWithType:_borderType AndBorderWidth:_pathWidth AndColor:_pathLineColor];
+        if (_borderType != tag){
+            _borderType = tag;
+            [self changeImageBorderWithType:_borderType AndBorderWidth:_pathWidth AndColor:_pathLineColor];
+        }else{
+            if (!isSelected){
+                [self colorViewDismiss];
+            }else{
+                if (_colorSelectView == nil){
+                    [self addColoeSelectedViewWithType:4];
+                }else{
+                    _colorSelectView.hidden = NO;
+                    [self colorViewShow];
+                }
+            }
+            
+        }
+            
+        
         
     }
 }
@@ -811,6 +847,7 @@
                 image.frame = CGRectMake(0, top, imgWidth, imgHeight);
                 image.imgView.frame = CGRectMake(0, 0, imgWidth, imgHeight);
             }
+            
         }
     }else{
         if (type == 1){
@@ -2083,6 +2120,16 @@
     }
 }
 
+-(void)removeMosaicView{
+    MJWeakSelf
+    [UIView animateWithDuration:0.3 animations:^{
+        weakSelf.mosaicView.frame = CGRectMake(0, SCREEN_HEIGHT - 80, SCREEN_WIDTH, weakSelf.mosaicView.height);
+    } completion:^(BOOL finished) {
+        [weakSelf.mosaicView removeFromSuperview];
+        weakSelf.mosaicView = nil;
+    }];
+}
+
 #pragma mark --Create View
 -(void)addEditLabWithType:(NSInteger )type{
     CGSize textSize = [Tools sizeOfText:_addLabStr andFontSize:_pathWidth];
@@ -2201,7 +2248,7 @@
             [self.imageViewsArr addObject:imageView];
             
         }
-        [_contentScrollView setContentSize:CGSizeMake(_contentScrollView.size.width, contentHeight + top)];
+        [_contentScrollView setContentSize:CGSizeMake(_contentScrollView.size.width, contentHeight + 10)];
         _shellBkImageView  = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0,width, _contentScrollView.contentSize.height)];
         if(contentHeight < 500){
             CGFloat newHeight = 0;
@@ -2423,23 +2470,26 @@
     }
     StitchingButton *lastIMG = _imageViewsArr.lastObject;
     [_waterLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-        if(_contentScrollView.contentSize.height < SCREEN_HEIGHT){
-            make.bottom.equalTo(@(lastIMG.bottom - 8));
-        }else{
-            make.bottom.equalTo(@(_contentScrollView.contentSize.height - 8));
-        }
+//        if(_contentScrollView.contentSize.height < SCREEN_HEIGHT){
+//
+//        }else{
+//            make.bottom.equalTo(@(_contentScrollView.contentSize.height - 8));
+//        }
+        make.bottom.equalTo(@(lastIMG.bottom - 8));
         
         make.width.left.equalTo(_contentScrollView);
     }];
     [self colorViewDismiss];
 }
 -(void)addFullWaterView{
+    NSLog(@"GVUserDe.waterTitleColor==%@",GVUserDe.waterTitleColor);
     [_fullWaterView removeFromSuperview];
     [_waterLabel  removeFromSuperview];
     CGFloat top = [_originTopArr[0]floatValue];
     _fullWaterView  = [[UIView alloc]initWithFrame:CGRectMake(0, top,_contentScrollView.width, _contentScrollView.contentSize.height)];
     _fullWaterView.layer.masksToBounds = YES;
     [_contentScrollView addSubview:_fullWaterView];
+    _fullWaterView.backgroundColor = [UIColor clearColor];
     [_fullWaterView addSubview:[FullWaterMarkView addWaterMarkView:GVUserDe.waterTitle.length > 0 ? GVUserDe.waterTitle : @"@快捷截长图" andSize:GVUserDe.waterTitleFontSize > 10 ?GVUserDe.waterTitleFontSize : 14 andColor:GVUserDe.waterTitleColor.length >0?GVUserDe.waterTitleColor: @"ffffff"]];
 }
 
@@ -2489,7 +2539,6 @@
         [self changeImageBorderWithType:_borderType AndBorderWidth:_pathWidth AndColor:_pathLineColor];
     }else if (_editType == 4){
         //水印文字大小
-        //水印文字颜色
         if (GVUserDe.waterPosition == 5){
             //全屏
             GVUserDe.waterTitleFontSize = size;
@@ -2639,11 +2688,7 @@
                 }else{
                     [self colorViewDismiss];
                     if (_markType == MOSAIC || _markType == MOSAICOVAL || _markType == MOSAICRECTANGLE){
-                        [UIView animateWithDuration:0.3 animations:^{
-                            weakSelf.mosaicView.frame = CGRectMake(0, SCREEN_HEIGHT - 80, SCREEN_WIDTH, weakSelf.mosaicView.height);
-                        } completion:^(BOOL finished) {
-                            [weakSelf.mosaicView removeFromSuperview];
-                        }];
+                        [self removeMosaicView];
                     }
                     if (_markType == LINE || _markType == MOSAIC){
                         UIBezierPath *path = [UIBezierPath pathWitchColor:_pathLineColor lineWidth:_pathWidth];

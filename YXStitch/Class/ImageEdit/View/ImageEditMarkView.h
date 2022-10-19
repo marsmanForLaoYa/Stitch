@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic ,strong)UIButton *deleteBtn;
 @property (nonatomic ,strong)UIButton *selectBtn;
 @property (nonatomic ,assign)BOOL isVer;
-@property (nonatomic ,copy)void(^btnClick)(NSInteger tag);
+@property (nonatomic ,copy)void(^btnClick)(NSInteger tag ,BOOL isSelected);
 @end
 
 NS_ASSUME_NONNULL_END

@@ -73,7 +73,7 @@
         make.top.equalTo(@20);
     }];
     
-    NSArray *iconArr = @[@"无边框_selected",@"内边框_unSelected",@"外边框_unSelected",@"全边框_unSelected"];
+    NSArray *iconArr = @[@"无边框_selected",@"外边框_unSelected",@"内边框_unSelected",@"全边框_unSelected"];
     for (NSInteger i = 0; i < iconArr.count ; i ++ ) {
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
         btn.tag = i + 1;
@@ -84,23 +84,27 @@
             make.width.height.equalTo(@40);
             make.left.equalTo(@(i * 60));
         }];
+        btn.selected = NO;
         if (i == 0){
             _selectBtn = btn;
+            btn.selected = YES;
         }
     }
 }
 
 -(void)btnClick:(UIButton *)btn{
     if (_selectBtn != btn){
+        btn.selected = YES;
         switch (btn.tag) {
             case 1:
                 [btn setImage:IMG(@"无边框_selected") forState:UIControlStateNormal];
                 break;
             case 2:
-                [btn setImage:IMG(@"内边框_selected") forState:UIControlStateNormal];
+                [btn setImage:IMG(@"外边框_selected") forState:UIControlStateNormal];
                 break;
             case 3:
-                [btn setImage:IMG(@"外边框_selected") forState:UIControlStateNormal];
+                [btn setImage:IMG(@"内边框_selected") forState:UIControlStateNormal];
+                
             case 4:
                 [btn setImage:IMG(@"全边框_selected") forState:UIControlStateNormal];
                 break;
@@ -112,10 +116,10 @@
                 [_selectBtn setImage:IMG(@"无边框_unSelected") forState:UIControlStateNormal];
                 break;
             case 2:
-                [_selectBtn setImage:IMG(@"内边框_unSelected") forState:UIControlStateNormal];
+                [_selectBtn setImage:IMG(@"外边框_unSelected") forState:UIControlStateNormal];
                 break;
             case 3:
-                [_selectBtn setImage:IMG(@"外边框_unSelected") forState:UIControlStateNormal];
+                [_selectBtn setImage:IMG(@"内边框_unSelected") forState:UIControlStateNormal];
                 break;
             case 4:
                 [_selectBtn setImage:IMG(@"全边框_unSelected") forState:UIControlStateNormal];
@@ -123,9 +127,12 @@
             default:
                 break;
         }
-        _selectBtn = btn;
-        self.btnClick(btn.tag);
+        _selectBtn = btn;  
+    }else{
+        btn.selected = !btn.selected;
     }
+    
+    self.btnClick(btn.tag,btn.selected);
 }
 
 @end
