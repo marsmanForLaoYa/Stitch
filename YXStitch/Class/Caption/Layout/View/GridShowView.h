@@ -23,6 +23,8 @@ typedef void(^GridShowViewSelecedImageBlock) (UIImage *image);
 
 @end
 
+
+
 typedef void (^GridShowImgViewTapBlock)(GridShowImgView *showImgView);
 
 typedef NS_OPTIONS(NSUInteger, GridPanEdge) {

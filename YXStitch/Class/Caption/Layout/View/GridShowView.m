@@ -1187,6 +1187,8 @@
 }
 
 @end
+
+
 //左右
 #define kCanPanViewMaxHeight 100
 #define kCanPanViewMinHeight 30
@@ -1275,6 +1277,8 @@
     _imageView.image = image;
     //改变imageview的frame
     [self changeImageViewFrame];
+    //scrollview滚动到中间
+    [self scrollToCenter];
 }
 
 - (void)setGridEditing:(BOOL)gridEditing {
@@ -1321,9 +1325,6 @@
     self.scrollView.contentSize = CGSizeMake(imageWidth, imageHeight);
     //设置imageview的大小
     self.imageView.frame = CGRectMake(0, 0, imageWidth, imageHeight);
-    
-    //scrollview滚动到中间
-    [self scrollToCenter];
 }
 
 //scrollview滚动到中间
@@ -1613,7 +1614,7 @@
     }
     else
     {
-        NSLog(@"recognizer.scale:%f", pinchGesture.scale);
+//        NSLog(@"recognizer.scale:%f", pinchGesture.scale);
         CGFloat w = self.imageView.width * pinchGesture.scale;
         CGFloat h = self.imageView.height * pinchGesture.scale;
         
