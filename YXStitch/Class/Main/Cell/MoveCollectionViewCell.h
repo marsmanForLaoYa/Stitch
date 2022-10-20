@@ -20,6 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 }
 @property (nonatomic, weak) id<MoveCollectionViewCellDelegate> p_MoveCollectionViewCellDelegate;
 @property (nonatomic, strong) NSString* cellName;
+@property(nonatomic,strong) UILabel *nameLab;
+@property(nonatomic,strong) UIImageView *iconIMG;
 @end
 
 NS_ASSUME_NONNULL_END

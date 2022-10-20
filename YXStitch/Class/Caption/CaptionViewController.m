@@ -153,6 +153,14 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
         make.centerX.width.equalTo(_contentView);
         make.height.equalTo(@(SCREEN_HEIGHT - Nav_H - 80));
     }];
+    
+    [_contentScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(@(Nav_H));
+        make.centerX.equalTo(_contentView);
+        make.height.equalTo(@(SCREEN_HEIGHT - Nav_HEIGHT - 80));
+        make.width.equalTo(@(VerViewWidth));
+    }];
+    
     if (_type != 4){
         [self addVerticalContentView];
         if (_type == 1){
@@ -209,7 +217,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
         //内容过小则重置imageView布局
         [self layoutContentView];
     }
-    _contentScrollView.contentSize = CGSizeMake(_contentScrollView.width,contentHeight);
+    _contentScrollView.contentSize = CGSizeMake(0,contentHeight);
 }
 
 //横拼
@@ -217,7 +225,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
     [_contentScrollView removeAllSubviews];
     CGFloat contentWidth = 0.0;
     UIImage *icon = _dataArr[0];
-    StitchingButton *firstImageView = [[StitchingButton alloc]initWithFrame:CGRectMake(0,(SCREEN_HEIGHT - 450)/2, (CGFloat)(icon.size.width / icon.size.height) * HorViewHeight, HorViewHeight)];
+    StitchingButton *firstImageView = [[StitchingButton alloc]initWithFrame:CGRectMake(0,0, (CGFloat)(icon.size.width / icon.size.height) * HorViewHeight, HorViewHeight)];
     firstImageView.image = icon;
     contentWidth += firstImageView.width;
     firstImageView.tag = 100;
@@ -241,7 +249,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
     if (contentWidth < SCREEN_WIDTH){
         [self layoutContentView];
     }
-    _contentScrollView.contentSize = CGSizeMake(contentWidth,_contentScrollView.height);
+    _contentScrollView.contentSize = CGSizeMake(0,_contentScrollView.height);
     
 }
 
@@ -862,7 +870,8 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
             //内容过小则重置imageView布局
             [weakSelf layoutContentView];
         }else{
-            weakSelf.contentScrollView.contentSize = CGSizeMake(weakSelf.contentScrollView.width,contentHeight + Nav_HEIGHT + 80);
+            NSLog(@"contentght==%lf",contentHeight);
+            weakSelf.contentScrollView.contentSize = CGSizeMake(weakSelf.contentScrollView.width,contentHeight);
         }
         [SVProgressHUD showSuccessWithStatus:@"拼接完成"];
     });
@@ -2270,11 +2279,11 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
             if ([_bottomView.typeLab.text isEqualToString:@"竖拼"]){
                 //竖拼切换成横拼
                 _isVerticalCut = NO;
-//                [_contentScrollView mas_remakeConstraints:^(MASConstraintMaker *make) {
-//                    make.width.equalTo(@(SCREEN_WIDTH));
-//                    make.centerY.equalTo(self.view);
-//                    make.height.equalTo(@(HorViewHeight));
-//                }];
+                [_contentScrollView mas_remakeConstraints:^(MASConstraintMaker *make) {
+                    make.width.equalTo(@(SCREEN_WIDTH));
+                    make.centerY.equalTo(_contentView);
+                    make.height.equalTo(@(HorViewHeight));
+                }];
                 [self addHorizontalContentView];
                 if (_isCut){
                     [self addHorizontalCutView];
@@ -2284,8 +2293,9 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                 _isVerticalCut = YES;
                 [_contentScrollView mas_remakeConstraints:^(MASConstraintMaker *make) {
                     make.top.equalTo(@(Nav_H));
-                    make.centerX.width.equalTo(_contentView);
-                    make.height.equalTo(@(SCREEN_HEIGHT - Nav_H - 80));
+                    make.centerX.equalTo(_contentView);
+                    make.height.equalTo(@(SCREEN_HEIGHT - Nav_HEIGHT - 80));
+                    make.width.equalTo(@(VerViewWidth));
                 }];
                 [self addVerticalContentView];
                 if (_isCut){

@@ -68,8 +68,9 @@
 @property (nonatomic ,assign)NSInteger editType;//编辑类型
 @property (nonatomic ,assign)NSInteger markType;//标注类型
 @property (nonatomic ,assign)NSInteger borderType;//边框类型
-@property (nonatomic, assign)NSInteger mosaicShape;//马赛克默认形状
-@property (nonatomic, assign)NSInteger mosaicStyle;//马赛克默认样式
+@property (nonatomic ,assign)NSInteger mosaicShape;//马赛克默认形状
+@property (nonatomic ,assign)NSInteger mosaicStyle;//马赛克默认样式
+@property (nonatomic ,assign)NSInteger selectMarkType;//选中的标注类型
 
 @property (nonatomic ,strong)UIPinchGestureRecognizer *pinchRecognizer;
 @property (nonatomic ,strong)UIPanGestureRecognizer *panRecognizer;;
@@ -101,8 +102,6 @@
 
 @property (nonatomic, strong)NSString *phoneTypeStr;//手机类型str
 @property (nonatomic, strong)NSString *addLabStr;//添加的文本str
-
-
 
 @end
 
@@ -411,6 +410,7 @@
     _editType = tag;
     if(tag == 1){
         //标注
+        _selectMarkType = 100;
         if (_imgEditMarkView == nil){
             _imgEditMarkView = [[ImageEditMarkView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH,100)];
             _imgEditMarkView.isVer = _isVer;
@@ -421,7 +421,7 @@
             weakSelf.imgEditMarkView.frame = CGRectMake(0, SCREEN_HEIGHT - weakSelf.imgEditMarkView.height, SCREEN_WIDTH, weakSelf.imgEditMarkView.height);
         }];
         _imgEditMarkView.btnClick = ^(NSInteger tag, BOOL isSelected) {
-            [weakSelf imgMarkEditViewBtnClickWithTag:tag];
+            [weakSelf imgMarkEditViewBtnClickWithTag:tag andIsSelected:isSelected];
         };
     }else if (tag ==2){
         //边框
@@ -442,7 +442,7 @@
     }else if (tag == 3){
         //套壳
         [_contentScrollView removeGestureRecognizer:_panRecognizer];
-       // if (User.checkIsVipMember){
+        if (User.checkIsVipMember){
             _isAddShell = YES;
             if (_isVer){
                 [self changeShellViewWithType:1];
@@ -461,9 +461,9 @@
             _shellSettingView.btnClick = ^(NSInteger tag, BOOL isSelected) {
                 [weakSelf changeImageShellWithType:tag AndSelected:isSelected];
             };
-//        }else{
-//            [self addTipsViewWithType:4];
-//        }
+        }else{
+            [self addTipsViewWithType:4];
+        }
     }else{
         //水印
         _contentScrollView.scrollEnabled = YES;
@@ -566,7 +566,7 @@
 }
 
 #pragma mark --Edit Method
--(void)imgMarkEditViewBtnClickWithTag:(NSInteger )tag{
+-(void)imgMarkEditViewBtnClickWithTag:(NSInteger )tag andIsSelected:(BOOL)isSelected{
     
     MJWeakSelf
     _isStartPaint = NO;
@@ -584,89 +584,99 @@
         [_contentScrollView removeGestureRecognizer:_panRecognizer];
         _contentScrollView.scrollEnabled = YES;
     }else{
-        [self addContentScrollViewPangesture];
-        if (_mosaicView != nil && tag != 3){
-            [self removeMosaicView];
-        }
-        _path = nil;
-        _currentPath = nil;
-        _slayer = nil;
-        if (tag == 1 || tag == 4 || tag == 2){
-            _pathWidth = 5;
-            _pathLineColor = [UIColor orangeColor];
-            if (tag == 2){
-                //实心填充
-                _markType = FILLRECTANGLE;
+        if (_selectMarkType != tag){
+            _selectMarkType = tag;
+            [self addContentScrollViewPangesture];
+            if (_mosaicView != nil && tag != 3){
+                [self removeMosaicView];
+            }
+            _path = nil;
+            _currentPath = nil;
+            _slayer = nil;
+            if (tag == 1 || tag == 4 || tag == 2){
+                _pathWidth = 5;
+                _pathLineColor = [UIColor orangeColor];
+                if (tag == 2){
+                    //实心填充
+                    _markType = FILLRECTANGLE;
+                    [_colorSelectView removeFromSuperview];
+                    [self addColoeSelectedViewWithType:3];
+                }else{
+                    //空心填充 //箭头
+                    [_colorSelectView removeFromSuperview];
+                    [self addColoeSelectedViewWithType:1];
+                    if (tag == 1){
+                        _markType = RECTANGLE;
+                    }else{
+                        _isStartPaint = YES;
+                        _markType = ARROW;
+                    }
+                }
+            }else if(tag == 3){
+                //马赛克
+                _markType = MOSAIC;
                 [_colorSelectView removeFromSuperview];
-                [self addColoeSelectedViewWithType:3];
-            }else{
-                //空心填充 //箭头
+                if (_mosaicView == nil){
+                   
+                    _mosaicView = [[MosaicStyleSelectView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, 80)];
+                    _mosaicShape = 100;
+                    _mosaicStyle = 200;
+                    [self.view addSubview:_mosaicView];
+                }
+                _pathWidth = 15;
+                _pathLineColor = [UIColor orangeColor];
+                //选择样式
+                _mosaicView.shapeBtnClick = ^(NSInteger tag) {
+                    //weakSelf.mosaicShape = tag;
+                    if (tag == 100){
+                        weakSelf.markType = MOSAICRECTANGLE;
+                    }else if(tag == 101){
+                        weakSelf.markType = MOSAICOVAL;
+                    }else{
+                        weakSelf.markType = MOSAIC;
+                    }
+                };
+                //选择图案
+                _mosaicView.styleBtnClick = ^(NSInteger tag) {
+                    weakSelf.mosaicStyle = tag;
+                };
+                [UIView animateWithDuration:0.3 animations:^{
+                    weakSelf.mosaicView.frame = CGRectMake(0, SCREEN_HEIGHT - 80 - weakSelf.mosaicView.height, SCREEN_WIDTH, weakSelf.mosaicView.height);
+                }];
+            }else if(tag == 5){
+                //画笔
+                _markType = LINE;
+                _pathWidth = 5;
+                _pathLineColor = [UIColor orangeColor];
+                [_colorSelectView removeFromSuperview];
+                [self addColoeSelectedViewWithType:2];
+            }else if(tag == 6){
+                //文本
+                _markType = WORD;
+                _pathWidth = 15;
+                _isStartPaint = YES;
+                _pathLineColor = [UIColor orangeColor];
                 [_colorSelectView removeFromSuperview];
                 [self addColoeSelectedViewWithType:1];
-                if (tag == 1){
-                    _markType = RECTANGLE;
-                }else{
-                    _isStartPaint = YES;
-                    _markType = ARROW;
-                }
+            }else if(tag == 100){
+                //删除
+                //_markType = DELETELAYER;
+                [self undo];
+            }else if(tag == 200){
+                //撤销
+                // _markType = UNDO;
+                [self undo];
+            }else{
+                
             }
-        }else if(tag == 3){
-            //马赛克
-            _markType = MOSAIC;
-            [_colorSelectView removeFromSuperview];
-            if (_mosaicView == nil){
-               
-                _mosaicView = [[MosaicStyleSelectView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, 80)];
-                _mosaicShape = 100;
-                _mosaicStyle = 200;
-                [self.view addSubview:_mosaicView];
-            }
-            _pathWidth = 15;
-            _pathLineColor = [UIColor orangeColor];
-            //选择样式
-            _mosaicView.shapeBtnClick = ^(NSInteger tag) {
-                //weakSelf.mosaicShape = tag;
-                if (tag == 100){
-                    weakSelf.markType = MOSAICRECTANGLE;
-                }else if(tag == 101){
-                    weakSelf.markType = MOSAICOVAL;
-                }else{
-                    weakSelf.markType = MOSAIC;
-                }
-            };
-            //选择图案
-            _mosaicView.styleBtnClick = ^(NSInteger tag) {
-                weakSelf.mosaicStyle = tag;
-            };
-            [UIView animateWithDuration:0.3 animations:^{
-                weakSelf.mosaicView.frame = CGRectMake(0, SCREEN_HEIGHT - 80 - weakSelf.mosaicView.height, SCREEN_WIDTH, weakSelf.mosaicView.height);
-            }];
-        }else if(tag == 5){
-            //画笔
-            _markType = LINE;
-            _pathWidth = 5;
-            _pathLineColor = [UIColor orangeColor];
-            [_colorSelectView removeFromSuperview];
-            [self addColoeSelectedViewWithType:2];
-        }else if(tag == 6){
-            //文本
-            _markType = WORD;
-            _pathWidth = 15;
-            _isStartPaint = YES;
-            _pathLineColor = [UIColor orangeColor];
-            [_colorSelectView removeFromSuperview];
-            [self addColoeSelectedViewWithType:1];
-        }else if(tag == 100){
-            //删除
-            //_markType = DELETELAYER;
-            [self undo];
-        }else if(tag == 200){
-            //撤销
-            // _markType = UNDO;
-            [self undo];
         }else{
-            
+            if(!isSelected){
+                [self colorViewDismiss];
+            }else{
+                [self colorViewShow];
+            }
         }
+        
     }
 }
 -(void)imageBorderSettingWithTag:(NSInteger )tag AndSelect:(BOOL)isSelected{
@@ -700,7 +710,6 @@
             if (_colorSelectView == nil){
                 [self addColoeSelectedViewWithType:4];
             }else{
-                _colorSelectView.hidden = NO;
                 [self colorViewShow];
             }
             _pathWidth = 2;
@@ -720,10 +729,7 @@
                     [self colorViewShow];
                 }
             }
-            
         }
-            
-        
         
     }
 }
@@ -923,6 +929,9 @@
             }
         }
     }
+    StitchingButton * lastIMG = _imageViewsArr.lastObject;
+    StitchingButton * firstIMG = _imageViewsArr.firstObject;
+    _shellBkImageView.frame = CGRectMake(_shellBkImageView.left, firstIMG.top - 20, _shellBkImageView.width, lastIMG.bottom + 20);
 }
 -(void)changeImageShellWithType:(NSInteger)type AndSelected:(BOOL)isSelected{
     MJWeakSelf
@@ -992,14 +1001,17 @@
             }
             
         }else{
+            NSString *restifier;
             if (!isSelected){
                 //有刘海
                 _isHaveBang = YES;
-                NSLog(@"name==%@",_shellBkImageView.restorationIdentifier);
+                restifier = [_shellBkImageView.restorationIdentifier substringFromIndex:1];
             }else{
-                //有刘海
+                //无刘海
+                restifier = [NSString stringWithFormat:@"无%@",_shellBkImageView.restorationIdentifier];
                 _isHaveBang = NO;
             }
+            _shellBkImageView.image = [self changeIMGWithImageName:restifier];
         }
     }
 }
@@ -1044,7 +1056,7 @@
             if ([str isEqualToString:@"iPad Pro"]){
                 if (_isShellVer){
                     _shellBkImageView.image = [self changeIMGWithImageName:@"iPad Pro"];
-                    _shellBkImageView.restorationIdentifier = @"iPad Pro";
+                   
                 }else{
                     _shellBkImageView.image = [self changeIMGWithImageName:@"iPad Pro横屏"];
                 }
@@ -2069,6 +2081,7 @@
 -(UIImage *)changeIMGWithImageName:(NSString *)name{
     UIImage *newImage = IMG(name);
     newImage = [newImage stretchableImageWithLeftCapWidth:floorf(newImage.size.width/2) topCapHeight:floorf(newImage.size.height/2)];
+    _shellBkImageView.restorationIdentifier = name;
     return newImage;
 }
 -(void)shellSelectViewDiss{
@@ -2089,8 +2102,11 @@
 }
 -(void)colorViewShow{
     MJWeakSelf
-    weakSelf.colorSelectView.frame = CGRectMake(0, SCREEN_HEIGHT - 80 - weakSelf.colorSelectView.height, SCREEN_WIDTH, weakSelf.colorSelectView.height);
-    //[self.view bringSubviewToFront:weakSelf.colorSelectView];
+    _colorSelectView.hidden = NO;
+    [UIView animateWithDuration:0.3 animations:^{
+        weakSelf.colorSelectView.frame = CGRectMake(0, SCREEN_HEIGHT - 80 - weakSelf.colorSelectView.height, SCREEN_WIDTH, weakSelf.colorSelectView.height);
+    }];
+
 }
 - (void)undo{
     _selectView.hidden = YES;
@@ -2443,7 +2459,7 @@
     if (GVUserDe.waterTitleColor.length >0){
         _waterLabel.textColor = HexColor(GVUserDe.waterTitleColor);
     }else{
-        _waterLabel.textColor = [UIColor whiteColor];
+        _waterLabel.textColor = HexColor(@"#D93030");
     }
     _waterLabel.backgroundColor = [UIColor clearColor];
     if (GVUserDe.waterTitle.length > 0){
@@ -2475,7 +2491,7 @@
 //        }else{
 //            make.bottom.equalTo(@(_contentScrollView.contentSize.height - 8));
 //        }
-        make.bottom.equalTo(@(lastIMG.bottom - 8));
+        make.bottom.equalTo(@(lastIMG.bottom - 16));
         
         make.width.left.equalTo(_contentScrollView);
     }];
@@ -2490,7 +2506,7 @@
     _fullWaterView.layer.masksToBounds = YES;
     [_contentScrollView addSubview:_fullWaterView];
     _fullWaterView.backgroundColor = [UIColor clearColor];
-    [_fullWaterView addSubview:[FullWaterMarkView addWaterMarkView:GVUserDe.waterTitle.length > 0 ? GVUserDe.waterTitle : @"@快捷截长图" andSize:GVUserDe.waterTitleFontSize > 10 ?GVUserDe.waterTitleFontSize : 14 andColor:GVUserDe.waterTitleColor.length >0?GVUserDe.waterTitleColor: @"ffffff"]];
+    [_fullWaterView addSubview:[FullWaterMarkView addWaterMarkView:GVUserDe.waterTitle.length > 0 ? GVUserDe.waterTitle : @"@快捷截长图" andSize:GVUserDe.waterTitleFontSize > 10 ?GVUserDe.waterTitleFontSize : 14 andColor:GVUserDe.waterTitleColor.length >0?GVUserDe.waterTitleColor: @"#D93030"]];
 }
 
 #pragma mark --ColorSelectViewDelegate
@@ -2673,7 +2689,7 @@
 
 #pragma mark -------------画笔事件-------------
 - (void)panGestureAction:(UIPanGestureRecognizer *)gesture{
-    MJWeakSelf
+
     CGPoint point = [gesture locationInView:_contentScrollView];
     if (_editType == 1){
         if (gesture.state == UIGestureRecognizerStateBegan){
@@ -2705,9 +2721,7 @@
                         
                         CAShapeLayer * slayer = [CAShapeLayer layer];
                         _path.lineWidth = _pathWidth;
-                        if (_markType == LINE){
-                            _path.boundRect = CGPathGetPathBoundingBox(_path.CGPath);
-                        }
+                        _path.boundRect = CGPathGetPathBoundingBox(_path.CGPath);
                         
                         slayer.path = _path.CGPath;
                         slayer.backgroundColor = [UIColor clearColor].CGColor;
@@ -2786,9 +2800,10 @@
                 }
                 
                 if (_markType > 0 && _markType != WORD && _markType != UNDO && _markType != DELETELAYER) {
-                    if (_markType == LINE){
-                        _path.boundRect = CGPathGetPathBoundingBox(_path.CGPath);
-                    }
+//                    if (_markType == LINE){
+//                        _path.boundRect = CGPathGetPathBoundingBox(_path.CGPath);
+//                    }
+                    _path.boundRect = CGPathGetPathBoundingBox(_path.CGPath);
                     _slayer.path = _path.CGPath;
                     if (_dataArr.count - 1 <= _dataArr.count){
                         _dataArr[_dataArr.count - 1] = _path;
@@ -2799,33 +2814,34 @@
         }else{
             if (!_isSelectPath && (_markType > 0 && _markType != UNDO && _markType != DELETELAYER && _markType != WORD) && _path != nil){
                 [self colorViewShow];
-                if ((_markType == LINE || _markType == MOSAIC)){
-                    NSArray *arr = [_path points];
-                    NSMutableArray *dataArr = [NSMutableArray array];
-                    for (NSInteger i = 0; i < arr.count; i ++) {
-                        CGPoint point = [arr[i] CGPointValue];
-                        NSValue *v0 = [NSValue valueWithCGPoint:point];
-                        [dataArr addObject:v0];
-                    }
-                    if (dataArr.count == arr.count){
-                        [self smoothedPathWithPoints:dataArr andGranularity:2 andType:1 AndPath:_path];
-                    }
-                    _isSelectPath = YES;
-                    _currentPath = _path;
-                    if (_markType == LINE){
-                       
-                        [self addSelectBorderView];
-                    }
-                    [self addGestureRecognizer];
-                }else if (_markType == RECTANGLE){
-                    //画矩形
-                    
-                }else if (_markType == ARROW){
-                    _currentPath = _path;
-               
-                }else if (_markType == FILLRECTANGLE){
-                    
-                }
+//                if ((_markType == LINE || _markType == MOSAIC)){
+//
+//                }else if (_markType == RECTANGLE){
+//                    //画矩形
+//
+//                }else if (_markType == ARROW){
+//                    _currentPath = _path;
+//
+//                }else if (_markType == FILLRECTANGLE){
+//
+//
+//                }
+               // NSArray *arr = [_path points];
+//                NSMutableArray *dataArr = [NSMutableArray array];
+//                for (NSInteger i = 0; i < arr.count; i ++) {
+//                    CGPoint point = [arr[i] CGPointValue];
+//                    NSValue *v0 = [NSValue valueWithCGPoint:point];
+//                    [dataArr addObject:v0];
+//                }
+//                if (dataArr.count == arr.count){
+//                    [self smoothedPathWithPoints:dataArr andGranularity:2 andType:1 AndPath:_path];
+//                }
+                _path.allPoints = [_path points];
+                _dataArr[_dataArr.count - 1] = _path;
+                _isSelectPath = YES;
+                _currentPath = _path;
+                [self addSelectBorderView];
+                [self addGestureRecognizer];
                 if (_dataArr.count > 0){
                     [_imgEditMarkView.deleteBtn setBackgroundImage:IMG(@"删除垃圾桶_selected") forState:UIControlStateNormal];
                     [_imgEditMarkView.backBtn setBackgroundImage:IMG(@"撤销_selected") forState:UIControlStateNormal];
@@ -2935,6 +2951,7 @@
     NSMutableArray *tmpArr = [NSMutableArray array];
     for (NSInteger i = 0; i < _dataArr.count; i ++) {
         PaintPath *path = _dataArr[i];
+        NSLog(@"bounrectx==%lf,y==%lf,width==%lf,height==%lf",path.boundRect.origin.x,path.boundRect.origin.y,path.boundRect.size.width,path.boundRect.size.height);
         if (CGRectContainsPoint(path.boundRect,startP) ||[self _xb_containsPointForCurveLineType:startP And:path]){
             //如果点在范围内或者二阶曲线的范围内
             [tmpArr addObject:path];

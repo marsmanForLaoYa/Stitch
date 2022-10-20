@@ -21,12 +21,12 @@
 }
 
 -(void)setupViews{
-    NSArray *priceArr = @[@"¥111",@"¥222",@"¥333"];
-    NSArray *textArr = @[@"每月",@"每年",@"一次性购买"];
-    CGFloat btnWidth = (CGFloat)(SCREEN_WIDTH - 64) / 3;
+    NSArray *priceArr = @[@"¥6",@"¥40",@"¥60",@"¥108"];
+    NSArray *textArr = @[@"每月",@"每半年",@"每年",@"一次性购买"];
+    CGFloat btnWidth = (CGFloat)(SCREEN_WIDTH - 80) / 4;
     for (NSInteger i = 0 ; i < priceArr.count ; i ++) {
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
-        btn.tag = i;
+        btn.tag = i + 1;
         [btn addTarget:self action:@selector(buyClick:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:btn];
         
@@ -58,21 +58,21 @@
             make.top.equalTo(textLab.mas_bottom).offset(17);
             make.width.equalTo(btn);
         }];
-        if (i == 1){
+        if (i == 2){
             [btn setBackgroundImage:IMG(@"mainIcon") forState:UIControlStateNormal];
             textLab.textColor = [UIColor whiteColor];
             priceLab.textColor = [UIColor whiteColor];
         }else{
             [btn setBackgroundImage:IMG(@"subsIcon") forState:UIControlStateNormal];
         }
-        if(i != 0){
+        if(i == 2 || i == 3){
             UILabel *discountLab = [UILabel new];
             UIColor *color = [UIColor colorWithPatternImage:IMG(@"btnIcon")];
             discountLab.font = Font12;
             discountLab.textColor = HexColor(@"#5C3916");
             discountLab.textAlignment = NSTextAlignmentCenter;
             [discountLab setBackgroundColor:color];
-            if (i == 1){
+            if (i == 2){
                 discountLab.text = @"50%优惠";
             }else{
                 discountLab.text = @"终生使用";

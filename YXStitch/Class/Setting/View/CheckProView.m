@@ -113,17 +113,22 @@
         make.bottom.width.left.equalTo(self);
         make.height.equalTo(@80);
     }];
+    UIButton *buyBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    //这里判断。是否已经是高级用户
+    if(![User checkIsVipMember]) {
+        [buyBtn setBackgroundColor:[UIColor blackColor]];
+        [buyBtn setTitle:@"解锁高级功能" forState:UIControlStateNormal];
+        [buyBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
+    }else{
+        [buyBtn setBackgroundColor:HexColor(@"#999999")];
+        [buyBtn setTitle:@"你已经是高级用户了" forState:UIControlStateNormal];
+    }
     
-    UIButton *buyBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-    //这里后续要判断。是否已经是高级用户
-    [buyBtn setBackgroundColor:[UIColor blackColor]];
     [buyBtn setTintColor:[UIColor whiteColor]];
-    [buyBtn setTitle:@"解锁高级功能" forState:UIControlStateNormal];
     buyBtn.titleLabel.font = [UIFont systemFontOfSize:18];
     buyBtn.layer.masksToBounds = YES;
     buyBtn.layer.cornerRadius = 4;
     buyBtn.tag = 2;
-    [buyBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     [buyView addSubview:buyBtn];
     [buyBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.centerY.equalTo(buyView);

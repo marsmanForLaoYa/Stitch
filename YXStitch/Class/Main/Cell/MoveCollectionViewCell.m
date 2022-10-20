@@ -8,8 +8,7 @@
 #import "MoveCollectionViewCell.h"
 
 @interface MoveCollectionViewCell()<UIGestureRecognizerDelegate>
-@property(nonatomic,strong) UILabel *nameLab;
-@property(nonatomic,strong) UIImageView *iconIMG;
+
 @end
 
 @implementation MoveCollectionViewCell
@@ -52,7 +51,13 @@
 
 -(void)setCellName:(NSString *)cellName{
     _cellName = cellName;
-    _iconIMG.image = [UIImage imageNamed:cellName];
+    if ([cellName isEqualToString:@"更多功能"] || [cellName isEqualToString:@"截长屏"] || [cellName isEqualToString:@"网页滚动截图"]|| [cellName isEqualToString:@"拼图"]|| [cellName isEqualToString:@"水印"]|| [cellName isEqualToString:@"设置"]){
+        _iconIMG.image = [UIImage imageNamed:cellName];
+        nameLab.text = cellName;
+    }else{
+        [_iconIMG sd_setImageWithURL:[NSURL URLWithString:cellName]];
+    }
+    
     if ([cellName isEqualToString:@"更多功能"]){
         nameLab.textColor =  [UIColor colorWithHexString:@"#999999"];
     }else{
@@ -75,8 +80,11 @@
         }else if ([cellName isEqualToString:@"设置"]){
             make.height.equalTo(@39);
             make.width.equalTo(@44);
-        }else{
+        }else if ([cellName isEqualToString:@"更多功能"]){
             //更多功能
+            make.width.equalTo(@44);
+            make.height.equalTo(@44);
+        }else{
             make.width.equalTo(@44);
             make.height.equalTo(@44);
         }
@@ -87,7 +95,7 @@
         make.centerX.equalTo(_iconIMG);
         make.top.equalTo(_iconIMG.mas_bottom).offset(24);
     }];
-    nameLab.text = cellName;
+    
 }
 
 - (void)GesturePress:(UIGestureRecognizer *)gestureRecognizer{

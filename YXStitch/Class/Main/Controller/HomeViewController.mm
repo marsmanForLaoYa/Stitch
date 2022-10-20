@@ -31,12 +31,15 @@
 #import "ImageEditViewController.h"
 #import "XWOpenCVHelper.h"
 #import "App.h"
-
+#import "HomeModel.h"
 @interface HomeViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,MoveCollectionViewCellDelegate,ScrrenStitchHintViewDelegate,HXPhotoViewDelegate,UIImagePickerControllerDelegate, HXPhotoViewCellCustomProtocol,HXCustomNavigationControllerDelegate,UnlockFuncViewDelegate,CheckProViewDelegate>
 
 @property (nonatomic ,strong)UIView *iconView;
 @property (nonatomic ,strong)UICollectionView *MJColloctionView;
 @property (nonatomic ,strong)NSMutableArray *iconArr;
+@property (nonatomic ,strong)NSMutableArray *schemeArr;
+@property (nonatomic ,strong)NSMutableArray *nameArr;
+
 @property (nonatomic ,strong)UIView * shotView;
 @property (nonatomic ,strong)NSIndexPath * indexPath;
 @property (nonatomic ,strong)NSIndexPath * nextIndexPath;
@@ -86,10 +89,12 @@
         _iconArr = [NSMutableArray arrayWithArray:GVUserDe.homeIconArr];
     }else{
         _iconArr = [NSMutableArray arrayWithObjects:@"截长屏",@"网页滚动截图",@"拼图",@"水印",@"设置",@"更多功能",nil];
+        [self requestData];
     }
     [self setupViews];
     [self setupLayout];
     [self setupNavItems];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(noty:) name:@"homeChange" object:nil];
     //检测连续截图
     if (GVUserDe.isAutoCheckRecentlyIMG) {
@@ -218,6 +223,27 @@
         }];
     }
 }
+
+-(void)requestData{
+    MJWeakSelf
+    [[XWNetTool sharedInstance] queryApplicationListWithCallback:^(NSArray<HomeModel *> * _Nullable dataSources, BOOL isProcessing, NSString * _Nullable errorMsg) {
+        if (!errorMsg && isProcessing) {
+            for (HomeModel *model in dataSources) {
+                [weakSelf.iconArr addObject:model.image];
+                if(model.title){
+                    [weakSelf.nameArr addObject:model.title];
+                }
+                if (model.scheme){
+                    [weakSelf.schemeArr addObject:model.scheme];
+                }
+                
+            }
+            dispatch_async(dispatch_get_main_queue(), ^ {
+                [weakSelf.MJColloctionView reloadData];
+            });
+        }
+    }];
+}
 #pragma mark - UI
 -(void)setupViews{
     UICollectionViewFlowLayout * layout = [[UICollectionViewFlowLayout alloc] init];
@@ -302,6 +328,7 @@
 #pragma mark -- CollectionDelegate
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
+    NSLog(@"count11==%ld",_iconArr.count);
     return _iconArr.count;
 }
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
@@ -311,7 +338,11 @@
     
     MoveCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"MoveCollectionViewCell" forIndexPath:indexPath];
     cell.p_MoveCollectionViewCellDelegate = self;
+    NSLog(@"indexpath.row==%ld",indexPath.row);
     cell.cellName = [_iconArr objectAtIndex:indexPath.row];
+    if (indexPath.row > 5){
+        cell.nameLab.text = [NSString stringWithFormat:@"%@",_schemeArr[indexPath.row - 5]];
+    }
     return cell;
 }
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
@@ -955,6 +986,18 @@
         self.stitchArr = [NSMutableArray array];
     }
     return _stitchArr;
+}
+-(NSMutableArray *)schemeArr{
+    if (_schemeArr == nil){
+        self.schemeArr = [NSMutableArray array];
+    }
+    return _schemeArr;
+}
+-(NSMutableArray *)nameArr{
+    if (_nameArr == nil){
+        self.nameArr = [NSMutableArray array];
+    }
+    return _nameArr;
 }
 
 @end

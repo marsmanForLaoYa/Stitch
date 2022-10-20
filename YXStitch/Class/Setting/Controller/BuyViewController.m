@@ -8,6 +8,7 @@
 #import "BuyViewController.h"
 #import "PriceView.h"
 #import "BuyDetailView.h"
+#import "IAPSubscribeTool.h"
 @interface BuyViewController ()<PriceViewDelegate>
 @property (nonatomic ,strong)PriceView *priceView;
 @property (nonatomic ,strong)BuyDetailView *detailView;
@@ -58,6 +59,7 @@
 -(void)addPriceView{
     _priceView = [PriceView new];
     _priceView.backgroundColor = [UIColor whiteColor];
+    _priceView.delegate = self;
     [self.view addSubview:_priceView];
     [_priceView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(@(Nav_H + 20));
@@ -79,7 +81,36 @@
 }
 #pragma mark --viewDelegate
 -(void)buyClickWithTag:(NSInteger)tag{
-    
+    NSString *typeStrID;
+    if (tag == 1){
+        //每个月
+        typeStrID = @"com.xwan.jigsaw.month6";
+    }else if (tag == 2){
+        //每年
+        typeStrID = @"com.xwan.jigsaw.halfYear40";
+    }else if (tag == 3){
+        //一年
+        typeStrID = @"com.xwan.jigsaw.year60";
+    }else{
+        //一次性
+        typeStrID = @"com.xwan.jigsaw.perpetual108";
+    }
+    [[IAPSubscribeTool sharedInstance] buy:typeStrID finishedBlock:^(NSString * _Nullable errorMsg, NSURL * _Nullable appStoreReceiptURL, BOOL isTest, BOOL isAutoRenewal) {
+                    if (errorMsg) {
+                        [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeNone];
+                        [SVProgressHUD showInfoWithStatus:errorMsg];
+                        [SVProgressHUD dismissWithDelay:3];
+                    }
+                    else
+                    {
+                        @weakify(self);
+                        [[XWNetTool sharedInstance] uploadSubscribeReceiptToServiceWithUrl:appStoreReceiptURL isTest:isTest needAutoCheck:YES callback:^(NSString * _Nullable errorMsg) {
+                            @strongify(self);
+                            [SVProgressHUD showSuccessWithStatus:@"购买成功!"];
+                        }];
+                        [SVProgressHUD dismiss];
+                    }
+                }];
 }
 
 -(void)btnClick{
