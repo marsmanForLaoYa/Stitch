@@ -193,7 +193,7 @@
     NSMutableArray *tempArr = [NSMutableArray array];
     __block NSInteger allSameCount = 1;
     if (_videoURL){
-        [[HandlerVideo sharedInstance]splitVideo:_videoURL fps:1 progressImageBlock:^(CGFloat progress) {
+        [[HandlerVideo sharedInstance]splitVideo:_videoURL fps:5 progressImageBlock:^(CGFloat progress) {
             if (progress >= 1) {
                 for (NSInteger i = 0 ; i < tempArr.count; i ++) {
                     if ( i < tempArr.count - 1){
