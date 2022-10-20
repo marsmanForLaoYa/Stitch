@@ -62,14 +62,14 @@
     self.myRecommedModel = [[RecommendModel alloc] initWithTitle:@"我的推荐" detail:@"0" userName:nil subTitle:nil cellType:CellTypeShowDetail isLineHidden:YES];
     NSArray *secondArr = [NSArray arrayWithObjects:self.recommedModel, self.myRecommedModel, nil];
     
-    self.subMonthModel = [[RecommendModel alloc] initWithTitle:@"按月订阅" detail:@"￥38" userName:nil subTitle:nil cellType:CellTypeShowDetail isLineHidden:NO];
-    self.subMonthModel.subcriseProduct = @"com.hjllq.apple.month38";
+    self.subMonthModel = [[RecommendModel alloc] initWithTitle:@"按月订阅" detail:@"￥6" userName:nil subTitle:nil cellType:CellTypeShowDetail isLineHidden:NO];
+    self.subMonthModel.subcriseProduct = @"com.xwan.jigsaw.month6";
 
-    self.subQuarterlyModel = [[RecommendModel alloc] initWithTitle:@"按季订阅" detail:@"￥68" userName:nil subTitle:nil cellType:CellTypeShowDetail isLineHidden:NO];
-    self.subQuarterlyModel.subcriseProduct = @"com.hjllq.apple.quarterly68";
+    self.subQuarterlyModel = [[RecommendModel alloc] initWithTitle:@"按半年订阅" detail:@"￥40" userName:nil subTitle:nil cellType:CellTypeShowDetail isLineHidden:NO];
+    self.subQuarterlyModel.subcriseProduct = @"com.xwan.jigsaw.halfYear40";
 
-    self.subYearModel = [[RecommendModel alloc] initWithTitle:@"按年订阅" detail:@"￥168" userName:nil subTitle:nil cellType:CellTypeShowDetail isLineHidden:YES];
-    self.subYearModel.subcriseProduct = @"com.hjllq.apple.year168";
+    self.subYearModel = [[RecommendModel alloc] initWithTitle:@"按年订阅" detail:@"￥60" userName:nil subTitle:nil cellType:CellTypeShowDetail isLineHidden:YES];
+    self.subYearModel.subcriseProduct = @"com.xwan.jigsaw.year60";
 
     NSArray *thirdArr = [NSArray arrayWithObjects:self.subMonthModel, self.subQuarterlyModel, self.subYearModel, nil];
     
@@ -163,6 +163,7 @@
     {
         if (![User current].isVipMember)
         {
+            NSLog(@"%@", setModel.subcriseProduct);
             [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeClear];
             [SVProgressHUD show];
             [SVProgressHUD dismissWithDelay:30];
