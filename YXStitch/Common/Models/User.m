@@ -31,8 +31,8 @@
     self = [super init];
     if (self) {
 
-        _login = YES;
-        _vipMember = YES;
+//        _login = YES;
+//        _vipMember = YES;
     }
     return self;
 }

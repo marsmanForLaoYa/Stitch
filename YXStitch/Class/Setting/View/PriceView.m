@@ -21,7 +21,7 @@
 }
 
 -(void)setupViews{
-    NSArray *priceArr = @[@"¥111",@"¥222",@"¥333"];
+    NSArray *priceArr = @[@"¥6",@"¥60",@"¥108"];
     NSArray *textArr = @[@"每月",@"每年",@"一次性购买"];
     CGFloat btnWidth = (CGFloat)(SCREEN_WIDTH - 64) / 3;
     for (NSInteger i = 0 ; i < priceArr.count ; i ++) {
@@ -58,7 +58,7 @@
             make.top.equalTo(textLab.mas_bottom).offset(17);
             make.width.equalTo(btn);
         }];
-        if (i == 1){
+        if (i == 2){
             [btn setBackgroundImage:IMG(@"mainIcon") forState:UIControlStateNormal];
             textLab.textColor = [UIColor whiteColor];
             priceLab.textColor = [UIColor whiteColor];
