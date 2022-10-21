@@ -76,10 +76,9 @@
 - (BOOL)feedImage:(UIImage *)image{
     if (image)
     {
-        if (!_minFirstImage || !_crcFirstImage) {
-            _crcFirstImage = image;
+        if (!_minFirstImage ) {
             _minFirstImage = image;
-            return YES;
+            return NO;
         }
         dispatch_semaphore_t sema = dispatch_semaphore_create(0);
         dispatch_group_t group = dispatch_group_create();
@@ -143,18 +142,20 @@
     SZImageMergeInfo *info = [self.miniMergeInfo infoBy:baseImage
                                             secondImage:image
                                                    type:SZImageFingerTypeMin];
-    BOOL success =[info validInfo:info];
+    BOOL success = [info validInfo:info];
     
     if (!success) {
         if (info.firstOffset > info.secondOffset) {
             _error = [NSError errorWithDomain:SZERRORDOMAIN
                                          code:SZMergeErrorNotSort
                                      userInfo:nil];
+            NSLog(@"顺序问题");
         }
         else{
             _error = [NSError errorWithDomain:SZERRORDOMAIN
                                          code:SZMergeErrorNotEnoughOverlap
                                      userInfo:nil];
+            NSLog(@"没有足够的重叠部分");
         }
         //如果不成功，会添加error的信息，用这个来判断是否需要拼接。
         info.error = _error;

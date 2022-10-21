@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "SZImageMergeInfo.h"
-#define SZERRORDOMAIN @"www.sz.com"
+#define SZERRORDOMAIN @"www.yxlady.com"
 typedef NS_ENUM(NSInteger, SZMergeError) {
     SZMergeErrorNotSameWidth,     //没有相同的宽度
     SZMergeErrorNotEnoughOverlap,  //没有足够的重叠部分

@@ -804,7 +804,6 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
     }else{
         [images addObjectsFromArray:assets];
     }
-
     if (!images.count) {
         return nil;
     }
@@ -816,9 +815,11 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
     PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
     options.synchronous = YES;
     CFAbsoluteTime time = CFAbsoluteTimeGetCurrent();
+    NSInteger index = 1;
     for (UIImage *image in images){
         [generator feedImage:image];
     }
+    
     
     CFAbsoluteTime next = CFAbsoluteTimeGetCurrent() - time;
     NSLog(@"总共消耗的时间：%@",@(next));
@@ -828,6 +829,9 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
     MJWeakSelf
     __block CGFloat contentHeight = 0.0;
     SZImageMergeInfo *firstInfo = generator.infos.firstObject;
+    if (!firstInfo.firstImage){
+        return;
+    }
     CGFloat firstImagescale = VerViewWidth / firstInfo.firstImage.size.width;
     __block StitchingButton *firstImageView = [[StitchingButton alloc] initWithFrame:CGRectMake(0, 0, VerViewWidth, firstInfo.firstImage.size.height * firstImagescale)];
     firstImageView.image = firstInfo.firstImage;
@@ -842,6 +846,9 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
     __block NSInteger tagIndex = 2;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         for (SZImageMergeInfo *info in weakSelf.generator.infos) {
+            if (!info.secondImage){
+                continue;
+            }
             CGFloat scale = VerViewWidth / info.secondImage.size.width;
             CGFloat secondImageH = info.secondImage.size.height * scale;
             StitchingButton *imageView = [[StitchingButton alloc] initWithFrame:CGRectMake(0, firstImageView.bottom, VerViewWidth, secondImageH)];
@@ -864,7 +871,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
             firstImageView = imageView;
             tagIndex ++;
         }
-        weakSelf.contentScrollView.contentSize = CGSizeMake(weakSelf.contentScrollView.width,contentHeight);
+        weakSelf.contentScrollView.contentSize = CGSizeMake(0,contentHeight);
         weakSelf.title = [NSString stringWithFormat:@"%ld张图片",generator.infos.count];
         
         if (contentHeight < SCREEN_HEIGHT){
@@ -872,11 +879,13 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
             [weakSelf layoutContentView];
         }else{
             NSLog(@"contentght==%lf",contentHeight);
-            weakSelf.contentScrollView.contentSize = CGSizeMake(weakSelf.contentScrollView.width,contentHeight);
+            NSLog(@"bottom==%lf",firstImageView.bottom);
+            weakSelf.contentScrollView.contentSize = CGSizeMake(0,firstImageView.bottom);
         }
         [SVProgressHUD showSuccessWithStatus:@"拼接完成"];
     });
 //    NSLog(@"_top.count==%ld",_originTopArr.count);
+    
     NSLog(@"count==%ld",_imageViews.count);
     
 }
@@ -2103,6 +2112,8 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
     MJWeakSelf
     if (btn.tag == 0){
         [_slicingBtn removeFromSuperview];
+        [self deleteContentScorllViewSubViews];
+        [_guideBtn removeFromSuperview];
         [SVProgressHUD showWithStatus:@"正在生成图片中.."];
         [TYSnapshotScroll screenSnapshot:_contentScrollView finishBlock:^(UIImage *snapshotImage) {
             [SVProgressHUD showSuccessWithStatus:@"图片已保存至拼图相册中"];

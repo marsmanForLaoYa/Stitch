@@ -227,7 +227,10 @@
                 if (allSameCount == tempArr.count){
                     [weakSelf.stitchArr addObject:tempArr.firstObject];
                 }
-                [weakSelf.stitchArr addObject:tempArr.lastObject];
+                if (tempArr.count > 0){
+                    [weakSelf.stitchArr addObject:tempArr.lastObject];
+                }
+                
                 [weakSelf screenStitchWithType:3];
                 [SVProgressHUD dismiss];
                 NSLog(@"stitchArr.count==%ld",weakSelf.stitchArr.count);
@@ -910,16 +913,16 @@
                 [weakSelf.navigationController pushViewController:layoutVC animated:YES];
             });
         }else{
-            if (!User.checkIsVipMember && self.manager.selectedCount > 9){
-                //非会员弹出提示
-                _funcView = [UnlockFuncView new];
-                _funcView.delegate = weakSelf;
-                _funcView.type = 3;
-                [self.view.window addSubview:_funcView];
-                [_funcView mas_makeConstraints:^(MASConstraintMaker *make) {
-                    make.edges.equalTo(self.view);
-                }];
-            }else{
+//            if (!User.checkIsVipMember && self.manager.selectedCount > 9){
+//                //非会员弹出提示
+//                _funcView = [UnlockFuncView new];
+//                _funcView.delegate = weakSelf;
+//                _funcView.type = 3;
+//                [self.view.window addSubview:_funcView];
+//                [_funcView mas_makeConstraints:^(MASConstraintMaker *make) {
+//                    make.edges.equalTo(self.view);
+//                }];
+//            }else{
                 if (btn.tag == 300){
                     //多图截长屏
                     __block NSMutableArray *arr = [NSMutableArray array];
@@ -997,7 +1000,7 @@
                     }
                     
                 }
-            }
+//            }
         }
         
         

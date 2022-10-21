@@ -10,6 +10,7 @@
 #import <zlib.h>
 #define P_ADD 8
 #define P_SEPARATOR 3
+#define P_FINGERVALUE 100
 @interface SZImageFinger ()
 @property (nonatomic,assign) SZImageFingerType type;
 @property (nonatomic, strong) NSArray *firstArray;
@@ -108,7 +109,7 @@
          @autoreleasepool {
             NSMutableDictionary *map = [[NSMutableDictionary alloc] init];
             for (NSInteger x = 0; x < width; x++) {
-                if (x % 4 == 0) {
+                if (x % P_FINGERVALUE == 0) {
                     const UInt8 *pixel = &(data[y * width * scale + x * scale]);
                     int32_t gray = 0.3 * pixel[2] + 0.59 * pixel[1] + 0.11 * pixel[0];
                     if (map[@(gray)] == nil) {
@@ -156,7 +157,7 @@
         NSMutableDictionary *map = [[NSMutableDictionary alloc] init];
         for (NSInteger x = 0; x < width; x++)
         {
-            if (x % 4 == 0) {
+            if (x % P_FINGERVALUE == 0) {
                 const UInt8 *pixel = &(data[y * width * scale + x * scale]);
                 int32_t gray = 0.3 * pixel[3] + 0.59 * pixel[2] + 0.11 * pixel[1];
                 

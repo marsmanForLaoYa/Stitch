@@ -71,7 +71,7 @@ static const NSString *INFO_KEY = @"INFO_KEY";
     //每次扫描都是从上两张图片的共同部分的起始点开始扫描。
     //这里的info_.firstOffset 代表的意思是：共同部分的最大偏移量，
     //减去info_.length就能得到：共同部分的起始位置
-    NSInteger firstStartIndex = (info_.firstOffset - info_.length -10) < 0 ? 0 : (info_.firstOffset - info_.length -10);
+    NSInteger firstStartIndex = (info_.firstOffset - info_.length ) < 0 ? 0 : (info_.firstOffset - info_.length);
     NSInteger secondStartIndex = 0;
     NSInteger bottomOffset = 0;
     //NSLog(@"bottomOffset==%ld",bottomOffset);
@@ -234,11 +234,12 @@ static const NSString *INFO_KEY = @"INFO_KEY";
 
 - (BOOL)isX:(int64_t)x
     equalTo:(int64_t)y{
-    if (_type == SZImageFingerTypeCRC){
-        return x == y;
-    }else{
-        return x * 1.1 >= y && x * 0.9 <= y;
-    }
+//    if (_type == SZImageFingerTypeCRC){
+//
+//    }else{
+//        return x * 1.1 >= y && x * 0.9 <= y;
+//    }
+    return x == y;
 }
 
 - (SZImageMergeInfo *)crcMergeInfo {
