@@ -12,7 +12,7 @@
 
 static const NSString *INFO_KEY = @"INFO_KEY";
 @interface SZImageMergeInfo ()
-@property (nonatomic,assign)   SZImageFingerType type;
+
 
 @property (nonatomic, strong) SZImageMergeInfo *crcMergeInfo;
 @property (nonatomic, strong) SZImageMergeInfo *miniMergeInfo;
@@ -74,20 +74,21 @@ static const NSString *INFO_KEY = @"INFO_KEY";
     NSInteger firstStartIndex = (info_.firstOffset - info_.length -10) < 0 ? 0 : (info_.firstOffset - info_.length -10);
     NSInteger secondStartIndex = 0;
     NSInteger bottomOffset = 0;
+    //NSLog(@"bottomOffset==%ld",bottomOffset);
     NSInteger i = 0;
     for (NSNumber *firstLine in firstLines) {
-            if (i < firstStartIndex || i > firstLinesCount - bottomOffset) {
-                 i ++;
-                continue;
-            }
+//            if (i < firstStartIndex || i > firstLinesCount - bottomOffset) {
+//                 i ++;
+//                continue;
+//            }
             int64_t firstValue = firstLine.integerValue;
         
             NSInteger j = 0;
             for (NSNumber *secondLine in secondLines) {
-                if (j < secondStartIndex || j > secondLinesCount - bottomOffset) {
-                    j ++;
-                    continue;
-                }
+//                if (j < secondStartIndex || j > secondLinesCount - bottomOffset) {
+//                    j ++;
+//                    continue;
+//                }
                 int64_t secondValue = secondLine.integerValue;
                 NSNumber *nextFLine;
                 NSNumber *nextSLine;

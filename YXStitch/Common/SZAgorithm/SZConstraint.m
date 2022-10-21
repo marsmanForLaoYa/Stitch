@@ -9,31 +9,30 @@
 #import "SZConstraint.h"
 
 @implementation SZConstraint
-//- (NSInteger)topOffset
-//{
-//    if ([UIScreen mainScreen].bounds.size.height == 812)
-//    {
-//        return (44 + 44) * 3;
-//    }
-//    else
-//    {
-//        return (44 + 20) * [[UIScreen mainScreen] scale];
-//    }
-//    return 20;
-//}
++ (NSInteger)topOffset
+{
+    if ([UIScreen mainScreen].bounds.size.height == 812)
+    {
+        return (44 + 44) * 3;
+    }
+    else
+    {
+        return (44 + 20) * [[UIScreen mainScreen] scale];
+    }
+}
 
-//- (NSInteger)bottomOffset
-//{
-//    if ([UIScreen mainScreen].bounds.size.height == 812)
-//    {
-//        return (44 + 34) * 3;
-//    }
-//    else
-//    {
-//        return (44) * [[UIScreen mainScreen] scale];
-//    }
-//    return 20;
-//}
++ (NSInteger)bottomOffset
+{
+    if ([UIScreen mainScreen].bounds.size.height == 812)
+    {
+        return (44 + 34) * 3;
+    }
+    else
+    {
+        return (44) * [[UIScreen mainScreen] scale];
+    }
+}
+
 
 - (NSInteger)requiredThreshold
 {

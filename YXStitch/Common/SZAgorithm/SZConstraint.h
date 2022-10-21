@@ -15,7 +15,7 @@
 @property (nonatomic, assign) NSInteger bottomOffset;
 @property (nonatomic, assign) NSInteger requiredThreshold;
 
-- (NSInteger)topOffset;
-- (NSInteger)bottomOffset;
++ (NSInteger)topOffset;
++ (NSInteger)bottomOffset;
 - (NSInteger)requiredThreshold;
 @end

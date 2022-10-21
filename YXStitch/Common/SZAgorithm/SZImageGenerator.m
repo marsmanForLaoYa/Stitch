@@ -42,9 +42,9 @@
     {
         @autoreleasepool
         {
-            dispatch_group_async(group, queue, ^{
-                [self crcFeedImage:image];
-            });
+//            dispatch_group_async(group, queue, ^{
+//                [self crcFeedImage:image];
+//            });
             dispatch_group_async(group, queue, ^{
                 [self minFeedImage:image];
             });
@@ -86,23 +86,24 @@
         dispatch_queue_t queue = dispatch_queue_create("com.image.loop.nb", DISPATCH_QUEUE_CONCURRENT);
             @autoreleasepool
             {
-                dispatch_group_async(group, queue, ^{
-                    [self crcFeedImage:image];
-                });
+//                dispatch_group_async(group, queue, ^{
+//                    [self crcFeedImage:image];
+//                });
                 dispatch_group_async(group, queue, ^{
                     [self minFeedImage:image];
                 });
                 dispatch_group_notify(group, queue, ^{
-                    SZImageMergeInfo *crcInfo = self.crcInfos.lastObject;
+                   // SZImageMergeInfo *crcInfo = self.crcInfos.lastObject;
                     SZImageMergeInfo *minInfo = self.minInfos.lastObject;
-                    if (!crcInfo.error) {
-                        [self.infos addObject:crcInfo];
-                    }
-                    else if (!minInfo.error) {
+//                    if (!crcInfo.error) {
+//                        [self.infos addObject:crcInfo];
+//                    }
+//                    else
+                    if (!minInfo.error) {
                         [self.infos addObject:minInfo];
                     }
                     else {
-                        [self.infos addObject:crcInfo];
+                      //  [self.infos addObject:crcInfo];
                     }
                     dispatch_semaphore_signal(sema);
                 });

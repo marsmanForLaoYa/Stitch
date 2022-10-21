@@ -866,6 +866,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
         }
         weakSelf.contentScrollView.contentSize = CGSizeMake(weakSelf.contentScrollView.width,contentHeight);
         weakSelf.title = [NSString stringWithFormat:@"%ld张图片",generator.infos.count];
+        
         if (contentHeight < SCREEN_HEIGHT){
             //内容过小则重置imageView布局
             [weakSelf layoutContentView];
@@ -875,7 +876,8 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
         }
         [SVProgressHUD showSuccessWithStatus:@"拼接完成"];
     });
-    NSLog(@"_top.count==%ld",_originTopArr.count);
+//    NSLog(@"_top.count==%ld",_originTopArr.count);
+    NSLog(@"count==%ld",_imageViews.count);
     
 }
 

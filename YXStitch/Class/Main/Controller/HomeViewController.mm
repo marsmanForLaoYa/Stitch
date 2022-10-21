@@ -32,6 +32,18 @@
 #import "XWOpenCVHelper.h"
 #import "App.h"
 #import "HomeModel.h"
+
+
+//#include "opencv2/opencv.hpp"
+//#include "opencv2/features2d.hpp"
+//#include "opencv2/calib3d.hpp"
+//#include "opencv2/flann.hpp"
+//#include <vector>
+//#include <iostream>
+//using namespace std;
+//using namespace cv;
+
+
 @interface HomeViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,MoveCollectionViewCellDelegate,ScrrenStitchHintViewDelegate,HXPhotoViewDelegate,UIImagePickerControllerDelegate, HXPhotoViewCellCustomProtocol,HXCustomNavigationControllerDelegate,UnlockFuncViewDelegate,CheckProViewDelegate>
 
 @property (nonatomic ,strong)UIView *iconView;
@@ -104,11 +116,11 @@
     
     [self addObserver];
     if (GVUserDe.isHaveScreenData){
+        GVUserDe.isHaveScreenData = NO;
         App *app = [App sharedInstance];
         _videoURL = app.videoURL;
         _isScrollScreen = YES;
         GVUserDe.isScorllScreen = _isScrollScreen;
-        GVUserDe.isHaveScreenData = NO;
         [self addScrrenData];
     }
 }
@@ -192,8 +204,9 @@
     [self.stitchArr removeAllObjects];
     NSMutableArray *tempArr = [NSMutableArray array];
     __block NSInteger allSameCount = 1;
+  //  [SVProgressHUD showWithStatus:@"检测到有滚动截图，正在为你生成图片"];
     if (_videoURL){
-        [[HandlerVideo sharedInstance]splitVideo:_videoURL fps:5 progressImageBlock:^(CGFloat progress) {
+        [[HandlerVideo sharedInstance]splitVideo:_videoURL fps:1 progressImageBlock:^(CGFloat progress) {
             if (progress >= 1) {
                 for (NSInteger i = 0 ; i < tempArr.count; i ++) {
                     if ( i < tempArr.count - 1){
@@ -203,7 +216,8 @@
                         NSLog(@"hashValue==%d",hashValue);
                         if (hashValue >= 5){
                             [weakSelf.stitchArr addObject:tempArr[i]];
-                            
+//                            UIImageWriteToSavedPhotosAlbum(tempArr[i], self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
+
                         }
                         if (hashValue == 0){
                             allSameCount ++;
@@ -213,7 +227,9 @@
                 if (allSameCount == tempArr.count){
                     [weakSelf.stitchArr addObject:tempArr.firstObject];
                 }
+                [weakSelf.stitchArr addObject:tempArr.lastObject];
                 [weakSelf screenStitchWithType:3];
+                [SVProgressHUD dismiss];
                 NSLog(@"stitchArr.count==%ld",weakSelf.stitchArr.count);
             }
         } splitCompleteBlock:^(BOOL success, UIImage *splitimg) {
@@ -222,6 +238,16 @@
             }
         }];
     }
+}
+
+-(void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo{
+    NSString *msg = nil;
+    if (!error) {
+        msg = @"下载成功，已为您保存至相册";
+    }else {
+        msg = @"系统未授权访问您的照片，请您在设置中进行权限设置后重试";
+    }
+    NSLog(@"msg=%@",msg);
 }
 
 -(void)requestData{
@@ -999,5 +1025,132 @@
     }
     return _nameArr;
 }
+
+//Point2f getTransformPoint(const Point2f originalPoint,const Mat &transformMaxtri){
+//    Mat originelP,targetP;
+//    originelP=(Mat_<double>(3,1)<<originalPoint.x,originalPoint.y,1.0);
+//    targetP=transformMaxtri*originelP;
+//    float x=targetP.at<double>(0,0)/targetP.at<double>(2,0);
+//    float y=targetP.at<double>(1,0)/targetP.at<double>(2,0);
+//    return Point2f(x,y);
+//}
+//
+//- (UIImage *)composeImage{
+//
+//    NSString *path01 = [[NSBundle mainBundle] pathForResource:@"test01" ofType:@"jpg"];
+//    NSString *path02 = [[NSBundle mainBundle] pathForResource:@"test02" ofType:@"jpg"];
+//    Mat img01;
+//    Mat img02;
+//    if (path01 == nil && path02 == nil) {
+//        return [UIImage new];
+//    }
+//    else{
+//        img01 = imread([path01 UTF8String]);
+//        img02 = imread([path02 UTF8String]);
+//
+//        //如果没有读取到image
+//        if (!img01.data && !img02.data) {
+//            return [UIImage new];
+//        }
+//
+//        //灰度图转换
+//        Mat img_h_01 ,img_h_02;
+//        cvtColor(img01, img_h_01, CV_RGB2GRAY);
+//        cvtColor(img02, img_h_02, CV_RGB2GRAY);
+//        vector<KeyPoint> keyPoint1,KeyPoint2;
+//        //提取特征点
+//        Ptr<FeatureDetector> fast = FastFeatureDetector::create(800);
+//        fast->detect(img_h_01, keyPoint1);
+//        fast->detect(img_h_02, KeyPoint2);
+//
+//        //特征点描述，为下面的特征点匹配做准备
+//        DescriptorExtractor siftDescriptor;
+//        Mat img_description_01,img_description_02;
+//        siftDescriptor.compute(img_h_01, keyPoint1, img_description_01);
+//        siftDescriptor.compute(img_h_02, KeyPoint2, img_description_02);
+//
+//        //获得匹配特征点，并提取最优配对
+//        FlannBasedMatcher matcher;
+//        vector<DMatch> matchePoints;
+//        matcher.match(img_description_01,img_description_02,matchePoints,Mat());
+//        sort(matchePoints.begin(), matchePoints.end());//特征点排序
+//
+//        //获取排在前N个的最优配对
+//        vector<Point2f> imagePoints1,imagePoints2;
+//        for (int i = 0; i < 10; i++) {
+//            imagePoints1.push_back(keyPoint1[matchePoints[i].queryIdx].pt);
+//            imagePoints2.push_back(KeyPoint2[matchePoints[i].trainIdx].pt);
+//        }
+//
+//        //获取img1到img2的投影映射矩阵，尺寸为3*3
+//        Mat homo = findHomography(imagePoints1, imagePoints2, CV_RANSAC);
+//        Mat adjustMat = (Mat_<double>(3,3)<<1.0,0,img01.cols,0,1.0,0,0,0,1.0);
+//        Mat adjustHomo = adjustMat * homo;
+//
+//        //获得最强配对点在原始图像和矩阵变换后图像上的对应位置，用于图像拼接点的定位
+//        Point2f originalLinkPoint,targetLintPoint,basedImagePoint;
+//        originalLinkPoint = keyPoint1[matchePoints[0].queryIdx].pt;
+//        targetLintPoint = getTransformPoint(originalLinkPoint, adjustHomo);
+//        basedImagePoint = KeyPoint2[matchePoints[0].trainIdx].pt;
+//
+//        //图像配准
+//        Mat imageTransform1;
+//        warpPerspective(img01, imageTransform1, adjustHomo, cv::Size(img02.cols+img01.cols+110,img02.rows));
+//
+//        //在最强配准点左侧的重叠区域进行累加，使衔接稳定过度，消除突变
+//        Mat image01OverLap,image02OverLap;
+//        image01OverLap = imageTransform1(cv::Rect(cv::Point(targetLintPoint.x - basedImagePoint.x,0),cv::Point(targetLintPoint.x,img02.rows)));
+//        image02OverLap = img02(cv::Rect(0,0,image01OverLap.cols,image01OverLap.rows));
+//
+//        //复制img01的重叠部分
+//        Mat image01ROICOPY = image01OverLap.clone();
+//        for (int i = 0; i < image01OverLap.rows; i++) {
+//            for (int j = 0; j < image01OverLap.cols;j++) {
+//                double weight;
+//                //随距离改变而改变的叠加体系
+//                weight = (double)j/image01OverLap.cols;
+//                image01OverLap.at<Vec3b>(i,j)[0] = (1 - weight)*image01ROICOPY.at<Vec3b>(i,j)[0]+weight*image02OverLap.at<Vec3b>(i,j)[0];
+//                image01OverLap.at<Vec3b>(i,j)[1] = (1 - weight)*image01ROICOPY.at<Vec3b>(i,j)[1]+weight*image02OverLap.at<Vec3b>(i,j)[1];
+//                image01OverLap.at<Vec3b>(i,j)[2] = (1 - weight)*image01ROICOPY.at<Vec3b>(i,j)[2]+weight*image02OverLap.at<Vec3b>(i,j)[2];
+//            }
+//        }
+//
+//        Mat ROIMat = img02(cv::Rect(cv::Point(image01OverLap.cols,0),cv::Point(img02.cols,img02.rows)));
+//        ROIMat.copyTo(Mat(imageTransform1,cv::Rect(targetLintPoint.x,0,ROIMat.cols,img02.rows)));
+//        return [self imageWithCVMat:imageTransform1];
+//    }
+//}
+//
+//- (UIImage *)imageWithCVMat:(const cv::Mat&)cvMat
+//{
+//    NSData *data = [NSData dataWithBytes:cvMat.data length:cvMat.elemSize() * cvMat.total()];
+//    CGColorSpaceRef colorSpace;
+//    if (cvMat.elemSize() == 1) {
+//        colorSpace = CGColorSpaceCreateDeviceGray();
+//    } else {
+//        colorSpace = CGColorSpaceCreateDeviceRGB();
+//    }
+//    CGDataProviderRef provider = CGDataProviderCreateWithCFData((__bridge CFDataRef)data);
+//    // Creating CGImage from cv::Mat
+//    CGImageRef imageRef = CGImageCreate(cvMat.cols,                                 //width
+//                                        cvMat.rows,                                 //height
+//                                        8,                                          //bits per component
+//                                        8 * cvMat.elemSize(),                       //bits per pixel
+//                                        cvMat.step[0],                              //bytesPerRow
+//                                        colorSpace,                                 //colorspace
+//                                        kCGImageAlphaNone|kCGBitmapByteOrderDefault,// bitmap info
+//                                        provider,                                   //CGDataProviderRef
+//                                        NULL,                                       //decode
+//                                        false,                                      //should interpolate
+//                                        kCGRenderingIntentDefault                   //intent
+//                                        );
+//
+//    UIImage *cvImage = [[UIImage alloc]initWithCGImage:imageRef];
+//    CGImageRelease(imageRef);
+//    CGDataProviderRelease(provider);
+//    CGColorSpaceRelease(colorSpace);
+//    return cvImage;
+//}
+
 
 @end
