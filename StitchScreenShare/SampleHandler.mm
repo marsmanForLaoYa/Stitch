@@ -189,7 +189,7 @@
                     }
                 }
                 //100张相同的图片，停止录屏
-                if(_sameImageCount > 100) {
+                if(_sameImageCount > 60) {
                     NSDictionary *dic = @{NSLocalizedFailureReasonErrorKey : @"图片已生成"};
                     NSError *err = [NSError errorWithDomain:@"domain" code:401 userInfo:dic];
                     [self finishBroadcastWithError:err];
