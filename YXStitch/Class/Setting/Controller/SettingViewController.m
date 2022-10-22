@@ -151,9 +151,10 @@
             break;
         case 5:
         {
-            //分享得会员
-            AdvertisFreeController *adVC = [[AdvertisFreeController alloc] init];
-            [self.navigationController pushViewController:adVC animated:YES];
+            if ([User checkLogin]) {
+                AdvertisFreeController *adVC = [[AdvertisFreeController alloc] init];
+                [self.navigationController pushViewController:adVC animated:YES];
+            }
         }
             break;
         case 6:

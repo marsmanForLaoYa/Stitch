@@ -994,19 +994,7 @@
                             if(![self.topBelowImageViews containsObject:obj]) {
                                 [belowArray addObject:obj];
                             }
-                            else
-                            {
-                                NSLog(@"1");
-                            }
                         }
-                        else
-                        {
-                            NSLog(@"2");
-                        }
-                    }
-                    else
-                    {
-                        NSLog(@"3");
                     }
                 }
             }];
