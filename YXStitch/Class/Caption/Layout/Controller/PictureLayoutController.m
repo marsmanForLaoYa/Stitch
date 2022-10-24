@@ -106,9 +106,9 @@
     UIBarButtonItem *saveItem = [[UIBarButtonItem alloc]initWithCustomView:saveBtn];
     self.navigationItem.rightBarButtonItem = saveItem;
     
-    UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+    UIButton *leftBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 25, 30)];
     leftBtn.tag = 1;
-    [leftBtn setBackgroundImage:IMG(@"stitch_white_back") forState:UIControlStateNormal];
+    [leftBtn setImage:IMG(@"stitch_white_back") forState:UIControlStateNormal];
     [leftBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [leftBtn addTarget:self action:@selector(btnBackClick:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithCustomView:leftBtn];

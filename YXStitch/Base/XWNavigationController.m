@@ -41,7 +41,7 @@
     if (self.viewControllers.count > 0) {
         //viewController.hidesBottomBarWhenPushed = YES;
 
-        UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 25, 30)];
+        UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
         
         [backButton setImage:[UIImage imageNamed:@"stitch_black_back"] forState:UIControlStateNormal];
        // [backButton setImageEdgeInsets:UIEdgeInsetsMake(0, -12, 0, 12)];
