@@ -9,7 +9,7 @@
 #import "SZConstraint.h"
 
 @implementation SZConstraint
-- (NSInteger)topOffset
++ (NSInteger)topOffset
 {
     if ([UIScreen mainScreen].bounds.size.height == 812)
     {
@@ -21,7 +21,7 @@
     }
 }
 
-- (NSInteger)bottomOffset
++ (NSInteger)bottomOffset
 {
     if ([UIScreen mainScreen].bounds.size.height == 812)
     {

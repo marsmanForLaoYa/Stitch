@@ -42,9 +42,9 @@
     {
         @autoreleasepool
         {
-//            dispatch_group_async(group, queue, ^{
-//                [self crcFeedImage:image];
-//            });
+            dispatch_group_async(group, queue, ^{
+                [self crcFeedImage:image];
+            });
             dispatch_group_async(group, queue, ^{
                 [self minFeedImage:image];
             });
@@ -106,6 +106,7 @@
                     }
                     dispatch_semaphore_signal(sema);
                 });
+               
             }
             dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
         }
@@ -155,11 +156,12 @@
             _error = [NSError errorWithDomain:SZERRORDOMAIN
                                          code:SZMergeErrorNotEnoughOverlap
                                      userInfo:nil];
-            NSLog(@"没有足够的重叠部分");
+            NSLog(@"重叠部分不够问题");
         }
         //如果不成功，会添加error的信息，用这个来判断是否需要拼接。
         info.error = _error;
     }
+
     //不管成功与否，都添加到数组中
     [_minInfos addObject:info];
 }

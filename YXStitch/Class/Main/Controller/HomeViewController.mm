@@ -357,7 +357,6 @@
 #pragma mark -- CollectionDelegate
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
-    NSLog(@"count11==%ld",_iconArr.count);
     return _iconArr.count;
 }
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
@@ -367,7 +366,6 @@
     
     MoveCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"MoveCollectionViewCell" forIndexPath:indexPath];
     cell.p_MoveCollectionViewCellDelegate = self;
-    NSLog(@"indexpath.row==%ld",indexPath.row);
     cell.cellName = [_iconArr objectAtIndex:indexPath.row];
     if (indexPath.row > 5){
         cell.nameLab.text = [NSString stringWithFormat:@"%@",_schemeArr[indexPath.row - 5]];

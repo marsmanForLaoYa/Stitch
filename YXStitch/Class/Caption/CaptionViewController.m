@@ -56,6 +56,7 @@
 @property (nonatomic ,strong)NSMutableArray *originTopArr;
 @property (nonatomic ,strong)NSMutableArray *originBottomArr;
 @property (nonatomic ,strong)NSMutableArray *originRightArr;
+@property (nonatomic ,strong)NSMutableArray *originHeightArr;
 @property (nonatomic ,strong)NSMutableArray *imageViews;
 @property (nonatomic ,strong)NSMutableArray *cutArr;
 @property (nonatomic ,strong)NSMutableArray *editLabArr;
@@ -196,6 +197,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
     [_contentScrollView addSubview:firstImageView];
     [self.originTopArr addObject:[NSNumber numberWithFloat:0]];
     [self.originBottomArr addObject:[NSNumber numberWithFloat:firstImageView.height]];
+    [self.originHeightArr addObject:[NSNumber numberWithFloat:firstImageView.height]];
     [self.imageViews addObject:firstImageView];
     for (NSInteger i = 1; i < _dataArr.count; i ++) {
         UIImage *icon = _dataArr[i];
@@ -211,6 +213,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
         [self.originTopArr addObject:[NSNumber numberWithFloat:firstImageView.top]];
         [self.imageViews addObject:imageView];
         [self.originBottomArr addObject:[NSNumber numberWithFloat:contentHeight]];
+        [self.originHeightArr addObject:[NSNumber numberWithFloat:imageView.height]];
         
     }
     if (contentHeight < LayoutHeight){
@@ -430,10 +433,12 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
             _imageViews[0] = img;
             _originTopArr[0] = [NSNumber numberWithFloat:img.top];
             _originBottomArr[0] = [NSNumber numberWithFloat:img.height];
+            _originHeightArr[0] = [NSNumber numberWithFloat:img.height];
         }else{
             _imageViews[i] = img;
             _originTopArr[i] = [NSNumber numberWithFloat:img.top];
             _originBottomArr[i] = [NSNumber numberWithFloat:img.height];
+            _originHeightArr[i] = [NSNumber numberWithFloat:img.height];
         }
         UIButton *cutBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [cutBtn addTarget:self action:@selector(cutBtnClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -795,16 +800,21 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
  */
 - (SZImageGenerator *)imageGeneratorBy:(NSArray *)assets{
     NSMutableArray *images = [NSMutableArray array];
+    __block NSInteger index = 0;
     if (!GVUserDe.isScorllScreen){
         for (PHAsset *asset in assets) {
             [Tools getImageWithAsset:asset withBlock:^(UIImage * _Nonnull image) {
                 [images addObject:image];
+                index++;
             }];
         }
     }else{
+        index = assets.count;
         [images addObjectsFromArray:assets];
     }
-    if (!images.count) {
+    if (!images.count && index != assets.count) {
+        [SVProgressHUD showInfoWithStatus:@"请重新选择图片！"];
+        [self.navigationController popViewControllerAnimated:YES];
         return nil;
     }
     /*
@@ -815,12 +825,9 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
     PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
     options.synchronous = YES;
     CFAbsoluteTime time = CFAbsoluteTimeGetCurrent();
-    NSInteger index = 1;
     for (UIImage *image in images){
         [generator feedImage:image];
     }
-    
-    
     CFAbsoluteTime next = CFAbsoluteTimeGetCurrent() - time;
     NSLog(@"总共消耗的时间：%@",@(next));
     return generator;
@@ -841,6 +848,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
     firstImageView.tag = 100;
     [_contentScrollView addSubview:firstImageView];
     [self.originTopArr addObject:[NSNumber numberWithFloat:0]];
+    [self.originHeightArr addObject:[NSNumber numberWithFloat:firstImageView.height]];
     [self.originBottomArr addObject:[NSNumber numberWithFloat:firstImageView.height]];
     [self.imageViews addObject:firstImageView];
     __block NSInteger tagIndex = 2;
@@ -867,27 +875,22 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
             contentHeight += imageView.height;
             [weakSelf.originTopArr addObject:[NSNumber numberWithFloat:imageView.top]];
             [weakSelf.originBottomArr addObject:[NSNumber numberWithFloat:contentHeight]];
+            [weakSelf.originHeightArr addObject:[NSNumber numberWithFloat:imageView.height]];
             [weakSelf.imageViews addObject:imageView];
             firstImageView = imageView;
             tagIndex ++;
         }
         weakSelf.contentScrollView.contentSize = CGSizeMake(0,contentHeight);
-        weakSelf.title = [NSString stringWithFormat:@"%ld张图片",generator.infos.count];
+       //weakSelf.title = [NSString stringWithFormat:@"%ld张图片",generator.infos.count];
         
         if (contentHeight < SCREEN_HEIGHT){
             //内容过小则重置imageView布局
             [weakSelf layoutContentView];
         }else{
-            NSLog(@"contentght==%lf",contentHeight);
-            NSLog(@"bottom==%lf",firstImageView.bottom);
             weakSelf.contentScrollView.contentSize = CGSizeMake(0,firstImageView.bottom);
         }
         [SVProgressHUD showSuccessWithStatus:@"拼接完成"];
-    });
-//    NSLog(@"_top.count==%ld",_originTopArr.count);
-    
-    NSLog(@"count==%ld",_imageViews.count);
-    
+    }); 
 }
 
 
@@ -1054,96 +1057,6 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                 }
                 
             }
-//            if (_imageViews.count == 1){
-//                StitchingButton *imageView = _imageViews[0];
-//                CGFloat top = [_originTopArr[0]floatValue];
-//                CGFloat height = [_originBottomArr[0]floatValue];
-//                if (_posizition == 1 || _posizition == 3){
-//                    if (_posizition == 1){
-//
-//                    }
-//                }
-//                if (_moveIndex == 1){
-//                    //点击了顶部
-//                    CGFloat offsetP = translatedPoint.y;
-//                    CGFloat tmpF = imageView.height + offsetP;
-//                    if (offsetP < 0){
-//                        if (imageView.imgView.bottom < 0){
-//                            imageView.height = 0;
-//                            return;
-//                        }
-//                    }else{
-//                        if (tmpF >= height){
-//                            imageView.top = top;
-//                            imageView.height = height;
-//                            return;
-//                        }
-//                    }
-//                    imageView.height = tmpF  ;
-//                    imageView.imgView.top = offsetP+ imageView.imgView.top;
-//                }else if (_posizition == 1){
-//                    //点击了左边
-//                    CGFloat offsetP = translatedPoint.x;
-//                    CGFloat tmpF = imageView.imgView.left + offsetP;
-//                    if (offsetP < 0){
-//                        if (imageView.right <= 0){
-//                            imageView.right = 0;
-//                            imageView.width = imageView.width - offsetP;
-//                            //return;
-//                        }else{
-//                            imageView.imgView.left = tmpF;
-//                        }
-//                    }else{
-//                        if (imageView.width >= VerViewWidth){
-//                            imageView.width = VerViewWidth;
-//                            imageView.centerX = self.view.centerX;
-//                            imageView.imgView.left = 0;
-//                            //return;
-//                        }else{
-//                            imageView.imgView.left = tmpF;
-//                        }
-//                    }
-//                    imageView.width = imageView.width + offsetP;
-//                }else if (_moveIndex == 2){
-//                    //点击了底部
-//                    CGFloat offsetP = translatedPoint.y;
-//                    imageView.height = imageView.height - offsetP;
-//                    if (imageView.height <= 0){
-//                        imageView.height = 0;
-//                        return;
-//                    }
-//                    if(offsetP < 0 && imageView.height >= imageView.imgView.height){
-//                        imageView.height = imageView.imgView.height;
-//                        return;
-//                    }
-//                    imageView.top = offsetP+ imageView.top;
-//                }else{
-//                    CGFloat offsetP = translatedPoint.x;
-//                    CGFloat tmpF = imageView.width - offsetP;
-//                    if (offsetP < 0){
-//                        if (tmpF >= VerViewWidth){
-//                            imageView.width = VerViewWidth;
-//                            imageView.centerX = _contentView.centerX;
-//                            // return;
-//                        }else{
-//                            imageView.width = tmpF;
-//                        }
-//                    }else{
-//                        if (tmpF <= 0){
-//                            imageView.width = 0;
-//                            imageView.centerX = _contentView.centerX;
-//                            // return;
-//                        }else{
-//                            imageView.width = tmpF;
-//                        }
-//                    }
-//                    imageView.left = imageView.left + offsetP;
-//                }
-//            }else{
-//
-//            }
-            
- 
         }
     }else if (recognizer.state == UIGestureRecognizerStateBegan){
         if (_isCut){
@@ -1222,6 +1135,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
             NSLog(@"offp==%lf",offsetP);
             StitchingButton *imageView = self.imageViews[0];
             CGFloat top = [_originTopArr[0]floatValue];
+            CGFloat viewHeight = [_originHeightArr[0] floatValue];
             CGFloat height;
             if (_imageViews.count == 1){
                 height = imageView.imgView.height;
@@ -1238,9 +1152,9 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                     imageView.imgView.top = offsetP+ imageView.imgView.top;
                 }
             }else{
-                if (tmpF >= imageView.imgView.height){
+                if (tmpF >= viewHeight){
                     imageView.top = top;
-                    imageView.height = imageView.imgView.height;
+                    imageView.height = viewHeight;
                   //  return;
                 }else{
                     imageView.height = tmpF  ;
@@ -1254,6 +1168,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
         }else if (_moveIndex == _imageViews.count + 1){
             //编辑最后一个不能超过他原先的top
             StitchingButton *imageView = self.imageViews[_moveIndex - 2];
+            CGFloat viewHeight = [_originHeightArr[_moveIndex - 2]floatValue];
             CGFloat tmpF = imageView.height - offsetP;
             if (offsetP > 0){
                 if (tmpF < 0){
@@ -1263,8 +1178,8 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                     imageView.height = tmpF;
                 }
             }else{
-                if (tmpF >= imageView.imgView.height){
-                    imageView.height = imageView.imgView.height;
+                if (tmpF >= viewHeight){
+                    imageView.height = viewHeight;
                     imageView.top = [_originTopArr[_moveIndex - 2] floatValue];
                     return;
                 }else{
@@ -1283,6 +1198,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                     _moveIndex = 2;
                 }
                 StitchingButton *imageView = self.imageViews[_moveIndex - 2];
+                CGFloat viewHeight = [_originHeightArr[_moveIndex - 2]floatValue];
                 CGFloat tmpF = imageView.height - offsetP;
                 if (offsetP > 0){
                     if (tmpF < 0){
@@ -1292,8 +1208,8 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                         imageView.height = tmpF;
                     }
                 }else{
-                    if (tmpF >= imageView.imgView.height){
-                        imageView.height = imageView.imgView.height;
+                    if (tmpF >= viewHeight){
+                        imageView.height = viewHeight;
                         imageView.top = [_originTopArr[_moveIndex - 2] floatValue];
                         return;
                     }else{
@@ -1308,6 +1224,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                 
             }else{
                 StitchingButton *imageView = self.imageViews[_moveIndex - 1];
+                CGFloat viewHeight = [_originHeightArr[_moveIndex - 1]floatValue];
                 CGFloat top = [_originTopArr[_moveIndex -1]floatValue];
                 CGFloat tmp = imageView.height + offsetP;
                 if (offsetP < 0){
@@ -1319,9 +1236,9 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                         imageView.imgView.top = offsetP+ imageView.imgView.top;
                     }
                 }else{
-                    if (tmp >= imageView.imgView.height){
+                    if (tmp >= viewHeight){
                         imageView.top = top;
-                        imageView.height = imageView.imgView.height;
+                        imageView.height = viewHeight;
                         imageView.imgView.top = 0;
                     }else{
                         imageView.height = tmp ;
@@ -1346,8 +1263,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
     StitchingButton *lastStichimageView = stichingImageView;
     for (NSInteger i = index; i >= 0; i --) {
         StitchingButton *changeImageView = self.imageViews[i];
-        changeImageView.bottom = lastStichimageView.top;
-        changeImageView.height = changeImageView.imgView.height;
+        changeImageView.top = changeImageView.top + offsetY;
         lastStichimageView = changeImageView;
     }
 }
@@ -1694,21 +1610,12 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
     //上半部分
     NSMutableArray *topArr = [NSMutableArray array];
     for (NSInteger i = 0 ; i <= index; i ++) {
-        if (_type == 4){
-            [topArr addObject:_editImgArr[i]];
-        }else{
-            [topArr addObject:_imageViews[i]];
-        }
-        
+        [topArr addObject:_imageViews[i]];
     }
     //下半部分
     NSMutableArray *bottomArr = [NSMutableArray array];
-    for (NSInteger i = index; i < _imageViews.count; i ++) {
-        if (_type == 4){
-            [topArr addObject:_editImgArr[i]];
-        }else{
-            [topArr addObject:_imageViews[i]];
-        }
+    for (NSInteger i = index; i < _imageViews.count; i ++) {  
+        [topArr addObject:_imageViews[i]];
     }
     [_originBottomArr removeAllObjects];
     [_originRightArr removeAllObjects];
@@ -2477,6 +2384,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
     }
     _isCut = NO;
     _isStartCut = NO;
+    [_contentScrollView removeGestureRecognizer:_panGesture];
 }
 
 
@@ -2558,6 +2466,12 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
         self.originBottomArr = [NSMutableArray array];
     }
     return _originBottomArr;
+}
+-(NSMutableArray *)originHeightArr{
+    if (!_originHeightArr){
+        self.originHeightArr = [NSMutableArray array];
+    }
+    return _originHeightArr;
 }
 -(NSMutableArray *)imageViews{
     if (!_imageViews){

@@ -71,9 +71,9 @@ static const NSString *INFO_KEY = @"INFO_KEY";
     //每次扫描都是从上两张图片的共同部分的起始点开始扫描。
     //这里的info_.firstOffset 代表的意思是：共同部分的最大偏移量，
     //减去info_.length就能得到：共同部分的起始位置
-    NSInteger firstStartIndex = (info_.firstOffset - info_.length ) < 0 ? 0 : (info_.firstOffset - info_.length);
+    NSInteger firstStartIndex = (info_.firstOffset - info_.length - 10 ) < 0 ? 0 : (info_.firstOffset - info_.length - 10 );
     NSInteger secondStartIndex = 0;
-    NSInteger bottomOffset = 0;
+    NSInteger bottomOffset = [SZConstraint bottomOffset];
     //NSLog(@"bottomOffset==%ld",bottomOffset);
     NSInteger i = 0;
     for (NSNumber *firstLine in firstLines) {
@@ -95,25 +95,28 @@ static const NSString *INFO_KEY = @"INFO_KEY";
                 if (i < firstLines.count - 1 && j < secondLines.count - 1 ){
                     nextFLine = firstLines[i + 1];
                     nextSLine = secondLines[j + 1];
-                }  
+                }
+
                 //判断特征点,记录特征点的坐标起始位置
                 if ([info isX:firstValue
                           equalTo:secondValue] || (![info isX:firstValue
                                                     equalTo:secondValue] && [info isX:nextFLine.integerValue equalTo:nextSLine.integerValue]) ) {
-                        int value = 0;
-                        if (j != 0) {
-                            value = matrix[(i+1) % 2][j-1] + 1;
-                        }
-                        matrix[i % 2][j] = value;
-                        if (value > length) {
-                            length = value;
-                            x = i;
-                            y = j;
-                        }
-                    }else {
-                        matrix[i % 2][j] = 0;
+                    
+                    int value = 0;
+                    if (j != 0) {
+                        value = matrix[(i+1) % 2][j-1] + 1;
                     }
-                    j ++;
+                    matrix[i % 2][j] = value;
+                    if (value > length) {
+                        length = value;
+                        x = i;
+                        y = j;
+                    }
+                }else {
+                    matrix[i % 2][j] = 0;
+                    
+                }
+                j ++;
             }
             i ++;
     }
@@ -123,7 +126,7 @@ static const NSString *INFO_KEY = @"INFO_KEY";
     free(matrix[i]);
     free(matrix);
     //1.这里的firstOffset和secondOffset是从 底 部开始的偏移量
-    //2.这里的firstOffset和secondOffset是从 顶 部开始的偏移量
+    //2.这里的firstOffset和secondOffset是从 底 部开始的偏移量
     info.length = length;
     info.firstOffset = firstImage.size.height - (x - length + 20) ;
     info.secondOffset= secondImage.size.height - (y - length + 20);
@@ -137,6 +140,13 @@ static const NSString *INFO_KEY = @"INFO_KEY";
     if ([self validInfo:info]) {
         info_.firstOffset = 0;
         info_.length = 0;
+
+    }else{
+//        info = [self continuejudgeinfoBy:firstImage secondImage:secondImage type:type];
+//        return info;
+        info.firstOffset = firstImage.size.height - x - length + 20  ;
+        info.secondOffset = secondImage.size.height - length + 20 ;
+        info.length = length ;
     }
 
     CFAbsoluteTime nextTime = CFAbsoluteTimeGetCurrent() - time;
@@ -154,6 +164,80 @@ static const NSString *INFO_KEY = @"INFO_KEY";
     return threshold > 0 &&
     length > threshold &&
     info.firstOffset < info.secondOffset;
+}
+
+-(instancetype)continuejudgeinfoBy:(UIImage *)firstImage
+                             secondImage:(UIImage *)secondImage
+                                    type:(SZImageFingerType)type{
+    
+    SZImageMergeInfo *info_ = nil;
+    if (type == SZImageFingerTypeCRC) {
+        info_ = self.crcMergeInfo;
+    } else if (type == SZImageFingerTypeMin) {
+        info_ = self.miniMergeInfo;
+    }
+
+    SZImageMergeInfo *info = [[SZImageMergeInfo alloc] init];
+    info.firstImage = firstImage;
+    info.secondImage = secondImage;
+    info.type = type;
+     
+    SZImageFinger *firstFingerprint = nil;
+    SZImageFinger *secondFingerprint= [SZImageFinger fingerImage:secondImage type:type];
+    if (info_.finger != nil) {
+        firstFingerprint = info_.finger;
+    }else{
+        firstFingerprint = [SZImageFinger fingerImage:firstImage type:type];
+    }
+    info_.finger = secondFingerprint;
+     
+    CFAbsoluteTime time = CFAbsoluteTimeGetCurrent();
+     
+    NSArray *firstLines = [firstFingerprint lines];
+    NSArray *secondLines= [secondFingerprint lines];
+     
+    NSInteger firstLinesCount = (NSInteger)[firstLines count];
+    NSInteger secondLinesCount = (NSInteger)[secondLines count];
+    int **matrix = (int **)malloc(sizeof(int *) * 2);
+    for (int i = 0; i < 2; i++) {
+        matrix[i] = (int *)malloc(sizeof(int) * (size_t)secondLinesCount);
+    }
+    for (NSInteger j = 0; j < secondLinesCount; j++) {
+        matrix[0][j] = matrix[1][j] = 0;
+    }
+    NSInteger length = 0,x = 0,y = 0;
+    for (NSInteger i = firstLinesCount - 1; i >= 0; i --) {
+        int64_t firstValue = [firstLines[i]integerValue];
+        for (NSInteger j = secondLinesCount - 1; j >= 0 ; j --) {
+            int64_t secondValue = [secondLines[j]integerValue];
+            if ([info isX:firstValue
+                      equalTo:secondValue] ) {
+                
+                int value = 0;
+                if (j != 0) {
+                    value = matrix[(i+1) % 2][j-1] + 1;
+                }
+                matrix[i % 2][j] = value;
+                if (value > length) {
+                    length = value;
+                    x = i;
+                    y = j;
+                }
+            }else {
+                matrix[i % 2][j] = 0;
+                
+            }
+        }
+    }
+     for (int i = 0; i < 2; i++)
+     free(matrix[i]);
+     free(matrix);
+     info.length = length;
+     info.firstOffset = firstImage.size.height - (x - length + 50) ;
+     info.secondOffset= secondImage.size.height - (y - length + 50);
+     info_.firstOffset = y ;
+     info_.length = length ;
+     return info;
 }
 
 - (void)testPixels:(NSArray *)pixel1 pixel2:(NSArray *)pixel2{
@@ -234,12 +318,12 @@ static const NSString *INFO_KEY = @"INFO_KEY";
 
 - (BOOL)isX:(int64_t)x
     equalTo:(int64_t)y{
-//    if (_type == SZImageFingerTypeCRC){
-//
-//    }else{
-//        return x * 1.1 >= y && x * 0.9 <= y;
-//    }
-    return x == y;
+    if (_type == SZImageFingerTypeCRC){
+        return x == y;
+    }else{
+        return x * 1.1 >= y && x * 0.9 <= y;
+    }
+    
 }
 
 - (SZImageMergeInfo *)crcMergeInfo {
