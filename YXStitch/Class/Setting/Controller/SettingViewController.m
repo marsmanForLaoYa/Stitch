@@ -167,6 +167,18 @@
             break;
         case 8:
             //
+            if (!User.checkLogin){
+                [[XWNetTool sharedInstance] loginWithCallback:^(User * _Nonnull user, NSString * _Nonnull errorMsg, NSInteger code) {
+                    if (code == CodeSuccess) {
+                        [SVProgressHUD showSuccessWithStatus:@"登录成功"];
+                        
+                    } else{
+                        [SVProgressHUD showInfoWithStatus:errorMsg];
+                    }
+                }];
+            }else{
+                return;
+            }
             break;
         default:
             break;

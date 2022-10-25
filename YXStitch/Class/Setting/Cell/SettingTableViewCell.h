@@ -11,6 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface SettingTableViewCell : UITableViewCell
 @property (nonatomic, strong) UILabel *setingLabel;
+@property (nonatomic, strong) UILabel *idLab;
 - (void)configModel:(NSString *)str andTag:(NSInteger)tag andType:(NSInteger)type;
 
 @end

@@ -270,9 +270,10 @@
                 [tmpArr removeFirstObject];
             }
             [tmpArr addObject:weakSelf.colorPlateView.colorLab.text];
-            [weakSelf.delegate changeWaterFontColor:weakSelf.colorPlateView.colorLab.text];
             GVUserDe.selectColorArr = tmpArr;
             GVUserDe.waterTitleColor = [GVUserDe.selectColorArr lastObject];
+            [weakSelf.delegate changeWaterFontColor:weakSelf.colorPlateView.colorLab.text];
+            
             
         }
         [UIView animateWithDuration:0.3 animations:^{

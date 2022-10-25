@@ -25,7 +25,7 @@
         self.layer.cornerRadius = 10;
         self.layer.masksToBounds = YES;
         _selectIndex = 1000;
-        _iphoneArr = @[@"无套壳",@"iPad Pro",@"iPad",@"iPhone 14Pro Max",@"iPhone14 Pro",@"iPhone 14 Plus",@"iPhone 14",@"iPhone 13 Pro Max",@"iPhone 13 Pro",@"iPhone 13",@"iPhone 13 Mini",@"iPhone 12 Pro Max",@"iPhone 12 Pro",@"iPhone 12",@"iPhone 12 Mini",@"iPhone 11 Pro Max",@"iPhone 11 Pro",@"iPhone XR/11",@"iPhone 8 Plus",@"iPhone 8"];
+        _iphoneArr = @[@"无套壳",@"iPad Pro",@"iPad",@"iPhone 14Pro Max",@"iPhone14 Pro",@"iPhone 14 Plus",@"iPhone 14",@"iPhone 13 Pro Max",@"iPhone 13 Pro",@"iPhone 13",@"iPhone 13 Mini",@"iPhone 12 Pro Max",@"iPhone 12 Pro",@"iPhone 12",@"iPhone 12 Mini",@"iPhone 11 Pro Max",@"iPhone 11 Pro",@"iPhone XR/11"];
         [self setupViews];
     }
     return self;

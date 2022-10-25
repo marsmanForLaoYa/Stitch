@@ -35,20 +35,30 @@
 -(void)setupViews{
     NSArray *iconArr;
     NSArray *textArr;
-    if(_type == 1){
-        iconArr = @[@"字幕调整选中" ,@"字幕裁切未选中",@"字幕切割未选中",@"字幕编辑未选中"];
-        textArr = @[@"调整",@"裁切",@"切割",@"编辑"];
-    }else if(_type == 2){
-        iconArr = @[@"横拼" ,@"字幕裁切未选中",@"字幕切割未选中",@"字幕编辑未选中"];
-        textArr = @[@"横拼",@"裁切",@"切割",@"编辑"];
+    if (_type == 5){
+        iconArr = @[@"字幕裁切未选中",@"字幕切割未选中",@"字幕编辑未选中"];
+        textArr = @[@"裁切",@"切割",@"编辑"];
     }else{
-        iconArr = @[@"擦除滚动条" ,@"字幕裁切未选中",@"字幕切割未选中",@"字幕编辑未选中"];
-        textArr = @[@"擦除滚动条",@"裁切",@"切割",@"编辑"];
+        if(_type == 1){
+            iconArr = @[@"字幕调整选中" ,@"字幕裁切未选中",@"字幕切割未选中",@"字幕编辑未选中"];
+            textArr = @[@"调整",@"裁切",@"切割",@"编辑"];
+        }else if(_type == 2){
+            iconArr = @[@"横拼" ,@"字幕裁切未选中",@"字幕切割未选中",@"字幕编辑未选中"];
+            textArr = @[@"横拼",@"裁切",@"切割",@"编辑"];
+        }else{
+            iconArr = @[@"擦除滚动条" ,@"字幕裁切未选中",@"字幕切割未选中",@"字幕编辑未选中"];
+            textArr = @[@"擦除滚动条",@"裁切",@"切割",@"编辑"];
+        }
     }
+    
     CGFloat btnWidth = SCREEN_WIDTH / iconArr.count;
     for (NSInteger i = 0; i < iconArr.count; i ++) {
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn.tag = i + 1;
+        if (_type == 5){
+            btn.tag = i + 2;
+        }else{
+            btn.tag = i + 1;
+        }
         [btn setBackgroundColor:[UIColor clearColor]];
         [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:btn];
@@ -61,11 +71,10 @@
             btn.selected = YES;
         }else{
             btn.selected = NO;
-        }
-        
+        }  
         UIImageView *icon = [UIImageView new];
         icon.image = IMG(iconArr[i]);
-        icon.tag = (i + 1) * 100;
+        icon.tag = btn.tag * 100;
         [btn addSubview:icon];
         [icon mas_makeConstraints:^(MASConstraintMaker *make) {
             make.width.height.equalTo(@22);
@@ -83,7 +92,7 @@
             make.width.left.equalTo(btn);
             make.top.equalTo(icon.mas_bottom).offset(4);
         }];
-        if ((_type == 2 && i == 0) || (_type == 3 && i == 0) || (_type == 4 && i == 0)){
+        if ((_type == 2 && i == 0) || (_type == 3 && i == 0) || (_type == 4 && i == 0) ){
             _typeLab = textLab;
         }
         if (i == 1){

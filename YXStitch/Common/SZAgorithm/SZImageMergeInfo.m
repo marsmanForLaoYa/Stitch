@@ -73,7 +73,7 @@ static const NSString *INFO_KEY = @"INFO_KEY";
     //减去info_.length就能得到：共同部分的起始位置
     NSInteger firstStartIndex = (info_.firstOffset - info_.length - 10 ) < 0 ? 0 : (info_.firstOffset - info_.length - 10 );
     NSInteger secondStartIndex = 0;
-    NSInteger bottomOffset = [SZConstraint bottomOffset];
+    NSInteger bottomOffset = 0;
     //NSLog(@"bottomOffset==%ld",bottomOffset);
     NSInteger i = 0;
     for (NSNumber *firstLine in firstLines) {
@@ -144,9 +144,9 @@ static const NSString *INFO_KEY = @"INFO_KEY";
     }else{
 //        info = [self continuejudgeinfoBy:firstImage secondImage:secondImage type:type];
 //        return info;
-        info.firstOffset = firstImage.size.height - x - length + 20  ;
-        info.secondOffset = secondImage.size.height - length + 20 ;
-        info.length = length ;
+//        info.firstOffset = firstImage.size.height - x - length + 20  ;
+//        info.secondOffset = secondImage.size.height - length + 20 ;
+//        info.length = length ;
     }
 
     CFAbsoluteTime nextTime = CFAbsoluteTimeGetCurrent() - time;

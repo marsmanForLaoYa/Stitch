@@ -32,6 +32,7 @@
 #import "XWOpenCVHelper.h"
 #import "App.h"
 #import "HomeModel.h"
+#import "SZStichingImageView.h"
 
 
 //#include "opencv2/opencv.hpp"
@@ -246,7 +247,7 @@
 -(void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo{
     NSString *msg = nil;
     if (!error) {
-        msg = @"下载成功，已为您保存至相册";
+        msg = @"保存成功，已为您保存至相册";
     }else {
         msg = @"系统未授权访问您的照片，请您在设置中进行权限设置后重试";
     }
@@ -616,6 +617,7 @@
         }else{
             vc.dataArr = _stitchArr;
             vc.editImgArr = _stitchArr;
+            vc.gengrator = _generator;
             vc.type = 4;
         }
         [weakSelf checkScreenStitchViewDiss];
@@ -640,13 +642,10 @@
         return;
     }
     _generator = result;
-    //点击了拼接，而且还没结束识别的时候；
-//    if (_needJumpToPreviewController) {
-//        [self startMergeImage:nil];
-//    }
-    
     _resultView = [StitchResultView new];
     _resultView.generator = _generator;
+    SZStichingImageView *imageView = _resultView.imageViews.lastObject;
+    [_resultView.scrollView setContentSize:CGSizeMake(0, imageView.bottom)];
     [_checkScreenStitchView addSubview:_resultView];
     [_resultView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(@23);
@@ -854,7 +853,7 @@
         if (btn.tag == 200){
             //选择一图裁切
             CaptionViewController *vc = [CaptionViewController new];
-            vc.type = 2;
+            vc.type = 5;
             __block NSMutableArray *arr = [NSMutableArray array];
             for (HXPhotoModel *photoModel in [self.manager selectedArray]) {
                 [Tools getImageWithAsset:photoModel.asset withBlock:^(UIImage * _Nonnull image) {

@@ -76,7 +76,7 @@
 		FB1B8DE728D06F5F0080AE74 /* AddWaterMark.m in Sources */ = {isa = PBXBuildFile; fileRef = FB1B8DE628D06F5F0080AE74 /* AddWaterMark.m */; };
 		FB26948228E57E5200565F4B /* imageShellSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = FB26948128E57E5200565F4B /* imageShellSelectView.m */; };
 		FB26948628E590BB00565F4B /* ShellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FB26948528E590BB00565F4B /* ShellTableViewCell.m */; };
-		FB2BBD1428AF688A001DDFAE /* CaptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB2BBD1328AF688A001DDFAE /* CaptionViewController.m */; };
+		FB2BBD1428AF688A001DDFAE /* CaptionViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = FB2BBD1328AF688A001DDFAE /* CaptionViewController.mm */; };
 		FB2BBD1828AF8D21001DDFAE /* CaptionBottomView.m in Sources */ = {isa = PBXBuildFile; fileRef = FB2BBD1728AF8D21001DDFAE /* CaptionBottomView.m */; };
 		FB2D5A0728A1EE2A006085BC /* HomeSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB2D5A0628A1EE2A006085BC /* HomeSettingViewController.m */; };
 		FB2D5A0A28A1F4AF006085BC /* BaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB2D5A0928A1F4AF006085BC /* BaseViewController.m */; };
@@ -342,7 +342,7 @@
 		FB26948428E590BB00565F4B /* ShellTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShellTableViewCell.h; sourceTree = "<group>"; };
 		FB26948528E590BB00565F4B /* ShellTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShellTableViewCell.m; sourceTree = "<group>"; };
 		FB2BBD1228AF688A001DDFAE /* CaptionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CaptionViewController.h; sourceTree = "<group>"; };
-		FB2BBD1328AF688A001DDFAE /* CaptionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CaptionViewController.m; sourceTree = "<group>"; };
+		FB2BBD1328AF688A001DDFAE /* CaptionViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CaptionViewController.mm; sourceTree = "<group>"; };
 		FB2BBD1628AF8D21001DDFAE /* CaptionBottomView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CaptionBottomView.h; sourceTree = "<group>"; };
 		FB2BBD1728AF8D21001DDFAE /* CaptionBottomView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CaptionBottomView.m; sourceTree = "<group>"; };
 		FB2D5A0528A1EE2A006085BC /* HomeSettingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HomeSettingViewController.h; sourceTree = "<group>"; };
@@ -790,7 +790,7 @@
 				BBBBA3B228F1069000406C43 /* Layout */,
 				FB2BBD1528AF85DA001DDFAE /* View */,
 				FB2BBD1228AF688A001DDFAE /* CaptionViewController.h */,
-				FB2BBD1328AF688A001DDFAE /* CaptionViewController.m */,
+				FB2BBD1328AF688A001DDFAE /* CaptionViewController.mm */,
 			);
 			path = Caption;
 			sourceTree = "<group>";
@@ -1747,7 +1747,7 @@
 				FB2D5A1E28A25D63006085BC /* SaveViewController.m in Sources */,
 				FB3EFE3E28A39485006C3889 /* BuyViewController.m in Sources */,
 				FBF59EFB28AC98BF00D9C6CF /* ColorPlateView.m in Sources */,
-				FB2BBD1428AF688A001DDFAE /* CaptionViewController.m in Sources */,
+				FB2BBD1428AF688A001DDFAE /* CaptionViewController.mm in Sources */,
 				FB00324928B8AB910028BC61 /* MyCustomSlider.m in Sources */,
 				FB26948228E57E5200565F4B /* imageShellSelectView.m in Sources */,
 				BBBBA3E828F1076300406C43 /* GridShowView.m in Sources */,
@@ -2086,7 +2086,6 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = StitchScreenShare/StitchScreenShare.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
@@ -2121,7 +2120,6 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = StitchScreenShare/StitchScreenShare.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;

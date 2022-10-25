@@ -71,60 +71,8 @@
 //mini提取指纹
 - (void)minMutlQueueFingerImage:(UIImage *)image
 {
-//    NSMutableArray *array = [NSMutableArray array];
-//    CFDataRef pixelData = CGDataProviderCopyData(CGImageGetDataProvider(image.CGImage));
-//    const UInt8* data = CFDataGetBytePtr(pixelData);
-//    NSInteger height = image.size.height;
-//    NSInteger width = image.size.width;
-//
-//    for (NSInteger y = 0; y < height; y++)
-//    {
-//        NSMutableDictionary *map = [[NSMutableDictionary alloc] init];
-//        for (NSInteger x = 0; x < width; x++)
-//        {
-//            const UInt8 *pixel = &(data[y * width * 4 + x * 4]);
-//            int32_t gray = 0.3 * pixel[3] + 0.59 * pixel[2] + 0.11 * pixel[1];
-//
-//            if (map[@(gray)] == nil)
-//            {
-//                map[@(gray)] = @(1);
-//            }
-//            else
-//            {
-//                map[@(gray)] = @([map[@(gray)] integerValue] + 1);
-//            }
-//        }
-//        NSMutableArray *numbers = [NSMutableArray array];
-//        for (NSNumber *key in map.allKeys)
-//        {
-//            NSValue *value = [NSValue valueWithRange:NSMakeRange([key integerValue], [map[key] integerValue])];
-//            [numbers addObject:value];
-//        }
-//
-//        [numbers sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
-//            NSInteger first = [obj1 rangeValue].length;
-//            NSInteger second = [obj2 rangeValue].length;
-//            return  first < second ? NSOrderedAscending : NSOrderedDescending;
-//        }];
-//
-//        //取得特殊的点作为当前行的特征值
-//        NSInteger print = 255;
-//        NSInteger count = [numbers count] * 0.5;
-//
-//        for (NSInteger i = 0; i < count; i++)
-//        {
-//            NSInteger value = [numbers[i] rangeValue].location;
-//            if (print > value)
-//            {
-//                print = value;
-//            }
-//        }
-//        [array addObject:@(print)];
-//    }
-//    _lines = array;
-//    CFRelease(pixelData);
     @autoreleasepool {
-        if (!image){
+        if (![image isKindOfClass:[UIImage class]]){
             return;
         }
         CFDataRef pixelData = CGDataProviderCopyData(CGImageGetDataProvider(image.CGImage));

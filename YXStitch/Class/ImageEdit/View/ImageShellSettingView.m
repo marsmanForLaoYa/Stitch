@@ -103,13 +103,13 @@
         }
     }
     
-    UIButton *phoneTypeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [phoneTypeBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
-    phoneTypeBtn.tag = 100;
-    phoneTypeBtn.selected = NO;
-    [phoneTypeBtn setBackgroundImage:IMG(@"机型背景") forState:UIControlStateNormal];
-    [contentView addSubview:phoneTypeBtn];
-    [phoneTypeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+    _phoneTypeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_phoneTypeBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
+    _phoneTypeBtn.tag = 100;
+    _phoneTypeBtn.selected = NO;
+    [_phoneTypeBtn setBackgroundImage:IMG(@"机型背景") forState:UIControlStateNormal];
+    [contentView addSubview:_phoneTypeBtn];
+    [_phoneTypeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.equalTo(@160);
         make.height.equalTo(@33);
         if([Tools isIPhoneNotchScreen]){
@@ -124,22 +124,22 @@
     _phoneTypeLab.textColor = [UIColor whiteColor];
     _phoneTypeLab.text = [Tools getIphoneType];
     _phoneTypeLab.font = Font13;
-    [phoneTypeBtn addSubview:_phoneTypeLab];
+    [_phoneTypeBtn addSubview:_phoneTypeLab];
     [_phoneTypeLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.equalTo(@110);
         make.left.equalTo(@14);
-        make.centerY.equalTo(phoneTypeBtn);
+        make.centerY.equalTo(_phoneTypeBtn);
     }];
     
     _phoneBKIMG = [UIImageView new];
     _phoneBKIMG.layer.masksToBounds = YES;
     _phoneBKIMG.layer.cornerRadius = 8;
     _phoneBKIMG.backgroundColor = HexColor(@"#91918C");
-    [phoneTypeBtn addSubview:_phoneBKIMG];
+    [_phoneTypeBtn addSubview:_phoneBKIMG];
     [_phoneBKIMG mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.height.equalTo(@16);
         make.centerY.equalTo(_phoneTypeLab);
-        make.right.equalTo(phoneTypeBtn.mas_right).offset(-8);
+        make.right.equalTo(_phoneTypeBtn.mas_right).offset(-8);
     }];
     
     

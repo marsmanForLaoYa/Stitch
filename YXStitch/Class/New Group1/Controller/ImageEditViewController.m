@@ -146,12 +146,13 @@
 #pragma mark --initUI
 -(void)setupViews{
     _contentView = [CustomScrollView new];
+    _contentView.frame = self.view.frame;
     _contentView.userInteractionEnabled = YES;
     _contentView.backgroundColor = [UIColor clearColor];
     [self.view addSubview:_contentView];
-    [_contentView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.view);
-    }];
+//    [_contentView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.edges.equalTo(self.view);
+//    }];
     
     _contentScrollView = [CustomScrollView new];
     _contentScrollView.delegate = self;
@@ -226,10 +227,9 @@
         
     }
     if (contentHeight < 500){
-        [self layoutContentView];
-    }else{
-        _contentScrollView.contentSize = CGSizeMake(_contentScrollView.width,contentHeight + 60);
+        [self layoutContentViewWithContent:contentHeight];
     }
+    _contentScrollView.contentSize = CGSizeMake(_contentScrollView.width,contentHeight + 60);
 }
 
 //横拼
@@ -297,47 +297,26 @@
     }];
     
 }
--(void)layoutContentView{
-    NSInteger centenIndex = _imageViewsArr.count / 2;
-    CGFloat alignPointY = 0.0;
-    StitchingButton *lastIMG;
-    if (_imageViewsArr.count < 5){
-        centenIndex += 1;
+-(void)layoutContentViewWithContent:(CGFloat )concentH{
+    CGFloat top = 0.0;
+    if (_isVer){
+        top = (SCREEN_HEIGHT - concentH) / 2;
+        [_contentScrollView mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(@(top));
+            make.width.equalTo(@(VerViewWidth));
+            make.height.equalTo(@(concentH));
+            make.centerX.equalTo(_contentView.mas_centerX);
+        }];
+    }else{
+        top = (SCREEN_WIDTH - concentH) / 2;
+        [_contentScrollView mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(@(top));
+            make.height.equalTo(@(HorViewHeight));
+            make.width.equalTo(@(concentH));
+            make.centerY.equalTo(_contentView.mas_centerY);
+        }];
     }
-    for (NSInteger i = centenIndex - 1; i >= 0; i --) {
-        StitchingButton *img = _imageViewsArr[i];
-        if (i == centenIndex - 1){
-            img.bottom = self.view.centerY;
-            alignPointY = img.bottom;
-        }else{
-            img.bottom = lastIMG.top;
-        }
-        lastIMG = img;
-        _originTopArr[i] = [NSNumber numberWithFloat:img.top];
-        _imageViewsArr[i] = img;
-    }
-    for (NSInteger i = centenIndex; i < _imageViewsArr.count; i ++) {
-        StitchingButton *img = _imageViewsArr[i];
-        if (i == centenIndex){
-            img.top = alignPointY;
-        }else{
-            img.top = lastIMG.bottom;
-        }
-        lastIMG = img;
-        _originTopArr[i] = [NSNumber numberWithFloat:img.top];
-        _imageViewsArr[i] = img;
-    }
-    StitchingButton *firstimg = _imageViewsArr.firstObject;
-    StitchingButton *lastimg = _imageViewsArr.lastObject;
-//    if (lastimg.bottom <= SCREEN_HEIGHT){
-////        [_contentView addSubview:_contentScrollView];
-//        [_contentScrollView mas_remakeConstraints:^(MASConstraintMaker *make) {
-//            make.height.equalTo(@(lastimg.bottom));
-//            make.width.equalTo(@(VerViewWidth));
-//            make.centerX.equalTo(_contentView);
-//            make.top.equalTo(@(firstimg.top));
-//        }];
-//    }
+    
 }
 -(void)addGestureRecognizer{
     //    _panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(selectonPanGesture:)];
@@ -394,7 +373,7 @@
 -(void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo{
     NSString *msg = nil;
     if (!error) {
-        msg = @"下载成功，已为您保存至相册";
+        msg = @"保存成功，已为您保存至相册";
     }else {
         msg = @"系统未授权访问您的照片，请您在设置中进行权限设置后重试";
     }
@@ -442,7 +421,7 @@
     }else if (tag == 3){
         //套壳
         [_contentScrollView removeGestureRecognizer:_panRecognizer];
-        if (User.checkIsVipMember){
+//        if (User.checkIsVipMember){
             _isAddShell = YES;
             if (_isVer){
                 [self changeShellViewWithType:1];
@@ -461,9 +440,9 @@
             _shellSettingView.btnClick = ^(NSInteger tag, BOOL isSelected) {
                 [weakSelf changeImageShellWithType:tag AndSelected:isSelected];
             };
-        }else{
-            [self addTipsViewWithType:4];
-        }
+//        }else{
+//            [self addTipsViewWithType:4];
+//        }
     }else{
         //水印
         _contentScrollView.scrollEnabled = YES;
@@ -572,23 +551,13 @@
     _isStartPaint = NO;
     if (tag == 0){
         //取消
-        _selectView.hidden = YES;
-        _markType = 0;
-        
-        [UIView animateWithDuration:0.3 animations:^{
-            weakSelf.imgEditMarkView.frame = CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, weakSelf.imgEditMarkView.height);
-        } completion:^(BOOL finished) {
-            weakSelf.imgEditMarkView.hidden = YES;
-            //weakSelf.bottomView.hidden = NO;
-        }];
-        [_contentScrollView removeGestureRecognizer:_panRecognizer];
-        _contentScrollView.scrollEnabled = YES;
+        [self markEditViewDiss];
     }else{
         if (_selectMarkType != tag){
             _selectMarkType = tag;
             [self addContentScrollViewPangesture];
             if (_mosaicView != nil && tag != 3){
-                [self removeMosaicView];
+                [self mosaicViewDiss];
             }
             _path = nil;
             _currentPath = nil;
@@ -640,9 +609,8 @@
                 _mosaicView.styleBtnClick = ^(NSInteger tag) {
                     weakSelf.mosaicStyle = tag;
                 };
-                [UIView animateWithDuration:0.3 animations:^{
-                    weakSelf.mosaicView.frame = CGRectMake(0, SCREEN_HEIGHT - 80 - weakSelf.mosaicView.height, SCREEN_WIDTH, weakSelf.mosaicView.height);
-                }];
+                [self mosaicViewShow];
+                
             }else if(tag == 5){
                 //画笔
                 _markType = LINE;
@@ -683,15 +651,7 @@
     MJWeakSelf
     if (tag == 0){
         //取消
-        [UIView animateWithDuration:0.3 animations:^{
-            weakSelf.borderSettingView.frame = CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, weakSelf.borderSettingView.height);
-        } completion:^(BOOL finished) {
-            weakSelf.borderSettingView.hidden = YES;
-            // weakSelf.bottomView.hidden = NO;
-        }];
-        _selectView.hidden = YES;
-        [_contentScrollView removeGestureRecognizer:_panRecognizer];
-        _contentScrollView.scrollEnabled = YES;
+        [self borderSettingViewDiss];
     }else{
         
         if (tag == 1){
@@ -714,7 +674,9 @@
             }
             _pathWidth = 2;
         }
-        _pathLineColor = [UIColor orangeColor];
+        if (!_pathLineColor){
+            _pathLineColor = HexColor(@"#276787");
+        }
         if (_borderType != tag){
             _borderType = tag;
             [self changeImageBorderWithType:_borderType AndBorderWidth:_pathWidth AndColor:_pathLineColor];
@@ -733,19 +695,32 @@
         
     }
 }
+
 -(void)changeImageBorderWithType:(NSInteger)type AndBorderWidth:(CGFloat)width AndColor:(UIColor *)color{
+    //修改边框类型和颜色
     if (width == 1){
         width = 0;
     }
     CGFloat changeScale = 1 - width / 100;
+    [_contentScrollView removeAllSubviews];
+    [_imageViewsArr removeAllObjects];
+    [_originTopArr removeAllObjects];
+    [_originWidthArr removeAllObjects];
+    [_originHeightArr removeAllObjects];
+    if (_isVer || width == 0){
+        [self addVerticalContentView];
+    }else{
+        [self addHorizontalContentView];
+    }
     if(_isVer){
         if (type == 2){
+            //外框
+            _contentScrollView.backgroundColor = color;
             if (_isShellVer){
                 StitchingButton *image = _imageViewsArr[0];
-                image.backgroundColor = color;
                 CGFloat imgWidth  = [_originWidthArr[0]floatValue];
                 CGFloat imgHeight = [_originHeightArr[0]floatValue];
-                CGFloat top = [_originTopArr[1]floatValue];
+                CGFloat top = [_originTopArr[0]floatValue];
                 if (!_isAddShell){
                     image.imgView.bottom = image.bottom;
                 }else{
@@ -754,6 +729,8 @@
                 image.imgView.width = imgWidth * changeScale;
                 image.imgView.height = imgHeight *changeScale;
                 image.imgView.left = (imgWidth - image.imgView.width)/2;
+                image.imgView.top = top + width;
+                _imageViewsArr[0] = image;
                 StitchingButton *firstImage = image;
                 for (NSInteger i = 1; i < _imageViewsArr.count ; i ++) {
                     StitchingButton *imageView = _imageViewsArr[i];
@@ -764,16 +741,12 @@
                     imageView.imgView.width = imgWidth * changeScale;
                     imageView.imgView.height = imgHeight *changeScale;
                     imageView.imgView.top = 0;
-                    if (i != 1){
-                        imageView.top = imgTop * changeScale;
-                    }else{
-                        imageView.top = firstImage.bottom;
-                    }
                     imageView.imgView.left = firstImage.imgView.left;
+                    imageView.top = imgTop * changeScale;
                     firstImage = imageView;
+                    _imageViewsArr[i] = imageView;
                 }
             }else{
-                //_contentScrollView.backgroundColor = color;
                 StitchingButton *image = _imageViewsArr[0];
                 image.backgroundColor = color;
                 CGFloat imgWidth  = [_originWidthArr[0]floatValue];
@@ -787,7 +760,6 @@
                     image.left = width;
                     image.top =  width;
                 }
-                
                 _imageViewsArr[0] = image;
                 StitchingButton *firstImage = image;
                 for (NSInteger i = 1; i < _imageViewsArr.count ; i ++) {
@@ -805,6 +777,7 @@
             }
             
         }else if (type == 3){
+            //内框
             _contentScrollView.backgroundColor = color;
             for (NSInteger i = 1; i < _imageViewsArr.count; i ++) {
                 StitchingButton *img = _imageViewsArr[i];
@@ -816,15 +789,9 @@
                     img.frame = CGRectMake(img.left, top + i * width, img.width, img.height);
                 }
                 //_imageViewsArr[i] = img;
-                
             }
-            if (_isVer){
-//                _contentScrollView.contentSize = CGSizeMake(_contentView.width, _contentScrollView.contentSize.height + width * _imageViewsArr.count);
-            }else{
-                
-            }
-            
         }else if (type == 4){
+            //全边框
             _contentScrollView.backgroundColor = color;
             for (NSInteger i = 0; i < _imageViewsArr.count ; i ++) {
                 StitchingButton *imageView = _imageViewsArr[i];
@@ -843,6 +810,7 @@
                 
             }
         }else{
+            //无边框
             for (NSInteger i = 0; i < _imageViewsArr.count; i ++) {
                 StitchingButton *image = _imageViewsArr[i];
                 image.backgroundColor = color;
@@ -932,9 +900,21 @@
     StitchingButton * lastIMG = _imageViewsArr.lastObject;
     StitchingButton * firstIMG = _imageViewsArr.firstObject;
     _shellBkImageView.frame = CGRectMake(_shellBkImageView.left, firstIMG.top - 20, _shellBkImageView.width, lastIMG.bottom + 20);
+    if (_isVer){
+        if (_imageViewsArr.count == 1){
+            [_contentScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.height.equalTo(@(lastIMG.bottom * changeScale));
+            }];
+        }
+        [_contentScrollView setContentSize:CGSizeMake(_contentScrollView.width, lastIMG.bottom + width)];
+    }else{
+        [_contentScrollView setContentSize:CGSizeMake(lastIMG.right, _contentScrollView.height)];
+    }
+    
 }
 -(void)changeImageShellWithType:(NSInteger)type AndSelected:(BOOL)isSelected{
     MJWeakSelf
+    [self colorViewDismiss];
     if (type == 0){
         //取消
         [self shellSelectViewDiss];
@@ -974,6 +954,7 @@
                 //竖屏进来切换成横屏
                 if (_isVer){
                     _isShellVer = NO;
+                    //横屏
                     [self changeShellViewWithType:2];
                 }else{
                     _isShellVer = YES;
@@ -1002,16 +983,19 @@
             
         }else{
             NSString *restifier;
-            if (!isSelected){
-                //有刘海
-                _isHaveBang = YES;
-                restifier = [_shellBkImageView.restorationIdentifier substringFromIndex:1];
-            }else{
-                //无刘海
-                restifier = [NSString stringWithFormat:@"无%@",_shellBkImageView.restorationIdentifier];
-                _isHaveBang = NO;
+            if (_isAddShell){
+                if (!isSelected){
+                    //有刘海
+                    _isHaveBang = YES;
+                    restifier = [_shellBkImageView.restorationIdentifier substringFromIndex:1];
+                }else{
+                    //无刘海
+                    restifier = [NSString stringWithFormat:@"无%@",_shellBkImageView.restorationIdentifier];
+                    _isHaveBang = NO;
+                }
+                _shellBkImageView.image = [self changeIMGWithImageName:restifier];
             }
-            _shellBkImageView.image = [self changeIMGWithImageName:restifier];
+            
         }
     }
 }
@@ -1026,6 +1010,8 @@
         //无刘海
     }
     if ([str isEqualToString:@"无套壳"]){
+        _isAddShell = NO;
+        [_contentView setBackgroundColor:[UIColor clearColor]];
         [_contentScrollView setBackgroundColor:[UIColor clearColor]];
         _contentScrollView.layer.masksToBounds = YES;
         _contentScrollView.layer.cornerRadius = 0;
@@ -1201,7 +1187,7 @@
                     }
                 }else if (tag == 3){
                     if (_isShellVer){
-                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 Pro max墨绿色"];
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13Pro max墨绿色"];
                     }else{
                         _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 Pro max墨绿色横屏"];
                     }
@@ -1213,9 +1199,9 @@
                     }
                 }else{
                     if (_isShellVer){
-                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 Pro max黑色"];
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 Pro max蓝色"];
                     }else{
-                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 Pro max黑色横屏"];
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 Pro max蓝色横屏"];
                     }
                 }
             }else if ([str isEqualToString:@"iPhone 13 Pro"]){
@@ -1283,7 +1269,7 @@
                     }
                 }else{
                     if (_isShellVer){
-                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 红"];
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 红色"];
                     }else{
                         _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone13 红色横屏"];
                     }
@@ -1335,7 +1321,7 @@
                     }
                 }else if (tag == 2){
                     if (_isShellVer){
-                        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone12 Pro max藏青色"];
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone12 Pro max藏青色"];
                     }else{
                         _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone12 Pro max藏青色横屏"];
                     }
@@ -2077,37 +2063,6 @@
     }
     
 }
-
--(UIImage *)changeIMGWithImageName:(NSString *)name{
-    UIImage *newImage = IMG(name);
-    newImage = [newImage stretchableImageWithLeftCapWidth:floorf(newImage.size.width/2) topCapHeight:floorf(newImage.size.height/2)];
-    _shellBkImageView.restorationIdentifier = name;
-    return newImage;
-}
--(void)shellSelectViewDiss{
-    MJWeakSelf
-    [UIView animateWithDuration:0.3 animations:^{
-        weakSelf.shellSettingView.frame = CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, weakSelf.shellSettingView.height);
-    } completion:^(BOOL finished) {
-        weakSelf.shellSettingView.hidden = YES;
-    }];
-}
--(void)colorViewDismiss{
-    MJWeakSelf
-    [UIView animateWithDuration:0.3 animations:^{
-        weakSelf.colorSelectView.frame = CGRectMake(0, SCREEN_HEIGHT - 80, SCREEN_WIDTH, weakSelf.colorSelectView.height);
-    } completion:^(BOOL finished) {
-        weakSelf.colorSelectView.hidden = YES;
-    }];
-}
--(void)colorViewShow{
-    MJWeakSelf
-    _colorSelectView.hidden = NO;
-    [UIView animateWithDuration:0.3 animations:^{
-        weakSelf.colorSelectView.frame = CGRectMake(0, SCREEN_HEIGHT - 80 - weakSelf.colorSelectView.height, SCREEN_WIDTH, weakSelf.colorSelectView.height);
-    }];
-
-}
 - (void)undo{
     _selectView.hidden = YES;
     if (!self.layers.count) return;
@@ -2136,13 +2091,77 @@
     }
 }
 
--(void)removeMosaicView{
+-(UIImage *)changeIMGWithImageName:(NSString *)name{
+    UIImage *newImage = IMG(name);
+    newImage = [newImage stretchableImageWithLeftCapWidth:floorf(newImage.size.width/2) topCapHeight:floorf(newImage.size.height/2)];
+    _shellBkImageView.restorationIdentifier = name;
+    return newImage;
+}
+-(void)shellSelectViewDiss{
     MJWeakSelf
+    [UIView animateWithDuration:0.1 animations:^{
+        weakSelf.shellSettingView.frame = CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, weakSelf.shellSettingView.height);
+    } completion:^(BOOL finished) {
+        weakSelf.shellSettingView.hidden = YES;
+    }];
+}
+-(void)colorViewDismiss{
+    MJWeakSelf
+    [UIView animateWithDuration:0.1 animations:^{
+        weakSelf.colorSelectView.frame = CGRectMake(0, SCREEN_HEIGHT - 80, SCREEN_WIDTH, weakSelf.colorSelectView.height);
+    } completion:^(BOOL finished) {
+        weakSelf.colorSelectView.hidden = YES;
+    }];
+}
+-(void)colorViewShow{
+    MJWeakSelf
+    _colorSelectView.hidden = NO;
     [UIView animateWithDuration:0.3 animations:^{
+        weakSelf.colorSelectView.frame = CGRectMake(0, SCREEN_HEIGHT - 80 - weakSelf.colorSelectView.height, SCREEN_WIDTH, weakSelf.colorSelectView.height);
+    }];
+
+}
+
+-(void)markEditViewDiss{
+    MJWeakSelf
+    _selectView.hidden = YES;
+    _markType = 0;
+    [UIView animateWithDuration:0.1 animations:^{
+        weakSelf.imgEditMarkView.frame = CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, weakSelf.imgEditMarkView.height);
+    } completion:^(BOOL finished) {
+        weakSelf.imgEditMarkView.hidden = YES;
+        //weakSelf.bottomView.hidden = NO;
+    }];
+    [_contentScrollView removeGestureRecognizer:_panRecognizer];
+    _contentScrollView.scrollEnabled = YES;
+}
+-(void)borderSettingViewDiss{
+    MJWeakSelf
+    [UIView animateWithDuration:0.1 animations:^{
+        weakSelf.borderSettingView.frame = CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, weakSelf.borderSettingView.height);
+    } completion:^(BOOL finished) {
+        weakSelf.borderSettingView.hidden = YES;
+    }];
+    _selectView.hidden = YES;
+    [_contentScrollView removeGestureRecognizer:_panRecognizer];
+    _contentScrollView.scrollEnabled = YES;
+}
+
+
+-(void)mosaicViewDiss{
+    //移除马赛克view
+    MJWeakSelf
+    [UIView animateWithDuration:0.1 animations:^{
         weakSelf.mosaicView.frame = CGRectMake(0, SCREEN_HEIGHT - 80, SCREEN_WIDTH, weakSelf.mosaicView.height);
     } completion:^(BOOL finished) {
-        [weakSelf.mosaicView removeFromSuperview];
-        weakSelf.mosaicView = nil;
+        weakSelf.mosaicView.hidden = YES;
+    }];
+}
+-(void)mosaicViewShow{
+    MJWeakSelf
+    _mosaicView.hidden = NO;
+    [UIView animateWithDuration:0.3 animations:^{
+        weakSelf.mosaicView.frame = CGRectMake(0, SCREEN_HEIGHT - 80 - weakSelf.mosaicView.height, SCREEN_WIDTH, weakSelf.mosaicView.height);
     }];
 }
 
@@ -2218,9 +2237,14 @@
         }];
         CGFloat contentHeight = 0.0;
         UIImage *icon = _imgArr[0];
-        if (top == 0){
-            top = 6;
+        if (_imgArr.count == 1){
+            top = 0;
+        }else{
+            if (top == 0 ){
+                top = 6;
+            }
         }
+        
         StitchingButton *firstImageView = [[StitchingButton alloc]initWithFrame:CGRectMake(3,top, width-6 , (CGFloat)(icon.size.height/icon.size.width) * width)];
         firstImageView.image = icon;
         if (_imgArr.count == 1){
@@ -2317,7 +2341,6 @@
             make.centerY.equalTo(self.view);
             make.height.equalTo(@(HorViewHeight));
         }];
-        
         CGFloat contentWidth = 0.0;
         CGFloat height = HorViewHeight - 40;
         UIImage *icon = _imgArr[0];
@@ -2367,13 +2390,23 @@
             for (NSInteger i = 0; i < _imageViewsArr.count; i ++) {
                 StitchingButton *img = _imageViewsArr[i];
                 if (i == 0){
-                    img.frame = CGRectMake(img.left, img.top,img.width * 2, img.height);
-                    img.imgView.width = img.width;
-                    UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:img.bounds byRoundingCorners:UIRectCornerTopLeft | UIRectCornerBottomLeft cornerRadii:CGSizeMake(55, 55)];
-                    CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
-                    maskLayer.frame = img.bounds;
-                    maskLayer.path = maskPath.CGPath;
-                    img.layer.mask = maskLayer;
+                    if (_imageViewsArr.count == 1){
+                        [img.layer.mask removeFromSuperlayer];
+                        img.frame = CGRectMake(20, 80,SCREEN_WIDTH - 40, 160);
+                        img.image = _imgArr[0];
+                        img.imgView.width = img.width;
+                        img.backgroundColor = [UIColor blueColor];
+                        img.layer.masksToBounds = YES;
+                        img.layer.cornerRadius = 40;
+                    }else{
+                        img.frame = CGRectMake(img.left, img.top,img.width * 2, img.height);
+                        img.imgView.width = img.width;
+                        UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:img.bounds byRoundingCorners:UIRectCornerTopLeft | UIRectCornerBottomLeft cornerRadii:CGSizeMake(55, 55)];
+                        CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+                        maskLayer.frame = img.bounds;
+                        maskLayer.path = maskPath.CGPath;
+                        img.layer.mask = maskLayer;
+                    }
                 }else{
                     img.frame = CGRectMake(firtsIMG.right, img.top, img.width * 2, img.height);
                     img.imgView.width = img.width;
@@ -2390,8 +2423,14 @@
                 _originWidthArr[i] = [NSNumber numberWithFloat:img.width];
                 firtsIMG = img;
             }
-            [_contentScrollView setContentSize:CGSizeMake(newWidth, _contentScrollView.height)];
-            [_shellBkImageView setFrame:CGRectMake(20, 20, newWidth,height)];
+            
+            if (_imageViewsArr.count == 1){
+                [_contentScrollView setContentSize:CGSizeMake(SCREEN_WIDTH - 40, 0)];
+                [_shellBkImageView setFrame:CGRectMake(20, 80, SCREEN_WIDTH - 40,160)];
+            }else{
+                [_contentScrollView setContentSize:CGSizeMake(newWidth, 0)];
+                [_shellBkImageView setFrame:CGRectMake(20, 20, newWidth,height)];
+            }
         }
         _contentScrollView.layer.masksToBounds = YES;
         _contentScrollView.layer.cornerRadius = 0;
@@ -2443,9 +2482,9 @@
         _selectView = [surroundSelectPathView new];
         _originRect = _selectView.frame;
         [_contentScrollView addSubview:_selectView];
-//        UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(selectPathPanGesture:)];
-//        panGestureRecognizer.maximumNumberOfTouches = 1;
-//        [_selectView addGestureRecognizer:panGestureRecognizer];
+        UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(selectPathPanGesture:)];
+        panGestureRecognizer.maximumNumberOfTouches = 1;
+        [_selectView addGestureRecognizer:panGestureRecognizer];
     }
     _selectView.frame =  CGRectMake(_currentPath.boundRect.origin.x - 5, _currentPath.boundRect.origin.y - 5, _currentPath.boundRect.size.width + 10, _currentPath.boundRect.size.height + 10);
     _originRect = _selectView.frame;
@@ -2615,11 +2654,14 @@
         [self changeImageBorderWithType:_borderType AndBorderWidth:_pathWidth AndColor:_pathLineColor];
     }else if (_editType == 3){
         //套壳
-        if (_isShellVer){
-            _contentView.backgroundColor = HexColor(color);
-        }else{
-            _contentScrollView.backgroundColor = HexColor(color);
+        if (_isAddShell){
+            if (_isShellVer){
+                _contentView.backgroundColor = HexColor(color);
+            }else{
+                _contentScrollView.backgroundColor = HexColor(color);
+            }
         }
+        
         
     }else{
         //水印文字颜色
@@ -2704,7 +2746,7 @@
                 }else{
                     [self colorViewDismiss];
                     if (_markType == MOSAIC || _markType == MOSAICOVAL || _markType == MOSAICRECTANGLE){
-                        [self removeMosaicView];
+                        [self mosaicViewDiss];
                     }
                     if (_markType == LINE || _markType == MOSAIC){
                         UIBezierPath *path = [UIBezierPath pathWitchColor:_pathLineColor lineWidth:_pathWidth];
@@ -2722,13 +2764,11 @@
                         CAShapeLayer * slayer = [CAShapeLayer layer];
                         _path.lineWidth = _pathWidth;
                         _path.boundRect = CGPathGetPathBoundingBox(_path.CGPath);
-                        
                         slayer.path = _path.CGPath;
                         slayer.backgroundColor = [UIColor clearColor].CGColor;
                         if (_markType == LINE || _markType == RECTANGLE || _markType == MOSAICOVAL || _markType == MOSAIC || _markType == MOSAICRECTANGLE || _markType == FILLRECTANGLE ) {
                             if (_markType == MOSAICOVAL || _markType == MOSAIC  || _markType == MOSAICRECTANGLE){
-                                //slayer.fillColor = [UIColor clearColor].CGColor;
-                              // slayer.opacity = 0.8;
+                               slayer.opacity = 0.98;
                                 if (_mosaicStyle == 200){
                                     if (_markType != MOSAIC){
                                         slayer.fillColor = [UIColor colorWithPatternImage:IMG(@"马赛克填充_03")].CGColor;
@@ -2813,7 +2853,12 @@
             }
         }else{
             if (!_isSelectPath && (_markType > 0 && _markType != UNDO && _markType != DELETELAYER && _markType != WORD) && _path != nil){
-                [self colorViewShow];
+                
+                if (_markType == MOSAIC || _markType == MOSAICOVAL || _markType == MOSAICRECTANGLE){
+                    [self mosaicViewShow];
+                }else{
+                    [self colorViewShow];
+                }
 //                if ((_markType == LINE || _markType == MOSAIC)){
 //
 //                }else if (_markType == RECTANGLE){
@@ -2894,7 +2939,18 @@
         }
         
     }else{
-        //[self colorViewDismiss];
+        if (_editType == 3){
+            _shellSettingView.phoneTypeBtn.selected = NO;
+            [UIView animateWithDuration:0.3 animations:^{
+                weakSelf.shellSelectView.frame = CGRectMake(0, SCREEN_HEIGHT - 80, SCREEN_WIDTH, weakSelf.shellSelectView.height);
+            } completion:^(BOOL finished) {
+                weakSelf.shellSelectView.hidden = YES;
+            }];
+        }
+        [self colorViewDismiss];
+        if (_mosaicView != nil){
+            [self mosaicViewDiss];
+        }
     }
 }
 

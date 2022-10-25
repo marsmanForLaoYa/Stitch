@@ -81,6 +81,9 @@
 }
 #pragma mark --viewDelegate
 -(void)buyClickWithTag:(NSInteger)tag{
+    [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeClear];
+    [SVProgressHUD show];
+    [SVProgressHUD dismissWithDelay:30];
     NSString *typeStrID;
     if (tag == 1){
         //每个月
@@ -96,6 +99,7 @@
         typeStrID = @"com.xwan.jigsaw.perpetual108";
     }
     [[IAPSubscribeTool sharedInstance] buy:typeStrID finishedBlock:^(NSString * _Nullable errorMsg, NSURL * _Nullable appStoreReceiptURL, BOOL isTest, BOOL isAutoRenewal) {
+        [SVProgressHUD dismiss];
                     if (errorMsg) {
                         [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeNone];
                         [SVProgressHUD showInfoWithStatus:errorMsg];

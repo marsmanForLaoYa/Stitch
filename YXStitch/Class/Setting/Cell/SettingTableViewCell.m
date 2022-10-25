@@ -100,7 +100,7 @@
         }];
         
         UILabel *nameLab = [UILabel new];
-        nameLab.text = @"游客xxx";
+        nameLab.text = @"游客";
         nameLab.textColor = [UIColor blackColor];
         nameLab.font = Font14;
         [self addSubview:nameLab];
@@ -111,12 +111,17 @@
             make.height.equalTo(@16);
         }];
         
-        UILabel *idLab = [UILabel new];
-        idLab.textColor = [UIColor blackColor];
-        idLab.font = Font12;
-        idLab.text = @"设备id：xxxxx";
-        [self addSubview:idLab];
-        [idLab mas_makeConstraints:^(MASConstraintMaker *make) {
+        _idLab = [UILabel new];
+        _idLab.textColor = [UIColor blackColor];
+        _idLab.font = Font12;
+        if (User.checkLogin){
+            _idLab.text =  [NSString stringWithFormat:@"设备id:%@",[User current].userId];
+        }else{
+            _idLab.text = @"未登陆";
+        }
+        
+        [self addSubview:_idLab];
+        [_idLab mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.width.equalTo(nameLab);
             make.top.equalTo(nameLab.mas_bottom).offset(8);
         }];
