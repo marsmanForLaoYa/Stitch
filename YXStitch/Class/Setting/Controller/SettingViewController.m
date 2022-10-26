@@ -196,7 +196,6 @@
     }else{
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
     }
-    
 }
 
 
