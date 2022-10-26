@@ -147,7 +147,13 @@
             [self.navigationController pushViewController:[URLSchemesViewController new] animated:YES];
             break;
         case 4:
+        {
             //去appstore评价
+            NSString *nsStringToOpen = [NSString stringWithFormat: @"itms-apps://itunes.apple.com/app/id%@?action=write-review",@"6443912576"];//替换为对应的APPID
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:nsStringToOpen] options:@{} completionHandler:^(BOOL success) {
+                
+            }];
+        }
             break;
         case 5:
         {
