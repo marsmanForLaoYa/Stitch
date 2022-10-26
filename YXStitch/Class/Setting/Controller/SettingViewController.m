@@ -189,8 +189,8 @@
 }
 -(void)gotoAppStore{
     //appid
-    NSInteger apple_id = 6443912576;
-    NSString *str = [NSString stringWithFormat:@"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%ld",(long)apple_id];
+    NSInteger apple_id = 1628981596;
+    NSString *str = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/app/id%ld?action=write-review",(long)apple_id];
     if (@available(iOS 10.0, *)) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str] options:@{} completionHandler:nil];
     }else{
