@@ -57,7 +57,7 @@
         make.height.equalTo(@80);
     }];
     
-    
+
     NSArray *arr = @[@"付费高级",@"付费更多",@"付费无限"];
     NSArray *textArr = @[@"拼图高级版",@"享受未来更多\n高级用户专属功能",@"全部功能无限使用"];
     for (NSInteger i = 0; i < arr.count ; i ++) {
