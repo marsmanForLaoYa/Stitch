@@ -148,11 +148,7 @@
             break;
         case 4:
         {
-            //去appstore评价
-            NSString *nsStringToOpen = [NSString stringWithFormat: @"itms-apps://itunes.apple.com/app/id%@?action=write-review",@"6443912576"];//替换为对应的APPID
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:nsStringToOpen] options:@{} completionHandler:^(BOOL success) {
-                
-            }];
+            [self gotoAppStore];
         }
             break;
         case 5:
@@ -193,7 +189,7 @@
 }
 -(void)gotoAppStore{
     //appid
-    NSInteger apple_id = 121212;
+    NSInteger apple_id = 6443912576;
     NSString *str = [NSString stringWithFormat:@"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%ld",(long)apple_id];
     if (@available(iOS 10.0, *)) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str] options:@{} completionHandler:nil];
