@@ -10,7 +10,7 @@
 #define CustomDefine_h
 #import <Foundation/Foundation.h>
 
-#define APP_KEY  @"62f5a71b88ccdf4b7eff832f"
+#define APP_KEY  @"63589c517c689753b5624440"
 
 #define APP_TOKEN  @"5bb48865c0984c0cd6a684ce18aca6425b77dea312f8c3fd8427ef25cda284a1e50fec2757672344fc891509c30a7d698ffe98bb52fbf8c4c1d262b5d04b413d"
 

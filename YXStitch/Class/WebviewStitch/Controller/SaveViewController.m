@@ -214,7 +214,12 @@
     
 }
 
+
+
+
 - (void)shareImageToPlatformType:(UMSocialPlatformType)platformType{
+    
+    
     //创建分享消息对象
     UMSocialMessageObject *messageObject = [UMSocialMessageObject messageObject];
     //创建图片内容对象

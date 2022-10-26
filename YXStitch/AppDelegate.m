@@ -62,9 +62,6 @@
     /* 设置微信的appKey和appSecret */
     [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_WechatSession appKey:@"wx60d36f0847db422c" appSecret:@"5758b4e5dedabcd34d5bfe7a1a65f31d" redirectURL:nil];
 
-//    /* 设置QQ */
-//    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_QQ appKey:@"101830139"/*设置QQ平台的appID*/  appSecret:nil redirectURL:nil];
-
     /* 设置sina */
 //    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_Sina appKey:@"3921700954"  appSecret:@"04b48b094faeb16683c32669824ebdad" redirectURL:@"https://sns.whalecloud.com/sina2/callback"];
 }
