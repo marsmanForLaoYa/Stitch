@@ -234,7 +234,6 @@
         _selectBtn = btn;
         [self.delegate changeFillBKImageWith:btn.tag];
     }
-   
 }
 
 #pragma mark - Getters

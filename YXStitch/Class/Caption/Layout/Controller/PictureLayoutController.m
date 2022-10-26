@@ -133,6 +133,10 @@
 - (void)btnClick:(UIButton *)btn {
     @weakify(self);
     [SVProgressHUD showWithStatus:@"正在生成图片中.."];
+    //清除选中view的边框
+    if (!self.gridEditView.hidden) {
+        [self hiddenGridEditViewAnimated:NO];
+    }
     [TYSnapshotScroll screenSnapshot:self.gridsShowView finishBlock:^(UIImage *snapshotImage) {
         @strongify(self);
         [SVProgressHUD showSuccessWithStatus:@"图片已保存至拼图相册中"];
