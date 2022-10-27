@@ -41,6 +41,7 @@
 #pragma mark - 翻转
 @property (nonatomic ,assign)BOOL isTurn;
 
+
 @end
 
 @implementation PictureLayoutController
