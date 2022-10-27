@@ -1265,8 +1265,6 @@
     _imageView.image = image;
     //改变imageview的frame
     [self changeImageViewFrame];
-    //scrollview滚动到中间
-    [self scrollToCenter];
 }
 
 - (void)setGridEditing:(BOOL)gridEditing {
@@ -1313,6 +1311,9 @@
     self.scrollView.contentSize = CGSizeMake(imageWidth, imageHeight);
     //设置imageview的大小
     self.imageView.frame = CGRectMake(0, 0, imageWidth, imageHeight);
+    
+    //scrollview滚动到中间
+    [self scrollToCenter];
 }
 
 //scrollview滚动到中间
