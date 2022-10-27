@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, assign) id<UrlSchemeTableViewDelegate> delegate;
 @property (nonatomic, strong)NSMutableArray *arr;
+@property (nonatomic, strong)NSMutableArray *strArr;
 
 @end
 

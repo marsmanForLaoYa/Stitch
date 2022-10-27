@@ -71,7 +71,7 @@
             btn.selected = YES;
         }else{
             btn.selected = NO;
-        }  
+        }
         UIImageView *icon = [UIImageView new];
         icon.image = IMG(iconArr[i]);
         icon.tag = btn.tag * 100;
@@ -81,7 +81,7 @@
             make.centerX.equalTo(btn);
             make.top.equalTo(@22);
         }];
-
+        
         UILabel *textLab = [UILabel new];
         textLab.textAlignment = NSTextAlignmentCenter;
         textLab.text = textArr[i];
@@ -95,10 +95,15 @@
         if ((_type == 2 && i == 0) || (_type == 3 && i == 0) || (_type == 4 && i == 0) ){
             _typeLab = textLab;
         }
-        if (i == 1){
-            _preLab = textLab;
-        }
-        
+        if (_type == 5){
+            if (i == 0){
+                _preLab = textLab;
+            }
+        }else{
+            if (i == 1){
+                _preLab = textLab;
+            }
+        }        
     }
 }
 -(void)setupLayout{
@@ -152,7 +157,6 @@
     }else{
         selectIMG = (UIImageView *)[self viewWithTag:btn.tag * 100];
         beforeIMG = (UIImageView *)[self viewWithTag:_selectIndex * 100];
-        
         if (_selectIndex == 1){
             if(_type == 1){
                 beforeIMG.image = IMG(@"字幕调整未选中");

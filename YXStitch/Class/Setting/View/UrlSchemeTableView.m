@@ -15,6 +15,7 @@
 
         self.backgroundColor = HexColor(BKGrayColor);
         _arr = [NSMutableArray arrayWithObjects:@"启动应用",@"打开相册页",@"最近长截图",@"网页截图",nil] ;
+        _strArr = [NSMutableArray arrayWithObjects:@"launch",@"photos",@"screenshots",@"web",nil] ;
         [self setupViews];
         [self setupLayout];
         
@@ -69,7 +70,7 @@
     UILabel *urlLab = [UILabel new];
     urlLab.font = Font13;
     urlLab.textColor = HexColor(@"#999999");
-    urlLab.text = @"stitch://xxxxx";
+    urlLab.text = [NSString stringWithFormat:@"stitch://%@",_strArr[index]];
     [cell addSubview:urlLab];
     [urlLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(cell.setingLabel.mas_right).offset(6);
@@ -84,7 +85,7 @@
     NSInteger index = indexPath.row + indexPath.section * 4;
     [self.delegate urlSchemeClickWithTag:index];
     UIPasteboard *pab = [UIPasteboard generalPasteboard];
-    pab.string = @"xxxxx";
+    pab.string = [NSString stringWithFormat:@"stitch://%@",_strArr[index]];
     [self.superview makeToast:@"已复制到剪贴板" duration:1 position:CSToastPositionCenter];
 }
 

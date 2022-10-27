@@ -280,9 +280,9 @@
     UIBarButtonItem *saveItem = [[UIBarButtonItem alloc]initWithCustomView:saveBtn];
     self.navigationItem.rightBarButtonItem = saveItem;
     
-    UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+    UIButton *leftBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 25, 30)];
     leftBtn.tag = 1;
-    [leftBtn setBackgroundImage:IMG(@"stitch_white_back") forState:UIControlStateNormal];
+    [leftBtn setImage:IMG(@"stitch_white_back") forState:UIControlStateNormal];
     [leftBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [leftBtn addTarget:self action:@selector(topBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithCustomView:leftBtn];
@@ -337,7 +337,7 @@
     _isStartPaint = NO;
     _isShellVer = _isVer;
     _ishaveBkColor = YES;
-    _isHaveBang = NO;
+    _isHaveBang = YES;
     _isAddShell = NO;
 }
 -(void)addContentScrollViewPangesture{
@@ -565,9 +565,11 @@
             if (_mosaicView != nil && tag != 3){
                 [self mosaicViewDiss];
             }
-            _path = nil;
-            _currentPath = nil;
-            _slayer = nil;
+            if (tag != 100 && tag != 200){
+                _path = nil;
+                _currentPath = nil;
+                _slayer = nil;
+            }
             if (tag == 1 || tag == 4 || tag == 2){
                 _pathWidth = 5;
                 _pathLineColor = [UIColor orangeColor];
@@ -589,15 +591,15 @@
                 }
             }else if(tag == 3){
                 //马赛克
-                _markType = MOSAIC;
+                _markType = MOSAICRECTANGLE;
                 [_colorSelectView removeFromSuperview];
                 if (_mosaicView == nil){
-                   
                     _mosaicView = [[MosaicStyleSelectView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, 80)];
                     _mosaicShape = 100;
-                    _mosaicStyle = 200;
+                    _mosaicStyle = 202;
                     [self.view addSubview:_mosaicView];
                 }
+                _mosaicView.hidden = NO;
                 _pathWidth = 15;
                 _pathLineColor = [UIColor orangeColor];
                 //选择样式
@@ -632,7 +634,11 @@
                 _pathLineColor = [UIColor orangeColor];
                 [_colorSelectView removeFromSuperview];
                 [self addColoeSelectedViewWithType:1];
-            }else if(tag == 100){
+            }else {
+                
+            }
+        }else{
+            if(tag == 100){
                 //删除
                 //_markType = DELETELAYER;
                 [self undo];
@@ -640,10 +646,18 @@
                 //撤销
                 // _markType = UNDO;
                 [self undo];
+            }else if(tag == 3){
+                if (isSelected){
+                    [self mosaicViewShow];
+                }else{
+                    [self mosaicViewDiss];
+                }
+               
             }else{
                 
+                
             }
-        }else{
+            
             if(!isSelected){
                 [self colorViewDismiss];
             }else{
@@ -673,12 +687,14 @@
                 weakSelf.borderType = 0;
             }];
         }else{
-            if (_colorSelectView == nil){
+            if (isSelected){
+                _pathWidth = 2;
+                [_colorSelectView removeAllSubviews];
                 [self addColoeSelectedViewWithType:4];
             }else{
-                [self colorViewShow];
+                [self colorViewDismiss];
             }
-            _pathWidth = 2;
+            
         }
         if (!_pathLineColor){
             _pathLineColor = HexColor(@"#276787");
@@ -922,15 +938,17 @@
 }
 -(void)changeImageShellWithType:(NSInteger)type AndSelected:(BOOL)isSelected{
     MJWeakSelf
-    [self colorViewDismiss];
+    
     if (type == 0){
         //取消
+        [self colorViewDismiss];
         [self shellSelectViewDiss];
         _selectView.hidden = YES;
         [_contentScrollView removeGestureRecognizer:_panRecognizer];
         _contentScrollView.scrollEnabled = YES;
     }else if (type == 100){
         //机型选择
+        [self colorViewDismiss];
         if (!isSelected){
             if (_shellSelectView == nil){
                 _shellSelectView = [[imageShellSelectView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT - 80, SCREEN_WIDTH,325)];
@@ -958,6 +976,7 @@
         //[self shellSelectViewDiss];
         if (type == 1){
             //横竖切换
+            [self colorViewDismiss];
             if (!isSelected){
                 //竖屏进来切换成横屏
                 if (_isVer){
@@ -982,24 +1001,24 @@
             }
         }else if (type == 2){
             //背景调整
-            [self addColoeSelectedViewWithType:4];
+            [_colorSelectView removeFromSuperview];
             if (!isSelected){
-               // [_colorSelectView removeFromSuperview];
-                
+                [self addColoeSelectedViewWithType:4];
             }else{
-                //[self colorViewDismiss];
+                [self colorViewDismiss];
             }
         }else{
+            [self colorViewDismiss];
             NSString *restifier;
             if (_isAddShell){
                 if (!isSelected){
-                    //有刘海
-                    _isHaveBang = YES;
-                    restifier = [_shellBkImageView.restorationIdentifier substringFromIndex:1];
-                }else{
                     //无刘海
                     restifier = [NSString stringWithFormat:@"无%@",_shellBkImageView.restorationIdentifier];
                     _isHaveBang = NO;
+                }else{
+                    //有刘海
+                    _isHaveBang = YES;
+                    restifier = [_shellBkImageView.restorationIdentifier substringFromIndex:1];
                 }
                 _shellBkImageView.image = [self changeIMGWithImageName:restifier];
             }
@@ -2080,10 +2099,21 @@
 - (void)undo{
     _selectView.hidden = YES;
     if (!self.layers.count) return;
-    [self.dataArr removeLastObject];
-    [[self mutableArrayValueForKey:REMOVED_LAYERS] addObject:self.layers.lastObject];
-    [self.layers.lastObject removeFromSuperlayer];
-    [[self mutableArrayValueForKey:LAYERS] removeLastObject];
+    if (_currentPath != nil){
+        NSInteger index = [_dataArr indexOfObject:_currentPath];
+        [_dataArr removeObjectAtIndex:index];
+        [self.layers[index] removeFromSuperlayer];
+        [[self mutableArrayValueForKey:LAYERS] removeObjectAtIndex:index];
+        _currentPath = nil;
+    }else{
+        [self.dataArr removeLastObject];
+        [[self mutableArrayValueForKey:REMOVED_LAYERS] addObject:self.layers.lastObject];
+        [self.layers.lastObject removeFromSuperlayer];
+        [[self mutableArrayValueForKey:LAYERS] removeLastObject];
+    }
+    
+    
+
     if (_markType == LINE){
         _selectView.hidden = YES;
     }
@@ -2392,7 +2422,7 @@
         }else{
             _contentScrollView.contentSize = CGSizeMake(SCREEN_WIDTH, contentHeight + top + 80);
         }
-        _shellBkImageView.image = [self changeIMGWithImageName:@"无刘海iphone14 Pro max金色"];
+        _shellBkImageView.image = [self changeIMGWithImageName:@"刘海iphone14 Pro max金色"];
         [_contentView addSubview:_shellBkImageView];
         [_contentView setBackgroundColor:HexColor(@"#C0DCE8")];
     }else{
@@ -2458,7 +2488,7 @@
                 if (i == 0){
                     if (_imageViewsArr.count == 1){
                         [img.layer.mask removeFromSuperlayer];
-                        img.frame = CGRectMake(20, 80,SCREEN_WIDTH - 40, 160);
+                        img.frame = CGRectMake(20, 84,SCREEN_WIDTH - 40, 152);
                         img.image = _imgArr[0];
                         img.imgView.width = img.width;
                         img.backgroundColor = [UIColor blueColor];
@@ -2629,7 +2659,6 @@
                 if (_slayer != nil){
                     _path.lineWidth = size * 2;
                     _slayer.lineWidth = size * 2;
-                    //        [self rectDrawBy:size / 2 AndColor:_currentPath.color];
                     [self rectDrawBy:index];
                 }
                 
@@ -2719,15 +2748,9 @@
     }else if (_editType == 3){
         //套壳
         if (_isAddShell){
-            if (_isShellVer){
-                _contentScrollView.backgroundColor = HexColor(color);
-            }else{
-                _contentView.backgroundColor = HexColor(color);
-            }
+            _contentView.backgroundColor = HexColor(color);
         }
-        
-        
-    }else{
+    }else if (_editType == 4){
         //水印文字颜色
         if (GVUserDe.waterPosition == 5){
             //全屏
@@ -2929,7 +2952,6 @@
 //                    //画矩形
 //
 //                }else if (_markType == ARROW){
-//                    _currentPath = _path;
 //
 //                }else if (_markType == FILLRECTANGLE){
 //
@@ -2971,9 +2993,9 @@
     MJWeakSelf
     CGPoint startP = [self pointWithTouches:touches];
     _stratPoint = startP;
-    if (CGRectContainsPoint(_contentView.frame, startP)){
+    if (CGRectContainsPoint(_contentScrollView.frame, startP)){
         if (_editType == 1){
-            if ([self judgleIsAtPathRectWithStartP:startP] && _markType == LINE){
+            if ([self judgleIsAtPathRectWithStartP:startP]){
                 _isSelectPath = YES;
                 [self addSelectBorderView];
             }
@@ -3086,7 +3108,6 @@
 }
 #pragma mark  --重赋值path路径
 -(void)rectDrawBy:(NSInteger )index{
-    //NSInteger index = [_dataArr indexOfObject:_currentPath];
     if (index <= _dataArr.count - 1){
 //        [self.layers[index] removeFromSuperlayer];
 //        [[self mutableArrayValueForKey:@"layers"] removeObjectAtIndex:index];

@@ -37,33 +37,29 @@
     UIScrollView *imgScrollView = [UIScrollView new];
     imgScrollView.showsVerticalScrollIndicator = NO;
     imgScrollView.showsHorizontalScrollIndicator = NO;
-    if(_isVer){
-        imageFakewidth = (CGFloat) SCREEN_WIDTH / 2;
-        imageFakeHeight = (CGFloat)_screenshotIMG.size.height *imageFakewidth / _screenshotIMG.size.width;
-        scrollWidth  = (CGFloat)225 / 375 * SCREEN_WIDTH;
-        scrollHeight = (CGFloat)360 / 667 * SCREEN_HEIGHT;
-        imgScrollView.contentSize = CGSizeMake(0, imageFakeHeight);
-    }else{
-        imageFakeHeight= 300;
-        imageFakewidth= _screenshotIMG.size.width;
-        scrollHeight = 300;
-        scrollWidth = (CGFloat)(_screenshotIMG.size.width/_screenshotIMG.size.height) * 300;;
-        imgScrollView.contentSize = CGSizeMake(imageFakewidth, 0);
-    }
+    NSLog(@"size==%@",@(_screenshotIMG.size));
     [_detailView addSubview:imgScrollView];
-    [imgScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(@20);
-        make.centerX.equalTo(self.view);
-        make.width.equalTo(@(scrollWidth));
-        make.height.equalTo(@(scrollHeight));
-    }];
-    imgScrollView.center = self.view.center;
+    if(_isVer){
+        [imgScrollView mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(@(20));
+            make.centerX.equalTo(self.view);
+            make.height.equalTo(@((CGFloat)360 / 667 * SCREEN_HEIGHT));
+            make.width.equalTo(@(260));
+        }];
+        [imgScrollView setContentSize:CGSizeMake(0, _screenshotIMG.size.height)];
+    }else{
+        [imgScrollView mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.width.equalTo(@(SCREEN_WIDTH));
+            make.top.equalTo(@(20));
+            make.height.equalTo(@(300));
+        }];
+        [imgScrollView setContentSize:CGSizeMake(_screenshotIMG.size.width, 0)];
+    }
     UIImageView *storeImage = [UIImageView new];
     storeImage.image = _screenshotIMG;
     [imgScrollView addSubview:storeImage];
     [storeImage mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.top.width.equalTo(imgScrollView);
-        make.height.equalTo(@(imageFakeHeight));
+        make.edges.equalTo(imgScrollView);
     }]; 
     UIButton *saveBtn = [UIButton buttonWithType:UIButtonTypeSystem];
     [saveBtn setBackgroundColor:[UIColor blackColor]];
@@ -213,7 +209,6 @@
     
     
 }
-
 
 
 

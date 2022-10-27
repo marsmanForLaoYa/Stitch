@@ -257,7 +257,6 @@
 -(void)requestData{
     MJWeakSelf
     [[XWNetTool sharedInstance] queryApplicationListWithCallback:^(NSArray<HomeModel *> * _Nullable dataSources, BOOL isProcessing, NSString * _Nullable errorMsg) {
-        //NSLog(@"dataSource==%@",dataSources.firstObject);
         if (!errorMsg && isProcessing) {
             for (HomeModel *model in dataSources) {
                 [weakSelf.iconArr addObject:model.image];

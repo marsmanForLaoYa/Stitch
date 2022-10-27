@@ -39,13 +39,13 @@
         if (type == 2){
             btn.layer.cornerRadius = 13;
             btn.layer.masksToBounds = YES;
-            btn.layer.borderWidth = 2;
-            btn.layer.borderColor = [UIColor whiteColor].CGColor;
             if (i == 2){
                 _styleBtn = btn;
+                btn.layer.borderWidth = 2;
+                btn.layer.borderColor = [UIColor redColor].CGColor;
             }
         }
-        if (i == 0 && type == 0){
+        if (i == 0 && type == 1){
             _selectBtn = btn;
         }
         [btn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -67,7 +67,7 @@
             _styleBtn.layer.borderWidth = 0;
             _styleBtn.layer.borderColor = [UIColor clearColor].CGColor;
             btn.layer.borderWidth = 2;
-            btn.layer.borderColor = [UIColor whiteColor].CGColor;
+            btn.layer.borderColor = [UIColor redColor].CGColor;
             _styleBtn = btn;
             self.styleBtnClick(btn.tag);
         }

@@ -71,6 +71,7 @@
     [self addColorSelectedView];
     
     _isTurn = NO;
+    _turnCount = 1;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -231,7 +232,7 @@
             case 0:
             {
                 //旋转
-               UIImage * flipImage = [Tools image:self.gridsShowView.lastShowImgView.image rotation:UIImageOrientationDown];
+                UIImage * flipImage = [Tools image:self.gridsShowView.lastShowImgView.image rotation:UIImageOrientationLeft];
                 [self.gridsShowView changeSelectedShowImgViewWithImage:flipImage];
             }
                 break;
@@ -640,6 +641,9 @@
         [Tools getImageWithAsset:photoModel.asset withBlock:^(UIImage * _Nonnull image) {
             @strongify(self);
             [self.gridsShowView changeSelectedShowImgViewWithImage:image];
+            [self.photoView removeFromSuperview];
+            self.photoView = nil;
+            self.manager = nil;
         }];
     }
 }

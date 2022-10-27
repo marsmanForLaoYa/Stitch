@@ -1061,7 +1061,7 @@ void rgbToHSV(float *rgb, float *hsv) {
             scaleX = rect.size.height/rect.size.width;
             break;
         case UIImageOrientationRight:
-            rotate = 33 * M_PI_2;
+            rotate = 3 * M_PI_2;
             rect = CGRectMake(0, 0, image.size.height, image.size.width);
             translateX = -rect.size.height;
             translateY = 0;
@@ -1099,6 +1099,7 @@ void rgbToHSV(float *rgb, float *hsv) {
     return newPic;
     
 }
+
 
 +(void)getAssetWithImage:(UIImage *)image getAssetSuccess:(void(^)(PHAsset *asset))getSuccess{
 
