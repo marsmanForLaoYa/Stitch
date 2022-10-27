@@ -191,6 +191,9 @@
 
 //替换image
 - (void)changeSelectedShowImgViewWithImage:(UIImage *)image {
+    if(image == nil) {
+        return;
+    }
  
     self.lastShowImgView.image = image;
     
@@ -1281,7 +1284,9 @@
 }
 
 - (void)changeImageViewFrame {
-    
+    if (self.image == nil) {
+        return;
+    }
     //计算imageview的宽高
     CGFloat imageHeight = self.image.size.height;
     CGFloat imageWidth = self.image.size.width;
