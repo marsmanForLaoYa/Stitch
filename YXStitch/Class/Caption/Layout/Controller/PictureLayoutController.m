@@ -232,7 +232,7 @@
             case 0:
             {
                 //旋转
-                UIImage * flipImage = [Tools image:self.gridsShowView.lastShowImgView.image rotation:UIImageOrientationLeft];
+                UIImage * flipImage = [Tools image:self.gridsShowView.lastShowImgView.image rotation:UIImageOrientationRight];
                 [self.gridsShowView changeSelectedShowImgViewWithImage:flipImage];
             }
                 break;
