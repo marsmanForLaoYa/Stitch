@@ -199,6 +199,7 @@
 		FBF59EF528AC796100D9C6CF /* WaterTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = FBF59EF428AC796100D9C6CF /* WaterTitleView.m */; };
 		FBF59EF828AC8B5400D9C6CF /* WaterColorSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = FBF59EF728AC8B5400D9C6CF /* WaterColorSelectView.m */; };
 		FBF59EFB28AC98BF00D9C6CF /* ColorPlateView.m in Sources */ = {isa = PBXBuildFile; fileRef = FBF59EFA28AC98BF00D9C6CF /* ColorPlateView.m */; };
+		FBFF16CF290A7D190081D2B4 /* UIImage+Orientation.m in Sources */ = {isa = PBXBuildFile; fileRef = FBFF16CE290A7D190081D2B4 /* UIImage+Orientation.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -557,6 +558,8 @@
 		FBF59EF728AC8B5400D9C6CF /* WaterColorSelectView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WaterColorSelectView.m; sourceTree = "<group>"; };
 		FBF59EF928AC98BF00D9C6CF /* ColorPlateView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ColorPlateView.h; sourceTree = "<group>"; };
 		FBF59EFA28AC98BF00D9C6CF /* ColorPlateView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ColorPlateView.m; sourceTree = "<group>"; };
+		FBFF16CD290A7D190081D2B4 /* UIImage+Orientation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIImage+Orientation.h"; sourceTree = "<group>"; };
+		FBFF16CE290A7D190081D2B4 /* UIImage+Orientation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Orientation.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1031,6 +1034,8 @@
 				FB2D5A2228A26564006085BC /* UIView+LVShot.m */,
 				FB2D5A2028A264C4006085BC /* WKWebView+LVShot.h */,
 				FB2D5A1F28A264C4006085BC /* WKWebView+LVShot.m */,
+				FBFF16CD290A7D190081D2B4 /* UIImage+Orientation.h */,
+				FBFF16CE290A7D190081D2B4 /* UIImage+Orientation.m */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -1726,6 +1731,7 @@
 				FB58D81328E14D5000EC831D /* CustomScrollView.m in Sources */,
 				FB1B8DE728D06F5F0080AE74 /* AddWaterMark.m in Sources */,
 				FB5D46A628AA3FEE0015E2A5 /* StitchResultView.m in Sources */,
+				FBFF16CF290A7D190081D2B4 /* UIImage+Orientation.m in Sources */,
 				BBC92AD128F670C80023E80F /* YKeychain.m in Sources */,
 				FB26948628E590BB00565F4B /* ShellTableViewCell.m in Sources */,
 				FBD32A9628DDC2D2000A548F /* UIBezierPath+Arrow.m in Sources */,

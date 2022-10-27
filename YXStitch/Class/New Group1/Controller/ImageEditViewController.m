@@ -2379,7 +2379,7 @@
                 make.height.equalTo(@(subHeigeht + 20));
                 make.centerX.top.width.equalTo(_contentScrollView);
             }];
-        if(contentHeight < 500){
+        if(contentHeight < 400){
             CGFloat newHeight = 0;
             StitchingButton *firstIMG;
             for (NSInteger i = 0 ; i < _imageViewsArr.count; i ++) {

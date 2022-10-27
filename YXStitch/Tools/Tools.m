@@ -13,6 +13,7 @@
 #import <CoreMedia/CoreMedia.h>
 #import <sys/utsname.h>
 #import "NSString+Extension.h"
+#import "UIImage+Orientation.h"
 
 #define BEfORETIME -(100 * 60)
 
@@ -1050,7 +1051,7 @@ void rgbToHSV(float *rgb, float *hsv) {
     float translateY = 0;
     float scaleX = 1.0;
     float scaleY = 1.0;
-    
+    image = [image fixOrientation:image];
     switch (orientation) {
         case UIImageOrientationLeft:
             rotate = M_PI_2;
