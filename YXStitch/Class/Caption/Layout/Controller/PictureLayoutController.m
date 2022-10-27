@@ -72,7 +72,6 @@
     [self addColorSelectedView];
     
     _isTurn = NO;
-    _turnCount = 1;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
