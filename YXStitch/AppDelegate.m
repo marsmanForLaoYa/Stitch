@@ -9,10 +9,10 @@
 //#import "KSViewController.h"
 #import "XWNavigationController.h"
 #import "HomeViewController.h"
-#import <UMShare/UMShare.h>
-#import <UMCommon/UMCommon.h>
 #import "App.h"
 #import "XWTimerTool.h"
+#import <MOBFoundation/MobSDK+Privacy.h>
+#import <ShareSDK/ShareSDK.h>
 
 @interface AppDelegate ()
 
@@ -26,7 +26,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [self SetRootView];
     [self setKeyboardHandle];
-    [self setUM];
+    [self setShare];
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"everLaunched"]) {
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"everLaunched"];
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"firstLaunch"];
@@ -51,19 +51,15 @@
     return YES;
 }
 
--(void)setUM{
-    [UMConfigure initWithAppkey:APP_KEY channel:@"App Store"];
-    //配置微信平台的Universal Links
-    //微信和QQ完整版会校验合法的universalLink，不设置会在初始化平台失败
-    [UMSocialGlobal shareInstance].universalLinkDic = @{@(UMSocialPlatformType_WechatSession):@"https://umplus-sdk-download.oss-cn-shanghai.aliyuncs.com/",
-                                                        @(UMSocialPlatformType_QQ):@"https://umplus-sdk-download.oss-cn-shanghai.aliyuncs.com/qq_conn/101830139"
-                                                        };
-    
-    /* 设置微信的appKey和appSecret */
-    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_WechatSession appKey:@"wx60d36f0847db422c" appSecret:@"5758b4e5dedabcd34d5bfe7a1a65f31d" redirectURL:nil];
-
-    /* 设置sina */
-//    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_Sina appKey:@"3921700954"  appSecret:@"04b48b094faeb16683c32669824ebdad" redirectURL:@"https://sns.whalecloud.com/sina2/callback"];
+-(void)setShare{
+    [MobSDK uploadPrivacyPermissionStatus:YES onResult:^(BOOL success) {
+        
+    }];
+    [ShareSDK registPlatforms:^(SSDKRegister *platformsRegister) {
+        //wx
+        [platformsRegister setupWeChatWithAppId:@"wxc85cef5f6ea96402" appSecret:@"2c9dd114aa8a78b2d7baa7d2f7d41565" universalLink:@"https://www.pintu365app.com/ios"];
+        [platformsRegister setupSinaWeiboWithAppkey:@"1582112744" appSecret:@"843084a22b83e24112b7794b756a8998" redirectUrl:@"https://www.pintu365app.com/" universalLink:@"https://www.pintu365app.com/ios"];
+    }];
 }
 
 - (void)handlePasteboardNotification:(NSNotification *)notify {
@@ -150,6 +146,10 @@
          }
      }
      return YES;
+}
+-(BOOL)application:(UIApplication*)application continueUserActivity:(NSUserActivity*)userActivity restorationHandler:(void(^)(NSArray* __nullable restorableObjects))restorationHandler
+{
+    return YES;
 }
 
 

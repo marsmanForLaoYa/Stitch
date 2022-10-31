@@ -6,7 +6,7 @@
 //
 
 #import "SaveViewController.h"
-#import <UMShare/UMShare.h>
+#import <ShareSDK/ShareSDK.h>
 @interface SaveViewController ()
 @property (nonatomic ,strong)UIView *detailView;
 @end
@@ -180,23 +180,20 @@
 }
 
 -(void)shareClick:(UIButton *)btn{
-    UMSocialPlatformType shareType;
+    SSDKPlatformType shareType;
     if (btn.tag != 0){
         switch (btn.tag) {
             case 1:
                 //微信
-                shareType = UMSocialPlatformType_WechatSession;
+                shareType = SSDKPlatformSubTypeWechatSession;
                 break;
             case 2:
-                shareType = UMSocialPlatformType_WechatTimeLine;
+                shareType = SSDKPlatformSubTypeWechatTimeline;
                 //朋友圈
                 break;
-            case 3:
-                //微博
-                shareType = UMSocialPlatformType_Sina;
-                break;
             default:
-                shareType = UMSocialPlatformType_Predefine_Begin;
+                //微博
+                shareType = SSDKPlatformTypeSinaWeibo;
                 break;
         }
         [self shareImageToPlatformType:shareType];
@@ -210,31 +207,39 @@
     
 }
 
+-(void)shareImageToPlatformType:(SSDKPlatformType)shareType{
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    [params SSDKSetupShareParamsByText:nil
+                                images:_screenshotIMG
+                                   url:nil
+                                 title:nil
+                                  type:SSDKContentTypeAuto];
+    //调用分享接口分享
+    [ShareSDK  share:shareType
+        parameters:params
+        onStateChanged:^(SSDKResponseState state, NSDictionary *userData,
+        SSDKContentEntity *contentEntity, NSError *error) {
+        switch (state) {
+            case SSDKResponseStateSuccess:
+                     NSLog(@"成功");//成功
+                     break;
+            case SSDKResponseStateFail:
+               {
+                      NSLog(@"--%@",error.description);
+                      //失败
+                      break;
+                }
+            case SSDKResponseStateCancel:
+                      //取消
+                      break;
 
-
-- (void)shareImageToPlatformType:(UMSocialPlatformType)platformType{
-    
-    
-    //创建分享消息对象
-    UMSocialMessageObject *messageObject = [UMSocialMessageObject messageObject];
-    //创建图片内容对象
-    UMShareImageObject *shareObject = [[UMShareImageObject alloc] init];
-    //如果有缩略图，则设置缩略图
-    shareObject.thumbImage = [UIImage imageNamed:@"darkIcon"];
-    [shareObject setShareImage:_screenshotIMG];
-
-    //分享消息对象设置分享内容对象
-    messageObject.shareObject = shareObject;
-   // messageObject.text = @"分享文本";
-    //调用分享接口
-    [[UMSocialManager defaultManager] shareToPlatform:platformType messageObject:messageObject currentViewController:self completion:^(id data, NSError *error) {
-        if (error) {
-            NSLog(@"************Share fail with error %@*********",error);
-        }else{
-            NSLog(@"response data is %@",data);
+            default:
+                break;
         }
+        
     }];
 }
+
 
 -(void)rightBtnClick{
     //分享的标题

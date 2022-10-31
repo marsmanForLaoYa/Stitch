@@ -1,4 +1,7 @@
 ${PODS_ROOT}/Target Support Files/Pods-YXStitch/Pods-YXStitch-resources.sh
 ${PODS_ROOT}/HXPhotoPicker/HXPhotoPicker/Resources/HXPhotoPicker.bundle
 ${PODS_ROOT}/SVProgressHUD/SVProgressHUD/SVProgressHUD.bundle
-${PODS_ROOT}/UMShare/UMShare/SocialLibraries/Sina/SinaSDK/WeiboSDK.bundle
+${PODS_CONFIGURATION_BUILD_DIR}/mob_sharesdk/ShareSDK.bundle
+${PODS_ROOT}/mob_sharesdk/ShareSDK/Support/PlatformSDK/SinaWeiboSDK/WeiboSDK.bundle
+${PODS_CONFIGURATION_BUILD_DIR}/mob_sharesdk/ShareSDK_JS_SinaWeibo.bundle
+${PODS_CONFIGURATION_BUILD_DIR}/mob_sharesdk/ShareSDK_JS_WeChat.bundle

@@ -22,10 +22,15 @@ target 'YXStitch' do
   pod 'CocoaLumberjack'
   
   #友盟分享
-  pod 'UMCommon'
-  pod 'UMDevice'
-  pod 'UMShare/Social/WeChat'
-  pod 'UMShare/Social/Sina'
+ # pod 'UMCommon'
+ # pod 'UMDevice'
+ # pod 'UMShare/Social/WeChat'
+  #pod 'UMShare/Social/Sina'
+  
+  #shareSDK分享
+  pod 'mob_sharesdk'
+  pod 'mob_sharesdk/ShareSDKPlatforms/SinaWeibo'
+  pod 'mob_sharesdk/ShareSDKPlatforms/WeChat'
   
 end
 

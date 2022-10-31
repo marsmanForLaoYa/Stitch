@@ -24,6 +24,18 @@ PODS:
   - IQKeyboardManager (6.5.10)
   - Masonry (1.1.0)
   - MJExtension (3.4.1)
+  - mob_sharesdk (4.4.8):
+    - mob_sharesdk/ShareSDK (= 4.4.8)
+    - MOBFoundation (>= 3.2.9)
+  - mob_sharesdk/ShareSDK (4.4.8):
+    - MOBFoundation (>= 3.2.9)
+  - mob_sharesdk/ShareSDKPlatforms/SinaWeibo (4.4.8):
+    - mob_sharesdk/ShareSDK
+    - MOBFoundation (>= 3.2.9)
+  - mob_sharesdk/ShareSDKPlatforms/WeChat (4.4.8):
+    - mob_sharesdk/ShareSDK
+    - MOBFoundation (>= 3.2.9)
+  - MOBFoundation (3.2.36)
   - RGBColorSlider (0.1.2)
   - SDCycleScrollView (1.82):
     - SDWebImage (>= 5.0.0)
@@ -33,25 +45,6 @@ PODS:
   - SVProgressHUD (2.2.5)
   - Toast (4.0.0)
   - TYSnapshotScroll (0.3.3)
-  - UMCommon (7.3.7):
-    - UMDevice
-  - UMDevice (2.2.1)
-  - UMShare/Core (6.10.6):
-    - UMCommon
-  - UMShare/Social/ReducedSina (6.10.6):
-    - UMCommon
-    - UMShare/Core
-  - UMShare/Social/ReducedWeChat (6.10.6):
-    - UMCommon
-    - UMShare/Core
-  - UMShare/Social/Sina (6.10.6):
-    - UMCommon
-    - UMShare/Core
-    - UMShare/Social/ReducedSina
-  - UMShare/Social/WeChat (6.10.6):
-    - UMCommon
-    - UMShare/Core
-    - UMShare/Social/ReducedWeChat
   - YYKit (1.0.9):
     - YYKit/no-arc (= 1.0.9)
   - YYKit/no-arc (1.0.9)
@@ -64,16 +57,15 @@ DEPENDENCIES:
   - IQKeyboardManager
   - Masonry
   - MJExtension
+  - mob_sharesdk
+  - mob_sharesdk/ShareSDKPlatforms/SinaWeibo
+  - mob_sharesdk/ShareSDKPlatforms/WeChat
   - RGBColorSlider
   - SDCycleScrollView (>= 1.82)
   - SDWebImage
   - SVProgressHUD
   - Toast
   - TYSnapshotScroll
-  - UMCommon
-  - UMDevice
-  - UMShare/Social/Sina
-  - UMShare/Social/WeChat
   - YYKit
 
 SPEC REPOS:
@@ -85,15 +77,14 @@ SPEC REPOS:
     - IQKeyboardManager
     - Masonry
     - MJExtension
+    - mob_sharesdk
+    - MOBFoundation
     - RGBColorSlider
     - SDCycleScrollView
     - SDWebImage
     - SVProgressHUD
     - Toast
     - TYSnapshotScroll
-    - UMCommon
-    - UMDevice
-    - UMShare
     - YYKit
 
 SPEC CHECKSUMS:
@@ -104,17 +95,16 @@ SPEC CHECKSUMS:
   IQKeyboardManager: 45a1fa55c1a5b02c61ac0fd7fd5b62bb4ad20d97
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MJExtension: 21c5f6f8c4d5d8844b7ae8fbae08fed0b501f961
+  mob_sharesdk: b707987dfbe7e180ea60ddf4b5db30126ac98390
+  MOBFoundation: 78ad4264f436b3d147375ab7fdb8088b9e22ca5d
   RGBColorSlider: 425099dc03ea753cd8b84977047fe1db01537616
   SDCycleScrollView: a0d74c3384caa72bdfc81470bdbc8c14b3e1fbcf
   SDWebImage: 72f86271a6f3139cc7e4a89220946489d4b9a866
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   TYSnapshotScroll: 0fbb89ae83610ef57961b75d3a877d75d75ef181
-  UMCommon: 37fe35f498e92cf57bbb06a086f02915fc35f211
-  UMDevice: 053478c4b4d7292f31f0a275c227d3c4007a5571
-  UMShare: b66d969a5cc7bd9eeffad6ad2ccd8f860d6216dd
   YYKit: 7cda43304a8dc3696c449041e2cb3107b4e236e7
 
-PODFILE CHECKSUM: b12edea2038215e91f5cf4bff1d15b3af5e3d3e0
+PODFILE CHECKSUM: 940ed930de2142c8ab1540abeb22108b5f8e76db
 
 COCOAPODS: 1.11.3

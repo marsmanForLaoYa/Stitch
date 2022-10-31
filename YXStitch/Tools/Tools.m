@@ -1051,6 +1051,7 @@ void rgbToHSV(float *rgb, float *hsv) {
     float translateY = 0;
     float scaleX = 1.0;
     float scaleY = 1.0;
+    //修复拍照的图片会自动生成UIImageOrientationRight问题。
     image = [image fixOrientation:image];
     switch (orientation) {
         case UIImageOrientationLeft:

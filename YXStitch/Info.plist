@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>保存图片需要访问您的相册</string>
 	<key>CFBundleAllowMixedLocalizations</key>
 	<true/>
 	<key>CFBundleIcons</key>
@@ -98,30 +96,32 @@
 			<string>wechat</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>wx60d36f0847db422c</string>
+				<string>wxc85cef5f6ea96402</string>
 			</array>
 		</dict>
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>sina</string>
+			<string>weibo</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>wb3921700954</string>
+				<string>wb1582112744</string>
 			</array>
 		</dict>
 	</array>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
-		<string>wechat</string>
 		<string>weixin</string>
+		<string>wechat</string>
 		<string>weixinULAPI</string>
-		<string>sinaweibohd</string>
+		<string>weixinURLParamsAPI</string>
 		<string>sinaweibo</string>
+		<string>sinaweibohd</string>
 		<string>sinaweibosso</string>
+		<string>sinaweibohdsso</string>
 		<string>weibosdk</string>
-		<string>weibosdk2.5</string>
+		<string>weibosdk3.3</string>
 	</array>
 	<key>LSItemContentTypes</key>
 	<array>
@@ -139,6 +139,10 @@
 		<string>public.text</string>
 		<string>public.data</string>
 	</array>
+	<key>MOBAppKey</key>
+	<string>36e397597e74a</string>
+	<key>MOBAppSecret</key>
+	<string>006068bcd25c66f2493091b4ea649b9c</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>

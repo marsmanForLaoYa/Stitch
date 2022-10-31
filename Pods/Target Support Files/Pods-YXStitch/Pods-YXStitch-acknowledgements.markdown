@@ -306,21 +306,6 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
-## UMCommon
-
-Copyright 2011 - 2021 umeng.com. All rights reserved.
-
-
-## UMDevice
-
-Copyright 2011 - 2021 umeng.com. All rights reserved.
-
-
-## UMShare
-
-Copyright 2011 - 2021 umeng.com. All rights reserved.
-
-
 ## YYKit
 
 The MIT License (MIT)

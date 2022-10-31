@@ -187,6 +187,9 @@
 		FBA068FE28DABEC500AAB7E6 /* PaintPath.m in Sources */ = {isa = PBXBuildFile; fileRef = FBA068FD28DABEC500AAB7E6 /* PaintPath.m */; };
 		FBA1862528ACFBF50001DF8C /* FullWaterMarkTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FBA1862428ACFBF50001DF8C /* FullWaterMarkTableViewCell.m */; };
 		FBA1862928ACFC740001DF8C /* FullWaterMarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = FBA1862828ACFC740001DF8C /* FullWaterMarkView.m */; };
+		FBA7BF1D290B97AA006BDC93 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = FBA7BF1C290B97AA006BDC93 /* libc++.tbd */; };
+		FBA7BF1F290B97B2006BDC93 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = FBA7BF1E290B97B2006BDC93 /* libz.tbd */; };
+		FBA7BF21290B97BD006BDC93 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = FBA7BF20290B97BD006BDC93 /* libsqlite3.tbd */; };
 		FBB863D028A4DB6600F73A80 /* UnlockFuncView.m in Sources */ = {isa = PBXBuildFile; fileRef = FBB863CF28A4DB6600F73A80 /* UnlockFuncView.m */; };
 		FBD32A9328DD8C9D000A548F /* MosaicStyleSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = FBD32A9228DD8C9D000A548F /* MosaicStyleSelectView.m */; };
 		FBD32A9628DDC2D2000A548F /* UIBezierPath+Arrow.m in Sources */ = {isa = PBXBuildFile; fileRef = FBD32A9428DDC2BB000A548F /* UIBezierPath+Arrow.m */; };
@@ -534,6 +537,9 @@
 		FBA1862428ACFBF50001DF8C /* FullWaterMarkTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FullWaterMarkTableViewCell.m; sourceTree = "<group>"; };
 		FBA1862728ACFC740001DF8C /* FullWaterMarkView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FullWaterMarkView.h; sourceTree = "<group>"; };
 		FBA1862828ACFC740001DF8C /* FullWaterMarkView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FullWaterMarkView.m; sourceTree = "<group>"; };
+		FBA7BF1C290B97AA006BDC93 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		FBA7BF1E290B97B2006BDC93 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		FBA7BF20290B97BD006BDC93 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		FBB863CE28A4DB6600F73A80 /* UnlockFuncView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UnlockFuncView.h; sourceTree = "<group>"; };
 		FBB863CF28A4DB6600F73A80 /* UnlockFuncView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UnlockFuncView.m; sourceTree = "<group>"; };
 		FBD32A9128DD8C9D000A548F /* MosaicStyleSelectView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MosaicStyleSelectView.h; sourceTree = "<group>"; };
@@ -567,6 +573,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FBA7BF21290B97BD006BDC93 /* libsqlite3.tbd in Frameworks */,
+				FBA7BF1F290B97B2006BDC93 /* libz.tbd in Frameworks */,
+				FBA7BF1D290B97AA006BDC93 /* libc++.tbd in Frameworks */,
 				FB086F7628A663090062EBA5 /* SystemConfiguration.framework in Frameworks */,
 				FB086F7428A662FF0062EBA5 /* CoreMedia.framework in Frameworks */,
 				FB086F7228A662F60062EBA5 /* CoreData.framework in Frameworks */,
@@ -1165,6 +1174,9 @@
 		FB687EC728A0DE65002D557B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FBA7BF20290B97BD006BDC93 /* libsqlite3.tbd */,
+				FBA7BF1E290B97B2006BDC93 /* libz.tbd */,
+				FBA7BF1C290B97AA006BDC93 /* libc++.tbd */,
 				BBB4688928F57C8700F15765 /* AssetsLibrary.framework */,
 				BBB4688728F57C8100F15765 /* CoreVideo.framework */,
 				BBB4688528F57C7700F15765 /* CoreGraphics.framework */,
@@ -1948,7 +1960,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = YXStitch/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "快捷截长图";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "拼接图片需要打开相册获取图片";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "保存图片需要访问您的相册";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -1996,7 +2008,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = YXStitch/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "快捷截长图";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "拼接图片需要打开相册获取图片";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "保存图片需要访问您的相册";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
