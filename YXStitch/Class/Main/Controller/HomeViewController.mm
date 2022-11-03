@@ -52,6 +52,7 @@
 @property (nonatomic ,strong)NSMutableArray *iconArr;
 @property (nonatomic ,strong)NSMutableArray *schemeArr;
 @property (nonatomic ,strong)NSMutableArray *nameArr;
+@property (nonatomic ,strong)NSMutableArray *urlArr;
 
 @property (nonatomic ,strong)UIView * shotView;
 @property (nonatomic ,strong)NSIndexPath * indexPath;
@@ -59,7 +60,7 @@
 @property (nonatomic ,weak) MoveCollectionViewCell * originalCell;
 @property (nonatomic, strong)SZImageGenerator *generator;
 @property (nonatomic ,strong)ScrrenStitchHintView *checkScreenStitchView;
-@property (nonatomic ,strong)UIView *bgView;
+
 @property (nonatomic ,strong)StitchResultView *resultView;
 @property (nonatomic ,strong)GuiderVisitorView *guiderView;
 
@@ -76,6 +77,7 @@
 @property (nonatomic ,assign)NSInteger selectInex;
 @property (nonatomic ,strong)UnlockFuncView *funcView;
 @property (nonatomic ,strong)CheckProView *checkProView;
+@property (nonatomic ,strong)UIView *bgView;
 
 @property (nonatomic ,strong)NSMutableArray *stitchArr;
 @property (nonatomic ,strong)NSURL *videoURL;
@@ -102,8 +104,9 @@
         _iconArr = [NSMutableArray arrayWithArray:GVUserDe.homeIconArr];
     }else{
         _iconArr = [NSMutableArray arrayWithObjects:@"截长屏",@"网页滚动截图",@"拼图",@"水印",@"设置",@"更多功能",nil];
-        [self requestData];
+        
     }
+    [self requestData];
     [self setupViews];
     [self setupLayout];
     [self setupNavItems];
@@ -259,9 +262,9 @@
     [[XWNetTool sharedInstance] queryApplicationListWithCallback:^(NSArray<HomeModel *> * _Nullable dataSources, BOOL isProcessing, NSString * _Nullable errorMsg) {
         if (!errorMsg && isProcessing) {
             for (HomeModel *model in dataSources) {
-                [weakSelf.iconArr addObject:model.image];
+                [weakSelf.iconArr insertObject:model.image atIndex:(model.sort - 1)];
                 if(model.title){
-                    [weakSelf.nameArr addObject:model.title];
+                    [weakSelf.nameArr addObject:model];
                 }
                 if (model.scheme){
                     [weakSelf.schemeArr addObject:model.scheme];
@@ -367,14 +370,26 @@
     
     MoveCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"MoveCollectionViewCell" forIndexPath:indexPath];
     cell.p_MoveCollectionViewCellDelegate = self;
-    cell.cellName = [_iconArr objectAtIndex:indexPath.row];
-    if (indexPath.row > 5){
-        cell.nameLab.text = [NSString stringWithFormat:@"%@",_schemeArr[indexPath.row - 5]];
+    NSString *cellName;
+    NSString *iconName;
+    if (_nameArr.count > 0){
+        if (indexPath.row <= _nameArr.count -1){
+            HomeModel *model = _nameArr[indexPath.row];
+            cellName = model.title;
+            iconName = [_iconArr objectAtIndex:indexPath.row];
+        }else{
+            cellName = [_iconArr objectAtIndex:indexPath.row];
+            iconName = cellName;
+        }
+    }else{
+        cellName = [_iconArr objectAtIndex:indexPath.row];
+        iconName = cellName;
     }
+    [cell setTitleWithName:cellName andIconIMG:iconName];
+
     return cell;
 }
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
-    MJWeakSelf
     //得到的cell
     MoveCollectionViewCell * cell = (MoveCollectionViewCell *)[self collectionView:collectionView cellForItemAtIndexPath:indexPath];
     NSString *cellName = cell.cellName;
@@ -402,8 +417,48 @@
         vc = [HomeSettingViewController new];
     }else{
         //用来跳转
+        HomeModel *model = _nameArr[indexPath.row];
+        if ([cellName isEqualToString:@"卡坦"]){  
+            if (![self checkAPPIsExist:@"wx22ffa29d07dc4d59://"]){
+                //NSLog(@"未安装");
+                NSURL *url = [NSURL URLWithString:model.url];
+                [[UIApplication sharedApplication]openURL:url options:nil completionHandler:^(BOOL success) {
+                                    
+                }];
+            }else{
+               //NSLog(@"安装");
+                NSURL *url = [NSURL URLWithString:model.scheme];
+                [[UIApplication sharedApplication]openURL:url options:nil completionHandler:^(BOOL success) {
+                                    
+                }];
+            }
+        }else{
+            NSURL *url = [NSURL URLWithString:model.url];
+            [[UIApplication sharedApplication]openURL:url options:nil completionHandler:^(BOOL success) {
+                                
+            }];
+        }
+        [self setClickMoment];
+        return;
     }
     [self.navigationController pushViewController:vc animated:YES];
+}
+
+-(void)setClickMoment{
+    //发送点击,后端统计请求
+    NSDictionary *params;
+    params = @{
+        @"id":@"1"
+    };
+    [[XWNetTool sharedInstance]getRequestWithUrl:API_SUMCLICKCOUNT withParam:params success:^(id  _Nullable responseObject) {
+        NSLog(@"responseObject==%@",responseObject);
+        NSInteger errorCode = [responseObject[@"error"] integerValue];
+        if (errorCode == CodeSuccess) {
+            NSLog(@"成功");
+        }
+    } failure:^(NSError * _Nonnull error) {
+       // NSLog(@"error==%@",error);
+    }];
 }
 
 -(void)GesturePressDelegate:(UIGestureRecognizer *)gestureRecognizer
@@ -582,46 +637,57 @@
 -(void)stitchBtnClickWithTag:(NSInteger)tag{
     MJWeakSelf
     if (tag == 4){
+        [SVProgressHUD dismiss];
         [weakSelf checkScreenStitchViewDiss];
     }else if (tag == 5){
         //导出
-        [SVProgressHUD showWithStatus:@"正在生成图片中.."];
-        [_resultView.scrollView DDGContentScrollScreenShot:^(UIImage *screenShotImage) {
-            [SVProgressHUD dismiss];
-            SaveViewController *saveVC = [SaveViewController new];
-            saveVC.screenshotIMG = screenShotImage;
-            saveVC.isVer = YES;
-            saveVC.type = 2;
-            [weakSelf checkScreenStitchViewDiss];
-            [weakSelf.navigationController pushViewController:saveVC animated:YES];
-        }];
+        if (User.checkIsVipMember){
+            [SVProgressHUD showWithStatus:@"正在生成图片中.."];
+            [TYSnapshotScroll screenSnapshot:_resultView.scrollView finishBlock:^(UIImage *snapshotImage) {
+                [SVProgressHUD dismiss];
+                SaveViewController *saveVC = [SaveViewController new];
+                saveVC.screenshotIMG = snapshotImage;
+                saveVC.isVer = YES;
+                saveVC.type = 2;
+                [weakSelf checkScreenStitchViewDiss];
+                [weakSelf.navigationController pushViewController:saveVC animated:YES];
+            }];
+        }else{
+            [self addFuncViewWithType:6];
+        }
+        
        
     }else {
-        //字幕//拼接//裁切
-        CaptionViewController *vc = [CaptionViewController new];  
-        __block NSMutableArray *tmpArr = [NSMutableArray array];
-        if (!_isScrollScreen){
-            for (PHAsset *asset in _stitchArr) {
-                [Tools getImageWithAsset:asset withBlock:^(UIImage * _Nonnull image) {
-                    [tmpArr addObject:image];
-                }];
-            }
-            vc.dataArr = tmpArr;
-            if (tag == 1){
-                vc.type = 2;
-            }else if (tag == 2){
-                vc.type = 1;
+        if (User.checkIsVipMember){
+            //字幕//拼接//裁切
+            CaptionViewController *vc = [CaptionViewController new];
+            __block NSMutableArray *tmpArr = [NSMutableArray array];
+            if (!_isScrollScreen){
+                for (PHAsset *asset in _stitchArr) {
+                    [Tools getImageWithAsset:asset withBlock:^(UIImage * _Nonnull image) {
+                        [tmpArr addObject:image];
+                    }];
+                }
+                vc.dataArr = tmpArr;
+                if (tag == 1){
+                    vc.type = 2;
+                }else if (tag == 2){
+                    vc.type = 1;
+                }else{
+                    vc.type = 3;
+                }
             }else{
-                vc.type = 3;
+                vc.dataArr = _stitchArr;
+                vc.editImgArr = _stitchArr;
+                vc.gengrator = _generator;
+                vc.type = 4;
             }
+            [weakSelf checkScreenStitchViewDiss];
+            [self.navigationController pushViewController:vc animated:YES];
         }else{
-            vc.dataArr = _stitchArr;
-            vc.editImgArr = _stitchArr;
-            vc.gengrator = _generator;
-            vc.type = 4;
+            [self addFuncViewWithType:6];
         }
-        [weakSelf checkScreenStitchViewDiss];
-        [self.navigationController pushViewController:vc animated:YES];
+        
         
     }
     
@@ -685,19 +751,36 @@
     }
 }
 
+-(BOOL)checkAPPIsExist:(NSString*)URLScheme{
+    NSURL* url;
+    if ([URLScheme containsString:@"://"]) {
+        url = [NSURL URLWithString:[NSString stringWithFormat:@"%@",URLScheme]];
+    } else {
+        url = [NSURL URLWithString:[NSString stringWithFormat:@"%@://",URLScheme]];
+    }
+    if ([[UIApplication sharedApplication] canOpenURL:url]){
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
 -(void)cancelClickWithTag:(NSInteger)tag{
     MJWeakSelf
     if (tag == 1){
         [UIView animateWithDuration:0.3 animations:^{
             weakSelf.checkProView.frame = CGRectMake(0, SCREEN_HEIGHT + 100, SCREEN_WIDTH , weakSelf.checkProView.height);
-            weakSelf.bgView.hidden = YES;
+          //  weakSelf.bgView.hidden = YES;
         }];
     }else{
         [UIView animateWithDuration:0.3 animations:^{
             weakSelf.checkProView.frame = CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, 550);
         } completion:^(BOOL finished) {
-            weakSelf.bgView.hidden = YES;
+           // weakSelf.bgView.hidden = YES;
             [weakSelf.checkProView removeFromSuperview];
+            weakSelf.checkProView = nil;
+            [weakSelf.view bringSubviewToFront:weakSelf.checkScreenStitchView];
+            
         }];
         [_funcView removeFromSuperview];
         [[NSNotificationCenter defaultCenter]postNotificationName:@"dismiss" object:nil];
@@ -910,16 +993,10 @@
                 [weakSelf.navigationController pushViewController:layoutVC animated:YES];
             });
         }else{
-//            if (!User.checkIsVipMember && self.manager.selectedCount > 9){
-//                //非会员弹出提示
-//                _funcView = [UnlockFuncView new];
-//                _funcView.delegate = weakSelf;
-//                _funcView.type = 3;
-//                [self.view.window addSubview:_funcView];
-//                [_funcView mas_makeConstraints:^(MASConstraintMaker *make) {
-//                    make.edges.equalTo(self.view);
-//                }];
-//            }else{
+            if (!User.checkIsVipMember && self.manager.selectedCount > 9){
+                //非会员弹出提示
+                [self addFuncViewWithType:3];
+            }else{
                 if (btn.tag == 300){
                     //多图截长屏
                     __block NSMutableArray *arr = [NSMutableArray array];
@@ -997,13 +1074,22 @@
                     }
                     
                 }
-//            }
+            }
         }
         
         
     }
 }
 
+-(void)addFuncViewWithType:(NSInteger)type{
+    _funcView = [UnlockFuncView new];
+    _funcView.delegate = self;
+    _funcView.type = type;
+    [self.view.window addSubview:_funcView];
+    [_funcView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.view);
+    }];
+}
 
 
 #pragma mark -- set
@@ -1025,132 +1111,5 @@
     }
     return _nameArr;
 }
-
-//Point2f getTransformPoint(const Point2f originalPoint,const Mat &transformMaxtri){
-//    Mat originelP,targetP;
-//    originelP=(Mat_<double>(3,1)<<originalPoint.x,originalPoint.y,1.0);
-//    targetP=transformMaxtri*originelP;
-//    float x=targetP.at<double>(0,0)/targetP.at<double>(2,0);
-//    float y=targetP.at<double>(1,0)/targetP.at<double>(2,0);
-//    return Point2f(x,y);
-//}
-//
-//- (UIImage *)composeImage{
-//
-//    NSString *path01 = [[NSBundle mainBundle] pathForResource:@"test01" ofType:@"jpg"];
-//    NSString *path02 = [[NSBundle mainBundle] pathForResource:@"test02" ofType:@"jpg"];
-//    Mat img01;
-//    Mat img02;
-//    if (path01 == nil && path02 == nil) {
-//        return [UIImage new];
-//    }
-//    else{
-//        img01 = imread([path01 UTF8String]);
-//        img02 = imread([path02 UTF8String]);
-//
-//        //如果没有读取到image
-//        if (!img01.data && !img02.data) {
-//            return [UIImage new];
-//        }
-//
-//        //灰度图转换
-//        Mat img_h_01 ,img_h_02;
-//        cvtColor(img01, img_h_01, CV_RGB2GRAY);
-//        cvtColor(img02, img_h_02, CV_RGB2GRAY);
-//        vector<KeyPoint> keyPoint1,KeyPoint2;
-//        //提取特征点
-//        Ptr<FeatureDetector> fast = FastFeatureDetector::create(800);
-//        fast->detect(img_h_01, keyPoint1);
-//        fast->detect(img_h_02, KeyPoint2);
-//
-//        //特征点描述，为下面的特征点匹配做准备
-//        DescriptorExtractor siftDescriptor;
-//        Mat img_description_01,img_description_02;
-//        siftDescriptor.compute(img_h_01, keyPoint1, img_description_01);
-//        siftDescriptor.compute(img_h_02, KeyPoint2, img_description_02);
-//
-//        //获得匹配特征点，并提取最优配对
-//        FlannBasedMatcher matcher;
-//        vector<DMatch> matchePoints;
-//        matcher.match(img_description_01,img_description_02,matchePoints,Mat());
-//        sort(matchePoints.begin(), matchePoints.end());//特征点排序
-//
-//        //获取排在前N个的最优配对
-//        vector<Point2f> imagePoints1,imagePoints2;
-//        for (int i = 0; i < 10; i++) {
-//            imagePoints1.push_back(keyPoint1[matchePoints[i].queryIdx].pt);
-//            imagePoints2.push_back(KeyPoint2[matchePoints[i].trainIdx].pt);
-//        }
-//
-//        //获取img1到img2的投影映射矩阵，尺寸为3*3
-//        Mat homo = findHomography(imagePoints1, imagePoints2, CV_RANSAC);
-//        Mat adjustMat = (Mat_<double>(3,3)<<1.0,0,img01.cols,0,1.0,0,0,0,1.0);
-//        Mat adjustHomo = adjustMat * homo;
-//
-//        //获得最强配对点在原始图像和矩阵变换后图像上的对应位置，用于图像拼接点的定位
-//        Point2f originalLinkPoint,targetLintPoint,basedImagePoint;
-//        originalLinkPoint = keyPoint1[matchePoints[0].queryIdx].pt;
-//        targetLintPoint = getTransformPoint(originalLinkPoint, adjustHomo);
-//        basedImagePoint = KeyPoint2[matchePoints[0].trainIdx].pt;
-//
-//        //图像配准
-//        Mat imageTransform1;
-//        warpPerspective(img01, imageTransform1, adjustHomo, cv::Size(img02.cols+img01.cols+110,img02.rows));
-//
-//        //在最强配准点左侧的重叠区域进行累加，使衔接稳定过度，消除突变
-//        Mat image01OverLap,image02OverLap;
-//        image01OverLap = imageTransform1(cv::Rect(cv::Point(targetLintPoint.x - basedImagePoint.x,0),cv::Point(targetLintPoint.x,img02.rows)));
-//        image02OverLap = img02(cv::Rect(0,0,image01OverLap.cols,image01OverLap.rows));
-//
-//        //复制img01的重叠部分
-//        Mat image01ROICOPY = image01OverLap.clone();
-//        for (int i = 0; i < image01OverLap.rows; i++) {
-//            for (int j = 0; j < image01OverLap.cols;j++) {
-//                double weight;
-//                //随距离改变而改变的叠加体系
-//                weight = (double)j/image01OverLap.cols;
-//                image01OverLap.at<Vec3b>(i,j)[0] = (1 - weight)*image01ROICOPY.at<Vec3b>(i,j)[0]+weight*image02OverLap.at<Vec3b>(i,j)[0];
-//                image01OverLap.at<Vec3b>(i,j)[1] = (1 - weight)*image01ROICOPY.at<Vec3b>(i,j)[1]+weight*image02OverLap.at<Vec3b>(i,j)[1];
-//                image01OverLap.at<Vec3b>(i,j)[2] = (1 - weight)*image01ROICOPY.at<Vec3b>(i,j)[2]+weight*image02OverLap.at<Vec3b>(i,j)[2];
-//            }
-//        }
-//
-//        Mat ROIMat = img02(cv::Rect(cv::Point(image01OverLap.cols,0),cv::Point(img02.cols,img02.rows)));
-//        ROIMat.copyTo(Mat(imageTransform1,cv::Rect(targetLintPoint.x,0,ROIMat.cols,img02.rows)));
-//        return [self imageWithCVMat:imageTransform1];
-//    }
-//}
-//
-//- (UIImage *)imageWithCVMat:(const cv::Mat&)cvMat
-//{
-//    NSData *data = [NSData dataWithBytes:cvMat.data length:cvMat.elemSize() * cvMat.total()];
-//    CGColorSpaceRef colorSpace;
-//    if (cvMat.elemSize() == 1) {
-//        colorSpace = CGColorSpaceCreateDeviceGray();
-//    } else {
-//        colorSpace = CGColorSpaceCreateDeviceRGB();
-//    }
-//    CGDataProviderRef provider = CGDataProviderCreateWithCFData((__bridge CFDataRef)data);
-//    // Creating CGImage from cv::Mat
-//    CGImageRef imageRef = CGImageCreate(cvMat.cols,                                 //width
-//                                        cvMat.rows,                                 //height
-//                                        8,                                          //bits per component
-//                                        8 * cvMat.elemSize(),                       //bits per pixel
-//                                        cvMat.step[0],                              //bytesPerRow
-//                                        colorSpace,                                 //colorspace
-//                                        kCGImageAlphaNone|kCGBitmapByteOrderDefault,// bitmap info
-//                                        provider,                                   //CGDataProviderRef
-//                                        NULL,                                       //decode
-//                                        false,                                      //should interpolate
-//                                        kCGRenderingIntentDefault                   //intent
-//                                        );
-//
-//    UIImage *cvImage = [[UIImage alloc]initWithCGImage:imageRef];
-//    CGImageRelease(imageRef);
-//    CGDataProviderRelease(provider);
-//    CGColorSpaceRelease(colorSpace);
-//    return cvImage;
-//}
-
 
 @end

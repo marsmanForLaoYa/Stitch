@@ -26,4 +26,7 @@
 //添加订阅
 #define API_RECEIPT_STORE @"v2/receipt/store"
 
+#define API_SUMCLICKCOUNT @"v2/application/click"
+
+
 #endif /* NetworkAPI_h */

@@ -120,8 +120,8 @@
         weakSelf.checkProView.frame = CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH , weakSelf.checkProView.height);
     } completion:^(BOOL finished) {
         weakSelf.bgView.hidden = YES;
-       // [weakSelf.checkProView removeFromSuperview];
-        weakSelf.checkProView.hidden = YES;
+        [weakSelf.checkProView removeFromSuperview];
+        weakSelf.checkProView = nil;
     }];
     if (tag == 2){
         [self.navigationController pushViewController:[BuyViewController new] animated:YES];

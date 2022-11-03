@@ -165,6 +165,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 ///UIImage 转phasset
 +(void)getAssetWithImage:(UIImage *)image getAssetSuccess:(void(^)(PHAsset *asset))getSuccess;
+
+///判断图片类型
++ (NSString *)contentTypeForImageData:(NSData *)data;
 @end
 
 NS_ASSUME_NONNULL_END

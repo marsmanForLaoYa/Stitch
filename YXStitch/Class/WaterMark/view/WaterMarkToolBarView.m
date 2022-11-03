@@ -7,14 +7,14 @@
 
 #import "WaterMarkToolBarView.h"
 #import "WaterTitleView.h"
-#import "WaterColorSelectView.h"
+
 #import "ColorPlateView.h"
 
 @interface WaterMarkToolBarView()<WaterColorSelectViewDelegate>
 
 @property (nonatomic ,strong)UIView *toolView;
 @property (nonatomic ,strong)WaterTitleView *titleView;
-@property (nonatomic ,strong)WaterColorSelectView *colorSelectView;
+
 @property (nonatomic ,strong)ColorPlateView *colorPlateView;
 @end
 
@@ -66,6 +66,7 @@
             make.width.height.equalTo(@12);
             make.centerY.centerX.equalTo(cancelBtn);
         }];
+        
     }
     
     UIView *contentView = [UIView new];
@@ -145,6 +146,11 @@
         make.centerY.equalTo(_toolView);
         make.right.equalTo(self.mas_right).offset(-14);
     }];
+    if (_type == 2){
+        if (GVUserDe.waterPosition > 1){
+            [self addColorView];
+        }
+    }
 }
 - (void)setupLayout {    
 //    CGFloat btnWidth = [Tools WidthWithLabelFont:Font13 withLabelHeight:30 AndStr:_titleBtn.titleLabel.text] + 20;
@@ -184,7 +190,7 @@
     self.btnClick(0);
 }
 -(void)iconBtnClick:(UIButton *)btn{
-    MJWeakSelf
+
     if (btn.tag == 1 && btn.tag == 0){
         self.btnClick(btn.tag);
     }else{
@@ -231,31 +237,36 @@
             }
             //保存位置
             _selectIndex = btn.tag;
-            GVUserDe.waterPosition = btn.tag;
+            
             self.btnClick(btn.tag);
         }
     }
     if (btn.tag != 1 && btn.tag != 0){
-        if (_colorSelectView == nil){
-            _colorSelectView = [WaterColorSelectView new];
-            _colorSelectView.type = 5;
-            _colorSelectView.delegate = self;
-            _colorSelectView.moreColorClick = ^{
-                [weakSelf addColorPlateView];
-            };
-            [self.superview addSubview:_colorSelectView];
-            [_colorSelectView mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.width.left.equalTo(self);
-                make.bottom.equalTo(_toolView.mas_top);
-                make.height.equalTo(@120);
-            }];
-        }else{
-            _colorSelectView.hidden = NO;
-        }
+        [self addColorView];
     }else{
         _colorSelectView.hidden = YES;
     }
     
+}
+
+-(void)addColorView{
+    MJWeakSelf
+    if (_colorSelectView == nil){
+        _colorSelectView = [WaterColorSelectView new];
+        _colorSelectView.type = 5;
+        _colorSelectView.delegate = self;
+        _colorSelectView.moreColorClick = ^{
+            [weakSelf addColorPlateView];
+        };
+        [self.superview addSubview:_colorSelectView];
+        [_colorSelectView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.width.left.equalTo(self);
+            make.bottom.equalTo(_toolView.mas_top);
+            make.height.equalTo(@120);
+        }];
+    }else{
+        _colorSelectView.hidden = NO;
+    }
 }
 
 

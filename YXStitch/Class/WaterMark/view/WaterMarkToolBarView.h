@@ -6,7 +6,7 @@
 //
 
 #import "BaseView.h"
-
+#import "WaterColorSelectView.h"
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol WaterMarkToolBarViewDelegate <NSObject>
@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface WaterMarkToolBarView : UIView
 @property (nonatomic, assign) id<WaterMarkToolBarViewDelegate> delegate;
+@property (nonatomic ,strong)WaterColorSelectView *colorSelectView;
 @property (nonatomic ,assign)NSInteger selectIndex;
 @property (nonatomic ,copy)void(^btnClick)(NSInteger tag);
 @property (nonatomic ,assign)NSInteger type;

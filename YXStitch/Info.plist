@@ -36,33 +36,6 @@
 				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>小房子</key>
-			<dict>
-				<key>CFBundleIconFiles</key>
-				<array>
-					<string>小房子</string>
-				</array>
-				<key>UIPrerenderedIcon</key>
-				<false/>
-			</dict>
-			<key>小猫</key>
-			<dict>
-				<key>CFBundleIconFiles</key>
-				<array>
-					<string>小猫</string>
-				</array>
-				<key>UIPrerenderedIcon</key>
-				<false/>
-			</dict>
-			<key>邮件信息</key>
-			<dict>
-				<key>CFBundleIconFiles</key>
-				<array>
-					<string>邮件信息</string>
-				</array>
-				<key>UIPrerenderedIcon</key>
-				<false/>
-			</dict>
 		</dict>
 		<key>CFBundlePrimaryIcon</key>
 		<dict>
@@ -72,17 +45,6 @@
 			</array>
 			<key>UIPrerenderedIcon</key>
 			<false/>
-		</dict>
-		<key>UINewsstandIcon</key>
-		<dict>
-			<key>CFBundleIconFiles</key>
-			<array>
-				<string></string>
-			</array>
-			<key>UINewsstandBindingEdge</key>
-			<string>UINewsstandBindingEdgeLeft</string>
-			<key>UINewsstandBindingType</key>
-			<string>UINewsstandBindingTypeMagazine</string>
 		</dict>
 	</dict>
 	<key>CFBundleTypeName</key>
@@ -109,6 +71,16 @@
 				<string>wb1582112744</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>katan</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>wx22ffa29d07dc4d59</string>
+			</array>
+		</dict>
 	</array>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
@@ -122,6 +94,7 @@
 		<string>sinaweibohdsso</string>
 		<string>weibosdk</string>
 		<string>weibosdk3.3</string>
+		<string>katan</string>
 	</array>
 	<key>LSItemContentTypes</key>
 	<array>
@@ -154,5 +127,15 @@
 	<true/>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	<key>NSLocationUsageDescription</key>
+	<string>是否允许此App使用你的麦克风？</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>是否允许此App访问你的媒体资料库？</string>
+	<key>NSCameraUsageDescription</key>
+	<string>是否允许此App使用你的相机？</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>我们需要通过您的地理位置信息获取您周边的相关数据</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>我们需要通过您的地理位置信息获取您周边的相关数据</string>
 </dict>
 </plist>

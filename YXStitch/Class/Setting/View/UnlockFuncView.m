@@ -41,6 +41,9 @@
         case 5:
             imgStr = @"layout_view_vip";
             break;
+        case 6:
+            imgStr = @"滚动截图";
+            break;
         default:
             break;
     }

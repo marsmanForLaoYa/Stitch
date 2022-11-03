@@ -479,11 +479,12 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
             make.width.equalTo(@22);
             make.height.equalTo(@60);
             make.left.equalTo(firstIMG.mas_left);
-            if (_contentScrollView.contentSize.height < LayoutHeight){
-                make.centerY.equalTo(_contentScrollView.mas_top);
-            }else{
-                make.centerY.equalTo(self.view.mas_centerY);
-            }
+//            if (_contentScrollView.height < LayoutHeight){
+//                make.centerY.equalTo(_contentScrollView.mas_top);
+//            }else{
+//
+//            }
+            make.centerY.equalTo(self.view.mas_centerY);
             
         }];
     }
@@ -915,7 +916,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
             //内容过小则重置imageView布局
             [weakSelf layoutContentViewWithContent:contentHeight];
         }else{
-            weakSelf.contentScrollView.contentSize = CGSizeMake(0,firstImageView.bottom);
+            weakSelf.contentScrollView.contentSize = CGSizeMake(0,firstImageView.bottom + weakSelf. bottomView.height);
         }
         [SVProgressHUD showSuccessWithStatus:@"拼接完成"];
     }); 
@@ -1686,6 +1687,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                 bottom = [_originBottomArr[cutIndex]floatValue];
                 top = [_originTopArr[cutIndex]floatValue];
                 _originBottomArr[cutIndex] = [NSNumber numberWithFloat:cutIMG.bottom];
+                _originTopArr[cutIndex] = [NSNumber numberWithFloat:cutIMG.top];
                 break;
             }
         }
@@ -1811,10 +1813,10 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
 //                [self.originBottomArr addObject:[NSNumber numberWithFloat:contentHeight]];
 //                [self.originHeightArr addObject:[NSNumber numberWithFloat:imageView.height]];
 //            }
-            if (latsIMG.bottom < LayoutHeight){
-                //内容过小则重置imageView布局
-                [self layoutContentViewWithContent:latsIMG.bottom];
-            }
+//            if (latsIMG.bottom < LayoutHeight){
+//                //内容过小则重置imageView布局
+//                [self layoutContentViewWithContent:latsIMG.bottom];
+//            }
             [self updateContentScrollViewContentSizeWithType:1];
         }else{
             [_originTopArr removeAllObjects];
@@ -1891,9 +1893,6 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
 }
 -(void)cutImgMoveGesture:(UIPanGestureRecognizer *)gesture{
     if (_isSlicing){
-//        if (_contentScrollView.isScrollEnabled){
-//            return;
-//        }
         StitchingButton *img = _imageViews.firstObject;
         CGPoint translatedPoint = [gesture translationInView:self.view];
         if (gesture.state == UIGestureRecognizerStateBegan){
@@ -1982,9 +1981,10 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                 if (offsetP > 0){
                     if (tmpF < 0){
                         imageView.height = 0;
-                        return;
+                       // return;
                     }else{
                         imageView.height = tmpF;
+                        imageView.top = imageView.top + offsetP;
                     }
                 }else{
                     if (tmpF >= viewHeight){
@@ -1992,12 +1992,13 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                         imageView.top = [_originTopArr[_moveIndex - 1] floatValue];
                         //
                         imageView.imgView.top = 0;
-                        return;
+                       // return;
                     }else{
                         imageView.height = tmpF;
+                        imageView.top = imageView.top + offsetP;
                     }
                 }
-                imageView.top = imageView.top + offsetP;
+                
                 //顶部跟随
                 if (_moveIndex - 2 >= 0 && _imageViews.count > 1){
                     [self topFollow:imageView offsetY:offsetP AndIndex:_moveIndex - 2];
@@ -2025,7 +2026,7 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                         imageView.top = top;
                         imageView.height = viewHeight;
                         //imageView.imgView.top = 0;
-                        imageView.imgView.top = -(viewHeight);
+                        imageView.imgView.top = -(imageView.imgView.height - viewHeight) ;
                     }else{
                         imageView.height = tmp ;
                         imageView.imgView.top = offsetP+ imageView.imgView.top;
@@ -2205,18 +2206,19 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
         [TYSnapshotScroll screenSnapshot:_contentScrollView finishBlock:^(UIImage *snapshotImage) { 
             SaveViewController *saveVC = [SaveViewController new];
             saveVC.screenshotIMG = snapshotImage;
-            if (GVUserDe.isAutoSaveIMGAlbum){
-                //保存到拼图相册
-                [SVProgressHUD showSuccessWithStatus:@"图片已保存至拼图相册中"];
-                [Tools saveImageWithImage:saveVC.screenshotIMG albumName:@"拼图" withBlock:^(NSString * _Nonnull identify) {
-                    saveVC.identify = identify;
-                }];
-            }else{
-                [SVProgressHUD showSuccessWithStatus:@"图片已保存至系统相册中"];
-                if (!GVUserDe.isAutoDeleteOriginIMG){
-                    UIImageWriteToSavedPhotosAlbum(snapshotImage, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
-                }
-            }
+            [SVProgressHUD showSuccessWithStatus:@"图片已保存至拼图相册中"];
+            [Tools saveImageWithImage:saveVC.screenshotIMG albumName:@"拼图" withBlock:^(NSString * _Nonnull identify) {
+                saveVC.identify = identify;
+            }];
+//            if (GVUserDe.isAutoSaveIMGAlbum){
+//                //保存到拼图相册
+//
+//            }else{
+//                [SVProgressHUD showSuccessWithStatus:@"图片已保存至系统相册中"];
+//                if (!GVUserDe.isAutoDeleteOriginIMG){
+//                    UIImageWriteToSavedPhotosAlbum(snapshotImage, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
+//                }
+//            }
             saveVC.isVer = weakSelf.isVerticalCut;
             saveVC.type = 2;
             [weakSelf.navigationController pushViewController:saveVC animated:YES];

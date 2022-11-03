@@ -22,6 +22,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString* cellName;
 @property(nonatomic,strong) UILabel *nameLab;
 @property(nonatomic,strong) UIImageView *iconIMG;
+
+-(void)setTitleWithName:(NSString *)cellName andIconIMG:(NSString *)iconName;
+
+
+
 @end
 
 NS_ASSUME_NONNULL_END

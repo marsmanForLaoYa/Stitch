@@ -25,7 +25,7 @@
         self.layer.cornerRadius = 10;
         self.layer.masksToBounds = YES;
         _selectIndex = 1000;
-        _iphoneArr = @[@"无套壳",@"iPad Pro",@"iPad",@"iPhone 14Pro Max",@"iPhone14 Pro",@"iPhone 14 Plus",@"iPhone 14",@"iPhone 13 Pro Max",@"iPhone 13 Pro",@"iPhone 13",@"iPhone 13 Mini",@"iPhone 12 Pro Max",@"iPhone 12 Pro",@"iPhone 12",@"iPhone 12 Mini",@"iPhone 11 Pro Max",@"iPhone 11 Pro",@"iPhone XR/11"];
+        _iphoneArr = @[@"无套壳",@"iPad Pro",@"iPad",@"iPhone 14Pro Max",@"iPhone14 Pro",@"iPhone 14 Plus",@"iPhone 14",@"iPhone 13 Pro Max",@"iPhone 13 Pro",@"iPhone 13",@"iPhone 13 Mini",@"iPhone 12 Pro Max",@"iPhone 12 Pro",@"iPhone 12",@"iPhone 12 Mini",@"iPhone 11 Pro Max",@"iPhone 11 Pro",@"iPhone XR/11",@"iPhone 8"];
         [self setupViews];
     }
     return self;
@@ -124,7 +124,7 @@
         }else if (type == 17){
             colorArr = @[@"#F9F6EF",@"#D1CDDA",@"#AEE1CD",@"#1F2020",@"#BA0C2E"];
         }else if (type == 18){
-            colorArr = @[@"#E2E3E4",@"#F7E8DD",@"#272729"];
+            colorArr = @[@"#EBEBE3",@"#1F2020",@"#BA0C2E",@"#F7E8DD"];
         }else{
             colorArr = @[@"#E2E3E4",@"#F7E8DD",@"#272729"];
         }

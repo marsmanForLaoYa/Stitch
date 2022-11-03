@@ -195,6 +195,7 @@ static const CGFloat kPhotoViewMargin = 12.0;
         } completion:^(BOOL finished) {
             weakSelf.bgView.hidden = YES;
             [weakSelf.checkProView removeFromSuperview];
+            weakSelf.checkProView = nil;
         }];
         [_funcView removeFromSuperview];
         [[NSNotificationCenter defaultCenter]postNotificationName:@"dismiss" object:nil];

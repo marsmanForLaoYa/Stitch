@@ -247,7 +247,6 @@
     firstImageView.userInteractionEnabled = YES;
     contentWidth += firstImageView.width;
     firstImageView.tag = 100;
-    //    [_originRightArr addObject:[NSNumber numberWithFloat:0]];
     [_contentScrollView addSubview:firstImageView];
     [self.imageViewsArr addObject:firstImageView];
     [self.originWidthArr addObject:[NSNumber numberWithFloat:(CGFloat)(icon.size.width / icon.size.height) * HorViewHeight]];
@@ -306,7 +305,6 @@
     CGFloat top = 0.0;
     if (_isVer){
         top = (SCREEN_HEIGHT - concentH) / 4;
-       // [_contentView setBackgroundColor:[UIColor redColor]];
         [_contentView mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(@(top));
             make.width.equalTo(@(VerViewWidth));
@@ -391,7 +389,6 @@
     _imgEditMarkView.hidden = YES;
     _selectView.hidden = YES;
     _borderSettingView.hidden = YES;
-    // _bottomView.hidden = YES;
     _editType = tag;
     if(tag == 1){
         //标注
@@ -427,7 +424,7 @@
     }else if (tag == 3){
         //套壳
         [_contentScrollView removeGestureRecognizer:_panRecognizer];
-//        if (User.checkIsVipMember){
+        if (User.checkIsVipMember){
             _isAddShell = YES;
             if (_isVer){
                 [self changeShellViewWithType:1];
@@ -446,9 +443,9 @@
             _shellSettingView.btnClick = ^(NSInteger tag, BOOL isSelected) {
                 [weakSelf changeImageShellWithType:tag AndSelected:isSelected];
             };
-//        }else{
-//            [self addTipsViewWithType:4];
-//        }
+        }else{
+            [self addTipsViewWithType:4];
+        }
     }else{
         //水印
         _contentScrollView.scrollEnabled = YES;
@@ -469,7 +466,7 @@
         if (GVUserDe.waterPosition == 5){
             [self addFullWaterView];
         }else{
-            [self addWaterLaber];
+            [self addWaterLaberWithTag:GVUserDe.waterPosition];
         }
     }
 }
@@ -483,6 +480,7 @@
         [self addFullWaterView];
     }else{
         if (tag == 0){
+            [_waterToolView.colorSelectView removeFromSuperview];
             [UIView animateWithDuration:0.3 animations:^{
                 weakSelf.waterToolView.frame = CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, weakSelf.waterToolView.height);
             } completion:^(BOOL finished) {
@@ -491,13 +489,13 @@
                 weakSelf.waterToolView = nil;
             }];
         }else{
-            GVUserDe.waterPosition = tag;
+
             if (tag == 1){
                 //无水印
                 [_fullWaterView removeFromSuperview];
                 [_waterLabel removeFromSuperview];
             }else{
-                [self addWaterLaber];
+                [self addWaterLaberWithTag:tag];
             }
         }
     }
@@ -543,6 +541,7 @@
         } completion:^(BOOL finished) {
             weakSelf.bgView.hidden = YES;
             [weakSelf.checkProView removeFromSuperview];
+            weakSelf.checkProView = nil;
         }];
         [_tipsView removeFromSuperview];
         
@@ -604,7 +603,6 @@
                 _pathLineColor = [UIColor orangeColor];
                 //选择样式
                 _mosaicView.shapeBtnClick = ^(NSInteger tag) {
-                    //weakSelf.mosaicShape = tag;
                     if (tag == 100){
                         weakSelf.markType = MOSAICRECTANGLE;
                     }else if(tag == 101){
@@ -673,7 +671,6 @@
         //取消
         [self borderSettingViewDiss];
     }else{
-        
         if (tag == 1){
             //无边框
             _pathWidth = 0;
@@ -938,7 +935,6 @@
 }
 -(void)changeImageShellWithType:(NSInteger)type AndSelected:(BOOL)isSelected{
     MJWeakSelf
-    
     if (type == 0){
         //取消
         [self colorViewDismiss];
@@ -969,11 +965,8 @@
             } completion:^(BOOL finished) {
                 weakSelf.shellSelectView.hidden = YES;
             }];
-        }
-        
-        
+        }      
     }else{
-        //[self shellSelectViewDiss];
         if (type == 1){
             //横竖切换
             [self colorViewDismiss];
@@ -1020,6 +1013,9 @@
                     _isHaveBang = YES;
                     restifier = [_shellBkImageView.restorationIdentifier substringFromIndex:1];
                 }
+                if ([restifier containsString:@"phone8"]){
+                    return;
+                }
                 _shellBkImageView.image = [self changeIMGWithImageName:restifier];
             }
             
@@ -1030,11 +1026,6 @@
 -(void)changeShellWithStr:(NSString *)str andTag:(NSInteger)tag{
     _phoneTypeStr = str;
     // _iphoneArr = @[@"无套壳",@"iPad Pro",@"iPad",@"iPhone 14Pro Max",@"iPhone14 Pro",@"iPhone 14 Plus",@"iPhone 14",@"iPhone 13 Pro Max",@"iPhone 13 Pro",@"iPhone 13",@"iPhone 13 Mini",@"iPhone 12 Pro Max",@"iPhone 12 Pro",@"iPhone 12",@"iPhone 12 Mini",@"iPhone 11 Pro Max",@"iPhone 11 Pro",@"iPhone XR/11",@"iPhone 8 Plus",@"iPhone 8"];
-    if (_isHaveBang){
-        //有刘海
-    }else{
-        //无刘海
-    }
     if ([str isEqualToString:@"无套壳"]){
         _isAddShell = NO;
         [_contentView setBackgroundColor:[UIColor clearColor]];
@@ -1578,7 +1569,33 @@
             }else if ([str isEqualToString:@"iPhone 8 Plus"]){
                 
             }else if ([str isEqualToString:@"iPhone 8"]){
-                
+                if (tag == 1){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"iphone8 银色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"iphone8 银色横屏"];
+                    }
+                }else if (tag == 2){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"iphone8 灰色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"iphone8 灰色横屏"];
+                    }
+                }else if (tag == 3){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"iphone8 红色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"iphone8 红色横屏"];
+                    }
+                }else if (tag == 4){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"iphone8 金色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"iphone8 金色横屏"];
+                    }
+                }else{
+                    
+                }
             }else{
                 
             }
@@ -2088,7 +2105,33 @@
             }else if ([str isEqualToString:@"iPhone 8 Plus"]){
                 
             }else if ([str isEqualToString:@"iPhone 8"]){
-                
+                if (tag == 1){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"iphone8 银色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"iphone8 银色横屏"];
+                    }
+                }else if (tag == 2){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"iphone8 灰色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"iphone8 灰色横屏"];
+                    }
+                }else if (tag == 3){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"iphone8 红色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"iphone8 红色横屏"];
+                    }
+                }else if (tag == 4){
+                    if (_isShellVer){
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"iphone8 金色"];
+                    }else{
+                        _shellBkImageView.image = [self changeIMGWithImageName:@"iphone8 金色横屏"];
+                    }
+                }else{
+                    
+                }
             }else{
                 
             }
@@ -2576,7 +2619,6 @@
 }
 
 -(void)addSelectBorderView{
-   // [_selectView removeFromSuperview];
     if (_selectView == nil){
         _selectView = [surroundSelectPathView new];
         _originRect = _selectView.frame;
@@ -2590,7 +2632,7 @@
     _selectView.hidden = NO;
 }
 
--(void)addWaterLaber{
+-(void)addWaterLaberWithTag:(NSInteger)tag{
     [_fullWaterView removeFromSuperview];
     [_waterLabel removeFromSuperview];
     _waterLabel = [UILabel new];
@@ -2612,10 +2654,10 @@
     }
     [_contentView addSubview:_waterLabel];
     [_contentView bringSubviewToFront:_waterLabel];
-    if (GVUserDe.waterPosition == 2){
+    if (tag == 2){
         //水印在左
         _waterLabel.textAlignment = NSTextAlignmentLeft;
-    }else if (GVUserDe.waterPosition == 3){
+    }else if (tag == 3){
         //居中
         _waterLabel.textAlignment = NSTextAlignmentCenter;
     }else{
@@ -2631,7 +2673,6 @@
     [self colorViewDismiss];
 }
 -(void)addFullWaterView{
-    NSLog(@"GVUserDe.waterTitleColor==%@",GVUserDe.waterTitleColor);
     [_fullWaterView removeFromSuperview];
     [_waterLabel  removeFromSuperview];
     CGFloat top = [_originTopArr[0]floatValue];
@@ -2707,11 +2748,9 @@
             //修改边框
             if (_markType == RECTANGLE){
                 //空心填充方框
-                //_borderView.layer.borderColor = ;
                 _slayer.strokeColor = HexColor(color).CGColor;
             }else if (_markType == LINE){
                 //修改画笔
-                // _path.pathColor = HexColor(color);
                 _slayer.strokeColor = HexColor(color).CGColor;
             }else{
                 //实心填充方框
@@ -3036,6 +3075,9 @@
     [self colorViewDismiss];
     if (_mosaicView != nil){
         [self mosaicViewDiss];
+    }
+    if (_editType == 4){
+        _waterToolView.colorSelectView.hidden = YES;
     }
 }
 

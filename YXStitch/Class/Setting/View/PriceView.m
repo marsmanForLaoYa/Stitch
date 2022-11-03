@@ -22,7 +22,7 @@
 
 -(void)setupViews{
     NSArray *priceArr = @[@"¥6",@"¥40",@"¥60",@"¥108"];
-    NSArray *textArr = @[@"每月",@"半年",@"每年",@"一次性购买"];
+    NSArray *textArr = @[@"每月",@"半年",@"每年",@"终生购买"];
     CGFloat btnWidth = (CGFloat)(SCREEN_WIDTH - 80) / 4;
     for (NSInteger i = 0 ; i < priceArr.count ; i ++) {
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];

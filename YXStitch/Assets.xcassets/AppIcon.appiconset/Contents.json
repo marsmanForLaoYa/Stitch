@@ -90,11 +90,13 @@
       "size" : "76x76"
     },
     {
+      "filename" : "Icon-App-152x152@2x.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "76x76"
     },
     {
+      "filename" : "Icon-App-176x176@2x.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "83.5x83.5"

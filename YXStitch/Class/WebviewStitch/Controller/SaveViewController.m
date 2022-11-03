@@ -7,8 +7,14 @@
 
 #import "SaveViewController.h"
 #import <ShareSDK/ShareSDK.h>
-@interface SaveViewController ()
+#import "UnlockFuncView.h"
+#import "BuyViewController.h"
+#import "CheckProView.h"
+@interface SaveViewController ()<CheckProViewDelegate,UnlockFuncViewDelegate>
 @property (nonatomic ,strong)UIView *detailView;
+@property (nonatomic ,strong)UnlockFuncView *funcView;
+@property (nonatomic ,strong)CheckProView *checkProView;
+@property (nonatomic ,strong)UIView *bgView;
 @end
 
 @implementation SaveViewController
@@ -148,8 +154,7 @@
     if (btn.tag == 1){
         [self.navigationController popToViewController:[self.navigationController.viewControllers objectAtIndex:1] animated:YES];
     }else{
-        if (_identify.length > 0){
-            //删除原图
+        if (User.checkIsVipMember){
             PHFetchResult *collectonResuts = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeAny options:[PHFetchOptions new]] ;
             [collectonResuts enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                 PHAssetCollection *assetCollection = obj;
@@ -173,10 +178,63 @@
                 
             }];
         }else{
-            [SVProgressHUD showInfoWithStatus:@"原图已删除"];
+            _funcView = [UnlockFuncView new];
+            _funcView.delegate = weakSelf;
+            _funcView.type = 1;
+            [self.view.window addSubview:_funcView];
+            [_funcView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.edges.equalTo(self.view);
+            }];
         }
     }
    
+}
+
+-(void)btnClickWithTag:(NSInteger)tag{
+    MJWeakSelf
+    if (tag == 1) {
+        [_funcView removeFromSuperview];
+        [self.navigationController pushViewController:[BuyViewController new] animated:YES];
+    }else{
+        MJWeakSelf
+        if (_bgView == nil){
+            _bgView = [Tools addBGViewWithFrame:self.view.frame];
+            [self.view addSubview:_bgView];
+        }else{
+            _bgView.hidden = NO;
+            [self.view bringSubviewToFront:_bgView];
+        }
+        if (_checkProView == nil){
+            _checkProView = [[CheckProView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, 550)];
+            _checkProView.delegate = self;
+            [self.view.window addSubview:_checkProView];
+        }
+        _checkProView.hidden = NO;
+        [self.view.window bringSubviewToFront:_checkProView];
+        [UIView animateWithDuration:0.3 animations:^{
+            weakSelf.checkProView.frame = CGRectMake(0, SCREEN_HEIGHT - weakSelf.checkProView.height, SCREEN_WIDTH , weakSelf.checkProView.height);
+        }];
+    }
+}
+
+-(void)cancelClickWithTag:(NSInteger)tag{
+    MJWeakSelf
+    if (tag == 1){
+        [UIView animateWithDuration:0.3 animations:^{
+            weakSelf.checkProView.frame = CGRectMake(0, SCREEN_HEIGHT + 100, SCREEN_WIDTH , weakSelf.checkProView.height);
+            weakSelf.bgView.hidden = YES;
+        }];
+    }else{
+        [UIView animateWithDuration:0.3 animations:^{
+            weakSelf.checkProView.frame = CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, 550);
+        } completion:^(BOOL finished) {
+            weakSelf.bgView.hidden = YES;
+            [weakSelf.checkProView removeFromSuperview];
+            weakSelf.checkProView = nil;
+        }];
+        [_funcView removeFromSuperview];
+        [weakSelf.navigationController pushViewController:[BuyViewController new] animated:YES];
+    }
 }
 
 -(void)shareClick:(UIButton *)btn{

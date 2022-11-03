@@ -49,15 +49,17 @@
     [self addSubview:nameLab];
 }
 
--(void)setCellName:(NSString *)cellName{
-    _cellName = cellName;
-    if ([cellName isEqualToString:@"更多功能"] || [cellName isEqualToString:@"截长屏"] || [cellName isEqualToString:@"网页滚动截图"]|| [cellName isEqualToString:@"拼图"]|| [cellName isEqualToString:@"水印"]|| [cellName isEqualToString:@"设置"]){
-        _iconIMG.image = [UIImage imageNamed:cellName];
-        nameLab.text = cellName;
-    }else{
-        [_iconIMG sd_setImageWithURL:[NSURL URLWithString:cellName]];
-    }
+-(void)setTitleWithName:(NSString *)cellName andIconIMG:(NSString *)iconName{
     
+    if ([cellName isEqualToString:@"更多功能"] || [cellName isEqualToString:@"截长屏"] || [cellName isEqualToString:@"网页滚动截图"]|| [cellName isEqualToString:@"拼图"]|| [cellName isEqualToString:@"水印"]|| [cellName isEqualToString:@"设置"]){
+        _iconIMG.image = [UIImage imageNamed:iconName];
+        
+    }else{
+        [_iconIMG sd_setImageWithURL:[NSURL URLWithString:iconName]];
+        
+    }
+    nameLab.text = cellName;
+    _cellName = cellName;
     if ([cellName isEqualToString:@"更多功能"]){
         nameLab.textColor =  [UIColor colorWithHexString:@"#999999"];
     }else{
@@ -95,8 +97,14 @@
         make.centerX.equalTo(_iconIMG);
         make.top.equalTo(_iconIMG.mas_bottom).offset(24);
     }];
-    
 }
+
+
+
+//-(void)setIconIMG:(UIImageView *)iconIMG{
+//    _iconIMG = iconIMG;
+//    
+//}
 
 - (void)GesturePress:(UIGestureRecognizer *)gestureRecognizer{
     

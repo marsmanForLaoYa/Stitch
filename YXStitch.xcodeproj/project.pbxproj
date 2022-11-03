@@ -178,7 +178,6 @@
 		FB7E659B28A4A6110079C9F3 /* PrefenceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FB7E659A28A4A6110079C9F3 /* PrefenceTableViewCell.m */; };
 		FB86DC2B28D96C5300EE8E4D /* UIImage+LF_Format.m in Sources */ = {isa = PBXBuildFile; fileRef = FB86DC2A28D96C5300EE8E4D /* UIImage+LF_Format.m */; };
 		FB86DC2E28D9A80700EE8E4D /* ImageEditMarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = FB86DC2D28D9A80700EE8E4D /* ImageEditMarkView.m */; };
-		FB8B4E4328AB8BFF00313ECD /* UIScrollView+LVShot.m in Sources */ = {isa = PBXBuildFile; fileRef = FB8B4E4128AB8BFC00313ECD /* UIScrollView+LVShot.m */; };
 		FB8B720D28FD69C200515024 /* surroundSelectPathView.m in Sources */ = {isa = PBXBuildFile; fileRef = FB8B720C28FD69C200515024 /* surroundSelectPathView.m */; };
 		FB8BAEA028E2F78900A9978A /* ImageShellSettingView.m in Sources */ = {isa = PBXBuildFile; fileRef = FB8BAE9F28E2F78900A9978A /* ImageShellSettingView.m */; };
 		FB9B943428DC455C009D55FB /* UIBezierPath+GetAllPoints.m in Sources */ = {isa = PBXBuildFile; fileRef = FB9B943228DC4556009D55FB /* UIBezierPath+GetAllPoints.m */; };
@@ -519,8 +518,6 @@
 		FB86DC2A28D96C5300EE8E4D /* UIImage+LF_Format.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+LF_Format.m"; sourceTree = "<group>"; };
 		FB86DC2C28D9A80700EE8E4D /* ImageEditMarkView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageEditMarkView.h; sourceTree = "<group>"; };
 		FB86DC2D28D9A80700EE8E4D /* ImageEditMarkView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ImageEditMarkView.m; path = "../New Group1/ImageEditMarkView.m"; sourceTree = "<group>"; };
-		FB8B4E4128AB8BFC00313ECD /* UIScrollView+LVShot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+LVShot.m"; sourceTree = "<group>"; };
-		FB8B4E4228AB8BFF00313ECD /* UIScrollView+LVShot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+LVShot.h"; sourceTree = "<group>"; };
 		FB8B720B28FD69C200515024 /* surroundSelectPathView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = surroundSelectPathView.h; sourceTree = "<group>"; };
 		FB8B720C28FD69C200515024 /* surroundSelectPathView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = surroundSelectPathView.m; sourceTree = "<group>"; };
 		FB8BAE9E28E2F78900A9978A /* ImageShellSettingView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageShellSettingView.h; sourceTree = "<group>"; };
@@ -1033,8 +1030,6 @@
 				FB2D5A0C28A1F59C006085BC /* UIImage+Color.m */,
 				FB86DC2928D96C4B00EE8E4D /* UIImage+LF_Format.h */,
 				FB86DC2A28D96C5300EE8E4D /* UIImage+LF_Format.m */,
-				FB8B4E4228AB8BFF00313ECD /* UIScrollView+LVShot.h */,
-				FB8B4E4128AB8BFC00313ECD /* UIScrollView+LVShot.m */,
 				FB0D9E2628B4D1420057DC37 /* UIScrollView+UITouch.h */,
 				FB0D9E2728B4D1420057DC37 /* UIScrollView+UITouch.m */,
 				FBDA328F28E29A60003B7FA6 /* UIView+directionBorder.h */,
@@ -1760,7 +1755,6 @@
 				FB4E536228A34D230072E1AD /* SettingViewController.m in Sources */,
 				FB2D5A0728A1EE2A006085BC /* HomeSettingViewController.m in Sources */,
 				FB2D5A2428A26564006085BC /* UIView+LVShot.m in Sources */,
-				FB8B4E4328AB8BFF00313ECD /* UIScrollView+LVShot.m in Sources */,
 				BBBBA3F028F180D600406C43 /* GridEditView.m in Sources */,
 				FB2D5A1E28A25D63006085BC /* SaveViewController.m in Sources */,
 				FB3EFE3E28A39485006C3889 /* BuyViewController.m in Sources */,
@@ -1945,10 +1939,12 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = Z8Z6JML7J5;
+				ENABLE_BITCODE = NO;
 				EXCLUDED_ARCHS = "";
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/YXStitch/ThirdPart",
@@ -1960,7 +1956,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = YXStitch/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "快捷截长图";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "保存图片需要访问您的相册";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "是否允许APP访问您的相册";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -1973,10 +1969,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.xwan.jigsaw;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "pintu developer";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "pintu developer";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1993,10 +1989,12 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = Z8Z6JML7J5;
+				ENABLE_BITCODE = NO;
 				EXCLUDED_ARCHS = "";
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/YXStitch/ThirdPart",
@@ -2008,7 +2006,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = YXStitch/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "快捷截长图";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "保存图片需要访问您的相册";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "是否允许APP访问您的相册";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -2021,10 +2019,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.xwan.jigsaw;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "pintu developer";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "pintu developer";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
