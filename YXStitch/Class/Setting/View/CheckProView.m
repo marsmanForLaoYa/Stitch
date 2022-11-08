@@ -33,6 +33,17 @@
         make.top.equalTo(@-8);
     }];
     
+    UIButton *recoverBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+    [recoverBtn setTitle:@"恢复购买" forState:UIControlStateNormal];
+    [recoverBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    recoverBtn.titleLabel.font = Font17;
+    [recoverBtn addTarget:self action:@selector(recover:) forControlEvents:UIControlEventTouchUpInside];
+    [proIMG addSubview:recoverBtn];
+    [recoverBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(proIMG.mas_right).offset(-20);
+        make.bottom.equalTo(proIMG);
+    }];
+    
     UIButton *cancelBtn = [UIButton buttonWithType:UIButtonTypeSystem];
     cancelBtn.tag = 1;
     [cancelBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -138,6 +149,16 @@
     
 }
 -(void)setupLayout{
+    
+}
+
+-(void)recover:(UIButton *)btn{
+    //恢复购买
+    if ([User current].isVipAppStore){
+        [SVProgressHUD showInfoWithStatus:@"您已恢复购买"];
+    }else{
+        [SVProgressHUD showInfoWithStatus:@"未查询到您的订阅记录，无法恢复！"];
+    }
     
 }
 

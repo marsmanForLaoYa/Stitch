@@ -2025,7 +2025,6 @@ typedef void(^SZImageMergeBlock)(SZImageGenerator *generator,NSError *error);
                     if (tmp >= viewHeight){
                         imageView.top = top;
                         imageView.height = viewHeight;
-                        //imageView.imgView.top = 0;
                         imageView.imgView.top = -(imageView.imgView.height - viewHeight) ;
                     }else{
                         imageView.height = tmp ;

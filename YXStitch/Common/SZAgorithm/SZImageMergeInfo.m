@@ -74,7 +74,6 @@ static const NSString *INFO_KEY = @"INFO_KEY";
     NSInteger firstStartIndex = (info_.firstOffset - info_.length - 10 ) < 0 ? 0 : (info_.firstOffset - info_.length - 10 );
     NSInteger secondStartIndex = 0;
     NSInteger bottomOffset = 0;
-    //NSLog(@"bottomOffset==%ld",bottomOffset);
     NSInteger i = 0;
     for (NSNumber *firstLine in firstLines) {
 //            if (i < firstStartIndex || i > firstLinesCount - bottomOffset) {

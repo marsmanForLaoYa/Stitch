@@ -146,6 +146,8 @@
 		FB3EFE8728A3C21D006C3889 /* Icon-App-29x29@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FB3EFE6928A3C21D006C3889 /* Icon-App-29x29@2x.png */; };
 		FB3EFE8828A3C21D006C3889 /* lightIcon-App-83.5x83.5@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FB3EFE6A28A3C21D006C3889 /* lightIcon-App-83.5x83.5@2x.png */; };
 		FB3EFE8C28A3CB07006C3889 /* GVUserDefaults+Properties.m in Sources */ = {isa = PBXBuildFile; fileRef = FB3EFE8A28A3CB07006C3889 /* GVUserDefaults+Properties.m */; };
+		FB46BF48291A2DB6002E3B05 /* lightIcon-App-152x152@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FB46BF47291A2DB6002E3B05 /* lightIcon-App-152x152@2x.png */; };
+		FB46BF4A291A2DBE002E3B05 /* lightIcon-App-176x176@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FB46BF49291A2DBE002E3B05 /* lightIcon-App-176x176@2x.png */; };
 		FB4E535F28A34C4B0072E1AD /* PreferenceSetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB4E535E28A34C4B0072E1AD /* PreferenceSetViewController.m */; };
 		FB4E536228A34D230072E1AD /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB4E536128A34D230072E1AD /* SettingViewController.m */; };
 		FB58D81328E14D5000EC831D /* CustomScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = FB58D81128E14D4400EC831D /* CustomScrollView.m */; };
@@ -453,6 +455,8 @@
 		FB3EFE6A28A3C21D006C3889 /* lightIcon-App-83.5x83.5@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "lightIcon-App-83.5x83.5@2x.png"; sourceTree = "<group>"; };
 		FB3EFE8A28A3CB07006C3889 /* GVUserDefaults+Properties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GVUserDefaults+Properties.m"; sourceTree = "<group>"; };
 		FB3EFE8B28A3CB07006C3889 /* GVUserDefaults+Properties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GVUserDefaults+Properties.h"; sourceTree = "<group>"; };
+		FB46BF47291A2DB6002E3B05 /* lightIcon-App-152x152@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "lightIcon-App-152x152@2x.png"; sourceTree = "<group>"; };
+		FB46BF49291A2DBE002E3B05 /* lightIcon-App-176x176@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "lightIcon-App-176x176@2x.png"; sourceTree = "<group>"; };
 		FB4E535D28A34C4B0072E1AD /* PreferenceSetViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PreferenceSetViewController.h; sourceTree = "<group>"; };
 		FB4E535E28A34C4B0072E1AD /* PreferenceSetViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PreferenceSetViewController.m; sourceTree = "<group>"; };
 		FB4E536028A34D230072E1AD /* SettingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SettingViewController.h; sourceTree = "<group>"; };
@@ -971,6 +975,8 @@
 		FB3EFE4C28A3C21D006C3889 /* LOGO */ = {
 			isa = PBXGroup;
 			children = (
+				FB46BF49291A2DBE002E3B05 /* lightIcon-App-176x176@2x.png */,
+				FB46BF47291A2DB6002E3B05 /* lightIcon-App-152x152@2x.png */,
 				FB3EFE4D28A3C21D006C3889 /* lightIcon-App-40x40@3x.png */,
 				FB3EFE4E28A3C21D006C3889 /* Icon-App-76x76@2x.png */,
 				FB3EFE4F28A3C21D006C3889 /* lightIcon-App-29x29@3x.png */,
@@ -1544,6 +1550,7 @@
 				FB3EFE7E28A3C21D006C3889 /* lightIcon-App-76x76@1x.png in Resources */,
 				BBBBA3E228F106AB00406C43 /* GridLayout_9.json in Resources */,
 				FB3EFE7B28A3C21D006C3889 /* Icon-App-20x20@3x.png in Resources */,
+				FB46BF4A291A2DBE002E3B05 /* lightIcon-App-176x176@2x.png in Resources */,
 				FB3EFE7428A3C21D006C3889 /* lightIcon-App-20x20@2x.png in Resources */,
 				FB3EFE7328A3C21D006C3889 /* lightIcon-App-29x29@2x.png in Resources */,
 				BBBBA3DE28F106AB00406C43 /* GridLayout_6.json in Resources */,
@@ -1554,6 +1561,7 @@
 				BBBBA3E328F106AB00406C43 /* GridLayout_5.json in Resources */,
 				FB3EFE6E28A3C21D006C3889 /* Icon-App-29x29@1x.png in Resources */,
 				FB3EFE7D28A3C21D006C3889 /* lightIcon-App-60x60@2x.png in Resources */,
+				FB46BF48291A2DB6002E3B05 /* lightIcon-App-152x152@2x.png in Resources */,
 				FB3EFE6D28A3C21D006C3889 /* lightIcon-App-29x29@3x.png in Resources */,
 				FB3EFE6B28A3C21D006C3889 /* lightIcon-App-40x40@3x.png in Resources */,
 				FB3EFE7828A3C21D006C3889 /* Icon-App-1024x1024@1x.png in Resources */,
@@ -1935,11 +1943,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = YXStitch/YXStitch.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = Z8Z6JML7J5;
 				ENABLE_BITCODE = NO;
@@ -1956,7 +1965,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = YXStitch/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "快捷截长图";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "是否允许APP访问您的相册";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "需要您的同意，才能访问相册，以便于选取照片进行拼接";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -1985,11 +1994,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = YXStitch/YXStitch.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = Z8Z6JML7J5;
 				ENABLE_BITCODE = NO;
@@ -2006,7 +2016,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = YXStitch/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "快捷截长图";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "是否允许APP访问您的相册";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "需要您的同意，才能访问相册，以便于选取照片进行拼接";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

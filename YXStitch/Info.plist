@@ -2,8 +2,32 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CFBundleAllowMixedLocalizations</key>
-	<true/>
+	<key>CFBundleIcons~ipad</key>
+	<dict>
+		<key>CFBundleAlternateIcons</key>
+		<dict>
+			<key>Icon</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>Icon-App-152x152</string>
+					<string>Icon-App-176x176</string>
+				</array>
+				<key>UIPrerenderedIcon</key>
+				<false/>
+			</dict>
+			<key>lightIcon</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>lightIcon-App-152x152</string>
+					<string>lightIcon-App-176x176</string>
+				</array>
+				<key>UIPrerenderedIcon</key>
+				<false/>
+			</dict>
+		</dict>
+	</dict>
 	<key>CFBundleIcons</key>
 	<dict>
 		<key>CFBundleAlternateIcons</key>
@@ -12,24 +36,22 @@
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>Icon-App-76x76</string>
-					<string>Icon-App-83.5x83.5</string>
-					<string>Icon-App-40x40</string>
-					<string>Icon-App-60x60</string>
 					<string>Icon-App-20x20</string>
 					<string>Icon-App-29x29</string>
+					<string>Icon-App-40x40</string>
+					<string>Icon-App-76x76</string>
+					<string>Icon-App-83.5x83.5</string>
 				</array>
 				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-			<key>LightIcon</key>
+			<key>lightIcon</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>lightIcon-App-40x40</string>
 					<string>lightIcon-App-20x20</string>
-					<string>lightIcon-App-60x60</string>
 					<string>lightIcon-App-29x29</string>
+					<string>lightIcon-App-40x40</string>
 					<string>lightIcon-App-76x76</string>
 					<string>lightIcon-App-83.5x83.5</string>
 				</array>
@@ -37,16 +59,9 @@
 				<false/>
 			</dict>
 		</dict>
-		<key>CFBundlePrimaryIcon</key>
-		<dict>
-			<key>CFBundleIconFiles</key>
-			<array>
-				<string>默认icon</string>
-			</array>
-			<key>UIPrerenderedIcon</key>
-			<false/>
-		</dict>
 	</dict>
+	<key>CFBundleAllowMixedLocalizations</key>
+	<true/>
 	<key>CFBundleTypeName</key>
 	<string>com.myapp.common-data</string>
 	<key>CFBundleURLTypes</key>
@@ -128,11 +143,11 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
 	<key>NSLocationUsageDescription</key>
-	<string>是否允许此App使用你的麦克风？</string>
+	<string>需要您的同意，才能访问麦克风，以便于对声音进行录制</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>是否允许此App访问你的媒体资料库？</string>
+	<string>需要您的同意，才能访问媒体资料库，以便于选取资料进行编辑</string>
 	<key>NSCameraUsageDescription</key>
-	<string>是否允许此App使用你的相机？</string>
+	<string>需要您的同意，才能访问相机，以便于拍摄照片进行拼接</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>我们需要通过您的地理位置信息获取您周边的相关数据</string>
 	<key>NSLocationAlwaysUsageDescription</key>

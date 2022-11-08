@@ -89,7 +89,7 @@
         _darkIMG.image = [UIImage imageNamed:@"unSelect"];
         _lightIMG.image = [UIImage imageNamed:@"select"];
         GVUserDe.logoType = 2;
-        iconName = @"LightIcon";
+        iconName = @"lightIcon";
     }
     
     //动态更换图标只支持10.3及以上系统
@@ -112,7 +112,9 @@
                  IMP imp = [[UIApplication sharedApplication] methodForSelector:selector];
                  void (*func)(id, SEL, id, id) = (void *)imp;
                  if (func){
-                     func([UIApplication sharedApplication], selector, iconName, ^(NSError * _Nullable error) {});
+                     func([UIApplication sharedApplication], selector, iconName, ^(NSError * _Nullable error) {
+                         NSLog(@"error==%@",error);
+                     });
                  }
              }
     }else{

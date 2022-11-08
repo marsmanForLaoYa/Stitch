@@ -76,7 +76,7 @@
     [_detailView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_priceView.mas_bottom).offset(20);
         make.width.left.equalTo(_priceView);
-        make.height.equalTo(@335);
+        make.height.equalTo(@425);
     }];
 }
 #pragma mark --viewDelegate

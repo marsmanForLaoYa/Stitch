@@ -101,6 +101,34 @@
         make.height.equalTo(@(140));
         make.top.equalTo(iconView.mas_bottom).offset(30);
     }];
+    
+    NSArray *labArr = @[@"使用条款：",@"隐私条款："];
+    NSArray *urlArr = @[@"https://www.pintu365app.com/terms_use.html",@"https://www.pintu365app.com/privacy.html"];
+    for (NSInteger i = 0; i < 2; i ++) {
+        UILabel * lab = [UILabel new];
+        lab.text = labArr[i];
+        lab.textColor = HexColor(@"#BBBBBB");
+        lab.font = Font13;
+        [self addSubview:lab];
+        [lab mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(driLab);
+            make.top.equalTo(driLab.mas_bottom).offset( i * 50);
+        }];
+        
+        UILabel *urlBtn = [UILabel new];
+        urlBtn.text = urlArr[i];
+        urlBtn.textColor = HexColor(@"#BBBBBB");
+        urlBtn.font = Font15;
+        [self addSubview:urlBtn];
+        [urlBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(lab).offset(20);
+            make.top.equalTo(lab.mas_bottom).offset(10);
+        }];
+    }
+}
+
+-(void)checkUrl:(UIButton *)btn{
+    
 }
 
 @end
